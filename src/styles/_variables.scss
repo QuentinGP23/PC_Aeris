@@ -1,18 +1,113 @@
-// Font sizes
-$font-size-s: 0.75rem;    // 12px
-$font-size-m: 0.875rem;   // 14px
-$font-size-l: 1.125rem;   // 18px
-$font-size-xl: 1.5rem;    // 24px
+// ==========================================================================
+// VARIABLES
+// ==========================================================================
 
+// -----------------------------------------------------------------------------
 // Colors
-$blue-dark: #1a3a5c;
-$blue: #2563eb;
-$blue-light: #60a5fa;
+// -----------------------------------------------------------------------------
 
-$white-dark: #e5e5e5;
-$white: #f5f5f5;
-$white-light: #ffffff;
+// Primary
+$primary-900: #1a3a5c;
+$primary-600: #2563eb;
+$primary-400: #60a5fa;
+$primary: $primary-600;
 
-$black-dark: #000000;
-$black: #181818;
-$black-light: #333333;
+// Neutral
+$neutral-900: #0a0a0a;
+$neutral-800: #171717;
+$neutral-700: #262626;
+$neutral-600: #404040;
+$neutral-500: #525252;
+$neutral-400: #737373;
+$neutral-300: #a3a3a3;
+$neutral-200: #d4d4d4;
+$neutral-100: #f5f5f5;
+$neutral-50: #fafafa;
+$white: #ffffff;
+
+// Semantic
+$success: #22c55e;
+$warning: #f59e0b;
+$error: #ef4444;
+$info: #3b82f6;
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+
+$font-family-base:
+  "Inter",
+  system-ui,
+  -apple-system,
+  sans-serif;
+$font-family-heading:
+  "Inter",
+  system-ui,
+  -apple-system,
+  sans-serif;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem; // 36px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// -----------------------------------------------------------------------------
+// Spacing
+// -----------------------------------------------------------------------------
+
+$spacing-1: 0.25rem; // 4px
+$spacing-2: 0.5rem; // 8px
+$spacing-3: 0.75rem; // 12px
+$spacing-4: 1rem; // 16px
+$spacing-5: 1.25rem; // 20px
+$spacing-6: 1.5rem; // 24px
+$spacing-8: 2rem; // 32px
+$spacing-10: 2.5rem; // 40px
+$spacing-12: 3rem; // 48px
+$spacing-16: 4rem; // 64px
+
+// -----------------------------------------------------------------------------
+// Border Radius
+// -----------------------------------------------------------------------------
+
+$radius-sm: 0.25rem; // 4px
+$radius-md: 0.5rem; // 8px
+$radius-lg: 0.75rem; // 12px
+$radius-xl: 1rem; // 16px
+$radius-full: 9999px;
+
+// -----------------------------------------------------------------------------
+// Shadows
+// -----------------------------------------------------------------------------
+
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+
+// -----------------------------------------------------------------------------
+// Breakpoints
+// -----------------------------------------------------------------------------
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// -----------------------------------------------------------------------------
+// Transitions
+// -----------------------------------------------------------------------------
+
+$transition-fast: 150ms ease;
+$transition-base: 200ms ease;
+$transition-slow: 300ms ease;
