@@ -1,0 +1,21 @@
+name: Check PR Source Branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR comes from develop
+        run: |
+          if [ "${{ github.head_ref }}" != "develop" ] && [[ "${{ github.head_ref }}" != release-please--* ]]; then
+            echo "❌ ERROR: PRs to main must come from 'develop' branch only!"
+            echo "Current source branch: ${{ github.head_ref }}"
+            echo ""
+            echo "Please merge your changes to 'develop' first, then create a PR from 'develop' to 'main'."
+            exit 1
+          fi
+          echo "✅ PR comes from develop branch - OK"
