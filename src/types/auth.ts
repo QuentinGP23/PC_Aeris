@@ -28,7 +28,7 @@ export interface SignUpData {
 }
 
 export interface SignInData {
-  email: string
+  identifier: string // email or pseudo
   password: string
 }
 

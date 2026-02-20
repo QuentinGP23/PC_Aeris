@@ -68,6 +68,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
+    // Auto-determine autocomplete if not provided
+    const getAutoComplete = () => {
+      if (props.autoComplete) return props.autoComplete;
+      if (isPassword) return "current-password";
+      if (type === "email") return "email";
+      if (type === "tel") return "tel";
+      if (props.name === "pseudo" || props.name === "username")
+        return "username";
+      if (props.name === "firstName") return "given-name";
+      if (props.name === "lastName") return "family-name";
+      return undefined;
+    };
+
     const handleClear = () => {
       onClear?.();
       if (onChange) {
@@ -115,6 +128,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onChange={onChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            autoComplete={getAutoComplete()}
             {...props}
           />
 

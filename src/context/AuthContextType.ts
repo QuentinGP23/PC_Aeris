@@ -6,7 +6,7 @@ export interface AuthContextType {
   isLoading: boolean
   isAuthenticated: boolean
   signUp: (data: SignUpData) => Promise<{ error: string | null }>
-  signIn: (data: SignInData) => Promise<{ error: string | null }>
+  signIn: (data: SignInData) => Promise<{ user: User | null; error: string | null }>
   signOut: () => Promise<{ error: string | null }>
   resetPassword: (email: string) => Promise<{ error: string | null }>
   updatePassword: (newPassword: string) => Promise<{ error: string | null }>

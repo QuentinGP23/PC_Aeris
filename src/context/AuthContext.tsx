@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { authService } from "../services";
 import type { User, SignUpData, SignInData } from "../types";
 import { AuthContext, type AuthContextType } from "./AuthContextType";
@@ -10,6 +10,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticating = useRef(false);
 
   useEffect(() => {
     // Check current session on mount
@@ -25,7 +26,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const {
       data: { subscription },
     } = authService.onAuthStateChange((user) => {
-      setUser(user);
+      if (!isAuthenticating.current) {
+        setUser(user);
+      }
     });
 
     return () => {
@@ -34,19 +37,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const signUp = async (data: SignUpData) => {
+    isAuthenticating.current = true;
     setIsLoading(true);
     const { user, error } = await authService.signUp(data);
     if (user) setUser(user);
     setIsLoading(false);
+    setTimeout(() => { isAuthenticating.current = false; }, 1000);
     return { error };
   };
 
   const signIn = async (data: SignInData) => {
+    isAuthenticating.current = true;
     setIsLoading(true);
     const { user, error } = await authService.signIn(data);
     if (user) setUser(user);
     setIsLoading(false);
-    return { error };
+    setTimeout(() => { isAuthenticating.current = false; }, 1000);
+    return { user, error };
   };
 
   const signOut = async () => {

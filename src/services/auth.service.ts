@@ -1,9 +1,43 @@
 import { supabase } from '../config'
 import type { SignUpData, SignInData, User } from '../types'
 
+// Admin credentials (hardcoded for now)
+const ADMIN_EMAIL = 'admin@pcaeris.fr'
+const ADMIN_PSEUDO = 'admin'
+
+// Helper to check if a value contains "admin" (case insensitive)
+const containsAdmin = (value: string | undefined): boolean => {
+  if (!value) return false
+  return value.toLowerCase().includes('admin')
+}
+
+// Helper to validate sign up data doesn't use reserved admin terms
+export const validateSignUpData = (data: SignUpData): string | null => {
+  if (containsAdmin(data.pseudo)) {
+    return 'Le pseudo "admin" est réservé'
+  }
+  if (containsAdmin(data.firstName)) {
+    return 'Le prénom ne peut pas contenir "admin"'
+  }
+  if (containsAdmin(data.lastName)) {
+    return 'Le nom ne peut pas contenir "admin"'
+  }
+  if (data.email.toLowerCase() === ADMIN_EMAIL) {
+    return 'Cet email est réservé'
+  }
+  return null
+}
+
+// Helper to check if identifier is email
+const isEmail = (identifier: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
+}
+
 export const authService = {
   // Sign up with email and password
   async signUp(data: SignUpData): Promise<{ user: User | null; error: string | null }> {
+    console.log('Attempting signup with:', data)
+    
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
@@ -12,12 +46,15 @@ export const authService = {
           pseudo: data.pseudo,
           first_name: data.firstName,
           last_name: data.lastName,
-          phone: data.phone,
+          phone_number: data.phone,
         },
       },
     })
 
+    console.log('Signup response:', { authData, authError })
+
     if (authError) {
+      console.error('Signup error details:', authError)
       return { user: null, error: authError.message }
     }
 
@@ -40,10 +77,32 @@ export const authService = {
     return { user, error: null }
   },
 
-  // Sign in with email and password
+  // Sign in with email or pseudo and password
   async signIn(data: SignInData): Promise<{ user: User | null; error: string | null }> {
+    let email = data.identifier
+    
+    // If identifier is not an email, it's a pseudo - need to find the email
+    if (!isEmail(data.identifier)) {
+      // Check if it's the admin
+      if (data.identifier.toLowerCase() === ADMIN_PSEUDO) {
+        email = ADMIN_EMAIL
+      } else {
+        // For regular users, we need to lookup by pseudo
+        // This requires a query to the users table or auth metadata
+        // For now, we'll use a workaround: try to get user by pseudo from auth metadata
+        // This is a limitation - Supabase doesn't allow login by custom fields directly
+        // In a real app, you'd have a users table with pseudo as unique field
+        
+        // Try common email patterns or return error
+        return { 
+          user: null, 
+          error: 'Connexion par pseudo non disponible. Utilisez votre email.' 
+        }
+      }
+    }
+
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email: data.email,
+      email: email,
       password: data.password,
     })
 
@@ -62,7 +121,7 @@ export const authService = {
       pseudo: metadata?.pseudo,
       firstName: metadata?.first_name,
       lastName: metadata?.last_name,
-      phone: metadata?.phone,
+      phone: metadata?.phone_number,
       role: metadata?.role || 'user',
       createdAt: authData.user.created_at,
       updatedAt: authData.user.updated_at || authData.user.created_at,
@@ -98,7 +157,7 @@ export const authService = {
       pseudo: metadata?.pseudo,
       firstName: metadata?.first_name,
       lastName: metadata?.last_name,
-      phone: metadata?.phone,
+      phone: metadata?.phone_number,
       role: metadata?.role || 'user',
       createdAt: supaUser.created_at,
       updatedAt: supaUser.updated_at || supaUser.created_at,
@@ -130,7 +189,7 @@ export const authService = {
         pseudo: data.pseudo,
         first_name: data.firstName,
         last_name: data.lastName,
-        phone: data.phone,
+        phone_number: data.phone,
       },
     })
     return { error: error?.message || null }
@@ -147,7 +206,7 @@ export const authService = {
           pseudo: metadata?.pseudo,
           firstName: metadata?.first_name,
           lastName: metadata?.last_name,
-          phone: metadata?.phone,
+          phone: metadata?.phone_number,
           role: metadata?.role || 'user',
           createdAt: session.user.created_at,
           updatedAt: session.user.updated_at || session.user.created_at,

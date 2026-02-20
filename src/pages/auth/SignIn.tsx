@@ -8,7 +8,7 @@ function SignIn() {
   const { signIn, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "",
     password: "",
     rememberMe: false,
   });
@@ -25,20 +25,25 @@ function SignIn() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.email || !formData.password) {
+    if (!formData.identifier || !formData.password) {
       setError("Veuillez remplir tous les champs");
       return;
     }
 
-    const { error } = await signIn({
-      email: formData.email,
+    const { user, error } = await signIn({
+      identifier: formData.identifier,
       password: formData.password,
     });
 
     if (error) {
       setError(error);
-    } else {
-      navigate("/");
+    } else if (user) {
+      // Redirect based on role
+      if (user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
   };
 
@@ -52,11 +57,12 @@ function SignIn() {
 
           <Form.Group>
             <Input
-              type="email"
-              label="Email"
-              placeholder="exemple@email.com"
-              value={formData.email}
-              onChange={handleChange("email")}
+              type="text"
+              label="Email ou pseudo"
+              placeholder="exemple@email.com ou pseudo"
+              value={formData.identifier}
+              onChange={handleChange("identifier")}
+              autoComplete="username"
               required
               fullWidth
             />

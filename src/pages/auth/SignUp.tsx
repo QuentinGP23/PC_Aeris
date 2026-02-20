@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form, Checkbox } from "../../components/common";
+import { validateSignUpData } from "../../services/auth.service";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -51,9 +52,31 @@ function SignUp() {
       return;
     }
 
+    // Validate no admin terms
+    const validationError = validateSignUpData({
+      email: formData.email,
+      password: formData.password,
+      pseudo: formData.pseudo,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+    });
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     const { error } = await signUp({
       email: formData.email,
       password: formData.password,
+      pseudo: formData.pseudo,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+    });
+
+    console.log("SignUp called with:", {
+      email: formData.email,
       pseudo: formData.pseudo,
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -144,6 +167,7 @@ function SignUp() {
               value={formData.password}
               onChange={handleChange("password")}
               hint="Minimum 6 caractères"
+              autoComplete="new-password"
               required
               fullWidth
             />
@@ -156,6 +180,7 @@ function SignUp() {
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange("confirmPassword")}
+              autoComplete="new-password"
               required
               fullWidth
             />
