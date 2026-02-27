@@ -45,8 +45,11 @@ jobs:
           git push origin "$BRANCH"
 
           # Create PR from the sync branch to develop
-          gh pr create \
+          PR_URL=$(gh pr create \
             --title "chore: sync develop with main" \
             --body "Automatic sync of \`main\` back into \`develop\` to keep branches aligned." \
             --head "$BRANCH" \
-            --base develop
+            --base develop)
+
+          # Enable auto-merge on the PR
+          gh pr merge "$PR_URL" --auto --merge
