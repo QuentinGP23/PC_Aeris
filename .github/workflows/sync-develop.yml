@@ -1,0 +1,52 @@
+name: Sync develop with main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if main is ahead of develop
+        id: check
+        run: |
+          git fetch origin develop
+          AHEAD=$(git rev-list --count origin/develop..origin/main)
+          echo "ahead=$AHEAD" >> "$GITHUB_OUTPUT"
+          echo "main is $AHEAD commits ahead of develop"
+
+      - name: Create sync branch and PR
+        if: steps.check.outputs.ahead != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if a sync PR already exists
+          EXISTING=$(gh pr list --base develop --state open --json headRefName --jq '.[].headRefName' | grep '^chore/sync-main-to-develop' || true)
+          if [ -n "$EXISTING" ]; then
+            echo "Sync PR already exists on branch $EXISTING, updating it"
+            git push origin main:"$EXISTING" --force
+            exit 0
+          fi
+
+          # Create a new branch from main
+          BRANCH="chore/sync-main-to-develop-$(date +%Y%m%d%H%M%S)"
+          git checkout -b "$BRANCH" origin/main
+          git push origin "$BRANCH"
+
+          # Create PR from the sync branch to develop
+          gh pr create \
+            --title "chore: sync develop with main" \
+            --body "Automatic sync of \`main\` back into \`develop\` to keep branches aligned." \
+            --head "$BRANCH" \
+            --base develop
