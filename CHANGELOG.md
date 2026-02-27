@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/QuentinGP23/PC_Aeris/compare/v1.1.0...v1.1.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* ajout vercel.json pour le routing SPA ([76190ed](https://github.com/QuentinGP23/PC_Aeris/commit/76190ed42a656f6e7cc576f76f34856d183c13d0))
+* ajout vercel.json pour le routing SPA ([868f79c](https://github.com/QuentinGP23/PC_Aeris/commit/868f79cd60c4f749fb22162efcfe922810fb070f))
+
 ## [1.1.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.0.0...v1.1.0) (2026-02-27)
 
 
