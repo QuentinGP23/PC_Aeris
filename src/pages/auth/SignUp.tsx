@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form, Checkbox } from "../../components/common";
 import { validateSignUpData } from "../../services/auth.service";
 
 function SignUp() {
-  const navigate = useNavigate();
   const { signUp, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -19,6 +18,7 @@ function SignUp() {
     acceptTerms: false,
   });
   const [error, setError] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleChange =
     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,9 +86,26 @@ function SignUp() {
     if (error) {
       setError(error);
     } else {
-      navigate("/");
+      setEmailSent(true);
     }
   };
+
+  if (emailSent) {
+    return (
+      <div className="auth-page">
+        <div className="auth-page__container">
+          <h1>Vérifiez votre boîte mail</h1>
+          <p>
+            Un email de confirmation a été envoyé à <strong>{formData.email}</strong>.
+          </p>
+          <p>Cliquez sur le lien dans l'email pour activer votre compte.</p>
+          <Link to="/signin">
+            <Button variant="outline">Retour à la connexion</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-page">
