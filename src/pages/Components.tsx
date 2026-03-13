@@ -39,9 +39,10 @@ function Components() {
     const from = pg * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
 
+    // Fetch products
     let query = supabase
       .from("products")
-      .select(`*, ${specsTable}(*)`)
+      .select("id, name, manufacturer, series, release_year, category, image_url")
       .eq("category", cat)
       .order("name")
       .range(from, to);
@@ -50,23 +51,40 @@ function Components() {
       query = query.ilike("name", `%${srch.trim()}%`);
     }
 
-    const { data, error } = await query;
+    const { data: productsData, error: productsError } = await query;
 
-    if (error) {
-      console.error(error);
+    if (productsError || !productsData) {
+      console.error(productsError);
       setProducts([]);
-    } else {
-      setProducts(
-        (data || []).map((p: Record<string, unknown>) => {
-          const specs = p[specsTable] as Record<string, unknown>[] | Record<string, unknown> | null;
-          return {
-            ...p,
-            specs: Array.isArray(specs) ? specs[0] || null : specs,
-            [specsTable]: undefined,
-          } as Product;
-        })
-      );
+      setLoading(false);
+      setHasLoaded(true);
+      return;
     }
+
+    // Fetch specs for these products
+    const productIds = productsData.map((p) => p.id);
+    const specsMap = new Map<string, Record<string, unknown>>();
+
+    if (productIds.length > 0) {
+      const { data: specsData } = await supabase
+        .from(specsTable)
+        .select("*")
+        .in("product_id", productIds);
+
+      if (specsData) {
+        for (const s of specsData) {
+          const row = s as Record<string, unknown>;
+          specsMap.set(row.product_id as string, row);
+        }
+      }
+    }
+
+    setProducts(
+      productsData.map((p) => ({
+        ...p,
+        specs: specsMap.get(p.id) || null,
+      }))
+    );
     setLoading(false);
     setHasLoaded(true);
   }, []);
