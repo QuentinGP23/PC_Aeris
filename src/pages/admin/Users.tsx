@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context";
 import { adminService } from "../../services";
@@ -10,6 +10,7 @@ function AdminUsers() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   // Edit state
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
@@ -32,11 +33,13 @@ function AdminUsers() {
     setUsers(data);
     setError(err);
     setLoading(false);
+    setHasFetched(true);
   }, []);
 
-  useEffect(() => {
+  // Initial load
+  if (!hasFetched && loading) {
     fetchUsers();
-  }, [fetchUsers]);
+  }
 
   const openEdit = (u: AdminUser) => {
     setEditingUser(u);

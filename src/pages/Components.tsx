@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { supabase } from "../config";
 
 const CATEGORIES = [
@@ -26,52 +26,72 @@ interface Product {
 function Components() {
   const [category, setCategory] = useState(CATEGORIES[0].value);
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const PAGE_SIZE = 50;
 
-  useEffect(() => {
-    setPage(0);
-  }, [category, search]);
+  const fetchProducts = useCallback(async (cat: string, pg: number, srch: string) => {
+    setLoading(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
+    const specsTable = CATEGORIES.find((c) => c.value === cat)!.specsTable;
+    const from = pg * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
 
-      const specsTable = CATEGORIES.find((c) => c.value === category)!.specsTable;
-      const from = page * PAGE_SIZE;
-      const to = from + PAGE_SIZE - 1;
+    let query = supabase
+      .from("products")
+      .select(`*, ${specsTable}(*)`)
+      .eq("category", cat)
+      .order("name")
+      .range(from, to);
 
-      let query = supabase
-        .from("products")
-        .select(`*, specs:${specsTable}(*)`)
-        .eq("category", category)
-        .order("name")
-        .range(from, to);
+    if (srch.trim()) {
+      query = query.ilike("name", `%${srch.trim()}%`);
+    }
 
-      if (search.trim()) {
-        query = query.ilike("name", `%${search.trim()}%`);
-      }
+    const { data, error } = await query;
 
-      const { data, error } = await query;
-
-      if (error) {
-        console.error(error);
-        setProducts([]);
-      } else {
-        setProducts(
-          (data || []).map((p: Record<string, unknown>) => ({
+    if (error) {
+      console.error(error);
+      setProducts([]);
+    } else {
+      setProducts(
+        (data || []).map((p: Record<string, unknown>) => {
+          const specs = p[specsTable] as Record<string, unknown>[] | Record<string, unknown> | null;
+          return {
             ...p,
-            specs: Array.isArray(p.specs) ? p.specs[0] || null : p.specs,
-          })) as Product[]
-        );
-      }
-      setLoading(false);
-    };
+            specs: Array.isArray(specs) ? specs[0] || null : specs,
+            [specsTable]: undefined,
+          } as Product;
+        })
+      );
+    }
+    setLoading(false);
+    setHasLoaded(true);
+  }, []);
 
-    fetchProducts();
-  }, [category, page, search]);
+  // Initial load
+  if (!hasLoaded && !loading) {
+    fetchProducts(category, page, search);
+  }
+
+  const handleCategoryChange = (cat: string) => {
+    setCategory(cat);
+    setPage(0);
+    fetchProducts(cat, 0, search);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(0);
+    fetchProducts(category, 0, value);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    fetchProducts(category, newPage, search);
+  };
 
   const renderValue = (val: unknown): string => {
     if (val === null || val === undefined) return "—";
@@ -89,7 +109,7 @@ function Components() {
         {CATEGORIES.map((c) => (
           <button
             key={c.value}
-            onClick={() => setCategory(c.value)}
+            onClick={() => handleCategoryChange(c.value)}
             style={{
               padding: "0.5rem 1rem",
               background: category === c.value ? "#2563eb" : "#e5e7eb",
@@ -108,7 +128,7 @@ function Components() {
         type="text"
         placeholder="Rechercher..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => handleSearchChange(e.target.value)}
         style={{ padding: "0.5rem", width: "100%", maxWidth: 400, marginBottom: "1rem", borderRadius: 6, border: "1px solid #ccc" }}
       />
 
@@ -168,10 +188,10 @@ function Components() {
           </div>
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "1rem", justifyContent: "center" }}>
-            <button disabled={page === 0} onClick={() => setPage(page - 1)} style={{ padding: "0.5rem 1rem" }}>
+            <button disabled={page === 0} onClick={() => handlePageChange(page - 1)} style={{ padding: "0.5rem 1rem" }}>
               Précédent
             </button>
-            <button disabled={products.length < PAGE_SIZE} onClick={() => setPage(page + 1)} style={{ padding: "0.5rem 1rem" }}>
+            <button disabled={products.length < PAGE_SIZE} onClick={() => handlePageChange(page + 1)} style={{ padding: "0.5rem 1rem" }}>
               Suivant
             </button>
           </div>
