@@ -1,0 +1,111 @@
+@use "variables" as *;
+
+// ==========================================================================
+// Admin Users
+// ==========================================================================
+
+.admin-users {
+  padding: $spacing-8;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    margin-bottom: $spacing-2;
+  }
+
+  > p {
+    margin-bottom: $spacing-6;
+    color: $neutral-500;
+    font-size: $font-size-sm;
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-3 $spacing-4;
+    margin-bottom: $spacing-4;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: $radius-md;
+    color: $error;
+    font-size: $font-size-sm;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: $spacing-6;
+    font-size: $font-size-sm;
+
+    th,
+    td {
+      padding: $spacing-3 $spacing-4;
+      text-align: left;
+      border-bottom: 1px solid $neutral-200;
+    }
+
+    th {
+      font-weight: $font-weight-semibold;
+      color: $neutral-600;
+      background-color: $neutral-50;
+    }
+
+    tr:hover td {
+      background-color: $neutral-50;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-2;
+  }
+
+  // Modal overlay
+  &__modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  // Modal
+  &__modal {
+    background-color: $white;
+    border-radius: $radius-lg;
+    padding: $spacing-8;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: $shadow-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+
+    h2 {
+      margin: 0;
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__modal-email {
+    color: $neutral-500;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  &__modal-warning {
+    color: $error;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+  }
+
+  &__modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-3;
+    margin-top: $spacing-2;
+  }
+}
