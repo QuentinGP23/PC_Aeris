@@ -215,6 +215,11 @@ function specsFormToUpdates(form: SpecsFormValues, schema: Record<string, SpecsF
   return updates
 }
 
+function SortIcon({ col, sortBy, sortDir }: { col: string; sortBy: string; sortDir: 'asc' | 'desc' }) {
+  if (sortBy !== col) return <span className="admin-products__sort-icon admin-products__sort-icon--idle">↕</span>
+  return <span className="admin-products__sort-icon">{sortDir === 'asc' ? '↑' : '↓'}</span>
+}
+
 function AdminProducts() {
   const [products, setProducts] = useState<AdminProduct[]>([])
   const [total, setTotal] = useState(0)
@@ -224,6 +229,8 @@ function AdminProducts() {
   const [category, setCategory] = useState<CategoryKey | 'all'>('all')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
+  const [sortBy, setSortBy] = useState('name')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
 
   const [editingProduct, setEditingProduct] = useState<AdminProduct | null>(null)
   const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info')
@@ -243,7 +250,7 @@ function AdminProducts() {
     let cancelled = false
     async function load() {
       setLoading(true)
-      const { products: data, total: t, error: err } = await adminService.listProducts(category, page, search)
+      const { products: data, total: t, error: err } = await adminService.listProducts(category, page, search, sortBy, sortDir)
       if (cancelled) return
       setProducts(data)
       setTotal(t)
@@ -252,7 +259,7 @@ function AdminProducts() {
     }
     void load()
     return () => { cancelled = true }
-  }, [category, page, search])
+  }, [category, page, search, sortBy, sortDir])
 
   const handleCategoryChange = (val: string) => {
     setCategory(val as CategoryKey | 'all')
@@ -261,6 +268,16 @@ function AdminProducts() {
 
   const handleSearch = (val: string) => {
     setSearch(val)
+    setPage(0)
+  }
+
+  const handleSort = (col: string) => {
+    if (sortBy === col) {
+      setSortDir((d) => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(col)
+      setSortDir('asc')
+    }
     setPage(0)
   }
 
@@ -315,7 +332,7 @@ function AdminProducts() {
     if (err) { setEditError(err); return }
 
     setEditingProduct(null)
-    const { products: data, total: t } = await adminService.listProducts(category, page, search)
+    const { products: data, total: t } = await adminService.listProducts(category, page, search, sortBy, sortDir)
     setProducts(data)
     setTotal(t)
   }
@@ -327,7 +344,7 @@ function AdminProducts() {
     setDeleteLoading(false)
     if (err) { setError(err); setDeletingProduct(null); return }
     setDeletingProduct(null)
-    const { products: data, total: t } = await adminService.listProducts(category, page, search)
+    const { products: data, total: t } = await adminService.listProducts(category, page, search, sortBy, sortDir)
     setProducts(data)
     setTotal(t)
   }
@@ -374,11 +391,11 @@ function AdminProducts() {
           <Table.Head>
             <Table.Row>
               <Table.Th>Image</Table.Th>
-              <Table.Th>Nom</Table.Th>
-              <Table.Th>Catégorie</Table.Th>
-              <Table.Th>Fabricant</Table.Th>
-              <Table.Th>Série</Table.Th>
-              <Table.Th>Année</Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('name')}>Nom <SortIcon col="name" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('category')}>Catégorie <SortIcon col="category" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('manufacturer')}>Fabricant <SortIcon col="manufacturer" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('series')}>Série <SortIcon col="series" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('release_year')}>Année <SortIcon col="release_year" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
               <Table.Th>Actions</Table.Th>
             </Table.Row>
           </Table.Head>

@@ -23,6 +23,22 @@
     margin-left: auto;
   }
 
+  &__th-sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+
+    &:hover { color: $primary; }
+  }
+
+  &__sort-icon {
+    margin-left: $spacing-1;
+    font-size: $font-size-xs;
+    color: $primary;
+
+    &--idle { color: $neutral-300; }
+  }
+
   &__loading,
   &__empty {
     display: flex;

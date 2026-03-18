@@ -63,6 +63,8 @@ export const adminService = {
     category: CategoryKey | 'all',
     page: number,
     search: string,
+    sortBy: string = 'name',
+    sortDir: 'asc' | 'desc' = 'asc',
   ): Promise<{ products: AdminProduct[]; total: number; error: string | null }> {
     const from = page * PAGE_SIZE
     const to = from + PAGE_SIZE - 1
@@ -70,7 +72,7 @@ export const adminService = {
     let query = supabase
       .from('products')
       .select('id, name, category, manufacturer, series, variant, release_year, image_url, created_at', { count: 'exact' })
-      .order('name')
+      .order(sortBy, { ascending: sortDir === 'asc', nullsFirst: false })
       .range(from, to)
 
     if (category !== 'all') query = query.eq('category', category)
