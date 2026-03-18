@@ -3,6 +3,7 @@ import { ProtectedRoute } from "./components/common";
 import {
   Home,
   Components,
+  Configurator,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -17,6 +18,7 @@ function App() {
       {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/components" element={<Components />} />
+      <Route path="/configurateur" element={<Configurator />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
