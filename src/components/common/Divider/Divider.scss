@@ -1,0 +1,88 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// DIVIDER
+// ==========================================================================
+
+.divider {
+  // -------------------------------------------------------------------------
+  // Horizontal (default)
+  // -------------------------------------------------------------------------
+
+  &[data-orientation="horizontal"] {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: $neutral-200;
+    }
+
+    // Without label: hide the gap, span full width as a single line
+    &:not(:has(.divider__label)) {
+      gap: 0;
+
+      &::before {
+        display: none;
+      }
+
+      &::after {
+        display: block;
+      }
+    }
+
+    // Variant: dashed
+    &[data-variant="dashed"]::before,
+    &[data-variant="dashed"]::after {
+      background-color: transparent;
+      border-top: 1px dashed $neutral-200;
+      height: 0;
+    }
+
+    // Variant: dotted
+    &[data-variant="dotted"]::before,
+    &[data-variant="dotted"]::after {
+      background-color: transparent;
+      border-top: 1px dotted $neutral-200;
+      height: 0;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Vertical
+  // -------------------------------------------------------------------------
+
+  &[data-orientation="vertical"] {
+    display: inline-flex;
+    align-self: stretch;
+    width: 1px;
+    background-color: $neutral-200;
+    margin: 0 $spacing-3;
+
+    &[data-variant="dashed"] {
+      background-color: transparent;
+      border-left: 1px dashed $neutral-200;
+      width: 0;
+    }
+
+    &[data-variant="dotted"] {
+      background-color: transparent;
+      border-left: 1px dotted $neutral-200;
+      width: 0;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Label
+  // -------------------------------------------------------------------------
+
+  &__label {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    white-space: nowrap;
+  }
+}

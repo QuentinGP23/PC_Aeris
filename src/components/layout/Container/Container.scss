@@ -1,0 +1,21 @@
+@use "../../../styles/variables" as *;
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-4;
+
+  &[data-size="sm"] { max-width: 640px; }
+  &[data-size="md"] { max-width: 768px; }
+  &[data-size="lg"] { max-width: 1024px; }
+  &[data-size="xl"] { max-width: 1280px; }
+  &[data-size="full"] { max-width: 100%; }
+
+  @media (min-width: 768px) {
+    padding: 0 $spacing-6;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 0 $spacing-8;
+  }
+}

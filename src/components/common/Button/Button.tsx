@@ -1,3 +1,4 @@
+import "./Button.scss";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type ButtonVariant =

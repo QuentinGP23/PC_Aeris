@@ -1,3 +1,4 @@
+import "./Checkbox.scss";
 import { forwardRef, type InputHTMLAttributes } from "react";
 import { Check } from "@phosphor-icons/react";
 

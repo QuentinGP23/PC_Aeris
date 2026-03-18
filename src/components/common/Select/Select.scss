@@ -1,0 +1,225 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// SELECT
+// ==========================================================================
+
+.select {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  // -------------------------------------------------------------------------
+  // Full width
+  // -------------------------------------------------------------------------
+
+  &[data-full-width="true"] {
+    width: 100%;
+  }
+
+  // -------------------------------------------------------------------------
+  // Label
+  // -------------------------------------------------------------------------
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $neutral-700;
+  }
+
+  // -------------------------------------------------------------------------
+  // Wrapper
+  // -------------------------------------------------------------------------
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  // -------------------------------------------------------------------------
+  // Field base
+  // -------------------------------------------------------------------------
+
+  &__field {
+    width: 100%;
+    appearance: none;
+    outline: none;
+    transition: all $transition-base;
+    background-color: $white;
+    color: $neutral-900;
+    font-size: $font-size-base;
+    font-family: inherit;
+    cursor: pointer;
+    padding-right: 2.5rem; // space for arrow
+
+    &::placeholder {
+      color: $neutral-400;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: $neutral-100;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Variants (applied on wrapper .select via data-variant)
+  // -------------------------------------------------------------------------
+
+  &[data-variant="default"] .select__field {
+    border: 1px solid $neutral-200;
+    border-radius: $radius-md;
+    padding-top: $spacing-3;
+    padding-bottom: $spacing-3;
+    padding-left: $spacing-4;
+    padding-right: 2.5rem;
+  }
+
+  &[data-variant="filled"] .select__field {
+    background-color: $neutral-100;
+    border: 1px solid transparent;
+    border-radius: $radius-md;
+    padding-top: $spacing-3;
+    padding-bottom: $spacing-3;
+    padding-left: $spacing-4;
+    padding-right: 2.5rem;
+  }
+
+  &[data-variant="outline"] .select__field {
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    padding-top: $spacing-3;
+    padding-bottom: $spacing-3;
+    padding-left: $spacing-4;
+    padding-right: 2.5rem;
+  }
+
+  &[data-variant="underline"] .select__field {
+    border: none;
+    border-bottom: 2px solid $neutral-200;
+    border-radius: 0;
+    padding-top: $spacing-3;
+    padding-bottom: $spacing-3;
+    padding-left: 0;
+    padding-right: 2.5rem;
+    background-color: transparent;
+  }
+
+  // -------------------------------------------------------------------------
+  // Sizes (applied on wrapper .select via data-size)
+  // -------------------------------------------------------------------------
+
+  &[data-size="sm"] .select__field {
+    padding-top: $spacing-2;
+    padding-bottom: $spacing-2;
+    padding-left: $spacing-3;
+    padding-right: 2.5rem;
+    font-size: $font-size-sm;
+  }
+
+  &[data-size="lg"] .select__field {
+    padding-top: $spacing-4;
+    padding-bottom: $spacing-4;
+    padding-left: $spacing-5;
+    padding-right: 2.5rem;
+    font-size: $font-size-lg;
+  }
+
+  // Underline variant overrides padding-left for size variants
+  &[data-variant="underline"][data-size="sm"] .select__field,
+  &[data-variant="underline"][data-size="lg"] .select__field {
+    padding-left: 0;
+  }
+
+  // -------------------------------------------------------------------------
+  // Focus state
+  // -------------------------------------------------------------------------
+
+  &[data-variant="default"] .select__field:focus,
+  &[data-variant="filled"] .select__field:focus,
+  &[data-variant="outline"] .select__field:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  &[data-variant="underline"] .select__field:focus {
+    border-bottom-color: $primary;
+    box-shadow: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Error state
+  // -------------------------------------------------------------------------
+
+  &[data-error="true"][data-variant="default"] .select__field,
+  &[data-error="true"][data-variant="filled"] .select__field,
+  &[data-error="true"][data-variant="outline"] .select__field {
+    border-color: $error;
+  }
+
+  &[data-error="true"][data-variant="underline"] .select__field {
+    border-bottom-color: $error;
+  }
+
+  &[data-error="true"][data-variant="default"] .select__field:focus,
+  &[data-error="true"][data-variant="filled"] .select__field:focus,
+  &[data-error="true"][data-variant="outline"] .select__field:focus {
+    border-color: $error;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+
+  // -------------------------------------------------------------------------
+  // Arrow indicator
+  // -------------------------------------------------------------------------
+
+  &__arrow {
+    position: absolute;
+    right: $spacing-3;
+    pointer-events: none;
+    color: $neutral-400;
+    display: flex;
+    align-items: center;
+  }
+
+  // -------------------------------------------------------------------------
+  // Left icon
+  // -------------------------------------------------------------------------
+
+  &__icon {
+    position: absolute;
+    color: $neutral-400;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+
+    &--left {
+      left: $spacing-3;
+    }
+  }
+
+  // Adjust field padding when left icon is present
+  &:has(.select__icon--left) .select__field {
+    padding-left: 2.5rem;
+  }
+
+  // Underline variant: no left padding even with icon
+  &[data-variant="underline"]:has(.select__icon--left) .select__field {
+    padding-left: 2rem;
+  }
+
+  // -------------------------------------------------------------------------
+  // Error & hint messages
+  // -------------------------------------------------------------------------
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $error;
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+}
