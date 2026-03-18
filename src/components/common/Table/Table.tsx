@@ -22,7 +22,7 @@ function Table({ children, striped = false, hoverable = true, compact = false, c
 function Thead({ children }: { children: ReactNode }) { return <thead className="table__head">{children}</thead> }
 function Tbody({ children }: { children: ReactNode }) { return <tbody className="table__body">{children}</tbody> }
 function Tr({ children, className = '' }: { children: ReactNode; className?: string }) { return <tr className={`table__row ${className}`}>{children}</tr> }
-function Th({ children, className = '' }: { children: ReactNode; className?: string }) { return <th className={`table__th ${className}`}>{children}</th> }
+function Th({ children, className = '', onClick }: { children: ReactNode; className?: string; onClick?: () => void }) { return <th className={`table__th ${className}`} onClick={onClick}>{children}</th> }
 function Td({ children, className = '' }: { children: ReactNode; className?: string }) { return <td className={`table__td ${className}`}>{children}</td> }
 
 Table.Head = Thead
