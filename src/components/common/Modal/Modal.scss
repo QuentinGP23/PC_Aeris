@@ -1,0 +1,113 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// MODAL
+// ==========================================================================
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $spacing-4;
+}
+
+.modal {
+  background-color: $white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xl;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  width: 100%;
+
+  // -------------------------------------------------------------------------
+  // Sizes
+  // -------------------------------------------------------------------------
+
+  &[data-size="sm"] {
+    max-width: 400px;
+  }
+
+  &[data-size="md"] {
+    max-width: 560px;
+  }
+
+  &[data-size="lg"] {
+    max-width: 720px;
+  }
+
+  &[data-size="xl"] {
+    max-width: 960px;
+  }
+
+  &[data-size="full"] {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  // -------------------------------------------------------------------------
+  // Header
+  // -------------------------------------------------------------------------
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-5 $spacing-6;
+    border-bottom: 1px solid $neutral-100;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    margin: 0;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: $neutral-400;
+    cursor: pointer;
+    padding: $spacing-1;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $neutral-700;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Body
+  // -------------------------------------------------------------------------
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-6;
+  }
+
+  // -------------------------------------------------------------------------
+  // Footer
+  // -------------------------------------------------------------------------
+
+  &__footer {
+    padding: $spacing-4 $spacing-6;
+    border-top: 1px solid $neutral-100;
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-3;
+    flex-shrink: 0;
+  }
+}

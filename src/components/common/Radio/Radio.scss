@@ -1,0 +1,154 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// RADIO
+// ==========================================================================
+
+.radio {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  // -------------------------------------------------------------------------
+  // Wrapper (label element)
+  // -------------------------------------------------------------------------
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    cursor: pointer;
+  }
+
+  // -------------------------------------------------------------------------
+  // Hidden native input
+  // -------------------------------------------------------------------------
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Visual circle
+  // -------------------------------------------------------------------------
+
+  &__circle {
+    flex-shrink: 0;
+    border: 2px solid $neutral-300;
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all $transition-base;
+    background-color: $white;
+  }
+
+  // Sizes
+  &[data-size="sm"] .radio__circle {
+    width: 16px;
+    height: 16px;
+  }
+
+  &[data-size="md"] .radio__circle {
+    width: 18px;
+    height: 18px;
+  }
+
+  &[data-size="lg"] .radio__circle {
+    width: 20px;
+    height: 20px;
+  }
+
+  // -------------------------------------------------------------------------
+  // Checked state
+  // -------------------------------------------------------------------------
+
+  &[data-checked="true"] .radio__circle {
+    border-color: $primary;
+  }
+
+  // -------------------------------------------------------------------------
+  // Dot (checked indicator)
+  // -------------------------------------------------------------------------
+
+  &__dot {
+    border-radius: $radius-full;
+    background-color: $primary;
+    flex-shrink: 0;
+  }
+
+  &[data-size="sm"] .radio__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  &[data-size="md"] .radio__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  &[data-size="lg"] .radio__dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  // -------------------------------------------------------------------------
+  // Hover state
+  // -------------------------------------------------------------------------
+
+  &__wrapper:hover .radio__circle {
+    border-color: $primary-400;
+  }
+
+  &[data-checked="true"] &__wrapper:hover .radio__circle {
+    border-color: $primary-900;
+  }
+
+  // -------------------------------------------------------------------------
+  // Label text
+  // -------------------------------------------------------------------------
+
+  &__label {
+    font-size: $font-size-base;
+    color: $neutral-800;
+    user-select: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Disabled state
+  // -------------------------------------------------------------------------
+
+  &[data-disabled="true"] {
+    opacity: 0.5;
+
+    .radio__wrapper {
+      cursor: not-allowed;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Error state
+  // -------------------------------------------------------------------------
+
+  &[data-error="true"] .radio__circle {
+    border-color: $error;
+  }
+
+  // -------------------------------------------------------------------------
+  // Error & hint messages
+  // -------------------------------------------------------------------------
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $error;
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+}

@@ -1,0 +1,89 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// SPINNER
+// ==========================================================================
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+
+  // -------------------------------------------------------------------------
+  // Circle
+  // -------------------------------------------------------------------------
+
+  &__circle {
+    display: block;
+    border-radius: $radius-full;
+    border: 2px solid transparent;
+    animation: spin 0.75s linear infinite;
+    flex-shrink: 0;
+  }
+
+  // -------------------------------------------------------------------------
+  // Sizes
+  // -------------------------------------------------------------------------
+
+  &[data-size="xs"] .spinner__circle {
+    width: 16px;
+    height: 16px;
+  }
+
+  &[data-size="sm"] .spinner__circle {
+    width: 20px;
+    height: 20px;
+  }
+
+  &[data-size="md"] .spinner__circle {
+    width: 24px;
+    height: 24px;
+  }
+
+  &[data-size="lg"] .spinner__circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  &[data-size="xl"] .spinner__circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  // -------------------------------------------------------------------------
+  // Variants
+  // -------------------------------------------------------------------------
+
+  &[data-variant="primary"] .spinner__circle {
+    border-top-color: $primary;
+    border-right-color: $primary;
+  }
+
+  &[data-variant="white"] .spinner__circle {
+    border-top-color: $white;
+    border-right-color: $white;
+  }
+
+  &[data-variant="neutral"] .spinner__circle {
+    border-top-color: $neutral-400;
+    border-right-color: $neutral-400;
+  }
+
+  // -------------------------------------------------------------------------
+  // Label
+  // -------------------------------------------------------------------------
+
+  &__label {
+    font-size: $font-size-sm;
+    color: currentColor;
+  }
+}

@@ -1,0 +1,197 @@
+@use "../../../styles/variables" as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $white;
+  border-bottom: 1px solid $neutral-100;
+  box-shadow: $shadow-sm;
+
+  &__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 $spacing-6;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: $spacing-6;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    color: $neutral-900;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xl;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    svg {
+      color: $primary;
+    }
+  }
+
+  &__logo-text {
+    font-weight: $font-weight-bold;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    flex: 1;
+  }
+
+  &__nav-link {
+    padding: $spacing-2 $spacing-3;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $neutral-600;
+    transition: color $transition-fast, background-color $transition-fast;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $neutral-100;
+      color: $neutral-900;
+    }
+
+    &--active {
+      color: $primary;
+      background-color: rgba(37, 99, 235, 0.08);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin-left: auto;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+
+  &__user-name {
+    font-size: $font-size-sm;
+    color: $neutral-700;
+    font-weight: $font-weight-medium;
+  }
+
+  &__signout {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      color: $neutral-900;
+    }
+  }
+
+  &__auth {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__btn {
+    padding: $spacing-2 $spacing-4;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &--ghost {
+      color: $neutral-700;
+
+      &:hover {
+        background-color: $neutral-100;
+      }
+    }
+
+    &--primary {
+      background-color: $primary;
+      color: $white;
+
+      &:hover {
+        background-color: $primary-900;
+      }
+    }
+  }
+
+  &__hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $neutral-700;
+    padding: $spacing-2;
+  }
+
+  &__mobile-menu {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-3 $spacing-4;
+    border-top: 1px solid $neutral-100;
+    background-color: $white;
+    gap: $spacing-1;
+  }
+
+  &__mobile-link {
+    padding: $spacing-3;
+    font-size: $font-size-base;
+    color: $neutral-700;
+    border-radius: $radius-md;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $neutral-100;
+    }
+
+    &--active {
+      color: $primary;
+      background-color: rgba(37, 99, 235, 0.08);
+    }
+
+    &--primary {
+      color: $primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__mobile-signout {
+    padding: $spacing-3;
+    font-size: $font-size-base;
+    color: $neutral-500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    &__nav {
+      display: none;
+    }
+
+    &__actions {
+      display: none;
+    }
+
+    &__hamburger {
+      display: flex;
+    }
+
+    &__inner {
+      gap: $spacing-4;
+    }
+  }
+}

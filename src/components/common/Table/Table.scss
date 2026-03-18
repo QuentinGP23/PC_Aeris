@@ -1,0 +1,67 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// TABLE
+// ==========================================================================
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-sm;
+
+  // -------------------------------------------------------------------------
+  // Header cell
+  // -------------------------------------------------------------------------
+
+  &__th {
+    padding: $spacing-3 $spacing-4;
+    text-align: left;
+    font-weight: $font-weight-semibold;
+    color: $neutral-600;
+    background-color: $neutral-50;
+    border-bottom: 2px solid $neutral-200;
+    white-space: nowrap;
+  }
+
+  // -------------------------------------------------------------------------
+  // Data cell
+  // -------------------------------------------------------------------------
+
+  &__td {
+    padding: $spacing-3 $spacing-4;
+    border-bottom: 1px solid $neutral-100;
+    color: $neutral-800;
+  }
+
+  // -------------------------------------------------------------------------
+  // Hoverable rows
+  // -------------------------------------------------------------------------
+
+  &[data-hoverable="true"] .table__row:hover .table__td {
+    background-color: $neutral-50;
+  }
+
+  // -------------------------------------------------------------------------
+  // Striped rows
+  // -------------------------------------------------------------------------
+
+  &[data-striped="true"] .table__row:nth-child(even) .table__td {
+    background-color: $neutral-50;
+  }
+
+  // -------------------------------------------------------------------------
+  // Compact
+  // -------------------------------------------------------------------------
+
+  &[data-compact="true"] {
+    .table__th,
+    .table__td {
+      padding: $spacing-2 $spacing-3;
+    }
+  }
+}

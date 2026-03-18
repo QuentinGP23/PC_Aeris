@@ -1,0 +1,105 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// CARD
+// ==========================================================================
+
+.card {
+  background-color: $white;
+  border-radius: $radius-lg;
+  overflow: hidden;
+
+  // -------------------------------------------------------------------------
+  // Variants
+  // -------------------------------------------------------------------------
+
+  &[data-variant="default"] {
+    border: 1px solid $neutral-200;
+    box-shadow: $shadow-sm;
+  }
+
+  &[data-variant="outlined"] {
+    border: 2px solid $neutral-200;
+  }
+
+  &[data-variant="elevated"] {
+    box-shadow: $shadow-lg;
+    border: none;
+  }
+
+  &[data-variant="flat"] {
+    background-color: $neutral-50;
+    border: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Padding (applied to card__body via parent data-padding)
+  // -------------------------------------------------------------------------
+
+  &[data-padding="none"] .card__body {
+    padding: 0;
+  }
+
+  &[data-padding="sm"] .card__body {
+    padding: $spacing-4;
+  }
+
+  &[data-padding="md"] .card__body {
+    padding: $spacing-6;
+  }
+
+  &[data-padding="lg"] .card__body {
+    padding: $spacing-8;
+  }
+
+  // -------------------------------------------------------------------------
+  // Hoverable
+  // -------------------------------------------------------------------------
+
+  &[data-hoverable="true"] {
+    transition: $transition-base;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Clickable
+  // -------------------------------------------------------------------------
+
+  &[data-clickable="true"] {
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Sections
+  // -------------------------------------------------------------------------
+
+  &__header {
+    padding: $spacing-4 $spacing-6;
+    border-bottom: 1px solid $neutral-100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__body {
+    padding: $spacing-6;
+  }
+
+  &__footer {
+    padding: $spacing-4 $spacing-6;
+    border-top: 1px solid $neutral-100;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+}

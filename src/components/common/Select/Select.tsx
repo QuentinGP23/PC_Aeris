@@ -1,3 +1,4 @@
+import "./Select.scss";
 import { forwardRef, type SelectHTMLAttributes, type ReactNode } from "react";
 import { CaretDown } from "@phosphor-icons/react";
 

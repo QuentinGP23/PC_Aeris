@@ -1,0 +1,235 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// INPUT
+// ==========================================================================
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  // -------------------------------------------------------------------------
+  // Full width
+  // -------------------------------------------------------------------------
+
+  &[data-full-width="true"] {
+    width: 100%;
+  }
+
+  // -------------------------------------------------------------------------
+  // Label
+  // -------------------------------------------------------------------------
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $neutral-700;
+  }
+
+  // -------------------------------------------------------------------------
+  // Wrapper
+  // -------------------------------------------------------------------------
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  // -------------------------------------------------------------------------
+  // Field base
+  // -------------------------------------------------------------------------
+
+  &__field {
+    width: 100%;
+    outline: none;
+    transition: all $transition-base;
+    background-color: $white;
+    color: $neutral-900;
+    font-size: $font-size-base;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $neutral-400;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: $neutral-100;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Variants (applied on wrapper .input via data-variant)
+  // -------------------------------------------------------------------------
+
+  &[data-variant="default"] .input__field {
+    border: 1px solid $neutral-200;
+    border-radius: $radius-md;
+    padding: $spacing-3 $spacing-4;
+  }
+
+  &[data-variant="filled"] .input__field {
+    background-color: $neutral-100;
+    border: 1px solid transparent;
+    border-radius: $radius-md;
+    padding: $spacing-3 $spacing-4;
+  }
+
+  &[data-variant="outline"] .input__field {
+    border: 2px solid $neutral-300;
+    border-radius: $radius-md;
+    padding: $spacing-3 $spacing-4;
+  }
+
+  &[data-variant="underline"] .input__field {
+    border: none;
+    border-bottom: 2px solid $neutral-200;
+    border-radius: 0;
+    padding: $spacing-3 0;
+    padding-left: 0;
+    background-color: transparent;
+  }
+
+  // -------------------------------------------------------------------------
+  // Sizes (applied on wrapper .input via data-size)
+  // -------------------------------------------------------------------------
+
+  &[data-size="sm"] .input__field {
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-sm;
+  }
+
+  &[data-size="md"] .input__field {
+    // default — already handled per variant
+  }
+
+  &[data-size="lg"] .input__field {
+    padding: $spacing-4 $spacing-5;
+    font-size: $font-size-lg;
+  }
+
+  // Underline variant overrides padding-left for size variants
+  &[data-variant="underline"][data-size="sm"] .input__field {
+    padding-left: 0;
+  }
+
+  &[data-variant="underline"][data-size="lg"] .input__field {
+    padding-left: 0;
+  }
+
+  // -------------------------------------------------------------------------
+  // Focus state
+  // -------------------------------------------------------------------------
+
+  &[data-focused="true"][data-variant="default"] .input__field,
+  &[data-focused="true"][data-variant="filled"] .input__field,
+  &[data-focused="true"][data-variant="outline"] .input__field {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  &[data-focused="true"][data-variant="underline"] .input__field {
+    border-bottom-color: $primary;
+    box-shadow: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Error state
+  // -------------------------------------------------------------------------
+
+  &[data-error="true"][data-variant="default"] .input__field,
+  &[data-error="true"][data-variant="filled"] .input__field,
+  &[data-error="true"][data-variant="outline"] .input__field {
+    border-color: $error;
+  }
+
+  &[data-error="true"][data-variant="underline"] .input__field {
+    border-bottom-color: $error;
+  }
+
+  &[data-error="true"][data-focused="true"][data-variant="default"] .input__field,
+  &[data-error="true"][data-focused="true"][data-variant="filled"] .input__field,
+  &[data-error="true"][data-focused="true"][data-variant="outline"] .input__field {
+    border-color: $error;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+
+  // -------------------------------------------------------------------------
+  // Icons
+  // -------------------------------------------------------------------------
+
+  &__icon {
+    position: absolute;
+    color: $neutral-400;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+
+    &--left {
+      left: $spacing-3;
+    }
+
+    &--right {
+      right: $spacing-3;
+    }
+  }
+
+  // Adjust field padding when icons are present
+  &:has(.input__icon--left) .input__field {
+    padding-left: 2.5rem;
+  }
+
+  &:has(.input__icon--right) .input__field {
+    padding-right: 2.5rem;
+  }
+
+  // Underline variant: no left padding even with icon
+  &[data-variant="underline"]:has(.input__icon--left) .input__field {
+    padding-left: 2rem;
+  }
+
+  // -------------------------------------------------------------------------
+  // Toggle (password) & Clear buttons
+  // -------------------------------------------------------------------------
+
+  &__toggle,
+  &__clear {
+    position: absolute;
+    right: $spacing-3;
+    background: none;
+    border: none;
+    color: $neutral-400;
+    cursor: pointer;
+    padding: $spacing-1;
+    display: flex;
+    align-items: center;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $neutral-700;
+    }
+  }
+
+  // Adjust field padding when toggle/clear is present
+  &:has(.input__toggle) .input__field,
+  &:has(.input__clear) .input__field {
+    padding-right: 2.5rem;
+  }
+
+  // -------------------------------------------------------------------------
+  // Error & hint messages
+  // -------------------------------------------------------------------------
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $error;
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+}
