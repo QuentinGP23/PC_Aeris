@@ -1,0 +1,136 @@
+@use "../../styles/variables" as *;
+
+.admin-products {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  &__alert {
+    margin-bottom: $spacing-2;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  &__loading,
+  &__empty {
+    display: flex;
+    justify-content: center;
+    padding: $spacing-16;
+    color: $neutral-400;
+    font-size: $font-size-lg;
+  }
+
+  &__thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: $radius-sm;
+    background: $neutral-50;
+    border: 1px solid $neutral-100;
+    padding: 2px;
+  }
+
+  &__no-img {
+    width: 48px;
+    height: 48px;
+    background: $neutral-100;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $neutral-300;
+    font-size: $font-size-sm;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $neutral-900;
+    max-width: 300px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__empty {
+    color: $neutral-300;
+    font-size: $font-size-sm;
+    padding: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-2;
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-4;
+    padding: $spacing-4 0;
+  }
+
+  &__page-info {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  &__modal-alert {
+    margin-bottom: $spacing-4;
+  }
+
+  &__modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__modal-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+  }
+
+  &__modal-preview {
+    display: flex;
+    justify-content: center;
+    padding: $spacing-4;
+    background: $neutral-50;
+    border-radius: $radius-md;
+    border: 1px solid $neutral-200;
+
+    img {
+      max-height: 120px;
+      max-width: 200px;
+      object-fit: contain;
+    }
+  }
+
+  &__delete-text {
+    font-size: $font-size-base;
+    color: $neutral-700;
+    margin-bottom: $spacing-2;
+  }
+
+  &__delete-warning {
+    font-size: $font-size-sm;
+    color: $error;
+    font-weight: $font-weight-medium;
+  }
+}

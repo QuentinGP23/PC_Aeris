@@ -11,6 +11,7 @@ import {
   ResetPassword,
   AdminDashboard,
   AdminUsers,
+  AdminProducts,
 } from "./pages";
 
 function PublicLayout() {
@@ -65,6 +66,16 @@ function App() {
           <ProtectedRoute requiredRole="admin">
             <AdminLayout title="Utilisateurs">
               <AdminUsers />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminLayout title="Produits">
+              <AdminProducts />
             </AdminLayout>
           </ProtectedRoute>
         }
