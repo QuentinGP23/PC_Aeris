@@ -94,6 +94,31 @@ export const adminService = {
     return { error: error?.message || null }
   },
 
+  async getProductSpecs(
+    productId: string,
+    specsTable: string,
+  ): Promise<{ specs: Record<string, unknown> | null; error: string | null }> {
+    const { data, error } = await supabase
+      .from(specsTable)
+      .select('*')
+      .eq('product_id', productId)
+      .single()
+    if (error) return { specs: null, error: error.message }
+    return { specs: data as Record<string, unknown>, error: null }
+  },
+
+  async updateProductSpecs(
+    productId: string,
+    specsTable: string,
+    updates: Record<string, unknown>,
+  ): Promise<{ error: string | null }> {
+    const { error } = await supabase
+      .from(specsTable)
+      .update(updates)
+      .eq('product_id', productId)
+    return { error: error?.message || null }
+  },
+
   // ── Dashboard stats ───────────────────────────────────────────────────────
 
   async getDashboardStats(): Promise<{ stats: DashboardStats | null; error: string | null }> {
