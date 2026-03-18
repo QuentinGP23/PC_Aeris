@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../config'
 import { useConfigStore } from '../../store'
 import { CATEGORIES, KEY_SPECS } from '../../types'
@@ -32,19 +32,18 @@ function Configurator() {
   const [totalCount, setTotalCount] = useState(0)
   const [compatInfo, setCompatInfo] = useState<{ active: boolean; reason?: string; empty?: boolean }>({ active: false })
 
-  // Track previous config to detect changes that affect compatibility
-  const prevConfigRef = useRef(config)
+  const cpuId = config['cpu']?.id
+  const motherboardId = config['motherboard']?.id
 
-  const fetchProducts = useCallback(
-    async (cat: CategoryKey, pg: number, srch: string, currentConfig: typeof config) => {
-      setLoading(true)
+  useEffect(() => {
+    let cancelled = false
+    const categoryDef = CATEGORIES.find((c) => c.value === activeCategory)!
+    const from = page * PAGE_SIZE
+    const to = from + PAGE_SIZE - 1
 
-      const categoryDef = CATEGORIES.find((c) => c.value === cat)!
-      const from = pg * PAGE_SIZE
-      const to = from + PAGE_SIZE - 1
-
-      // Resolve compatibility filters
-      const compat = await getCompatibleProductIds(cat, currentConfig)
+    async function run() {
+      const compat = await getCompatibleProductIds(activeCategory, config)
+      if (cancelled) return
 
       if (compat.filtered && compat.productIds.length === 0) {
         setProducts([])
@@ -55,16 +54,17 @@ function Configurator() {
       }
 
       setCompatInfo(compat.filtered ? { active: true, reason: compat.reason } : { active: false })
+      setLoading(true)
 
       let query = supabase
         .from('products')
         .select('id, name, manufacturer, series, release_year, category, image_url', { count: 'exact' })
-        .eq('category', cat)
+        .eq('category', activeCategory)
         .order('name')
         .range(from, to)
 
-      if (srch.trim()) {
-        query = query.ilike('name', `%${srch.trim()}%`)
+      if (search.trim()) {
+        query = query.ilike('name', `%${search.trim()}%`)
       }
 
       if (compat.filtered) {
@@ -72,6 +72,7 @@ function Configurator() {
       }
 
       const { data: productsData, error, count } = await query
+      if (cancelled) return
 
       if (error || !productsData) {
         setProducts([])
@@ -90,7 +91,7 @@ function Configurator() {
           .select('*')
           .in('product_id', productIds)
 
-        if (specsData) {
+        if (specsData && !cancelled) {
           for (const s of specsData) {
             const row = s as Record<string, unknown>
             specsMap.set(row.product_id as string, row)
@@ -98,47 +99,34 @@ function Configurator() {
         }
       }
 
-      setProducts(
-        productsData.map((p) => ({
-          ...p,
-          specs: specsMap.get(p.id) || null,
-        }))
-      )
-      setLoading(false)
-    },
-    []
-  )
+      if (!cancelled) {
+        setProducts(
+          productsData.map((p) => ({
+            ...p,
+            specs: specsMap.get(p.id) || null,
+          }))
+        )
+        setLoading(false)
+      }
+    }
 
-  // Fetch on category change
-  useEffect(() => {
+    void run()
+    return () => { cancelled = true }
+  }, [activeCategory, page, search, cpuId, motherboardId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCategoryChange = (cat: CategoryKey) => {
+    setActiveCategory(cat)
     setSearch('')
     setPage(0)
-    fetchProducts(activeCategory, 0, '', config)
-  }, [activeCategory, fetchProducts])  // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Re-fetch when a compatibility-relevant component changes
-  useEffect(() => {
-    const prev = prevConfigRef.current
-    const changed =
-      prev['cpu'] !== config['cpu'] ||
-      prev['motherboard'] !== config['motherboard']
-
-    if (changed) {
-      prevConfigRef.current = config
-      setPage(0)
-      fetchProducts(activeCategory, 0, search, config)
-    }
-  }, [config, activeCategory, search, fetchProducts])
+  }
 
   const handleSearch = (value: string) => {
     setSearch(value)
     setPage(0)
-    fetchProducts(activeCategory, 0, value, config)
   }
 
   const handlePage = (newPage: number) => {
     setPage(newPage)
-    fetchProducts(activeCategory, newPage, search, config)
   }
 
   const selectedCount = Object.keys(config).length
@@ -166,7 +154,7 @@ function Configurator() {
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                onClick={() => setActiveCategory(cat.value)}
+                onClick={() => handleCategoryChange(cat.value)}
               >
                 <span className="configurator__summary-icon">{cat.icon}</span>
                 <div className="configurator__summary-info">
@@ -221,7 +209,7 @@ function Configurator() {
               ]
                 .filter(Boolean)
                 .join(' ')}
-              onClick={() => setActiveCategory(cat.value)}
+              onClick={() => handleCategoryChange(cat.value)}
             >
               <span>{cat.icon}</span>
               <span>{cat.label}</span>
