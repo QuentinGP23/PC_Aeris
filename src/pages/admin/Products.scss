@@ -157,6 +157,12 @@
     min-height: 120px;
   }
 
+  &__specs-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: $spacing-3;
+  }
+
   &__specs-loading {
     display: flex;
     justify-content: center;

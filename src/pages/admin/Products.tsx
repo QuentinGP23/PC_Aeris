@@ -229,6 +229,7 @@ function AdminProducts() {
   const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info')
   const [editForm, setEditForm] = useState({ name: '', manufacturer: '', series: '', variant: '', release_year: '', image_url: '' })
   const [specsForm, setSpecsForm] = useState<SpecsFormValues>({})
+  const [originalSpecs, setOriginalSpecs] = useState<Record<string, unknown> | null>(null)
   const [specsLoading, setSpecsLoading] = useState(false)
   const [editLoading, setEditLoading] = useState(false)
   const [editError, setEditError] = useState<string | null>(null)
@@ -279,8 +280,10 @@ function AdminProducts() {
     if (specsTable && SPECS_SCHEMA[specsTable]) {
       setSpecsLoading(true)
       setSpecsForm({})
+      setOriginalSpecs(null)
       const { specs } = await adminService.getProductSpecs(p.id, specsTable)
       setSpecsLoading(false)
+      setOriginalSpecs(specs)
       setSpecsForm(initSpecsForm(specs, SPECS_SCHEMA[specsTable]))
     }
   }
@@ -327,6 +330,11 @@ function AdminProducts() {
     const { products: data, total: t } = await adminService.listProducts(category, page, search)
     setProducts(data)
     setTotal(t)
+  }
+
+  const handleResetSpecs = () => {
+    if (!specsSchema) return
+    setSpecsForm(initSpecsForm(originalSpecs, specsSchema))
   }
 
   const specsTable = editingProduct ? CATEGORIES.find((c) => c.value === editingProduct.category)?.specsTable : undefined
@@ -467,6 +475,13 @@ function AdminProducts() {
 
         {activeTab === 'specs' && (
           <div className="admin-products__specs-panel">
+            {!specsLoading && specsSchema && (
+              <div className="admin-products__specs-toolbar">
+                <Button variant="outline" size="sm" onClick={handleResetSpecs}>
+                  Réinitialiser
+                </Button>
+              </div>
+            )}
             {specsLoading ? (
               <div className="admin-products__specs-loading"><Spinner size="md" /></div>
             ) : specsSchema ? (
