@@ -1,0 +1,105 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// ALERT
+// ==========================================================================
+
+.alert {
+  display: flex;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  border-radius: $radius-md;
+  border: 1px solid;
+
+  // -------------------------------------------------------------------------
+  // Variants
+  // -------------------------------------------------------------------------
+
+  &[data-variant="success"] {
+    background-color: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.3);
+
+    .alert__icon {
+      color: #16a34a;
+    }
+  }
+
+  &[data-variant="warning"] {
+    background-color: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+
+    .alert__icon {
+      color: #b45309;
+    }
+  }
+
+  &[data-variant="error"] {
+    background-color: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.3);
+
+    .alert__icon {
+      color: #dc2626;
+    }
+  }
+
+  &[data-variant="info"] {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
+
+    .alert__icon {
+      color: #1d4ed8;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Icon
+  // -------------------------------------------------------------------------
+
+  &__icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  // -------------------------------------------------------------------------
+  // Content
+  // -------------------------------------------------------------------------
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-1;
+    margin-top: 0;
+  }
+
+  &__body {
+    font-size: $font-size-sm;
+    color: $neutral-700;
+  }
+
+  // -------------------------------------------------------------------------
+  // Dismiss button
+  // -------------------------------------------------------------------------
+
+  &__dismiss {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: $neutral-400;
+    cursor: pointer;
+    padding: $spacing-1;
+    display: flex;
+    align-items: center;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $neutral-700;
+    }
+  }
+}

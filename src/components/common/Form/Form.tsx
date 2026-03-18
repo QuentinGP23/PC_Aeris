@@ -1,3 +1,4 @@
+import "./Form.scss";
 import type { FormHTMLAttributes, ReactNode } from "react";
 
 type FormLayout = "vertical" | "horizontal" | "inline";

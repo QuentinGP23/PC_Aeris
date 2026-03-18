@@ -1,0 +1,82 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// AVATAR
+// ==========================================================================
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: $primary;
+  color: $white;
+  font-weight: $font-weight-semibold;
+  flex-shrink: 0;
+
+  // -------------------------------------------------------------------------
+  // Variants
+  // -------------------------------------------------------------------------
+
+  &[data-variant="circle"] {
+    border-radius: $radius-full;
+  }
+
+  &[data-variant="rounded"] {
+    border-radius: $radius-lg;
+  }
+
+  &[data-variant="square"] {
+    border-radius: $radius-sm;
+  }
+
+  // -------------------------------------------------------------------------
+  // Sizes
+  // -------------------------------------------------------------------------
+
+  &[data-size="xs"] {
+    width: 24px;
+    height: 24px;
+    font-size: $font-size-xs;
+  }
+
+  &[data-size="sm"] {
+    width: 32px;
+    height: 32px;
+    font-size: $font-size-xs;
+  }
+
+  &[data-size="md"] {
+    width: 40px;
+    height: 40px;
+    font-size: $font-size-sm;
+  }
+
+  &[data-size="lg"] {
+    width: 48px;
+    height: 48px;
+    font-size: $font-size-base;
+  }
+
+  &[data-size="xl"] {
+    width: 64px;
+    height: 64px;
+    font-size: $font-size-lg;
+  }
+
+  // -------------------------------------------------------------------------
+  // Inner elements
+  // -------------------------------------------------------------------------
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__initials,
+  &__fallback {
+    font-size: inherit;
+    line-height: 1;
+  }
+}

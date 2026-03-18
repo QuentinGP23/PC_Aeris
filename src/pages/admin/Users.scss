@@ -1,0 +1,79 @@
+@use "../../styles/variables" as *;
+
+.admin-users-page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  &__alert {
+    margin-bottom: $spacing-2;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    white-space: nowrap;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: $spacing-16;
+  }
+
+  &__user-cell {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+
+  &__email {
+    font-size: $font-size-sm;
+    color: $neutral-800;
+    font-weight: $font-weight-medium;
+  }
+
+  &__empty {
+    color: $neutral-300;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-2;
+  }
+
+  &__modal-email {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    margin-bottom: $spacing-4;
+  }
+
+  &__modal-alert {
+    margin-bottom: $spacing-4;
+  }
+
+  &__modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__delete-text {
+    font-size: $font-size-base;
+    color: $neutral-700;
+    margin-bottom: $spacing-2;
+  }
+
+  &__delete-warning {
+    font-size: $font-size-sm;
+    color: $error;
+    font-weight: $font-weight-medium;
+  }
+}

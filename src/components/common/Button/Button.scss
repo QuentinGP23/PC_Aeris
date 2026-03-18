@@ -1,0 +1,173 @@
+@use "../../../styles/variables" as *;
+
+// ==========================================================================
+// BUTTON
+// ==========================================================================
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: inherit;
+
+  // -------------------------------------------------------------------------
+  // Sizes
+  // -------------------------------------------------------------------------
+
+  &[data-size="xs"] {
+    padding: $spacing-1 $spacing-3;
+    font-size: $font-size-xs;
+  }
+
+  &[data-size="sm"] {
+    padding: $spacing-2 $spacing-4;
+    font-size: $font-size-sm;
+  }
+
+  &[data-size="md"] {
+    padding: $spacing-3 $spacing-5;
+    font-size: $font-size-base;
+  }
+
+  &[data-size="lg"] {
+    padding: $spacing-4 $spacing-6;
+    font-size: $font-size-lg;
+  }
+
+  &[data-size="xl"] {
+    padding: $spacing-5 $spacing-8;
+    font-size: $font-size-xl;
+  }
+
+  // -------------------------------------------------------------------------
+  // Variants
+  // -------------------------------------------------------------------------
+
+  &[data-variant="primary"] {
+    background-color: $primary;
+    color: $white;
+    border-color: $primary;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-900;
+      border-color: $primary-900;
+    }
+  }
+
+  &[data-variant="secondary"] {
+    background-color: $neutral-100;
+    color: $neutral-900;
+    border-color: $neutral-100;
+
+    &:hover:not(:disabled) {
+      background-color: $neutral-200;
+      border-color: $neutral-200;
+    }
+  }
+
+  &[data-variant="outline"] {
+    background-color: transparent;
+    color: $primary;
+    border-color: $primary;
+
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+
+  &[data-variant="ghost"] {
+    background-color: transparent;
+    color: $neutral-700;
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      background-color: $neutral-100;
+    }
+  }
+
+  &[data-variant="danger"] {
+    background-color: $error;
+    color: $white;
+    border-color: $error;
+
+    &:hover:not(:disabled) {
+      background-color: #dc2626;
+      border-color: #dc2626;
+    }
+  }
+
+  &[data-variant="success"] {
+    background-color: $success;
+    color: $white;
+    border-color: $success;
+
+    &:hover:not(:disabled) {
+      background-color: #16a34a;
+      border-color: #16a34a;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Full width
+  // -------------------------------------------------------------------------
+
+  &[data-full-width="true"] {
+    width: 100%;
+    justify-content: center;
+  }
+
+  // -------------------------------------------------------------------------
+  // Loading state
+  // -------------------------------------------------------------------------
+
+  &[data-loading="true"] {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  // -------------------------------------------------------------------------
+  // Disabled state
+  // -------------------------------------------------------------------------
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // -------------------------------------------------------------------------
+  // Sub-elements
+  // -------------------------------------------------------------------------
+
+  &__icon {
+    display: flex;
+    align-items: center;
+  }
+
+  &__loader {
+    display: inline-flex;
+    align-items: center;
+    animation: spin 1s linear infinite;
+  }
+
+  &__text {
+    display: inline;
+  }
+}
