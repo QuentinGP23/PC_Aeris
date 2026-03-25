@@ -8,13 +8,18 @@ function HomeCta() {
     <section className="home-cta">
       <Container>
         <div className="home-cta__inner">
-          <h2 className="home-cta__title">Prêt à construire ton PC ?</h2>
+          <span className="home-cta__eyebrow">Gratuit · Sans inscription</span>
+          <h2 className="home-cta__title">
+            Prêt à assembler<br />
+            <span>ton PC idéal ?</span>
+          </h2>
           <p className="home-cta__text">
-            Rejoins des milliers d'utilisateurs qui ont déjà configuré leur machine idéale sur PC Aeris.
+            Rejoins des milliers d'utilisateurs qui ont déjà configuré leur machine sur PC Aeris.
+            Aucune carte bancaire requise.
           </p>
           <div className="home-cta__actions">
             <Link to="/configurateur">
-              <Button size="lg">Configurer mon PC</Button>
+              <Button size="lg">Configurer mon PC →</Button>
             </Link>
             <Link to="/signup">
               <Button size="lg" variant="outline">Créer un compte</Button>

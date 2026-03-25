@@ -3,62 +3,199 @@
 
 .hero-banner {
   position: relative;
-  width: 100%;
-  height: 100vh;
-  background-color: $neutral-900;
+  min-height: 100vh;
+  background: $neutral-900;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: $spacing-16 $spacing-6;
+  gap: $spacing-12;
 
-  // --------------------------------------------------
-  // Content
-  // --------------------------------------------------
+  @include lg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 $spacing-12;
+    min-height: 100vh;
+  }
 
+  // ── Radial glow ────────────────────────────────────────────────────────────
+  &__glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba($primary, 0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(#8b5cf6, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  // ── Content ────────────────────────────────────────────────────────────────
   &__content {
     position: relative;
     z-index: 1;
-    @include flex-column;
-    justify-content: center;
-    height: 100%;
-    padding: $spacing-8 $spacing-6;
+    display: flex;
+    flex-direction: column;
     gap: $spacing-6;
-    max-width: 600px;
-
-    @include md {
-      padding: $spacing-12 $spacing-8;
-    }
-
-    @include lg {
-      padding: $spacing-16 $spacing-12;
-    }
+    max-width: 560px;
   }
 
-  // --------------------------------------------------
-  // Typography
-  // --------------------------------------------------
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-4;
+    background: rgba($primary, 0.12);
+    border: 1px solid rgba($primary, 0.25);
+    border-radius: $radius-full;
+    font-size: $font-size-sm;
+    color: $primary-400;
+    font-weight: $font-weight-medium;
+    width: fit-content;
+  }
+
+  &__badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $primary-400;
+    box-shadow: 0 0 8px $primary-400;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
 
   &__title {
-    font-size: clamp(2rem, 5vw, $font-size-4xl);
+    font-size: clamp(2.2rem, 5vw, 3.75rem);
     font-weight: $font-weight-bold;
-    line-height: 1.1;
+    line-height: 1.08;
     color: $white;
+    letter-spacing: -0.02em;
 
-    &--accent {
-      color: $primary-400;
+    &--gradient {
+      background: linear-gradient(135deg, $primary-400 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   }
 
   &__subtitle {
     font-size: $font-size-lg;
-    color: $neutral-300;
+    color: $neutral-400;
     line-height: 1.6;
-    max-width: 480px;
+    max-width: 460px;
   }
-
-  // --------------------------------------------------
-  // Actions
-  // --------------------------------------------------
 
   &__actions {
     display: flex;
-    gap: $spacing-4;
+    gap: $spacing-3;
     flex-wrap: wrap;
   }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    padding-top: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__stat {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+
+    strong {
+      color: $white;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__stat-sep {
+    width: 1px;
+    height: 14px;
+    background: $neutral-700;
+  }
+
+  // ── Visual panel ───────────────────────────────────────────────────────────
+  &__visual {
+    position: relative;
+    z-index: 1;
+    display: none;
+    flex-direction: column;
+    gap: $spacing-3;
+    padding: $spacing-8;
+
+    @include lg { display: flex; }
+  }
+
+  &__card {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-4 $spacing-5;
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.08);
+    border-radius: $radius-xl;
+    backdrop-filter: blur(12px);
+    transition: transform 0.2s, border-color 0.2s;
+
+    &:hover { transform: translateX(4px); }
+
+    &--cpu  { border-left: 2px solid #3b82f6; }
+    &--gpu  { border-left: 2px solid #ef4444; }
+    &--ram  { border-left: 2px solid #22c55e; }
+  }
+
+  &__card-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  &__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  &__card-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $white;
+  }
+
+  &__card-tag {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+
+  &__card-check {
+    font-size: $font-size-sm;
+    color: $success;
+    font-weight: $font-weight-bold;
+  }
+
+  &__compat {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-3 $spacing-5;
+    background: rgba($success, 0.08);
+    border: 1px solid rgba($success, 0.2);
+    border-radius: $radius-lg;
+    font-size: $font-size-sm;
+    color: $success;
+    font-weight: $font-weight-medium;
+    margin-top: $spacing-2;
+  }
+
+  &__compat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $success;
+    box-shadow: 0 0 8px $success;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }

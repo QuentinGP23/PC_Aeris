@@ -1,18 +1,17 @@
 import { Link } from 'react-router-dom'
 import { CATEGORIES } from '../../../types'
-import { Button } from '../../common'
 import { Container } from '../../layout'
 import './CategoryGrid.scss'
 
-const CATEGORY_COLORS: Record<string, string> = {
-  cpu:         '#3b82f6',
-  gpu:         '#ef4444',
-  ram:         '#22c55e',
-  motherboard: '#6366f1',
-  storage:     '#f59e0b',
-  psu:         '#ec4899',
-  pc_case:     '#14b8a6',
-  cpu_cooler:  '#8b5cf6',
+const CATEGORY_META: Record<string, { color: string; bg: string; featured?: boolean }> = {
+  cpu:         { color: '#3b82f6', bg: 'rgba(59,130,246,0.08)',  featured: true },
+  gpu:         { color: '#ef4444', bg: 'rgba(239,68,68,0.08)',   featured: true },
+  motherboard: { color: '#6366f1', bg: 'rgba(99,102,241,0.08)' },
+  ram:         { color: '#22c55e', bg: 'rgba(34,197,94,0.08)'  },
+  storage:     { color: '#f59e0b', bg: 'rgba(245,158,11,0.08)' },
+  psu:         { color: '#ec4899', bg: 'rgba(236,72,153,0.08)' },
+  pc_case:     { color: '#14b8a6', bg: 'rgba(20,184,166,0.08)', featured: true },
+  cpu_cooler:  { color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', featured: true },
 }
 
 function CategoryGrid() {
@@ -20,31 +19,40 @@ function CategoryGrid() {
     <section className="category-grid">
       <Container>
         <div className="category-grid__header">
-          <h2 className="category-grid__title">Tous les composants</h2>
+          <p className="category-grid__eyebrow">Catalogue complet</p>
+          <h2 className="category-grid__title">
+            Chaque composant,<br />
+            <span className="category-grid__title--gradient">à ta portée.</span>
+          </h2>
           <p className="category-grid__subtitle">
-            De la carte mère au ventirad, configure chaque pièce de ton PC à la carte.
+            De la carte mère au ventirad — tous les composants pour assembler ton PC.
           </p>
         </div>
 
-        <div className="category-grid__grid">
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.value}
-              to="/configurateur"
-              className="category-grid__card"
-              style={{ '--cat-color': CATEGORY_COLORS[cat.value] } as React.CSSProperties}
-            >
-              <span className="category-grid__icon">{cat.icon}</span>
-              <span className="category-grid__label">{cat.label}</span>
-              <span className="category-grid__arrow">→</span>
-            </Link>
-          ))}
-        </div>
-
-        <div className="category-grid__cta">
-          <Link to="/configurateur">
-            <Button size="lg">Démarrer ma configuration</Button>
-          </Link>
+        <div className="category-grid__bento">
+          {CATEGORIES.map((cat) => {
+            const meta = CATEGORY_META[cat.value]
+            return (
+              <Link
+                key={cat.value}
+                to="/configurateur"
+                className={`category-grid__card${meta.featured ? ' category-grid__card--featured' : ''}`}
+                style={{
+                  '--cat-color': meta.color,
+                  '--cat-bg': meta.bg,
+                } as React.CSSProperties}
+              >
+                <div className="category-grid__card-glow" />
+                <span className="category-grid__icon">{cat.icon}</span>
+                <div className="category-grid__card-body">
+                  <span className="category-grid__label">{cat.label}</span>
+                  {meta.featured && (
+                    <span className="category-grid__arrow">Explorer →</span>
+                  )}
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </Container>
     </section>
