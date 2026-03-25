@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.2.0...v1.3.0) (2026-03-18)
+
+
+### Features
+
+* add admin pages for users and products management ([be6079b](https://github.com/QuentinGP23/PC_Aeris/commit/be6079bde3ec348e0071f7670c9c17c23d635a7c))
+* add complete design system ([dd5a9df](https://github.com/QuentinGP23/PC_Aeris/commit/dd5a9dff69e018839940e3064dfbe07384b927bd))
+* add complete design system ([3c203b1](https://github.com/QuentinGP23/PC_Aeris/commit/3c203b165de864d0e72e6f7f371f291c8fbe62fb))
+* add PC configurator with compatibility filtering ([d28f56c](https://github.com/QuentinGP23/PC_Aeris/commit/d28f56c2c01ba84f3cf085c2fbc09c9c750272ce))
+* **admin:** add reset button to specs tab ([b0b4fa4](https://github.com/QuentinGP23/PC_Aeris/commit/b0b4fa47eec19bad1622a7eadf1a1b95a473fbed))
+* **admin:** add sortable columns to products table ([b5329f7](https://github.com/QuentinGP23/PC_Aeris/commit/b5329f7b901552f43bd9ddb202ddb23b7752d3fb))
+* **admin:** add specs editing to Products page ([e36256e](https://github.com/QuentinGP23/PC_Aeris/commit/e36256e8dd42870eea17d1b2ab8e54b5398db68a))
+
+
+### Bug Fixes
+
+* **configurator:** fix react-hooks/set-state-in-effect lint errors ([fccc6e7](https://github.com/QuentinGP23/PC_Aeris/commit/fccc6e710672a9a81bda267b7c2007c3a38ac6b7))
+* **table:** add onClick prop to Th component ([f2f6f1c](https://github.com/QuentinGP23/PC_Aeris/commit/f2f6f1c0a1a6cca775bbf8a6362032d456598a85))
+
 ## [1.2.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.1.1...v1.2.0) (2026-03-13)
 
 
