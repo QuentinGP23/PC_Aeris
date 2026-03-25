@@ -1,1 +1,5 @@
-export { HeroBanner } from "./HeroBanner";
+export { HeroBanner } from './HeroBanner'
+export { CategoryGrid } from './CategoryGrid'
+export { HowItWorks } from './HowItWorks'
+export { StatsBar } from './StatsBar'
+export { HomeCta } from './HomeCta'

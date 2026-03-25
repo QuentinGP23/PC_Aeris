@@ -1,0 +1,39 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.home-cta {
+  padding: $spacing-16 0;
+  background: $white;
+
+  @include lg { padding: 6rem 0; }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $spacing-4;
+    padding: $spacing-10 0;
+  }
+
+  &__title {
+    font-size: clamp($font-size-2xl, 4vw, $font-size-4xl);
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+  }
+
+  &__text {
+    font-size: $font-size-lg;
+    color: $neutral-500;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: $spacing-4;
+  }
+}
