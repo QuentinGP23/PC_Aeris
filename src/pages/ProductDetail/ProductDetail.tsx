@@ -57,8 +57,11 @@ function ProductDetail() {
           .single()
 
         if (specsData) {
-          const { product_id: _, id: __, ...rest } = specsData as Record<string, unknown>
-          specs = rest
+          specs = Object.fromEntries(
+            Object.entries(specsData as Record<string, unknown>).filter(
+              ([k]) => k !== 'product_id' && k !== 'id'
+            )
+          )
         }
       }
 
