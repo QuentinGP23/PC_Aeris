@@ -28,6 +28,8 @@ export interface DashboardStats {
   totalProducts: number
   productsByCategory: Record<string, number>
   totalUsers: number
+  withImage: number
+  withPrice: number
 }
 
 const PAGE_SIZE = 50
@@ -124,23 +126,30 @@ export const adminService = {
   // ── Dashboard stats ───────────────────────────────────────────────────────
 
   async getDashboardStats(): Promise<{ stats: DashboardStats | null; error: string | null }> {
-    const [productsRes, usersRes] = await Promise.all([
-      supabase.from('products').select('category'),
+    const CATS: CategoryKey[] = ['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'pc_case', 'cpu_cooler']
+
+    const [totalRes, withImageRes, withPriceRes, usersRes, ...catRess] = await Promise.all([
+      supabase.from('products').select('*', { count: 'exact', head: true }),
+      supabase.from('products').select('*', { count: 'exact', head: true }).not('image_url', 'is', null),
+      supabase.from('products').select('*', { count: 'exact', head: true }).not('price_avg_eur', 'is', null),
       supabase.rpc('admin_list_users'),
+      ...CATS.map((cat) =>
+        supabase.from('products').select('*', { count: 'exact', head: true }).eq('category', cat),
+      ),
     ])
 
-    if (productsRes.error) return { stats: null, error: productsRes.error.message }
+    if (totalRes.error) return { stats: null, error: totalRes.error.message }
 
     const byCategory: Record<string, number> = {}
-    for (const p of productsRes.data ?? []) {
-      byCategory[p.category] = (byCategory[p.category] ?? 0) + 1
-    }
+    CATS.forEach((cat, i) => { byCategory[cat] = catRess[i].count ?? 0 })
 
     return {
       stats: {
-        totalProducts: productsRes.data?.length ?? 0,
+        totalProducts: totalRes.count ?? 0,
         productsByCategory: byCategory,
         totalUsers: (usersRes.data ?? []).length,
+        withImage: withImageRes.count ?? 0,
+        withPrice: withPriceRes.count ?? 0,
       },
       error: null,
     }

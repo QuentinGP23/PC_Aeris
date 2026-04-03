@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../../config'
 import { useConfigStore } from '../../store'
-import { CATEGORIES, KEY_SPECS } from '../../types'
+import { CATEGORIES } from '../../types'
+import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
 import { getCompatibleProductIds } from '../../utils'
 import { Button } from '../../components/common'
@@ -9,16 +11,13 @@ import './Configurator.scss'
 
 const PAGE_SIZE = 24
 
-function renderSpecValue(val: unknown): string {
+function renderSpecValue(val: unknown, unit?: string): string {
   if (val === null || val === undefined) return '—'
   if (typeof val === 'boolean') return val ? 'Oui' : 'Non'
   if (Array.isArray(val)) return val.join(', ') || '—'
   if (typeof val === 'object') return JSON.stringify(val)
-  return String(val)
-}
-
-function formatSpecKey(key: string): string {
-  return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const str = String(val)
+  return unit ? `${str} ${unit}` : str
 }
 
 function Configurator() {
@@ -58,7 +57,7 @@ function Configurator() {
 
       let query = supabase
         .from('products')
-        .select('id, name, manufacturer, series, release_year, category, image_url', { count: 'exact' })
+        .select('id, name, manufacturer, series, variant, release_year, category, image_url, description, price_min_eur, price_max_eur, price_avg_eur, price_updated_at, retailer_url, benchmark_score', { count: 'exact' })
         .eq('category', activeCategory)
         .order('name')
         .range(from, to)
@@ -289,10 +288,10 @@ function Configurator() {
                           .map((key) => (
                             <li key={key}>
                               <span className="configurator__card-spec-key">
-                                {formatSpecKey(key)}
+                                {SPEC_LABELS[key] ?? key.replace(/_/g, ' ')}
                               </span>
                               <span className="configurator__card-spec-val">
-                                {renderSpecValue(product.specs![key])}
+                                {renderSpecValue(product.specs![key], SPEC_UNITS[key])}
                               </span>
                             </li>
                           ))}
@@ -301,25 +300,42 @@ function Configurator() {
                   </div>
 
                   <div className="configurator__card-footer">
-                    {isSelected ? (
-                      <Button
-                        variant="success"
-                        size="sm"
-                        fullWidth
-                        onClick={() => removeComponent(activeCategory)}
-                      >
-                        ✓ Sélectionné
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        fullWidth
-                        onClick={() => selectComponent(activeCategory, product)}
-                      >
-                        Sélectionner
-                      </Button>
+                    {product.price_min_eur !== null && product.price_max_eur !== null && (
+                      <div className="configurator__card-price">
+                        <span className="configurator__card-price-range">
+                          {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
+                        </span>
+                        {product.price_avg_eur !== null && (
+                          <span className="configurator__card-price-avg">
+                            moy. {Math.round(product.price_avg_eur)}€
+                          </span>
+                        )}
+                      </div>
                     )}
+                    <div className="configurator__card-actions">
+                      {isSelected ? (
+                        <Button
+                          variant="success"
+                          size="sm"
+                          fullWidth
+                          onClick={() => removeComponent(activeCategory)}
+                        >
+                          ✓ Sélectionné
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          fullWidth
+                          onClick={() => selectComponent(activeCategory, product)}
+                        >
+                          Sélectionner
+                        </Button>
+                      )}
+                      <Link to={`/produit/${product.id}`} className="configurator__card-detail-link">
+                        Voir la fiche →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )

@@ -393,6 +393,47 @@
   &__card-footer {
     padding: $spacing-3 $spacing-4;
     border-top: 1px solid $neutral-100;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__card-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $spacing-2;
+  }
+
+  &__card-price-range {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-900;
+  }
+
+  &__card-price-avg {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+
+  &__card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  &__card-detail-link {
+    display: block;
+    text-align: center;
+    font-size: $font-size-xs;
+    color: $primary;
+    text-decoration: none;
+    padding: $spacing-1 0;
+    transition: opacity $transition-fast;
+
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   // -------------------------------------------------------------------------

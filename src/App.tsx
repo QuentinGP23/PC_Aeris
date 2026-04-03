@@ -5,6 +5,7 @@ import {
   Home,
   Components,
   Configurator,
+  ProductDetail,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/components" element={<Components />} />
         <Route path="/configurateur" element={<Configurator />} />
+        <Route path="/produit/:id" element={<ProductDetail />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

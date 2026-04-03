@@ -1,7 +1,7 @@
 import './Dashboard.scss'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Package, ComputerTower, Cpu, Monitor, Memory, HardDrive, Lightning, Cube, Wind } from '@phosphor-icons/react'
+import { Users, Package, ComputerTower, Cpu, Monitor, Memory, HardDrive, Lightning, Cube, Wind, Image, CurrencyEur } from '@phosphor-icons/react'
 import { adminService, type DashboardStats } from '../../services'
 import { Spinner, Alert, Card } from '../../components/common'
 import './Dashboard.scss'
@@ -59,6 +59,8 @@ function AdminDashboard() {
       <div className="dashboard__top-stats">
         <StatCard label="Utilisateurs" value={stats?.totalUsers ?? 0} icon={Users} color="#2563eb" />
         <StatCard label="Produits total" value={stats?.totalProducts ?? 0} icon={Package} color="#8b5cf6" />
+        <StatCard label="Avec une image" value={stats?.withImage ?? 0} icon={Image} color="#10b981" />
+        <StatCard label="Avec un prix" value={stats?.withPrice ?? 0} icon={CurrencyEur} color="#f59e0b" />
       </div>
 
       {/* Quick links */}
