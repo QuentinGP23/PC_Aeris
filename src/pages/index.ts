@@ -1,6 +1,7 @@
 export { default as Home } from './Home'
 export { default as Components } from './Components'
 export { Configurator } from './Configurator'
+export { ProductDetail } from './ProductDetail'
 export * from './auth'
 export * from './admin'
 export * from './legal'
