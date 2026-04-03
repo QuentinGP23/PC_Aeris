@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.3.0...v1.4.0) (2026-04-03)
+
+
+### Features
+
+* **design-system:** apply DS to home, auth, legal pages ([3fbc172](https://github.com/QuentinGP23/PC_Aeris/commit/3fbc172f56a89215808a629d40580dfdf0349897))
+* **design-system:** implement base DS tokens — colors, typography, spacing, animations ([157c405](https://github.com/QuentinGP23/PC_Aeris/commit/157c405e308be9bf3858cd8909fd9652584b3088))
+
 ## [1.3.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.2.0...v1.3.0) (2026-03-18)
 
 
