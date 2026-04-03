@@ -1,0 +1,60 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.stats-bar {
+  padding: $spacing-16 0;
+  background: $neutral-800;
+  border-top: 1px solid rgba($white, 0.06);
+  border-bottom: 1px solid rgba($white, 0.06);
+
+  @include lg { padding: 5rem 0; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-8 $spacing-4;
+
+    @include md {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-2;
+    text-align: center;
+    position: relative;
+
+    // Vertical separator between stats on desktop
+    @include md {
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 20%;
+        height: 60%;
+        width: 1px;
+        background: rgba($white, 0.1);
+      }
+    }
+  }
+
+  &__value {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    background: linear-gradient(135deg, $white 0%, $neutral-300 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    font-weight: $font-weight-medium;
+  }
+}
