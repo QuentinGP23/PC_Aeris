@@ -1,14 +1,14 @@
 import './Container.scss'
 import type { HTMLAttributes, ReactNode } from 'react'
 
-type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   size?: ContainerSize
   children: ReactNode
 }
 
-function Container({ size = 'lg', children, className = '', ...props }: ContainerProps) {
+function Container({ size = 'xl', children, className = '', ...props }: ContainerProps) {
   return (
     <div className={`container ${className}`} data-size={size} {...props}>
       {children}

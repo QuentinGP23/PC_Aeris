@@ -27,9 +27,9 @@ function Footer() {
           </div>
           <div className="footer__col">
             <h4 className="footer__col-title">Légal</h4>
-            <span className="footer__link footer__link--disabled">CGV</span>
-            <span className="footer__link footer__link--disabled">Politique de confidentialité</span>
-            <span className="footer__link footer__link--disabled">Mentions légales</span>
+            <Link to="/cgv" className="footer__link">CGV</Link>
+            <Link to="/confidentialite" className="footer__link">Politique de confidentialité</Link>
+            <Link to="/mentions-legales" className="footer__link">Mentions légales</Link>
           </div>
         </div>
       </div>

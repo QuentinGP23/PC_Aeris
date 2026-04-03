@@ -12,6 +12,9 @@ import {
   AdminDashboard,
   AdminUsers,
   AdminProducts,
+  CGV,
+  PrivacyPolicy,
+  LegalNotice,
 } from "./pages";
 
 function PublicLayout() {
@@ -46,6 +49,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/cgv" element={<CGV />} />
+        <Route path="/confidentialite" element={<PrivacyPolicy />} />
+        <Route path="/mentions-legales" element={<LegalNotice />} />
         <Route path="*" element={<div>Page non trouvée</div>} />
       </Route>
 

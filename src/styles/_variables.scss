@@ -407,3 +407,15 @@ $breakpoint-2xl: $bp-2xl;
 // --- Layout ---
 $header-height: var(--header-height);
 $sidebar-width: var(--sidebar-width);
+
+// ==========================================================================
+// SCSS RAW HEX — valeurs brutes pour usage dans rgba(), gradients SCSS
+// Ne pas utiliser directement dans les composants — préférer les tokens
+// ==========================================================================
+
+$c-primary:   #4F46E5;
+$c-success:   #10B981;
+$c-error:     #EF4444;
+$c-warning:   #F59E0B;
+$c-purple:    #8B5CF6;
+$c-white:     #FFFFFF;

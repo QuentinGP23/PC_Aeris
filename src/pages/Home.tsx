@@ -1,13 +1,12 @@
-import { HeroBanner, CategoryGrid, HowItWorks, StatsBar, HomeCta } from '../components/ui'
+import { HeroBanner, CategoryGrid, HowItWorks, StatsBar } from '../components/ui'
 
 function Home() {
   return (
     <>
       <HeroBanner />
+      <StatsBar />
       <CategoryGrid />
       <HowItWorks />
-      <StatsBar />
-      <HomeCta />
     </>
   )
 }
