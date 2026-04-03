@@ -1,0 +1,317 @@
+@use "../../styles/variables" as *;
+
+// ==========================================================================
+// PRODUCT DETAIL
+// ==========================================================================
+
+.product-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-8 $spacing-6;
+
+  &--loading,
+  &--not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-4;
+    min-height: 40vh;
+    color: $neutral-400;
+    font-size: $font-size-lg;
+  }
+
+  // -------------------------------------------------------------------------
+  // Breadcrumb
+  // -------------------------------------------------------------------------
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    margin-bottom: $spacing-8;
+    flex-wrap: wrap;
+
+    a {
+      color: $primary;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    span:last-child {
+      color: $neutral-700;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Layout
+  // -------------------------------------------------------------------------
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: $spacing-10;
+    align-items: start;
+
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Left column
+  // -------------------------------------------------------------------------
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    position: sticky;
+    top: $spacing-6;
+
+    @media (max-width: $breakpoint-lg) {
+      position: static;
+    }
+  }
+
+  &__image-wrap {
+    background-color: $white;
+    border: 1px solid $neutral-200;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: $spacing-8;
+  }
+
+  &__image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 5rem;
+    color: $neutral-300;
+  }
+
+  // -------------------------------------------------------------------------
+  // Price block
+  // -------------------------------------------------------------------------
+
+  &__price-block {
+    background-color: $white;
+    border: 1px solid $neutral-200;
+    border-radius: $radius-xl;
+    padding: $spacing-5;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  &__price-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $neutral-400;
+    margin-bottom: $spacing-1;
+  }
+
+  &__price-range {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__price-sep {
+    color: $neutral-300;
+    font-weight: $font-weight-normal;
+  }
+
+  &__price-avg {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+  }
+
+  &__price-date {
+    font-size: $font-size-xs;
+    color: $neutral-300;
+    margin-top: $spacing-1;
+  }
+
+  &__price-unavailable {
+    font-size: $font-size-sm;
+    color: $neutral-300;
+    font-style: italic;
+  }
+
+  // -------------------------------------------------------------------------
+  // Actions
+  // -------------------------------------------------------------------------
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__retailer-link {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $primary;
+    text-decoration: none;
+    padding: $spacing-2;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Right column — header
+  // -------------------------------------------------------------------------
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: $primary;
+    background-color: $primary-50;
+    padding: $spacing-1 $spacing-3;
+    border-radius: $radius-full;
+    width: fit-content;
+  }
+
+  &__name {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+    line-height: 1.2;
+  }
+
+  &__meta {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+  }
+
+  &__benchmark {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-3;
+    background-color: $neutral-50;
+    border: 1px solid $neutral-200;
+    border-radius: $radius-lg;
+    padding: $spacing-2 $spacing-4;
+    width: fit-content;
+  }
+
+  &__benchmark-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $neutral-400;
+  }
+
+  &__benchmark-value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+  }
+
+  // -------------------------------------------------------------------------
+  // Description
+  // -------------------------------------------------------------------------
+
+  &__description {
+    h2 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $neutral-900;
+      margin-bottom: $spacing-3;
+    }
+
+    p {
+      font-size: $font-size-base;
+      color: $neutral-600;
+      line-height: 1.7;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Specs table
+  // -------------------------------------------------------------------------
+
+  &__specs {
+    h2 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $neutral-900;
+      margin-bottom: $spacing-4;
+    }
+  }
+
+  &__specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-sm;
+
+    tr {
+      border-bottom: 1px solid $neutral-100;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:nth-child(even) {
+        background-color: $neutral-50;
+      }
+    }
+  }
+
+  &__spec-key {
+    padding: $spacing-3 $spacing-4;
+    color: $neutral-500;
+    width: 40%;
+    vertical-align: top;
+  }
+
+  &__spec-val {
+    padding: $spacing-3 $spacing-4;
+    color: $neutral-900;
+    font-weight: $font-weight-medium;
+  }
+}
