@@ -1,0 +1,59 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.auth-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-5);
+
+  @include md { padding: var(--space-12) var(--space-8); }
+
+  // ── Card ─────────────────────────────────────────────────────────────────
+  &__container {
+    width: 100%;
+    max-width: var(--container-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-10) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    box-shadow: var(--shadow-lg);
+
+    @include md { padding: var(--space-12) var(--space-10); }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+      font-weight: var(--weight-bold);
+      color: var(--color-text-primary);
+      letter-spacing: var(--tracking-tight);
+      line-height: var(--leading-tight);
+      margin: 0;
+    }
+
+    // ── Form spacing ───────────────────────────────────────────────────────
+    .form__fieldset {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    > p {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin: 0;
+
+      a {
+        color: var(--color-primary-600);
+        font-weight: var(--weight-medium);
+
+        &:hover { text-decoration: underline; }
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.stats-bar {
+  padding: var(--space-16) 0;
+  background: var(--color-neutral-900);
+  border-top: 1px solid rgba($c-white, 0.05);
+  border-bottom: 1px solid rgba($c-white, 0.05);
+
+  @include lg { padding: var(--space-20) 0; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8) var(--space-4);
+
+    @include md {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+    position: relative;
+
+    @include md {
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 20%;
+        height: 60%;
+        width: 1px;
+        background: rgba($c-white, 0.08);
+      }
+    }
+  }
+
+  &__value {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    background: linear-gradient(135deg, $c-white 0%, var(--color-neutral-300) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__label {
+    font-size: var(--text-sm);
+    color: var(--color-neutral-400);
+    font-weight: var(--weight-medium);
+  }
+}

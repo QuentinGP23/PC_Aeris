@@ -1,92 +1,189 @@
 // ==========================================================================
-// BASE - Global styles
+// BASE — Styles globaux PC Aeris
 // ==========================================================================
 
 @use "variables" as *;
 
-// -----------------------------------------------------------------------------
-// Fonts
-// -----------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// Fonts — Google Fonts
+// Space Grotesk (titres) + Inter (corps) + JetBrains Mono (code/specs)
+// --------------------------------------------------------------------------
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
-// -----------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
 // Root
-// -----------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 :root {
   font-size: 16px;
 }
 
-// -----------------------------------------------------------------------------
-// Body
-// -----------------------------------------------------------------------------
-
-body {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  font-weight: $font-weight-normal;
-  color: $neutral-900;
-  background-color: $white;
+html {
+  scroll-behavior: smooth;
 }
 
-// -----------------------------------------------------------------------------
-// Typography
-// -----------------------------------------------------------------------------
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: $font-family-heading;
+// --------------------------------------------------------------------------
+// Body
+// --------------------------------------------------------------------------
+
+body {
+  font-family: $font-body;
+  font-size: $text-base;
+  font-weight: $font-weight-normal;
+  line-height: var(--leading-normal);
+  color: $text-primary;
+  background-color: $bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+
+// --------------------------------------------------------------------------
+// Typographie — Headings
+// --------------------------------------------------------------------------
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
   font-weight: $font-weight-bold;
-  line-height: 1.2;
+  line-height: var(--leading-tight);
+  color: $text-primary;
 }
 
 h1 {
-  font-size: $font-size-4xl;
+  font-size: $text-5xl;
+  letter-spacing: var(--tracking-tighter);
 }
 
 h2 {
-  font-size: $font-size-3xl;
+  font-size: $text-4xl;
+  letter-spacing: var(--tracking-tight);
 }
 
 h3 {
-  font-size: $font-size-2xl;
+  font-size: $text-3xl;
+  letter-spacing: var(--tracking-tight);
 }
 
 h4 {
-  font-size: $font-size-xl;
+  font-size: $text-2xl;
+  letter-spacing: var(--tracking-normal);
 }
 
 h5 {
-  font-size: $font-size-lg;
+  font-size: $text-xl;
 }
 
 h6 {
-  font-size: $font-size-base;
+  font-size: $text-lg;
 }
 
-// -----------------------------------------------------------------------------
-// Links
-// -----------------------------------------------------------------------------
+p {
+  line-height: var(--leading-relaxed);
+  color: $text-secondary;
+}
+
+
+// --------------------------------------------------------------------------
+// Liens
+// --------------------------------------------------------------------------
 
 a {
-  color: $primary;
+  color: $text-link;
+  text-decoration: none;
   transition: color $transition-fast;
 
   &:hover {
-    color: $primary-900;
+    color: $primary-hover;
   }
 }
 
-// -----------------------------------------------------------------------------
-// Focus
-// -----------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// Code & specs techniques
+// --------------------------------------------------------------------------
+
+code, kbd, samp, pre {
+  font-family: $font-mono;
+  font-size: var(--text-sm);
+}
+
+code {
+  background: $surface-raised;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  padding: 0.1em 0.4em;
+  color: $text-primary;
+}
+
+pre {
+  background: $surface-raised;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: $spacing-4;
+  overflow-x: auto;
+
+  code {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+
+// --------------------------------------------------------------------------
+// Focus accessible
+// --------------------------------------------------------------------------
 
 :focus-visible {
-  outline: 2px solid $primary;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: $radius-sm;
+}
+
+
+// --------------------------------------------------------------------------
+// Sélection de texte
+// --------------------------------------------------------------------------
+
+::selection {
+  background: var(--color-primary-100);
+  color: var(--color-primary-900);
+}
+
+
+// --------------------------------------------------------------------------
+// Images & médias
+// --------------------------------------------------------------------------
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+
+// --------------------------------------------------------------------------
+// Scrollbar globale
+// --------------------------------------------------------------------------
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-300);
+    border-radius: var(--radius-full);
+  }
 }
