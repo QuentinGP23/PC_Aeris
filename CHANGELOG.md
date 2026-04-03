@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.4.0...v1.5.0) (2026-04-03)
+
+
+### Features
+
+* **product-api:** fiche produit, enrichissement images/prix, labels FR ([e51b801](https://github.com/QuentinGP23/PC_Aeris/commit/e51b801a404e65b50367b54c40b1ebc60b083617))
+* **product-api:** fiche produit, enrichissement images/prix, labels FR ([1d0d352](https://github.com/QuentinGP23/PC_Aeris/commit/1d0d352e2a21c2170bc54ba403c5b09b45253e69))
+
+
+### Bug Fixes
+
+* **lint:** remove unused destructured vars in ProductDetail ([cc0f4ff](https://github.com/QuentinGP23/PC_Aeris/commit/cc0f4ff3374ecdcc3dcc6b78b0a0cdee19c6ef0d))
+
 ## [1.4.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.3.0...v1.4.0) (2026-04-03)
 
 
