@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form } from "../../components/common";
+import "./auth.scss";
 
 function ResetPassword() {
   const navigate = useNavigate();

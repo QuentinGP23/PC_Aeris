@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form, Checkbox } from "../../components/common";
+import "./auth.scss";
 import { validateSignUpData } from "../../services/auth.service";
 
 function SignUp() {

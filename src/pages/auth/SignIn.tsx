@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form, Checkbox } from "../../components/common";
+import "./auth.scss";
 
 function SignIn() {
   const navigate = useNavigate();

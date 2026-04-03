@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Button, Input, Form } from "../../components/common";
+import "./auth.scss";
 
 function ForgotPassword() {
   const { resetPassword, isLoading } = useAuth();

@@ -1,8 +1,10 @@
 // ==========================================================================
-// PC AERIS - Main Stylesheet
+// PC AERIS — Stylesheet principal
+// Ordre d'import important : variables → reset → animations → base → modules
 // ==========================================================================
 
 @use "variables" as *;
 @use "reset";
+@use "animations";
 @use "base";
 @use "admin";
