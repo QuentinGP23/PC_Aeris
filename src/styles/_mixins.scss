@@ -1,40 +1,54 @@
 // ==========================================================================
-// MIXINS - Reusable style patterns
+// MIXINS — PC AERIS
 // ==========================================================================
 
 @use "variables" as *;
 
-// -----------------------------------------------------------------------------
-// Breakpoints
-// -----------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// 1. RESPONSIVE — Mobile-first
+// --------------------------------------------------------------------------
 
 @mixin sm {
-  @media (min-width: $breakpoint-sm) {
-    @content;
-  }
+  @media (min-width: $bp-sm) { @content; }
 }
 
 @mixin md {
-  @media (min-width: $breakpoint-md) {
-    @content;
-  }
+  @media (min-width: $bp-md) { @content; }
 }
 
 @mixin lg {
-  @media (min-width: $breakpoint-lg) {
-    @content;
-  }
+  @media (min-width: $bp-lg) { @content; }
 }
 
 @mixin xl {
-  @media (min-width: $breakpoint-xl) {
-    @content;
-  }
+  @media (min-width: $bp-xl) { @content; }
 }
 
-// -----------------------------------------------------------------------------
-// Flexbox
-// -----------------------------------------------------------------------------
+@mixin xxl {
+  @media (min-width: $bp-2xl) { @content; }
+}
+
+@mixin max-sm {
+  @media (max-width: #{$bp-sm - 1px}) { @content; }
+}
+
+@mixin max-md {
+  @media (max-width: #{$bp-md - 1px}) { @content; }
+}
+
+@mixin max-lg {
+  @media (max-width: #{$bp-lg - 1px}) { @content; }
+}
+
+@mixin between($min, $max) {
+  @media (min-width: $min) and (max-width: $max) { @content; }
+}
+
+
+// --------------------------------------------------------------------------
+// 2. LAYOUT
+// --------------------------------------------------------------------------
 
 @mixin flex-center {
   display: flex;
@@ -53,9 +67,39 @@
   flex-direction: column;
 }
 
-// -----------------------------------------------------------------------------
-// Typography
-// -----------------------------------------------------------------------------
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin grid($cols, $gap: var(--space-6)) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+// Container centré avec padding horizontal
+@mixin container($max: var(--container-xl)) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+
+  @include md {
+    padding-inline: var(--space-8);
+  }
+
+  @include xl {
+    padding-inline: var(--space-12);
+  }
+}
+
+
+// --------------------------------------------------------------------------
+// 3. TYPOGRAPHIE
+// --------------------------------------------------------------------------
 
 @mixin text-truncate {
   overflow: hidden;
@@ -63,9 +107,54 @@
   white-space: nowrap;
 }
 
-// -----------------------------------------------------------------------------
-// Buttons
-// -----------------------------------------------------------------------------
+@mixin text-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Titre hero — Space Grotesk, tight, impactant
+@mixin heading-hero {
+  font-family: var(--font-heading);
+  font-size: var(--text-6xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+  color: var(--color-text-primary);
+}
+
+// Titre de section
+@mixin heading-section {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+// Label capslock
+@mixin label-caps {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+// Texte code / specs techniques
+@mixin text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+
+// --------------------------------------------------------------------------
+// 4. INTERACTIONS
+// --------------------------------------------------------------------------
 
 @mixin button-reset {
   appearance: none;
@@ -74,4 +163,121 @@
   cursor: pointer;
   font: inherit;
   padding: 0;
+  text-align: left;
+}
+
+// Focus ring accessible — remplace le outline natif
+@mixin focus-ring($color: var(--shadow-focus)) {
+  &:focus-visible {
+    outline: none;
+    box-shadow: $color;
+  }
+}
+
+// Hover lift — légère élévation sur hover
+@mixin hover-lift($translate: -2px, $shadow: var(--shadow-card-hover)) {
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+
+  &:hover {
+    transform: translateY($translate);
+    box-shadow: $shadow;
+  }
+}
+
+// Hover glow — lueur primaire au hover
+@mixin hover-glow {
+  transition: box-shadow var(--transition-base);
+
+  &:hover {
+    box-shadow: 0 0 0 3px var(--color-primary-100);
+  }
+}
+
+
+// --------------------------------------------------------------------------
+// 5. COMPOSANTS UTILITAIRES
+// --------------------------------------------------------------------------
+
+// Card de base
+@mixin card($padding: var(--space-6)) {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: $padding;
+  box-shadow: var(--shadow-card);
+}
+
+// Badge pill
+@mixin badge($bg: var(--color-primary-50), $color: var(--color-primary)) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: $bg;
+  color: $color;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// Overlay semi-transparent
+@mixin overlay($opacity: 0.5) {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / $opacity);
+  z-index: var(--z-overlay);
+}
+
+// Surface avec séparateur interne
+@mixin divider($color: var(--color-border)) {
+  border-bottom: 1px solid $color;
+}
+
+// Scrollbar custom (webkit)
+@mixin custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-300);
+    border-radius: var(--radius-full);
+
+    &:hover {
+      background: var(--color-neutral-400);
+    }
+  }
+}
+
+// Gradient texte
+@mixin gradient-text($from: var(--color-primary-500), $to: var(--color-primary-700)) {
+  background: linear-gradient(135deg, $from 0%, $to 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Skeleton loading
+@mixin skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-neutral-100) 25%,
+    var(--color-neutral-50)  50%,
+    var(--color-neutral-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
 }
