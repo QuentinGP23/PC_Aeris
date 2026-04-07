@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.0.0...v2.1.0) (2026-04-07)
+
+
+### Features
+
+* **profile:** add user profile page ([3404c8e](https://github.com/QuentinGP23/PC_Aeris/commit/3404c8e861d0880eebb2a625a00559f53821277b))
+* **profile:** merge user profile page into develop ([d8396aa](https://github.com/QuentinGP23/PC_Aeris/commit/d8396aa15ef8c3cfe3a6bd905203f2ac6b314d90))
+
 ## [2.0.0](https://github.com/QuentinGP23/PC_Aeris/compare/v1.5.0...v2.0.0) (2026-04-03)
 
 
