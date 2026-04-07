@@ -3,6 +3,7 @@ import { ProtectedRoute } from "./components/common";
 import { Header, Footer, AdminLayout } from "./components/layout";
 import {
   Home,
+  NotFound,
   Components,
   Configurator,
   ProductDetail,
@@ -55,7 +56,7 @@ function App() {
         <Route path="/cgv" element={<CGV />} />
         <Route path="/confidentialite" element={<PrivacyPolicy />} />
         <Route path="/mentions-legales" element={<LegalNotice />} />
-        <Route path="*" element={<div>Page non trouvée</div>} />
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       {/* Admin routes with AdminLayout */}
