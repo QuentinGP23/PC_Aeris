@@ -1,0 +1,191 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.profile {
+  padding: $spacing-10 0 $spacing-16;
+
+  // ── Header ─────────────────────────────────────────────────────────────────
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-5;
+    padding: $spacing-6 0;
+    flex-wrap: wrap;
+  }
+
+  &__header-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+    line-height: 1.2;
+  }
+
+  &__email {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin-top: $spacing-1;
+    flex-wrap: wrap;
+  }
+
+  &__role {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $spacing-2;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--user  { background: rgba($primary, 0.1); color: $primary; }
+    &--admin { background: rgba($warning, 0.1); color: $warning; }
+  }
+
+  &__since {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+
+  &__header-actions {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  // ── Sections ───────────────────────────────────────────────────────────────
+
+  &__section {
+    padding: $spacing-8 0;
+  }
+
+  &__section-header {
+    margin-bottom: $spacing-6;
+  }
+
+  &__section-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $neutral-900;
+    margin-bottom: $spacing-1;
+  }
+
+  &__section-desc {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+  }
+
+  // ── Danger zone ─────────────────────────────────────────────────────────────
+
+  &__danger-zone {
+    border: 1px solid rgba($error, 0.3);
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  &__danger-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-6;
+    padding: $spacing-5 $spacing-6;
+    flex-wrap: wrap;
+
+    &--destructive {
+      background: rgba($error, 0.03);
+    }
+  }
+
+  &__danger-divider {
+    height: 1px;
+    background: rgba($error, 0.15);
+  }
+
+  &__danger-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__danger-item-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    color: $neutral-900;
+
+    .profile__danger-item--destructive & { color: $error; }
+  }
+
+  &__danger-item-desc {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    line-height: 1.5;
+  }
+
+  // ── Delete modal ────────────────────────────────────────────────────────────
+
+  &__delete-modal {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__delete-modal-text {
+    font-size: $font-size-sm;
+    color: $neutral-700;
+    line-height: 1.6;
+  }
+
+  &__delete-modal-instruction {
+    font-size: $font-size-sm;
+    color: $neutral-600;
+    padding: $spacing-3 $spacing-4;
+    background: rgba($error, 0.05);
+    border-left: 3px solid $error;
+    border-radius: 0 $radius-sm $radius-sm 0;
+    line-height: 1.5;
+  }
+
+  // ── Form ───────────────────────────────────────────────────────────────────
+
+  &__alert {
+    margin-bottom: $spacing-4;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    max-width: 560px;
+  }
+
+  &__form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__form-actions {
+    display: flex;
+    gap: $spacing-3;
+    padding-top: $spacing-2;
+  }
+}

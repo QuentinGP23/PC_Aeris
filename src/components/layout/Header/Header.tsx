@@ -40,8 +40,8 @@ function Header() {
                 <Link to="/admin" className="header__nav-link">Admin</Link>
               )}
               <div className="header__user">
-                <span className="header__user-name">{user.pseudo || user.email}</span>
-                <button className="header__signout" onClick={() => signOut()}>Déconnexion</button>
+                <Link to="/profile" className="header__user-name">{user.pseudo || user.email}</Link>
+                <button className="header__signout" onClick={() => void signOut()}>Déconnexion</button>
               </div>
             </>
           ) : (
@@ -69,7 +69,8 @@ function Header() {
           {isAuthenticated && user ? (
             <>
               {user.role === 'admin' && <Link to="/admin" className="header__mobile-link">Admin</Link>}
-              <button className="header__mobile-signout" onClick={() => signOut()}>Déconnexion</button>
+              <Link to="/profile" className="header__mobile-link" onClick={() => setMenuOpen(false)}>Mon profil</Link>
+              <button className="header__mobile-signout" onClick={() => void signOut()}>Déconnexion</button>
             </>
           ) : (
             <>

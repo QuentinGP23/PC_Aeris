@@ -6,6 +6,7 @@ import {
   Components,
   Configurator,
   ProductDetail,
+  Profile,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -47,7 +48,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <div>Page Profil (TODO)</div>
+              <Profile />
             </ProtectedRoute>
           }
         />

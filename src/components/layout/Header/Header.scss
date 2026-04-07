@@ -81,6 +81,10 @@
     font-size: $font-size-sm;
     color: $neutral-700;
     font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover { color: $primary; }
   }
 
   &__signout {
