@@ -1,4 +1,5 @@
 export { default as Home } from './Home'
+export { NotFound } from './NotFound'
 export { default as Components } from './Components'
 export { Configurator } from './Configurator'
 export { ProductDetail } from './ProductDetail'

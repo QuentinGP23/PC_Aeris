@@ -1,0 +1,87 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.not-found {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  background: $neutral-50;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: $spacing-16 0;
+    gap: $spacing-6;
+  }
+
+  // ── 404 visual ─────────────────────────────────────────────────────────────
+
+  &__code {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    line-height: 1;
+    margin-bottom: $spacing-4;
+  }
+
+  &__digit {
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: $font-weight-bold;
+    color: $neutral-200;
+    letter-spacing: -0.04em;
+    user-select: none;
+  }
+
+  &__zero {
+    position: relative;
+    width: clamp(5rem, 13vw, 8.5rem);
+    height: clamp(5rem, 13vw, 8.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__zero-ring {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    background:
+      linear-gradient($neutral-50, $neutral-50) padding-box,
+      linear-gradient(135deg, $primary-400, #a78bfa) border-box;
+    animation: spin-ring 8s linear infinite;
+  }
+
+  // ── Text ───────────────────────────────────────────────────────────────────
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+    letter-spacing: -0.02em;
+  }
+
+  &__text {
+    font-size: $font-size-lg;
+    color: $neutral-500;
+    line-height: 1.6;
+    max-width: 380px;
+  }
+
+  // ── Actions ────────────────────────────────────────────────────────────────
+
+  &__actions {
+    display: flex;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: $spacing-2;
+  }
+}
+
+@keyframes spin-ring {
+  to { transform: rotate(360deg); }
+}
