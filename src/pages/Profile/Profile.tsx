@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context'
-import { Button, Input, Alert, Avatar, Divider } from '../../components/common'
+import { Button, Input, Alert, Avatar, Divider, Modal } from '../../components/common'
 import { Container } from '../../components/layout'
 import './Profile.scss'
 
@@ -70,6 +70,11 @@ function Profile() {
     await signOut()
     navigate('/')
   }
+
+  // ── Delete account ────────────────────────────────────────────────────────
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState('')
+  const DELETE_KEYWORD = 'SUPPRIMER'
 
   if (!user) return null
 
@@ -212,17 +217,80 @@ function Profile() {
         <Divider />
 
         {/* ── Danger zone ──────────────────────────────────────────────────── */}
-        <section className="profile__section profile__section--danger">
+        <section className="profile__section">
           <div className="profile__section-header">
-            <h2 className="profile__section-title profile__section-title--danger">Zone de danger</h2>
-            <p className="profile__section-desc">Actions irréversibles sur ton compte.</p>
+            <h2 className="profile__section-title">Zone de danger</h2>
+            <p className="profile__section-desc">Ces actions sont définitives. Lis bien avant d'agir.</p>
           </div>
-          <Button variant="danger" onClick={handleSignOut} isLoading={signOutLoading}>
-            Se déconnecter
-          </Button>
+
+          <div className="profile__danger-zone">
+            {/* Se déconnecter */}
+            <div className="profile__danger-item">
+              <div className="profile__danger-item-info">
+                <p className="profile__danger-item-title">Se déconnecter</p>
+                <p className="profile__danger-item-desc">
+                  Ferme ta session sur cet appareil. Tu pourras te reconnecter à tout moment.
+                </p>
+              </div>
+              <Button variant="outline" onClick={() => { void handleSignOut() }} isLoading={signOutLoading}>
+                Déconnexion
+              </Button>
+            </div>
+
+            <div className="profile__danger-divider" />
+
+            {/* Supprimer le compte */}
+            <div className="profile__danger-item profile__danger-item--destructive">
+              <div className="profile__danger-item-info">
+                <p className="profile__danger-item-title">Supprimer le compte</p>
+                <p className="profile__danger-item-desc">
+                  Supprime définitivement ton compte et toutes tes données. Cette action est irréversible.
+                </p>
+              </div>
+              <Button variant="danger" onClick={() => setDeleteModalOpen(true)}>
+                Supprimer mon compte
+              </Button>
+            </div>
+          </div>
         </section>
 
       </Container>
+
+      {/* ── Delete confirmation modal ─────────────────────────────────────── */}
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => { setDeleteModalOpen(false); setDeleteConfirm('') }}
+        title="Supprimer le compte"
+        size="sm"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => { setDeleteModalOpen(false); setDeleteConfirm('') }}>
+              Annuler
+            </Button>
+            <Button
+              variant="danger"
+              disabled={deleteConfirm !== DELETE_KEYWORD}
+            >
+              Supprimer définitivement
+            </Button>
+          </>
+        }
+      >
+        <div className="profile__delete-modal">
+          <p className="profile__delete-modal-text">
+            Cette action supprimera <strong>définitivement</strong> ton compte, tes configurations sauvegardées et toutes tes données associées.
+          </p>
+          <p className="profile__delete-modal-instruction">
+            Tape <strong>{DELETE_KEYWORD}</strong> pour confirmer.
+          </p>
+          <Input
+            value={deleteConfirm}
+            onChange={(e) => setDeleteConfirm(e.target.value)}
+            placeholder={DELETE_KEYWORD}
+            fullWidth
+          />
+        </div>
+      </Modal>
     </div>
   )
 }

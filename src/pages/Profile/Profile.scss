@@ -70,10 +70,6 @@
 
   &__section {
     padding: $spacing-8 0;
-
-    &--danger {
-      padding-bottom: $spacing-6;
-    }
   }
 
   &__section-header {
@@ -85,13 +81,83 @@
     font-weight: $font-weight-semibold;
     color: $neutral-900;
     margin-bottom: $spacing-1;
-
-    &--danger { color: $error; }
   }
 
   &__section-desc {
     font-size: $font-size-sm;
     color: $neutral-500;
+  }
+
+  // ── Danger zone ─────────────────────────────────────────────────────────────
+
+  &__danger-zone {
+    border: 1px solid rgba($error, 0.3);
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  &__danger-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-6;
+    padding: $spacing-5 $spacing-6;
+    flex-wrap: wrap;
+
+    &--destructive {
+      background: rgba($error, 0.03);
+    }
+  }
+
+  &__danger-divider {
+    height: 1px;
+    background: rgba($error, 0.15);
+  }
+
+  &__danger-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__danger-item-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    color: $neutral-900;
+
+    .profile__danger-item--destructive & { color: $error; }
+  }
+
+  &__danger-item-desc {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    line-height: 1.5;
+  }
+
+  // ── Delete modal ────────────────────────────────────────────────────────────
+
+  &__delete-modal {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__delete-modal-text {
+    font-size: $font-size-sm;
+    color: $neutral-700;
+    line-height: 1.6;
+  }
+
+  &__delete-modal-instruction {
+    font-size: $font-size-sm;
+    color: $neutral-600;
+    padding: $spacing-3 $spacing-4;
+    background: rgba($error, 0.05);
+    border-left: 3px solid $error;
+    border-radius: 0 $radius-sm $radius-sm 0;
+    line-height: 1.5;
   }
 
   // ── Form ───────────────────────────────────────────────────────────────────
