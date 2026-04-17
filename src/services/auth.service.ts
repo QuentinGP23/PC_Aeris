@@ -36,8 +36,6 @@ const isEmail = (identifier: string): boolean => {
 export const authService = {
   // Sign up with email and password
   async signUp(data: SignUpData): Promise<{ user: User | null; error: string | null }> {
-    console.log('Attempting signup with:', data)
-    
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
@@ -51,10 +49,7 @@ export const authService = {
       },
     })
 
-    console.log('Signup response:', { authData, authError })
-
     if (authError) {
-      console.error('Signup error details:', authError)
       return { user: null, error: authError.message }
     }
 
@@ -87,17 +82,11 @@ export const authService = {
       if (data.identifier.toLowerCase() === ADMIN_PSEUDO) {
         email = ADMIN_EMAIL
       } else {
-        // For regular users, we need to lookup by pseudo
-        // This requires a query to the users table or auth metadata
-        // For now, we'll use a workaround: try to get user by pseudo from auth metadata
-        // This is a limitation - Supabase doesn't allow login by custom fields directly
-        // In a real app, you'd have a users table with pseudo as unique field
-        
-        // Try common email patterns or return error
-        return { 
-          user: null, 
-          error: 'Connexion par pseudo non disponible. Utilisez votre email.' 
+        const { data: foundEmail, error: rpcError } = await supabase.rpc('get_email_by_pseudo', { p_pseudo: data.identifier })
+        if (rpcError || !foundEmail) {
+          return { user: null, error: 'Pseudo introuvable.' }
         }
+        email = foundEmail
       }
     }
 

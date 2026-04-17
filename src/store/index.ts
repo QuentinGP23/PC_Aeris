@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import type { CategoryKey, Product } from '../types'
 
+export { useToast, useToastStore } from './toastStore'
+export type { ToastVariant, Toast } from './toastStore'
+
 interface ConfigStore {
   config: Partial<Record<CategoryKey, Product>>
   selectComponent: (category: CategoryKey, product: Product) => void
