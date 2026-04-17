@@ -30,12 +30,12 @@
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   box-shadow: $shadow-lg;
-  animation: toast-in 200ms $ease-out both;
+  animation: toast-in 200ms cubic-bezier(0, 0, 0.2, 1) both;
 
   &--success {
     background-color: $success-light;
     border-color: rgba(16, 185, 129, 0.3);
-    color: $success-text;
+    color: #065F46;
 
     .toast__icon { color: $success; }
   }
@@ -43,7 +43,7 @@
   &--error {
     background-color: $error-light;
     border-color: rgba(239, 68, 68, 0.3);
-    color: $error-text;
+    color: #991B1B;
 
     .toast__icon { color: $error; }
   }
@@ -51,7 +51,7 @@
   &--warning {
     background-color: $warning-light;
     border-color: rgba(245, 158, 11, 0.3);
-    color: $warning-text;
+    color: #92400E;
 
     .toast__icon { color: $warning; }
   }
