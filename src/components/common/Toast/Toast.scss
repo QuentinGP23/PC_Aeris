@@ -1,0 +1,103 @@
+@use "../../../styles/variables" as *;
+
+.toast-container {
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  max-width: 380px;
+  width: calc(100vw - $spacing-12);
+
+  @media (max-width: $breakpoint-sm) {
+    bottom: $spacing-4;
+    right: $spacing-4;
+    left: $spacing-4;
+    width: auto;
+    max-width: none;
+  }
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-3 $spacing-4;
+  border-radius: $radius-lg;
+  border: 1px solid transparent;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-lg;
+  animation: toast-in 200ms $ease-out both;
+
+  &--success {
+    background-color: $success-light;
+    border-color: rgba(16, 185, 129, 0.3);
+    color: $success-text;
+
+    .toast__icon { color: $success; }
+  }
+
+  &--error {
+    background-color: $error-light;
+    border-color: rgba(239, 68, 68, 0.3);
+    color: $error-text;
+
+    .toast__icon { color: $error; }
+  }
+
+  &--warning {
+    background-color: $warning-light;
+    border-color: rgba(245, 158, 11, 0.3);
+    color: $warning-text;
+
+    .toast__icon { color: $warning; }
+  }
+
+  &--info {
+    background-color: $primary-50;
+    border-color: rgba(99, 102, 241, 0.3);
+    color: $primary-700;
+
+    .toast__icon { color: $primary; }
+  }
+
+  &__icon {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+  }
+
+  &__message {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size-xs;
+    opacity: 0.5;
+    padding: $spacing-1;
+    line-height: 1;
+    color: inherit;
+    transition: opacity $transition-fast;
+
+    &:hover { opacity: 1; }
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
