@@ -4,9 +4,5 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
-    coverage: {
-      provider: 'v8',
-      include: ['src/utils/**', 'src/services/**'],
-    },
   },
 })
