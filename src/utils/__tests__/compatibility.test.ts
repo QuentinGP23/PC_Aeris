@@ -23,18 +23,20 @@ function makeProduct(specs: Record<string, unknown>): Product {
   return {
     id: 'p1',
     name: 'Test',
-    category: 'cpu',
     manufacturer: 'Test',
-    specs,
-    amazon_sku: null,
+    series: null,
+    variant: null,
+    release_year: null,
+    category: 'cpu',
     image_url: null,
-    price_avg_eur: null,
+    description: null,
     price_min_eur: null,
     price_max_eur: null,
+    price_avg_eur: null,
     price_updated_at: null,
-    price_new_eur: null,
-    price_new_source: null,
-    price_used_sources: null,
+    retailer_url: null,
+    benchmark_score: null,
+    specs,
   }
 }
 
