@@ -21,7 +21,35 @@ export interface AdminProduct {
   variant: string | null
   release_year: number | null
   image_url: string | null
+  price_min_eur: number | null
+  price_max_eur: number | null
+  price_avg_eur: number | null
   created_at: string
+}
+
+export interface CreateProductInput {
+  name: string
+  category: CategoryKey
+  manufacturer?: string | null
+  series?: string | null
+  variant?: string | null
+  release_year?: number | null
+  image_url?: string | null
+  price_min_eur?: number | null
+  price_max_eur?: number | null
+  price_avg_eur?: number | null
+}
+
+export interface UpdateProductInput {
+  name?: string
+  manufacturer?: string | null
+  series?: string | null
+  variant?: string | null
+  release_year?: number | null
+  image_url?: string | null
+  price_min_eur?: number | null
+  price_max_eur?: number | null
+  price_avg_eur?: number | null
 }
 
 export interface DashboardStats {
@@ -73,7 +101,7 @@ export const adminService = {
 
     let query = supabase
       .from('products')
-      .select('id, name, category, manufacturer, series, variant, release_year, image_url, created_at', { count: 'exact' })
+      .select('id, name, category, manufacturer, series, variant, release_year, image_url, price_min_eur, price_max_eur, price_avg_eur, created_at', { count: 'exact' })
       .order(sortBy, { ascending: sortDir === 'asc', nullsFirst: false })
       .range(from, to)
 
@@ -85,9 +113,21 @@ export const adminService = {
     return { products: (data as AdminProduct[]) || [], total: count ?? 0, error: null }
   },
 
+  async createProduct(
+    input: CreateProductInput,
+  ): Promise<{ product: AdminProduct | null; error: string | null }> {
+    const { data, error } = await supabase
+      .from('products')
+      .insert(input)
+      .select('id, name, category, manufacturer, series, variant, release_year, image_url, price_min_eur, price_max_eur, price_avg_eur, created_at')
+      .single()
+    if (error) return { product: null, error: error.message }
+    return { product: data as AdminProduct, error: null }
+  },
+
   async updateProduct(
     id: string,
-    updates: { name?: string; manufacturer?: string | null; series?: string | null; variant?: string | null; release_year?: number | null; image_url?: string | null },
+    updates: UpdateProductInput,
   ): Promise<{ error: string | null }> {
     const { error } = await supabase.from('products').update(updates).eq('id', id)
     return { error: error?.message || null }
@@ -120,6 +160,17 @@ export const adminService = {
       .from(specsTable)
       .update(updates)
       .eq('product_id', productId)
+    return { error: error?.message || null }
+  },
+
+  async createProductSpecs(
+    productId: string,
+    specsTable: string,
+    specs: Record<string, unknown>,
+  ): Promise<{ error: string | null }> {
+    const { error } = await supabase
+      .from(specsTable)
+      .insert({ product_id: productId, ...specs })
     return { error: error?.message || null }
   },
 

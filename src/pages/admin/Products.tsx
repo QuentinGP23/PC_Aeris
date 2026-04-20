@@ -220,6 +220,23 @@ function SortIcon({ col, sortBy, sortDir }: { col: string; sortBy: string; sortD
   return <span className="admin-products__sort-icon">{sortDir === 'asc' ? '↑' : '↓'}</span>
 }
 
+type EditFormValues = {
+  name: string
+  manufacturer: string
+  series: string
+  variant: string
+  release_year: string
+  image_url: string
+  price_min_eur: string
+  price_max_eur: string
+  price_avg_eur: string
+}
+
+const EMPTY_EDIT_FORM: EditFormValues = {
+  name: '', manufacturer: '', series: '', variant: '', release_year: '', image_url: '',
+  price_min_eur: '', price_max_eur: '', price_avg_eur: '',
+}
+
 function AdminProducts() {
   const [products, setProducts] = useState<AdminProduct[]>([])
   const [total, setTotal] = useState(0)
@@ -232,9 +249,11 @@ function AdminProducts() {
   const [sortBy, setSortBy] = useState('name')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
 
-  const [editingProduct, setEditingProduct] = useState<AdminProduct | null>(null)
+  // Modal mode: null = closed, 'create' = new product, AdminProduct = edit existing
+  const [modalMode, setModalMode] = useState<'create' | AdminProduct | null>(null)
+  const [createCategory, setCreateCategory] = useState<CategoryKey>('cpu')
   const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info')
-  const [editForm, setEditForm] = useState({ name: '', manufacturer: '', series: '', variant: '', release_year: '', image_url: '' })
+  const [editForm, setEditForm] = useState<EditFormValues>(EMPTY_EDIT_FORM)
   const [specsForm, setSpecsForm] = useState<SpecsFormValues>({})
   const [originalSpecs, setOriginalSpecs] = useState<Record<string, unknown> | null>(null)
   const [specsLoading, setSpecsLoading] = useState(false)
@@ -281,8 +300,26 @@ function AdminProducts() {
     setPage(0)
   }
 
+  const openCreate = () => {
+    setModalMode('create')
+    setCreateCategory('cpu')
+    setActiveTab('info')
+    setEditError(null)
+    setEditForm(EMPTY_EDIT_FORM)
+    setOriginalSpecs(null)
+    setSpecsForm(initSpecsForm(null, SPECS_SCHEMA['cpu_specs']))
+  }
+
+  const handleCreateCategoryChange = (val: CategoryKey) => {
+    setCreateCategory(val)
+    const specsTable = CATEGORIES.find((c) => c.value === val)?.specsTable
+    if (specsTable && SPECS_SCHEMA[specsTable]) {
+      setSpecsForm(initSpecsForm(null, SPECS_SCHEMA[specsTable]))
+    }
+  }
+
   const openEdit = async (p: AdminProduct) => {
-    setEditingProduct(p)
+    setModalMode(p)
     setActiveTab('info')
     setEditError(null)
     setEditForm({
@@ -292,6 +329,9 @@ function AdminProducts() {
       variant: p.variant ?? '',
       release_year: p.release_year != null ? String(p.release_year) : '',
       image_url: p.image_url ?? '',
+      price_min_eur: p.price_min_eur != null ? String(p.price_min_eur) : '',
+      price_max_eur: p.price_max_eur != null ? String(p.price_max_eur) : '',
+      price_avg_eur: p.price_avg_eur != null ? String(p.price_avg_eur) : '',
     })
     const specsTable = CATEGORIES.find((c) => c.value === p.category)?.specsTable
     if (specsTable && SPECS_SCHEMA[specsTable]) {
@@ -305,33 +345,64 @@ function AdminProducts() {
     }
   }
 
-  const handleEdit = async () => {
-    if (!editingProduct) return
+  const buildProductPayload = () => ({
+    name: editForm.name.trim(),
+    manufacturer: editForm.manufacturer.trim() || null,
+    series: editForm.series.trim() || null,
+    variant: editForm.variant.trim() || null,
+    release_year: editForm.release_year ? Number(editForm.release_year) : null,
+    image_url: editForm.image_url.trim() || null,
+    price_min_eur: editForm.price_min_eur ? Number(editForm.price_min_eur) : null,
+    price_max_eur: editForm.price_max_eur ? Number(editForm.price_max_eur) : null,
+    price_avg_eur: editForm.price_avg_eur ? Number(editForm.price_avg_eur) : null,
+  })
+
+  const handleSubmit = async () => {
+    if (modalMode === null) return
+    if (!editForm.name.trim()) { setEditError('Le nom est obligatoire'); return }
+
     setEditLoading(true)
     setEditError(null)
 
-    const specsTable = CATEGORIES.find((c) => c.value === editingProduct.category)?.specsTable
-    const schema = specsTable ? SPECS_SCHEMA[specsTable] : null
+    if (modalMode === 'create') {
+      const specsTable = CATEGORIES.find((c) => c.value === createCategory)?.specsTable
+      const schema = specsTable ? SPECS_SCHEMA[specsTable] : null
 
-    const [infoRes, specsRes] = await Promise.all([
-      adminService.updateProduct(editingProduct.id, {
-        name: editForm.name || undefined,
-        manufacturer: editForm.manufacturer || null,
-        series: editForm.series || null,
-        variant: editForm.variant || null,
-        release_year: editForm.release_year ? Number(editForm.release_year) : null,
-        image_url: editForm.image_url || null,
-      }),
-      specsTable && schema
-        ? adminService.updateProductSpecs(editingProduct.id, specsTable, specsFormToUpdates(specsForm, schema))
-        : Promise.resolve({ error: null }),
-    ])
+      const { product, error: createErr } = await adminService.createProduct({
+        ...buildProductPayload(),
+        category: createCategory,
+      })
+      if (createErr || !product) {
+        setEditLoading(false)
+        setEditError(createErr ?? 'Création échouée')
+        return
+      }
+      if (specsTable && schema) {
+        const { error: specsErr } = await adminService.createProductSpecs(
+          product.id, specsTable, specsFormToUpdates(specsForm, schema),
+        )
+        if (specsErr) {
+          setEditLoading(false)
+          setEditError(`Produit créé mais specs échouées : ${specsErr}`)
+          return
+        }
+      }
+    } else {
+      const specsTable = CATEGORIES.find((c) => c.value === modalMode.category)?.specsTable
+      const schema = specsTable ? SPECS_SCHEMA[specsTable] : null
+
+      const [infoRes, specsRes] = await Promise.all([
+        adminService.updateProduct(modalMode.id, buildProductPayload()),
+        specsTable && schema
+          ? adminService.updateProductSpecs(modalMode.id, specsTable, specsFormToUpdates(specsForm, schema))
+          : Promise.resolve({ error: null }),
+      ])
+      const err = infoRes.error ?? specsRes.error
+      if (err) { setEditLoading(false); setEditError(err); return }
+    }
 
     setEditLoading(false)
-    const err = infoRes.error ?? specsRes.error
-    if (err) { setEditError(err); return }
-
-    setEditingProduct(null)
+    setModalMode(null)
     const { products: data, total: t } = await adminService.listProducts(category, page, search, sortBy, sortDir)
     setProducts(data)
     setTotal(t)
@@ -354,8 +425,13 @@ function AdminProducts() {
     setSpecsForm(initSpecsForm(originalSpecs, specsSchema))
   }
 
-  const specsTable = editingProduct ? CATEGORIES.find((c) => c.value === editingProduct.category)?.specsTable : undefined
+  const currentCategory: CategoryKey | null =
+    modalMode === 'create' ? createCategory :
+    modalMode ? modalMode.category : null
+  const specsTable = currentCategory ? CATEGORIES.find((c) => c.value === currentCategory)?.specsTable : undefined
   const specsSchema = specsTable ? SPECS_SCHEMA[specsTable] : null
+  const isCreateMode = modalMode === 'create'
+  const modalOpen = modalMode !== null
 
   return (
     <div className="admin-products">
@@ -380,6 +456,7 @@ function AdminProducts() {
           onClear={() => handleSearch('')}
         />
         <span className="admin-products__count">{total.toLocaleString('fr-FR')} produit{total !== 1 ? 's' : ''}</span>
+        <Button onClick={openCreate}>+ Créer un produit</Button>
       </div>
 
       {loading ? (
@@ -396,6 +473,7 @@ function AdminProducts() {
               <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('manufacturer')}>Fabricant <SortIcon col="manufacturer" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
               <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('series')}>Série <SortIcon col="series" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
               <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('release_year')}>Année <SortIcon col="release_year" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
+              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('price_avg_eur')}>Prix <SortIcon col="price_avg_eur" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
               <Table.Th>Actions</Table.Th>
             </Table.Row>
           </Table.Head>
@@ -421,6 +499,13 @@ function AdminProducts() {
                 <Table.Td>{p.series || <span className="admin-products__empty">—</span>}</Table.Td>
                 <Table.Td>{p.release_year || <span className="admin-products__empty">—</span>}</Table.Td>
                 <Table.Td>
+                  {p.price_avg_eur != null ? (
+                    <span className="admin-products__price">{p.price_avg_eur.toFixed(2)} €</span>
+                  ) : (
+                    <span className="admin-products__empty">—</span>
+                  )}
+                </Table.Td>
+                <Table.Td>
                   <div className="admin-products__actions">
                     <Button variant="outline" size="sm" onClick={() => { void openEdit(p) }}>Modifier</Button>
                     <Button variant="danger" size="sm" onClick={() => setDeletingProduct(p)}>Supprimer</Button>
@@ -441,12 +526,12 @@ function AdminProducts() {
         </div>
       )}
 
-      {/* Edit modal */}
-      <Modal isOpen={!!editingProduct} onClose={() => setEditingProduct(null)} title="Modifier le produit" size="xl"
+      {/* Create/Edit modal */}
+      <Modal isOpen={modalOpen} onClose={() => setModalMode(null)} title={isCreateMode ? 'Créer un produit' : 'Modifier le produit'} size="xl"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setEditingProduct(null)}>Annuler</Button>
-            <Button onClick={() => { void handleEdit() }} isLoading={editLoading}>Enregistrer</Button>
+            <Button variant="secondary" onClick={() => setModalMode(null)}>Annuler</Button>
+            <Button onClick={() => { void handleSubmit() }} isLoading={editLoading}>{isCreateMode ? 'Créer' : 'Enregistrer'}</Button>
           </>
         }
       >
@@ -472,6 +557,15 @@ function AdminProducts() {
 
         {activeTab === 'info' && (
           <div className="admin-products__modal-form">
+            {isCreateMode && (
+              <Select
+                label="Catégorie *"
+                options={CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
+                value={createCategory}
+                onChange={(e) => handleCreateCategoryChange(e.target.value as CategoryKey)}
+                fullWidth
+              />
+            )}
             <Input label="Nom *" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} fullWidth />
             <div className="admin-products__modal-row">
               <Input label="Fabricant" value={editForm.manufacturer} onChange={(e) => setEditForm({ ...editForm, manufacturer: e.target.value })} fullWidth />
@@ -480,6 +574,11 @@ function AdminProducts() {
             <div className="admin-products__modal-row">
               <Input label="Variante" value={editForm.variant} onChange={(e) => setEditForm({ ...editForm, variant: e.target.value })} fullWidth />
               <Input label="Année de sortie" type="number" value={editForm.release_year} onChange={(e) => setEditForm({ ...editForm, release_year: e.target.value })} fullWidth />
+            </div>
+            <div className="admin-products__modal-row">
+              <Input label="Prix min (€)" type="number" value={editForm.price_min_eur} onChange={(e) => setEditForm({ ...editForm, price_min_eur: e.target.value })} fullWidth />
+              <Input label="Prix moyen (€)" type="number" value={editForm.price_avg_eur} onChange={(e) => setEditForm({ ...editForm, price_avg_eur: e.target.value })} fullWidth />
+              <Input label="Prix max (€)" type="number" value={editForm.price_max_eur} onChange={(e) => setEditForm({ ...editForm, price_max_eur: e.target.value })} fullWidth />
             </div>
             <Input label="URL image" value={editForm.image_url} onChange={(e) => setEditForm({ ...editForm, image_url: e.target.value })} fullWidth />
             {editForm.image_url && (
