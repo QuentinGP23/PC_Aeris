@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.2.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.1.0...v2.2.0) (2026-04-21)
+
+
+### Features
+
+* **sprint-2:** fix login pseudo + toast notifications globales ([62e3fda](https://github.com/QuentinGP23/PC_Aeris/commit/62e3fda4fa60a4f54d32b3b21eec546ab696a19b))
+* **sprint-2:** fix login pseudo + toast notifications globales ([eef1ea0](https://github.com/QuentinGP23/PC_Aeris/commit/eef1ea0b84a749b8e9d6ac30d63390f26a56da60))
+* **sprint-3:** compatibilités GPU/PSU TDP, boîtier/mobo format, stockage/connectique ([0714e6e](https://github.com/QuentinGP23/PC_Aeris/commit/0714e6e94e6385f9d7d60c45a723a9515557b879))
+* **sprint-3:** compatibilités GPU/PSU/Storage + tests unitaires ([d26fe76](https://github.com/QuentinGP23/PC_Aeris/commit/d26fe76cf558d39d5a3d88163a4b2d1dce7a3808))
+* **sprint-4:** admin création produit + édition prix (US-078, US-079) ([cb0358a](https://github.com/QuentinGP23/PC_Aeris/commit/cb0358a97d2ad69d28a52f972c18edc0100d84e0))
+* **sprint-4:** admin produits (CRUD + prix) + tests d'intégration ([138f3df](https://github.com/QuentinGP23/PC_Aeris/commit/138f3df132e498587d9759e503a23334dc41feb8))
+
+
+### Bug Fixes
+
+* **ci:** résoudre conflit vitest@2 / coverage-v8@4 + ajouter npm test au CI ([b28b519](https://github.com/QuentinGP23/PC_Aeris/commit/b28b5191b681292c74cf891b5e0676a2b6d49a74))
+* **ci:** résoudre conflit vitest@2 / coverage-v8@4 + ajouter npm test au CI ([4ef6096](https://github.com/QuentinGP23/PC_Aeris/commit/4ef6096d1dfe2dbe536fec39595f0a28878809d6))
+* **test:** aligner makeProduct avec les champs réels du type Product ([16c4868](https://github.com/QuentinGP23/PC_Aeris/commit/16c4868cfb7c62f1535d7b8db7152d3e494ea2e1))
+* **toast:** replace undefined SCSS vars with valid values ([3abe049](https://github.com/QuentinGP23/PC_Aeris/commit/3abe0492400f55c8cfe28b6eb55ae77c0a39ca94))
+
 ## [2.1.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.0.0...v2.1.0) (2026-04-07)
 
 
