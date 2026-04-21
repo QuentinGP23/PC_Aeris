@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
+import { useToast } from "../../store";
 import { Button, Input, Form, Checkbox } from "../../components/common";
 import "./auth.scss";
 
 function SignIn() {
   const navigate = useNavigate();
   const { signIn, isLoading } = useAuth();
+  const toast = useToast();
 
   const [formData, setFormData] = useState({
     identifier: "",
@@ -39,7 +41,7 @@ function SignIn() {
     if (error) {
       setError(error);
     } else if (user) {
-      // Redirect based on role
+      toast.success(`Bienvenue ${user.pseudo ?? user.firstName ?? ''} !`)
       if (user.role === "admin") {
         navigate("/admin");
       } else {

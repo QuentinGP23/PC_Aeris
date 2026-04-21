@@ -1,5 +1,5 @@
 import { Outlet, Routes, Route } from "react-router-dom";
-import { ProtectedRoute } from "./components/common";
+import { ProtectedRoute, ToastContainer } from "./components/common";
 import { Header, Footer, AdminLayout } from "./components/layout";
 import {
   Home,
@@ -34,6 +34,8 @@ function PublicLayout() {
 
 function App() {
   return (
+    <>
+    <ToastContainer />
     <Routes>
       {/* Public routes with Header + Footer */}
       <Route element={<PublicLayout />}>
@@ -91,6 +93,7 @@ function App() {
         }
       />
     </Routes>
+    </>
   );
 }
 

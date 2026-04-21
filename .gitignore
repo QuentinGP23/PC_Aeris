@@ -54,3 +54,4 @@ coverage
 *.pem
 .vercel
 .netlify
+.claude/settings.local.json
