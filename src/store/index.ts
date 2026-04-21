@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { CategoryKey, Product } from '../types'
 
 export { useToast, useToastStore } from './toastStore'
@@ -11,15 +12,20 @@ interface ConfigStore {
   clearConfig: () => void
 }
 
-export const useConfigStore = create<ConfigStore>((set) => ({
-  config: {},
-  selectComponent: (category, product) =>
-    set((state) => ({ config: { ...state.config, [category]: product } })),
-  removeComponent: (category) =>
-    set((state) => {
-      const next = { ...state.config }
-      delete next[category]
-      return { config: next }
+export const useConfigStore = create<ConfigStore>()(
+  persist(
+    (set) => ({
+      config: {},
+      selectComponent: (category, product) =>
+        set((state) => ({ config: { ...state.config, [category]: product } })),
+      removeComponent: (category) =>
+        set((state) => {
+          const next = { ...state.config }
+          delete next[category]
+          return { config: next }
+        }),
+      clearConfig: () => set({ config: {} }),
     }),
-  clearConfig: () => set({ config: {} }),
-}))
+    { name: 'pc-aeris-config' }
+  )
+)

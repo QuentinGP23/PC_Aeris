@@ -1,123 +1,148 @@
 // ==========================================================================
-// DESIGN SYSTEM — PC AERIS
-// Variables & Tokens
+// DESIGN SYSTEM — PC AERIS 2026 (Aeris Dark)
+// CSS custom properties + SCSS aliases (compat existing components)
 // ==========================================================================
-//
-// Architecture :
-//   - CSS custom properties sur :root  → accessibles au runtime (JS, theming)
-//   - SCSS variables                   → shortcuts pour usage dans les composants
-//
-// Convention : --[catégorie]-[nom]-[variante?]
-// ==========================================================================
-
-
-// --------------------------------------------------------------------------
-// 1. COULEURS
-// --------------------------------------------------------------------------
 
 :root {
 
-  // Backgrounds & surfaces
-  --color-bg:             #F8F9FB;
-  --color-surface:        #FFFFFF;
-  --color-surface-raised: #F1F3F7;
-  --color-surface-sunken: #ECEEF2;
+  // --------------------------------------------------------------------------
+  // 1. AERIS TOKENS (design system 2026)
+  // --------------------------------------------------------------------------
 
-  // Texte
-  --color-text-primary:   #111114;
-  --color-text-secondary: #6B7280;
-  --color-text-tertiary:  #9CA3AF;
-  --color-text-disabled:  #D1D5DB;
-  --color-text-inverse:   #FFFFFF;
-  --color-text-link:      #4F46E5;
+  // Surfaces dark theme
+  --bg:         #04040A;
+  --surface:    #09090F;
+  --surface-2:  #0F0F18;
+  --surface-3:  #161624;
 
-  // Primary — Indigo électrique
+  // Borders
+  --border:   rgba(255, 255, 255, 0.06);
+  --border-s: rgba(255, 255, 255, 0.11);
+
+  // Text
+  --text:   #F0F0FA;
+  --text-2: #64647A;
+  --text-3: #32323E;
+
+  // Accent indigo
+  --ind:    #6366F1;
+  --ind-l:  #818CF8;
+  --ind-d:  #4338CA;
+  --ind-g:  rgba(99, 102, 241, 0.15);
+  --ind-gs: rgba(99, 102, 241, 0.3);
+
+  // States
+  --ok:   #10B981;
+  --err:  #EF4444;
+  --warn: #F59E0B;
+
+  // Font families
+  --fh: 'Space Grotesk', system-ui, sans-serif;
+  --fb: 'Inter', system-ui, sans-serif;
+  --fm: 'JetBrains Mono', ui-monospace, monospace;
+
+  // Radii (Aeris scale)
+  --r:  12px;
+  --rs: 8px;
+  --rl: 20px;
+
+  // Easings
+  --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --reveal: cubic-bezier(0.16, 1, 0.3, 1);
+
+
+  // --------------------------------------------------------------------------
+  // 2. LEGACY COLOR TOKENS (remapped to dark theme)
+  // --------------------------------------------------------------------------
+
+  --color-bg:             var(--bg);
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-2);
+  --color-surface-sunken: var(--surface-3);
+
+  --color-text-primary:   var(--text);
+  --color-text-secondary: var(--text-2);
+  --color-text-tertiary:  var(--text-3);
+  --color-text-disabled:  var(--text-3);
+  --color-text-inverse:   #0C0C0E;
+  --color-text-link:      var(--ind-l);
+
+  --color-primary:       var(--ind);
+  --color-primary-hover: #7577F5;
   --color-primary-50:    #EEF2FF;
   --color-primary-100:   #E0E7FF;
   --color-primary-200:   #C7D2FE;
   --color-primary-300:   #A5B4FC;
-  --color-primary-400:   #818CF8;
-  --color-primary-500:   #6366F1;
-  --color-primary-600:   #4F46E5;
-  --color-primary-700:   #4338CA;
-  --color-primary-800:   #3730A3;
-  --color-primary-900:   #312E81;
-  --color-primary:       var(--color-primary-600);
-  --color-primary-hover: var(--color-primary-700);
+  --color-primary-400:   var(--ind-l);
+  --color-primary-500:   var(--ind);
+  --color-primary-600:   var(--ind-d);
+  --color-primary-700:   #3730A3;
+  --color-primary-800:   #312E81;
+  --color-primary-900:   #1E1B4B;
 
-  // Neutrals
   --color-neutral-50:  #F9FAFB;
   --color-neutral-100: #F3F4F6;
-  --color-neutral-200: #E5E7EB;
-  --color-neutral-300: #D1D5DB;
-  --color-neutral-400: #9CA3AF;
+  --color-neutral-200: #1F1F2A;
+  --color-neutral-300: #32323E;
+  --color-neutral-400: #64647A;
   --color-neutral-500: #6B7280;
   --color-neutral-600: #4B5563;
   --color-neutral-700: #374151;
-  --color-neutral-800: #1F2937;
-  --color-neutral-900: #111827;
-  --color-neutral-950: #0C0C0E;
+  --color-neutral-800: var(--surface-2);
+  --color-neutral-900: var(--surface);
+  --color-neutral-950: var(--bg);
 
-  // Success
-  --color-success:       #10B981;
+  --color-success:       var(--ok);
   --color-success-hover: #059669;
-  --color-success-light: #D1FAE5;
-  --color-success-text:  #065F46;
+  --color-success-light: rgba(16, 185, 129, 0.1);
+  --color-success-text:  #34D399;
 
-  // Warning
-  --color-warning:       #F59E0B;
+  --color-warning:       var(--warn);
   --color-warning-hover: #D97706;
-  --color-warning-light: #FEF3C7;
-  --color-warning-text:  #92400E;
+  --color-warning-light: rgba(245, 158, 11, 0.1);
+  --color-warning-text:  #FBBF24;
 
-  // Error
-  --color-error:       #EF4444;
+  --color-error:       var(--err);
   --color-error-hover: #DC2626;
-  --color-error-light: #FEE2E2;
-  --color-error-text:  #991B1B;
+  --color-error-light: rgba(239, 68, 68, 0.1);
+  --color-error-text:  #FCA5A5;
 
-  // Info
   --color-info:       #3B82F6;
   --color-info-hover: #2563EB;
-  --color-info-light: #DBEAFE;
-  --color-info-text:  #1E40AF;
+  --color-info-light: rgba(59, 130, 246, 0.1);
 
-  // Borders
-  --color-border:        #E5E7EB;
-  --color-border-strong: #D1D5DB;
-  --color-border-focus:  var(--color-primary);
+  --color-border:        var(--border);
+  --color-border-strong: var(--border-s);
+  --color-border-focus:  var(--ind);
 
 
   // --------------------------------------------------------------------------
-  // 2. TYPOGRAPHIE
+  // 3. TYPOGRAPHY
   // --------------------------------------------------------------------------
 
-  // Familles
-  --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-heading: var(--fh);
+  --font-body:    var(--fb);
+  --font-mono:    var(--fm);
 
-  // Tailles fluides — clamp(min, vw, max)
-  --text-xs:   clamp(0.6875rem, 0.75vw,  0.75rem);   // 11–12px
-  --text-sm:   clamp(0.75rem,   0.85vw,  0.875rem);   // 12–14px
-  --text-base: clamp(0.875rem,  1vw,     1rem);        // 14–16px
-  --text-lg:   clamp(1rem,      1.1vw,   1.125rem);    // 16–18px
-  --text-xl:   clamp(1.125rem,  1.3vw,   1.25rem);     // 18–20px
-  --text-2xl:  clamp(1.25rem,   1.6vw,   1.5rem);      // 20–24px
-  --text-3xl:  clamp(1.5rem,    2.1vw,   1.875rem);    // 24–30px
-  --text-4xl:  clamp(1.875rem,  2.8vw,   2.25rem);     // 30–36px
-  --text-5xl:  clamp(2.25rem,   3.5vw,   3rem);        // 36–48px
-  --text-6xl:  clamp(3rem,      4.5vw,   4rem);        // 48–64px
-  --text-7xl:  clamp(4rem,      6vw,     5.5rem);      // 64–88px
+  --text-xs:   clamp(0.6875rem, 0.75vw,  0.75rem);
+  --text-sm:   clamp(0.75rem,   0.85vw,  0.875rem);
+  --text-base: clamp(0.875rem,  1vw,     1rem);
+  --text-lg:   clamp(1rem,      1.1vw,   1.125rem);
+  --text-xl:   clamp(1.125rem,  1.3vw,   1.25rem);
+  --text-2xl:  clamp(1.25rem,   1.6vw,   1.5rem);
+  --text-3xl:  clamp(1.5rem,    2.1vw,   1.875rem);
+  --text-4xl:  clamp(1.875rem,  2.8vw,   2.25rem);
+  --text-5xl:  clamp(2.25rem,   3.5vw,   3rem);
+  --text-6xl:  clamp(3rem,      4.5vw,   4rem);
+  --text-7xl:  clamp(4rem,      6vw,     5.5rem);
 
-  // Graisses
   --weight-normal:    400;
   --weight-medium:    500;
   --weight-semibold:  600;
   --weight-bold:      700;
   --weight-extrabold: 800;
 
-  // Interlignage
   --leading-none:    1;
   --leading-tight:   1.2;
   --leading-snug:    1.375;
@@ -125,80 +150,77 @@
   --leading-relaxed: 1.65;
   --leading-loose:   2;
 
-  // Letter-spacing — négatif sur les titres pour l'impact (inspiré Ciridae)
-  --tracking-tighter: -0.05em;   // hero / très grands titres
-  --tracking-tight:   -0.025em;  // titres de section
+  --tracking-tighter: -0.05em;
+  --tracking-tight:   -0.025em;
   --tracking-normal:   0em;
   --tracking-wide:     0.025em;
   --tracking-wider:    0.05em;
-  --tracking-widest:   0.12em;   // labels CAPSLOCK
+  --tracking-widest:   0.12em;
 
 
   // --------------------------------------------------------------------------
-  // 3. ESPACEMENT — grille 4px, incrément 8px
+  // 4. SPACING
   // --------------------------------------------------------------------------
 
   --space-px: 1px;
   --space-0:  0;
-  --space-1:  0.25rem;   //  4px
-  --space-2:  0.5rem;    //  8px
-  --space-3:  0.75rem;   // 12px
-  --space-4:  1rem;      // 16px
-  --space-5:  1.25rem;   // 20px
-  --space-6:  1.5rem;    // 24px
-  --space-7:  1.75rem;   // 28px
-  --space-8:  2rem;      // 32px
-  --space-10: 2.5rem;    // 40px
-  --space-12: 3rem;      // 48px
-  --space-14: 3.5rem;    // 56px
-  --space-16: 4rem;      // 64px
-  --space-20: 5rem;      // 80px
-  --space-24: 6rem;      // 96px
-  --space-28: 7rem;      // 112px
-  --space-32: 8rem;      // 128px
-  --space-40: 10rem;     // 160px
-  --space-48: 12rem;     // 192px
-  --space-64: 16rem;     // 256px
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-7:  1.75rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-28: 7rem;
+  --space-32: 8rem;
+  --space-40: 10rem;
+  --space-48: 12rem;
+  --space-64: 16rem;
 
 
   // --------------------------------------------------------------------------
-  // 4. BORDER RADIUS
+  // 5. BORDER RADIUS
   // --------------------------------------------------------------------------
 
   --radius-none: 0;
-  --radius-sm:   0.25rem;   //  4px
-  --radius-md:   0.5rem;    //  8px
-  --radius-lg:   0.75rem;   // 12px
-  --radius-xl:   1rem;      // 16px
-  --radius-2xl:  1.5rem;    // 24px
-  --radius-3xl:  2rem;      // 32px
+  --radius-sm:   var(--rs);
+  --radius-md:   var(--r);
+  --radius-lg:   var(--r);
+  --radius-xl:   var(--rl);
+  --radius-2xl:  var(--rl);
+  --radius-3xl:  2rem;
   --radius-full: 9999px;
 
 
   // --------------------------------------------------------------------------
-  // 5. SHADOWS — légères, premium
+  // 6. SHADOWS (dark-tuned)
   // --------------------------------------------------------------------------
 
-  --shadow-xs:     0 1px 2px 0 rgb(0 0 0 / 0.04);
-  --shadow-sm:     0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-md:     0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-  --shadow-lg:     0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-xl:     0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.05);
-  --shadow-2xl:    0 25px 50px -12px rgb(0 0 0 / 0.14);
-  --shadow-inner:  inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-xs:     0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-sm:     0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md:     0 4px 16px -2px rgb(0 0 0 / 0.45);
+  --shadow-lg:     0 16px 48px -8px rgb(0 0 0 / 0.5);
+  --shadow-xl:     0 20px 60px -10px rgb(0 0 0 / 0.55);
+  --shadow-2xl:    0 25px 80px -12px rgb(0 0 0 / 0.65);
+  --shadow-inner:  inset 0 2px 4px 0 rgb(0 0 0 / 0.3);
 
-  // Focus rings
-  --shadow-focus:         0 0 0 3px rgb(79 70 229 / 0.18);
-  --shadow-focus-error:   0 0 0 3px rgb(239 68 68 / 0.18);
-  --shadow-focus-success: 0 0 0 3px rgb(16 185 129 / 0.18);
+  --shadow-focus:         0 0 0 3px rgba(99, 102, 241, 0.18);
+  --shadow-focus-error:   0 0 0 3px rgba(239, 68, 68, 0.18);
+  --shadow-focus-success: 0 0 0 3px rgba(16, 185, 129, 0.18);
 
-  // Cards
-  --shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-card-hover: 0 8px 24px -4px rgb(0 0 0 / 0.10), 0 2px 8px -2px rgb(0 0 0 / 0.06);
+  --shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-card-hover: 0 16px 48px rgb(0 0 0 / 0.5);
 
 
   // --------------------------------------------------------------------------
-  // 6. Z-INDEX
+  // 7. Z-INDEX
   // --------------------------------------------------------------------------
 
   --z-below:    -1;
@@ -213,7 +235,7 @@
 
 
   // --------------------------------------------------------------------------
-  // 7. TRANSITIONS
+  // 8. TRANSITIONS
   // --------------------------------------------------------------------------
 
   --duration-instant: 50ms;
@@ -226,8 +248,8 @@
   --ease-in:      cubic-bezier(0.4, 0, 1, 1);
   --ease-out:     cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);  // léger rebond
-  --ease-smooth:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:  var(--spring);
+  --ease-smooth:  var(--ease);
 
   --transition-fast:   var(--duration-fast)   var(--ease-default);
   --transition-base:   var(--duration-base)   var(--ease-default);
@@ -236,23 +258,23 @@
 
 
   // --------------------------------------------------------------------------
-  // 8. LAYOUT
+  // 9. LAYOUT
   // --------------------------------------------------------------------------
 
   --container-sm:  640px;
   --container-md:  768px;
   --container-lg:  1024px;
-  --container-xl:  1280px;
+  --container-xl:  1360px;
   --container-2xl: 1536px;
 
-  --header-height: 64px;
+  --header-height: 58px;
+  --nav-h:         58px;
   --sidebar-width: 260px;
 }
 
 
 // ==========================================================================
-// SCSS VARIABLES — Aliases vers les CSS custom properties
-// Usage : @use "../styles/variables" as *; puis $primary, $spacing-4, etc.
+// SCSS ALIASES (compat existing SCSS modules)
 // ==========================================================================
 
 // --- Couleurs principales ---
@@ -335,7 +357,6 @@ $text-5xl:  var(--text-5xl);
 $text-6xl:  var(--text-6xl);
 $text-7xl:  var(--text-7xl);
 
-// Aliases backward-compat
 $font-size-xs:   $text-xs;
 $font-size-sm:   $text-sm;
 $font-size-base: $text-base;
@@ -390,14 +411,13 @@ $transition-base:   var(--transition-base);
 $transition-slow:   var(--transition-slow);
 $transition-spring: var(--transition-spring);
 
-// --- Breakpoints (valeurs statiques pour @media) ---
+// --- Breakpoints ---
 $bp-sm:  640px;
 $bp-md:  768px;
 $bp-lg:  1024px;
 $bp-xl:  1280px;
 $bp-2xl: 1536px;
 
-// Aliases backward-compat
 $breakpoint-sm:  $bp-sm;
 $breakpoint-md:  $bp-md;
 $breakpoint-lg:  $bp-lg;
@@ -408,12 +428,12 @@ $breakpoint-2xl: $bp-2xl;
 $header-height: var(--header-height);
 $sidebar-width: var(--sidebar-width);
 
-// ==========================================================================
-// SCSS RAW HEX — valeurs brutes pour usage dans rgba(), gradients SCSS
-// Ne pas utiliser directement dans les composants — préférer les tokens
-// ==========================================================================
+// --- Aeris direct ---
+$container-max: 1360px;
+$nav-h: 58px;
 
-$c-primary:   #4F46E5;
+// --- Raw hex (for rgba) ---
+$c-primary:   #6366F1;
 $c-success:   #10B981;
 $c-error:     #EF4444;
 $c-warning:   #F59E0B;

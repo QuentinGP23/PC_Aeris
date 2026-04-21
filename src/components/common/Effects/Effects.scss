@@ -1,0 +1,40 @@
+@use "../../../styles/variables" as *;
+
+.cur-dot {
+  position: fixed;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.2s var(--ease), height 0.2s var(--ease);
+
+  @media (hover: none) { display: none; }
+}
+
+.cur-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.22s var(--ease),
+    height 0.22s var(--ease),
+    border-color 0.22s;
+
+  @media (hover: none) { display: none; }
+}
+
+.cur-hover .cur-dot { width: 32px; height: 32px; }
+.cur-hover .cur-ring {
+  width: 56px;
+  height: 56px;
+  border-color: rgba(255, 255, 255, 0.38);
+}
