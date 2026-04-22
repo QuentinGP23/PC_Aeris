@@ -191,6 +191,14 @@ img, video {
   max-width: var(--container-xl);
   margin: 0 auto;
   padding: 0 40px;
+
+  @media (max-width: 640px) { padding: 0 20px; }
+}
+
+// Page wrapper — compense la nav fixe
+.page {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
 }
 
 // Scroll reveal (triggered by initReveal())

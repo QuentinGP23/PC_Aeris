@@ -1,72 +1,78 @@
 import { Link, useLocation } from 'react-router-dom'
 import { type ReactNode } from 'react'
-import { Gauge, Users, Package, ComputerTower, SignOut } from '@phosphor-icons/react'
 import { useAuth } from '../../../context'
 import './AdminLayout.scss'
 
 const NAV_ITEMS = [
-  { to: '/admin', label: 'Dashboard', icon: Gauge },
-  { to: '/admin/users', label: 'Utilisateurs', icon: Users },
-  { to: '/admin/products', label: 'Produits', icon: Package },
+  { to: '/admin', label: 'Dashboard', icon: '◧' },
+  { to: '/admin/users', label: 'Utilisateurs', icon: '◉' },
+  { to: '/admin/products', label: 'Produits', icon: '◫' },
 ]
 
 interface AdminLayoutProps {
   children: ReactNode
   title?: string
+  eyebrow?: string
+  ghost?: string
+  actions?: ReactNode
 }
 
-function AdminLayout({ children, title }: AdminLayoutProps) {
+function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actions }: AdminLayoutProps) {
   const { pathname } = useLocation()
   const { user, signOut } = useAuth()
 
   return (
-    <div className="admin-layout">
-      {/* Sidebar */}
-      <aside className="admin-layout__sidebar">
-        <div className="admin-layout__sidebar-header">
-          <Link to="/" className="admin-layout__brand">
-            <ComputerTower size={22} weight="fill" />
-            <span>PC Aeris</span>
-          </Link>
-          <span className="admin-layout__badge">Admin</span>
+    <div className="admin-wrap">
+      <aside className="admin-nav">
+        <div className="admin-nav__hd">
+          <span className="admin-nav__label">PC Aeris</span>
+          <div className="admin-nav__title">Console Admin</div>
         </div>
 
-        <nav className="admin-layout__nav">
-          {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`admin-layout__nav-item ${pathname === to ? 'admin-layout__nav-item--active' : ''}`}
-            >
-              <Icon size={18} />
-              <span>{label}</span>
-            </Link>
-          ))}
-        </nav>
+        <div className="admin-nav__body">
+          <div className="admin-nav__section">Pilotage</div>
+          {NAV_ITEMS.map((it) => {
+            const active = pathname === it.to
+            return (
+              <Link
+                key={it.to}
+                to={it.to}
+                className={`admin-nav__item ${active ? 'admin-nav__item--act' : ''}`}
+              >
+                <span className="admin-nav__item-ico">{it.icon}</span>
+                <span>{it.label}</span>
+              </Link>
+            )
+          })}
+        </div>
 
-        <div className="admin-layout__sidebar-footer">
-          <div className="admin-layout__user">
-            <span className="admin-layout__user-name">{user?.pseudo || user?.email}</span>
-            <span className="admin-layout__user-role">Administrateur</span>
-          </div>
-          <button className="admin-layout__signout" onClick={() => signOut()} title="Déconnexion">
-            <SignOut size={18} />
-          </button>
+        <div className="admin-nav__ft">
+          {user && (
+            <div className="admin-nav__who">
+              <div className="admin-nav__who-name">{user.pseudo || user.email}</div>
+              <div className="admin-nav__who-role">Administrateur</div>
+            </div>
+          )}
+          <Link to="/" className="admin-nav__back">← Retour au site</Link>
+          <button className="admin-nav__back" onClick={() => signOut()}>Déconnexion</button>
         </div>
       </aside>
 
-      {/* Main */}
-      <div className="admin-layout__main">
-        {title && (
-          <div className="admin-layout__page-header">
-            <h1>{title}</h1>
+      <div className="admin-content">
+        <div className="admin-hd">
+          <div className="admin-hd__left">
+            <div className="admin-hd__eyebrow">{eyebrow}</div>
+            {title && <div className="admin-hd__title">{title}</div>}
           </div>
-        )}
-        <div className="admin-layout__content">
+          {actions && <div className="admin-hd__actions">{actions}</div>}
+          {ghost && <div className="admin-hd__ghost">{ghost}</div>}
+        </div>
+        <div className="admin-body">
           {children}
         </div>
       </div>
     </div>
   )
 }
+
 export default AdminLayout

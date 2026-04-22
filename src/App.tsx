@@ -30,7 +30,7 @@ function PublicLayout() {
   return (
     <>
       <Header />
-      <main>
+      <main className="page">
         <Outlet />
       </main>
       <Footer />
@@ -74,7 +74,7 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute requiredRole="admin">
-              <AdminLayout title="Dashboard">
+              <AdminLayout title="Dashboard" ghost="DASH">
                 <AdminDashboard />
               </AdminLayout>
             </ProtectedRoute>
@@ -84,7 +84,7 @@ function App() {
           path="/admin/users"
           element={
             <ProtectedRoute requiredRole="admin">
-              <AdminLayout title="Utilisateurs">
+              <AdminLayout title="Utilisateurs" ghost="USERS">
                 <AdminUsers />
               </AdminLayout>
             </ProtectedRoute>
@@ -94,7 +94,7 @@ function App() {
           path="/admin/products"
           element={
             <ProtectedRoute requiredRole="admin">
-              <AdminLayout title="Produits">
+              <AdminLayout title="Produits" ghost="STOCK">
                 <AdminProducts />
               </AdminLayout>
             </ProtectedRoute>

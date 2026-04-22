@@ -1,34 +1,28 @@
-import './Dashboard.scss'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Package, ComputerTower, Cpu, Monitor, Memory, HardDrive, Lightning, Cube, Wind, Image, CurrencyEur } from '@phosphor-icons/react'
 import { adminService, type DashboardStats } from '../../services'
-import { Spinner, Alert, Card } from '../../components/common'
 import './Dashboard.scss'
 
-const CATEGORY_META: Record<string, { label: string; icon: typeof Users; color: string }> = {
-  cpu:         { label: 'Processeurs',      icon: Cpu,          color: '#6366f1' },
-  gpu:         { label: 'Cartes graphiques', icon: Monitor,      color: '#8b5cf6' },
-  ram:         { label: 'RAM',              icon: Memory,       color: '#3b82f6' },
-  motherboard: { label: 'Cartes mères',     icon: ComputerTower,color: '#0ea5e9' },
-  storage:     { label: 'Stockage',         icon: HardDrive,    color: '#10b981' },
-  psu:         { label: 'Alimentations',    icon: Lightning,    color: '#f59e0b' },
-  pc_case:     { label: 'Boîtiers',         icon: Cube,         color: '#ef4444' },
-  cpu_cooler:  { label: 'Ventrads',         icon: Wind,         color: '#14b8a6' },
+interface CategoryMeta { label: string; icon: string; color: string }
+
+const CATEGORY_META: Record<string, CategoryMeta> = {
+  cpu:         { label: 'Processeurs',       icon: '⚡', color: '#3B82F6' },
+  gpu:         { label: 'Cartes graphiques', icon: '🎮', color: '#EF4444' },
+  ram:         { label: 'RAM',               icon: '🧠', color: '#22C55E' },
+  motherboard: { label: 'Cartes mères',      icon: '🔌', color: '#0EA5E9' },
+  storage:     { label: 'Stockage',          icon: '💾', color: '#F59E0B' },
+  psu:         { label: 'Alimentations',     icon: '⚡', color: '#F59E0B' },
+  pc_case:     { label: 'Boîtiers',          icon: '🖥️', color: '#A855F7' },
+  cpu_cooler:  { label: 'Refroidissement',   icon: '❄️', color: '#14B8A6' },
 }
 
-function StatCard({ label, value, icon: Icon, color }: { label: string; value: number; icon: typeof Users; color: string }) {
-  return (
-    <div className="dashboard__stat-card">
-      <div className="dashboard__stat-icon" style={{ background: `${color}18`, color }}>
-        <Icon size={24} weight="fill" />
-      </div>
-      <div className="dashboard__stat-info">
-        <span className="dashboard__stat-value">{value.toLocaleString('fr-FR')}</span>
-        <span className="dashboard__stat-label">{label}</span>
-      </div>
-    </div>
-  )
+interface StatDef {
+  key: string
+  label: string
+  value: number
+  icon: string
+  color: string
+  bg: string
 }
 
 function AdminDashboard() {
@@ -49,64 +43,95 @@ function AdminDashboard() {
     return () => { cancelled = true }
   }, [])
 
-  if (loading) return <div className="dashboard__loading"><Spinner size="lg" /></div>
+  const totalProducts = stats?.totalProducts ?? 0
+
+  const statCards: StatDef[] = [
+    { key: 'users',    label: 'Utilisateurs',  value: stats?.totalUsers    ?? 0, icon: '◉', color: '#6366F1', bg: 'USR' },
+    { key: 'products', label: 'Produits',      value: totalProducts,             icon: '◫', color: '#A855F7', bg: 'PRD' },
+    { key: 'images',   label: 'Avec image',    value: stats?.withImage     ?? 0, icon: '◐', color: '#10B981', bg: 'IMG' },
+    { key: 'prices',   label: 'Avec prix',     value: stats?.withPrice     ?? 0, icon: '€', color: '#F59E0B', bg: 'EUR' },
+  ]
 
   return (
     <div className="dashboard">
-      {error && <Alert variant="error" title="Erreur" dismissible onDismiss={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <div className="ad-alert-err">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} aria-label="Fermer">×</button>
+        </div>
+      )}
 
-      {/* Top stats */}
-      <div className="dashboard__top-stats">
-        <StatCard label="Utilisateurs" value={stats?.totalUsers ?? 0} icon={Users} color="#2563eb" />
-        <StatCard label="Produits total" value={stats?.totalProducts ?? 0} icon={Package} color="#8b5cf6" />
-        <StatCard label="Avec une image" value={stats?.withImage ?? 0} icon={Image} color="#10b981" />
-        <StatCard label="Avec un prix" value={stats?.withPrice ?? 0} icon={CurrencyEur} color="#f59e0b" />
-      </div>
-
-      {/* Quick links */}
-      <div className="dashboard__quick-links">
-        <Link to="/admin/users" className="dashboard__quick-link">
-          <Users size={20} />
-          <span>Gérer les utilisateurs</span>
-        </Link>
-        <Link to="/admin/products" className="dashboard__quick-link">
-          <Package size={20} />
-          <span>Gérer les produits</span>
-        </Link>
-      </div>
-
-      {/* Products by category */}
-      <Card>
-        <Card.Header>
-          <h2 className="dashboard__section-title">Produits par catégorie</h2>
-        </Card.Header>
-        <Card.Body>
-          <div className="dashboard__categories">
-            {Object.entries(CATEGORY_META).map(([key, meta]) => {
-              const Icon = meta.icon
-              const count = stats?.productsByCategory[key] ?? 0
-              return (
-                <div key={key} className="dashboard__category-row">
-                  <div className="dashboard__category-icon" style={{ color: meta.color }}>
-                    <Icon size={18} weight="fill" />
-                  </div>
-                  <span className="dashboard__category-label">{meta.label}</span>
-                  <div className="dashboard__category-bar-wrap">
-                    <div
-                      className="dashboard__category-bar"
-                      style={{
-                        width: `${Math.round((count / (stats?.totalProducts || 1)) * 100)}%`,
-                        background: meta.color,
-                      }}
-                    />
-                  </div>
-                  <span className="dashboard__category-count">{count.toLocaleString('fr-FR')}</span>
+      {loading ? (
+        <div className="ad-loading">Chargement…</div>
+      ) : (
+        <>
+          <div className="ad-stats">
+            {statCards.map((s) => (
+              <div key={s.key} className="ad-stat">
+                <div
+                  className="ad-stat__ico"
+                  style={{ background: `${s.color}1A`, color: s.color }}
+                >
+                  {s.icon}
                 </div>
-              )
-            })}
+                <div className="ad-stat__n">{s.value.toLocaleString('fr-FR')}</div>
+                <div className="ad-stat__l">{s.label}</div>
+                <div className="ad-stat__bg">{s.bg}</div>
+              </div>
+            ))}
           </div>
-        </Card.Body>
-      </Card>
+
+          <div className="ad-quick">
+            <Link to="/admin/users" className="ad-quick__item">
+              <div className="ad-quick__ico" style={{ background: 'rgba(99,102,241,0.12)', color: '#818CF8' }}>◉</div>
+              <div>
+                <div className="ad-quick__label">Gérer les utilisateurs</div>
+                <div className="ad-quick__sub">Comptes, rôles, accès</div>
+              </div>
+            </Link>
+            <Link to="/admin/products" className="ad-quick__item">
+              <div className="ad-quick__ico" style={{ background: 'rgba(168,85,247,0.12)', color: '#C084FC' }}>◫</div>
+              <div>
+                <div className="ad-quick__label">Gérer les produits</div>
+                <div className="ad-quick__sub">Catalogue & specs</div>
+              </div>
+            </Link>
+            <Link to="/" className="ad-quick__item">
+              <div className="ad-quick__ico" style={{ background: 'rgba(16,185,129,0.12)', color: '#34D399' }}>↗</div>
+              <div>
+                <div className="ad-quick__label">Voir le site public</div>
+                <div className="ad-quick__sub">Aperçu utilisateur</div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="ad-block">
+            <div className="ad-block__hd">
+              <div className="ad-block__title">Produits par catégorie</div>
+              <div className="ad-count">{totalProducts.toLocaleString('fr-FR')} produits</div>
+            </div>
+            <div className="ad-block__body">
+              {Object.entries(CATEGORY_META).map(([key, meta]) => {
+                const count = stats?.productsByCategory[key] ?? 0
+                const pct = totalProducts > 0 ? Math.round((count / totalProducts) * 100) : 0
+                return (
+                  <div key={key} className="ad-cat-row">
+                    <div className="ad-cat-ico" style={{ color: meta.color }}>{meta.icon}</div>
+                    <div className="ad-cat-lbl">{meta.label}</div>
+                    <div className="ad-cat-bar-wrap">
+                      <div
+                        className="ad-cat-bar"
+                        style={{ width: `${pct}%`, background: meta.color }}
+                      />
+                    </div>
+                    <div className="ad-cat-count">{count.toLocaleString('fr-FR')}</div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

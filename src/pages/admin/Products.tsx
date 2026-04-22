@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { adminService, type AdminProduct } from '../../services'
 import { CATEGORIES } from '../../types'
 import type { CategoryKey } from '../../types'
-import { Button, Input, Select, Textarea, Toggle, Table, Modal, Badge, Alert, Spinner } from '../../components/common'
 import './Products.scss'
 
 const PAGE_SIZE = 50
@@ -12,9 +11,15 @@ const CATEGORY_OPTIONS = [
   ...CATEGORIES.map((c) => ({ value: c.value, label: c.label })),
 ]
 
-const BADGE_VARIANT: Record<string, 'primary' | 'success' | 'warning' | 'error' | 'info' | 'default'> = {
-  cpu: 'primary', gpu: 'error', ram: 'success', motherboard: 'info',
-  storage: 'warning', psu: 'default', pc_case: 'default', cpu_cooler: 'default',
+const BADGE_CLASS: Record<string, string> = {
+  cpu: 'ad-badge--cpu',
+  gpu: 'ad-badge--gpu',
+  ram: 'ad-badge--ram',
+  motherboard: 'ad-badge--mb',
+  storage: 'ad-badge--storage',
+  psu: 'ad-badge--psu',
+  pc_case: 'ad-badge--case',
+  cpu_cooler: 'ad-badge--cooler',
 }
 
 type FieldType = 'text' | 'number' | 'boolean' | 'array' | 'jsonb'
@@ -216,8 +221,8 @@ function specsFormToUpdates(form: SpecsFormValues, schema: Record<string, SpecsF
 }
 
 function SortIcon({ col, sortBy, sortDir }: { col: string; sortBy: string; sortDir: 'asc' | 'desc' }) {
-  if (sortBy !== col) return <span className="admin-products__sort-icon admin-products__sort-icon--idle">↕</span>
-  return <span className="admin-products__sort-icon">{sortDir === 'asc' ? '↑' : '↓'}</span>
+  if (sortBy !== col) return <span className="ad-sort ad-sort--idle">↕</span>
+  return <span className="ad-sort">{sortDir === 'asc' ? '↑' : '↓'}</span>
 }
 
 type EditFormValues = {
@@ -249,7 +254,6 @@ function AdminProducts() {
   const [sortBy, setSortBy] = useState('name')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
 
-  // Modal mode: null = closed, 'create' = new product, AdminProduct = edit existing
   const [modalMode, setModalMode] = useState<'create' | AdminProduct | null>(null)
   const [createCategory, setCreateCategory] = useState<CategoryKey>('cpu')
   const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info')
@@ -420,11 +424,6 @@ function AdminProducts() {
     setTotal(t)
   }
 
-  const handleResetSpecs = () => {
-    if (!specsSchema) return
-    setSpecsForm(initSpecsForm(originalSpecs, specsSchema))
-  }
-
   const currentCategory: CategoryKey | null =
     modalMode === 'create' ? createCategory :
     modalMode ? modalMode.category : null
@@ -433,234 +432,340 @@ function AdminProducts() {
   const isCreateMode = modalMode === 'create'
   const modalOpen = modalMode !== null
 
+  const handleResetSpecs = () => {
+    if (!specsSchema) return
+    setSpecsForm(initSpecsForm(originalSpecs, specsSchema))
+  }
+
   return (
     <div className="admin-products">
       {error && (
-        <Alert variant="error" dismissible onDismiss={() => setError(null)} className="admin-products__alert">
-          {error}
-        </Alert>
+        <div className="ad-alert-err">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} aria-label="Fermer">×</button>
+        </div>
       )}
 
-      <div className="admin-products__toolbar">
-        <Select
-          options={CATEGORY_OPTIONS}
+      <div className="ad-toolbar">
+        <select
+          className="ad-select"
           value={category}
           onChange={(e) => handleCategoryChange(e.target.value)}
-        />
-        <Input
+        >
+          {CATEGORY_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+        <input
+          className="ad-input"
           type="search"
-          placeholder="Rechercher un produit..."
+          placeholder="Rechercher un produit…"
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
-          clearable
-          onClear={() => handleSearch('')}
+          style={{ minWidth: 260 }}
         />
-        <span className="admin-products__count">{total.toLocaleString('fr-FR')} produit{total !== 1 ? 's' : ''}</span>
-        <Button onClick={openCreate}>+ Créer un produit</Button>
+        <span className="ad-count">{total.toLocaleString('fr-FR')} produit{total !== 1 ? 's' : ''}</span>
+        <button className="ad-btn ad-btn--ind" onClick={openCreate}>+ Créer un produit</button>
       </div>
 
       {loading ? (
-        <div className="admin-products__loading"><Spinner size="lg" /></div>
+        <div className="ad-loading">Chargement…</div>
       ) : products.length === 0 ? (
-        <div className="admin-products__empty">Aucun produit trouvé.</div>
+        <div className="ad-empty-state">Aucun produit trouvé.</div>
       ) : (
-        <Table hoverable>
-          <Table.Head>
-            <Table.Row>
-              <Table.Th>Image</Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('name')}>Nom <SortIcon col="name" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('category')}>Catégorie <SortIcon col="category" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('manufacturer')}>Fabricant <SortIcon col="manufacturer" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('series')}>Série <SortIcon col="series" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('release_year')}>Année <SortIcon col="release_year" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th className="admin-products__th-sortable" onClick={() => handleSort('price_avg_eur')}>Prix <SortIcon col="price_avg_eur" sortBy={sortBy} sortDir={sortDir} /></Table.Th>
-              <Table.Th>Actions</Table.Th>
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {products.map((p) => (
-              <Table.Row key={p.id}>
-                <Table.Td>
-                  {p.image_url ? (
-                    <img src={p.image_url} alt={p.name} className="admin-products__thumb" />
-                  ) : (
-                    <div className="admin-products__no-img">—</div>
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <span className="admin-products__name">{p.name}</span>
-                </Table.Td>
-                <Table.Td>
-                  <Badge variant={BADGE_VARIANT[p.category] ?? 'default'} size="sm" rounded>
-                    {CATEGORIES.find((c) => c.value === p.category)?.label ?? p.category}
-                  </Badge>
-                </Table.Td>
-                <Table.Td>{p.manufacturer || <span className="admin-products__empty">—</span>}</Table.Td>
-                <Table.Td>{p.series || <span className="admin-products__empty">—</span>}</Table.Td>
-                <Table.Td>{p.release_year || <span className="admin-products__empty">—</span>}</Table.Td>
-                <Table.Td>
-                  {p.price_avg_eur != null ? (
-                    <span className="admin-products__price">{p.price_avg_eur.toFixed(2)} €</span>
-                  ) : (
-                    <span className="admin-products__empty">—</span>
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <div className="admin-products__actions">
-                    <Button variant="outline" size="sm" onClick={() => { void openEdit(p) }}>Modifier</Button>
-                    <Button variant="danger" size="sm" onClick={() => setDeletingProduct(p)}>Supprimer</Button>
-                  </div>
-                </Table.Td>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <div className="ad-table-wrap">
+          <table className="ad-table">
+            <thead>
+              <tr>
+                <th style={{ width: 60 }}>Image</th>
+                <th className="is-sortable" onClick={() => handleSort('name')}>Nom <SortIcon col="name" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th className="is-sortable" onClick={() => handleSort('category')}>Catégorie <SortIcon col="category" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th className="is-sortable" onClick={() => handleSort('manufacturer')}>Fabricant <SortIcon col="manufacturer" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th className="is-sortable" onClick={() => handleSort('series')}>Série <SortIcon col="series" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th className="is-sortable" onClick={() => handleSort('release_year')}>Année <SortIcon col="release_year" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th className="is-sortable" onClick={() => handleSort('price_avg_eur')}>Prix <SortIcon col="price_avg_eur" sortBy={sortBy} sortDir={sortDir} /></th>
+                <th style={{ width: 180 }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((p) => (
+                <tr key={p.id}>
+                  <td>
+                    {p.image_url ? (
+                      <img src={p.image_url} alt={p.name} className="ad-thumb" />
+                    ) : (
+                      <div className="ad-thumb-empty">—</div>
+                    )}
+                  </td>
+                  <td>
+                    <span className="td-main admin-products__name">{p.name}</span>
+                  </td>
+                  <td>
+                    <span className={`ad-badge ${BADGE_CLASS[p.category] ?? 'ad-badge--cat'}`}>
+                      {CATEGORIES.find((c) => c.value === p.category)?.label ?? p.category}
+                    </span>
+                  </td>
+                  <td>{p.manufacturer || <span className="ad-empty-cell">—</span>}</td>
+                  <td>{p.series || <span className="ad-empty-cell">—</span>}</td>
+                  <td className="td-mono">{p.release_year || <span className="ad-empty-cell">—</span>}</td>
+                  <td className="td-mono">
+                    {p.price_avg_eur != null
+                      ? <span className="td-main">{p.price_avg_eur.toFixed(2)} €</span>
+                      : <span className="ad-empty-cell">—</span>}
+                  </td>
+                  <td>
+                    <div className="admin-products__actions">
+                      <button className="ad-btn ad-btn--ghost ad-btn--sm" onClick={() => { void openEdit(p) }}>Modifier</button>
+                      <button className="ad-btn ad-btn--danger ad-btn--sm" onClick={() => setDeletingProduct(p)}>Supprimer</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="admin-products__pagination">
-          <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Précédent</Button>
-          <span className="admin-products__page-info">Page {page + 1} / {totalPages}</span>
-          <Button variant="outline" size="sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant →</Button>
+        <div className="ad-pagination">
+          <button className="ad-btn ad-btn--ghost ad-btn--sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Précédent</button>
+          <span className="ad-page-info">Page {page + 1} / {totalPages}</span>
+          <button className="ad-btn ad-btn--ghost ad-btn--sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant →</button>
         </div>
       )}
 
-      {/* Create/Edit modal */}
-      <Modal isOpen={modalOpen} onClose={() => setModalMode(null)} title={isCreateMode ? 'Créer un produit' : 'Modifier le produit'} size="xl"
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setModalMode(null)}>Annuler</Button>
-            <Button onClick={() => { void handleSubmit() }} isLoading={editLoading}>{isCreateMode ? 'Créer' : 'Enregistrer'}</Button>
-          </>
-        }
-      >
-        {editError && <Alert variant="error" className="admin-products__modal-alert">{editError}</Alert>}
+      {/* Create / Edit modal */}
+      {modalOpen && (
+        <div className="ad-modal-overlay" onClick={() => setModalMode(null)}>
+          <div className="ad-modal ad-modal--xl" onClick={(e) => e.stopPropagation()}>
+            <div className="ad-modal__hd">
+              <div className="ad-modal__title">{isCreateMode ? 'Créer un produit' : 'Modifier le produit'}</div>
+              <button className="ad-modal__close" onClick={() => setModalMode(null)} aria-label="Fermer">×</button>
+            </div>
+            <div className="ad-modal__body">
+              {editError && <div className="ad-alert-err">{editError}</div>}
 
-        {/* Tabs */}
-        <div className="admin-products__tabs">
-          <button
-            className={`admin-products__tab${activeTab === 'info' ? ' admin-products__tab--active' : ''}`}
-            onClick={() => setActiveTab('info')}
-            type="button"
-          >
-            Informations
-          </button>
-          <button
-            className={`admin-products__tab${activeTab === 'specs' ? ' admin-products__tab--active' : ''}`}
-            onClick={() => setActiveTab('specs')}
-            type="button"
-          >
-            Caractéristiques
-          </button>
-        </div>
-
-        {activeTab === 'info' && (
-          <div className="admin-products__modal-form">
-            {isCreateMode && (
-              <Select
-                label="Catégorie *"
-                options={CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
-                value={createCategory}
-                onChange={(e) => handleCreateCategoryChange(e.target.value as CategoryKey)}
-                fullWidth
-              />
-            )}
-            <Input label="Nom *" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} fullWidth />
-            <div className="admin-products__modal-row">
-              <Input label="Fabricant" value={editForm.manufacturer} onChange={(e) => setEditForm({ ...editForm, manufacturer: e.target.value })} fullWidth />
-              <Input label="Série" value={editForm.series} onChange={(e) => setEditForm({ ...editForm, series: e.target.value })} fullWidth />
-            </div>
-            <div className="admin-products__modal-row">
-              <Input label="Variante" value={editForm.variant} onChange={(e) => setEditForm({ ...editForm, variant: e.target.value })} fullWidth />
-              <Input label="Année de sortie" type="number" value={editForm.release_year} onChange={(e) => setEditForm({ ...editForm, release_year: e.target.value })} fullWidth />
-            </div>
-            <div className="admin-products__modal-row">
-              <Input label="Prix min (€)" type="number" value={editForm.price_min_eur} onChange={(e) => setEditForm({ ...editForm, price_min_eur: e.target.value })} fullWidth />
-              <Input label="Prix moyen (€)" type="number" value={editForm.price_avg_eur} onChange={(e) => setEditForm({ ...editForm, price_avg_eur: e.target.value })} fullWidth />
-              <Input label="Prix max (€)" type="number" value={editForm.price_max_eur} onChange={(e) => setEditForm({ ...editForm, price_max_eur: e.target.value })} fullWidth />
-            </div>
-            <Input label="URL image" value={editForm.image_url} onChange={(e) => setEditForm({ ...editForm, image_url: e.target.value })} fullWidth />
-            {editForm.image_url && (
-              <div className="admin-products__modal-preview">
-                <img src={editForm.image_url} alt="Aperçu" />
+              <div className="ad-tabs">
+                <button
+                  type="button"
+                  className={`ad-tab ${activeTab === 'info' ? 'ad-tab--act' : ''}`}
+                  onClick={() => setActiveTab('info')}
+                >
+                  Informations
+                </button>
+                <button
+                  type="button"
+                  className={`ad-tab ${activeTab === 'specs' ? 'ad-tab--act' : ''}`}
+                  onClick={() => setActiveTab('specs')}
+                >
+                  Caractéristiques
+                </button>
               </div>
-            )}
-          </div>
-        )}
 
-        {activeTab === 'specs' && (
-          <div className="admin-products__specs-panel">
-            {!specsLoading && specsSchema && (
-              <div className="admin-products__specs-toolbar">
-                <Button variant="outline" size="sm" onClick={handleResetSpecs}>
-                  Réinitialiser
-                </Button>
-              </div>
-            )}
-            {specsLoading ? (
-              <div className="admin-products__specs-loading"><Spinner size="md" /></div>
-            ) : specsSchema ? (
-              <div className="admin-products__specs-grid">
-                {Object.entries(specsSchema).map(([key, field]) => {
-                  if (field.type === 'boolean') {
-                    return (
-                      <div key={key} className="admin-products__specs-field admin-products__specs-field--bool">
-                        <Toggle
-                          label={field.label}
-                          checked={specsForm[key] as boolean}
-                          onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.checked })}
-                        />
-                      </div>
-                    )
-                  }
-                  if (field.type === 'jsonb') {
-                    return (
-                      <div key={key} className="admin-products__specs-field admin-products__specs-field--jsonb">
-                        <Textarea
-                          label={field.label}
-                          value={specsForm[key] as string}
-                          onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
-                          rows={3}
-                          fullWidth
-                        />
-                      </div>
-                    )
-                  }
-                  return (
-                    <div key={key} className="admin-products__specs-field">
-                      <Input
-                        label={field.label + (field.type === 'array' ? ' (virgules)' : '')}
-                        type={field.type === 'number' ? 'number' : 'text'}
-                        value={specsForm[key] as string}
-                        onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
-                        fullWidth
+              {activeTab === 'info' && (
+                <div className="ad-form">
+                  {isCreateMode && (
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Catégorie *</label>
+                      <select
+                        className="ad-fg__sel"
+                        value={createCategory}
+                        onChange={(e) => handleCreateCategoryChange(e.target.value as CategoryKey)}
+                      >
+                        {CATEGORIES.map((c) => (
+                          <option key={c.value} value={c.value}>{c.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <div className="ad-fg">
+                    <label className="ad-fg__l">Nom *</label>
+                    <input
+                      className="ad-fg__in"
+                      value={editForm.name}
+                      onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="ad-row ad-row--2">
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Fabricant</label>
+                      <input
+                        className="ad-fg__in"
+                        value={editForm.manufacturer}
+                        onChange={(e) => setEditForm({ ...editForm, manufacturer: e.target.value })}
                       />
                     </div>
-                  )
-                })}
-              </div>
-            ) : (
-              <p className="admin-products__specs-empty">Aucun schéma disponible pour cette catégorie.</p>
-            )}
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Série</label>
+                      <input
+                        className="ad-fg__in"
+                        value={editForm.series}
+                        onChange={(e) => setEditForm({ ...editForm, series: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="ad-row ad-row--2">
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Variante</label>
+                      <input
+                        className="ad-fg__in"
+                        value={editForm.variant}
+                        onChange={(e) => setEditForm({ ...editForm, variant: e.target.value })}
+                      />
+                    </div>
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Année de sortie</label>
+                      <input
+                        className="ad-fg__in"
+                        type="number"
+                        value={editForm.release_year}
+                        onChange={(e) => setEditForm({ ...editForm, release_year: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="ad-row ad-row--3">
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Prix min (€)</label>
+                      <input
+                        className="ad-fg__in"
+                        type="number"
+                        value={editForm.price_min_eur}
+                        onChange={(e) => setEditForm({ ...editForm, price_min_eur: e.target.value })}
+                      />
+                    </div>
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Prix moyen (€)</label>
+                      <input
+                        className="ad-fg__in"
+                        type="number"
+                        value={editForm.price_avg_eur}
+                        onChange={(e) => setEditForm({ ...editForm, price_avg_eur: e.target.value })}
+                      />
+                    </div>
+                    <div className="ad-fg">
+                      <label className="ad-fg__l">Prix max (€)</label>
+                      <input
+                        className="ad-fg__in"
+                        type="number"
+                        value={editForm.price_max_eur}
+                        onChange={(e) => setEditForm({ ...editForm, price_max_eur: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="ad-fg">
+                    <label className="ad-fg__l">URL image</label>
+                    <input
+                      className="ad-fg__in"
+                      value={editForm.image_url}
+                      onChange={(e) => setEditForm({ ...editForm, image_url: e.target.value })}
+                    />
+                  </div>
+                  {editForm.image_url && (
+                    <div className="admin-products__preview">
+                      <img src={editForm.image_url} alt="Aperçu" className="ad-preview-img" />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'specs' && (
+                <div className="admin-products__specs">
+                  {!specsLoading && specsSchema && (
+                    <div className="admin-products__specs-toolbar">
+                      <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={handleResetSpecs}>
+                        Réinitialiser
+                      </button>
+                    </div>
+                  )}
+                  {specsLoading ? (
+                    <div className="ad-loading">Chargement des specs…</div>
+                  ) : specsSchema ? (
+                    <div className="ad-specs-grid">
+                      {Object.entries(specsSchema).map(([key, field]) => {
+                        if (field.type === 'boolean') {
+                          const checked = specsForm[key] as boolean
+                          return (
+                            <label key={key} className="ad-toggle" onClick={(e) => e.preventDefault()}>
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.checked })}
+                              />
+                              <span
+                                className={`ad-toggle__sw ${checked ? 'ad-toggle__sw--on' : ''}`}
+                                onClick={() => setSpecsForm({ ...specsForm, [key]: !checked })}
+                              >
+                                <span className="ad-toggle__knob" />
+                              </span>
+                              <span className="ad-toggle__label">{field.label}</span>
+                            </label>
+                          )
+                        }
+                        if (field.type === 'jsonb') {
+                          return (
+                            <div key={key} className="ad-fg ad-specs-grid__full">
+                              <label className="ad-fg__l">{field.label}</label>
+                              <textarea
+                                className="ad-fg__ta"
+                                rows={3}
+                                value={specsForm[key] as string}
+                                onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
+                              />
+                            </div>
+                          )
+                        }
+                        return (
+                          <div key={key} className="ad-fg">
+                            <label className="ad-fg__l">{field.label}{field.type === 'array' ? ' (virgules)' : ''}</label>
+                            <input
+                              className="ad-fg__in"
+                              type={field.type === 'number' ? 'number' : 'text'}
+                              value={specsForm[key] as string}
+                              onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
+                            />
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="ad-empty-state">Aucun schéma disponible pour cette catégorie.</p>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="ad-modal__ft">
+              <button className="ad-btn ad-btn--ghost" onClick={() => setModalMode(null)}>Annuler</button>
+              <button className="ad-btn ad-btn--ind" onClick={() => { void handleSubmit() }} disabled={editLoading}>
+                {editLoading ? 'Enregistrement…' : (isCreateMode ? 'Créer' : 'Enregistrer')}
+              </button>
+            </div>
           </div>
-        )}
-      </Modal>
+        </div>
+      )}
 
       {/* Delete modal */}
-      <Modal isOpen={!!deletingProduct} onClose={() => setDeletingProduct(null)} title="Supprimer le produit" size="sm"
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setDeletingProduct(null)}>Annuler</Button>
-            <Button variant="danger" onClick={() => { void handleDelete() }} isLoading={deleteLoading}>Supprimer</Button>
-          </>
-        }
-      >
-        <p className="admin-products__delete-text">
-          Es-tu sûr de vouloir supprimer <strong>{deletingProduct?.name}</strong> ?
-        </p>
-        <p className="admin-products__delete-warning">Cette action est irréversible.</p>
-      </Modal>
+      {deletingProduct && (
+        <div className="ad-modal-overlay" onClick={() => setDeletingProduct(null)}>
+          <div className="ad-modal ad-modal--sm" onClick={(e) => e.stopPropagation()}>
+            <div className="ad-modal__hd">
+              <div className="ad-modal__title">Supprimer le produit</div>
+              <button className="ad-modal__close" onClick={() => setDeletingProduct(null)} aria-label="Fermer">×</button>
+            </div>
+            <div className="ad-modal__body">
+              <p className="ad-warn-text">
+                Es-tu sûr de vouloir supprimer <strong style={{ color: 'var(--text)' }}>{deletingProduct.name}</strong> ?
+              </p>
+              <p className="ad-warn-danger">Cette action est irréversible.</p>
+            </div>
+            <div className="ad-modal__ft">
+              <button className="ad-btn ad-btn--ghost" onClick={() => setDeletingProduct(null)}>Annuler</button>
+              <button className="ad-btn ad-btn--danger" onClick={() => { void handleDelete() }} disabled={deleteLoading}>
+                {deleteLoading ? 'Suppression…' : 'Supprimer'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
