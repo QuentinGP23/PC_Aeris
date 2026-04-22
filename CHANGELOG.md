@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.2.0...v2.3.0) (2026-04-22)
+
+
+### Features
+
+* **design:** fondations du design system Aeris 2026 ([01d21db](https://github.com/QuentinGP23/PC_Aeris/commit/01d21db6d708361ab42549aca55cb03ebcbee17c))
+* **redesign:** refonte complète Aeris Dark sur tout le site ([4a3b463](https://github.com/QuentinGP23/PC_Aeris/commit/4a3b4637e6b7c02f87d3e2795de348e8c082b500))
+
+
+### Bug Fixes
+
+* **redesign:** RGAA, vraies stats et retrait doublons sur la home ([90127c5](https://github.com/QuentinGP23/PC_Aeris/commit/90127c5e275c869b174fcb0772d48732c169c4ac))
+
 ## [2.2.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.1.0...v2.2.0) (2026-04-21)
 
 
