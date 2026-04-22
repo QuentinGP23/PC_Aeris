@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PC Aeris — Configurateur PC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="aeris.css" />
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- Grain overlay -->
+<canvas id="grain-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9997;opacity:0.038"></canvas>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+/* ── GRAIN ── */
+;(function() {
+  const canvas = document.getElementById('grain-canvas')
+  const W = 256, H = 256
+  canvas.width = W; canvas.height = H
+  const ctx = canvas.getContext('2d')
+  const img = ctx.createImageData(W, H)
+  for (let i = 0; i < img.data.length; i += 4) {
+    const v = Math.random() * 255 | 0
+    img.data[i] = img.data[i+1] = img.data[i+2] = v
+    img.data[i+3] = 255
+  }
+  ctx.putImageData(img, 0, 0)
+})()
+
+/* ── CUSTOM CURSOR ── */
+;(function() {
+  const dot = document.getElementById('cur')
+  const ring = document.getElementById('cur-r')
+  let mx = -100, my = -100, rx = -100, ry = -100
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY })
+  function loop() {
+    rx += (mx - rx) * 0.14
+    ry += (my - ry) * 0.14
+    dot.style.left = mx + 'px'
+    dot.style.top = my + 'px'
+    ring.style.left = rx + 'px'
+    ring.style.top = ry + 'px'
+    requestAnimationFrame(loop)
+  }
+  loop()
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a,button,[data-hover]'))
+      document.body.classList.add('cur-hover')
+  })
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a,button,[data-hover]'))
+      document.body.classList.remove('cur-hover')
+  })
+})()
+
+/* ── SCROLL REVEAL ── */
+window.initReveal = function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target) } })
+  }, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' })
+  const watch = () => {
+    document.querySelectorAll('.rv:not([data-obs])').forEach(el => {
+      el.setAttribute('data-obs','1'); obs.observe(el)
+    })
+  }
+  watch()
+  const mo = new MutationObserver(watch)
+  mo.observe(document.body, { childList: true, subtree: true })
+}
+</script>
+
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="nav.jsx"></script>
+<script type="text/babel" src="home.jsx"></script>
+<script type="text/babel" src="configurator.jsx"></script>
+<script type="text/babel" src="auth.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#6366F1",
+  "accentLight": "#818CF8",
+  "roundness": "default"
+}/*EDITMODE-END*/
+
+const ACCENT_MAP = {
+  '#6366F1':'#818CF8','#8B5CF6':'#A78BFA',
+  '#10B981':'#34D399','#F59E0B':'#FCD34D','#EC4899':'#F472B6'
+}
+
+function App() {
+  const [page, setPage] = useState('home')
+  const [params, setParams] = useState({})
+  const [config, setConfig] = useState({})
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS)
+  const [tweaksOpen, setTweaksOpen] = useState(false)
+
+  const navigate = (p, ps = {}) => { setPage(p); setParams(ps); window.scrollTo({ top: 0 }) }
+
+  useEffect(() => {
+    const r = document.documentElement.style
+    r.setProperty('--ind', tweaks.accent)
+    r.setProperty('--ind-l', tweaks.accentLight)
+    r.setProperty('--ind-g', tweaks.accent + '26')
+    r.setProperty('--ind-gs', tweaks.accent + '4D')
+    const radius = tweaks.roundness === 'sharp' ? ['4px','6px','8px']
+                 : tweaks.roundness === 'rounded' ? ['16px','12px','28px']
+                 : ['12px','8px','20px']
+    r.setProperty('--r', radius[0])
+    r.setProperty('--rs', radius[1])
+    r.setProperty('--rl', radius[2])
+  }, [tweaks])
+
+  useEffect(() => {
+    if (window.initReveal) window.initReveal()
+  }, [page])
+
+  useEffect(() => {
+    window.addEventListener('message', e => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksOpen(true)
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksOpen(false)
+    })
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*')
+  }, [])
+
+  const setTweak = (k, v) => {
+    setTweaks(prev => {
+      const next = { ...prev, [k]: v }
+      if (k === 'accent') next.accentLight = ACCENT_MAP[v] || '#818CF8'
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*')
+      return next
+    })
+  }
+
+  const ACCENTS = [
+    {c:'#6366F1',l:'Indigo'},{c:'#8B5CF6',l:'Violet'},
+    {c:'#10B981',l:'Émeraude'},{c:'#F59E0B',l:'Amber'},{c:'#EC4899',l:'Rose'}
+  ]
+
+  return (
+    <RouterCtx.Provider value={{ page, params, navigate }}>
+      <AerisNav config={config} />
+      <div className="page">
+        {page === 'home'         && <AerisHome />}
+        {page === 'configurator' && <AerisConfigurator config={config} setConfig={setConfig} />}
+        {page === 'product'      && <AerisProductDetail productId={params.id} config={config} setConfig={setConfig} navigate={navigate} />}
+        {page === 'signin'       && <AerisSignIn />}
+        {page === 'signup'       && <AerisSignUp />}
+      </div>
+      {page === 'home' && <AerisFooter />}
+
+      {tweaksOpen && (
+        <div className="tweaks-panel">
+          <div className="tweaks-panel__title">Tweaks</div>
+          <div className="tw-row">
+            <div className="tw-lbl">Accent</div>
+            <div className="tw-opts">
+              {ACCENTS.map(a => (
+                <div key={a.c} className={`tw-sw ${tweaks.accent===a.c?'tw-sw--act':''}`}
+                  style={{background:a.c}} onClick={()=>setTweak('accent',a.c)} title={a.l} />
+              ))}
+            </div>
+          </div>
+          <div className="tw-row">
+            <div className="tw-lbl">Arrondi</div>
+            <div className="tw-opts">
+              {['sharp','default','rounded'].map(v=>(
+                <button key={v} className={`tw-opt ${tweaks.roundness===v?'tw-opt--act':''}`}
+                  onClick={()=>setTweak('roundness',v)}>{v}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </RouterCtx.Provider>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+</script>
+</body>
+</html>

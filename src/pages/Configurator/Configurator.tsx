@@ -6,7 +6,6 @@ import { CATEGORIES } from '../../types'
 import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
 import { getCompatibleProductIds } from '../../utils'
-import { Button } from '../../components/common'
 import './Configurator.scss'
 
 const PAGE_SIZE = 24
@@ -119,223 +118,229 @@ function Configurator() {
     setPage(0)
   }
 
-  const handleSearch = (value: string) => {
-    setSearch(value)
-    setPage(0)
-  }
-
-  const handlePage = (newPage: number) => {
-    setPage(newPage)
-  }
-
   const selectedCount = Object.keys(config).length
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+  const progressPct = Math.round((selectedCount / CATEGORIES.length) * 100)
+
+  const totalAvg = Object.values(config).reduce((acc, p) => acc + (p?.price_avg_eur ?? 0), 0)
+
+  const activeCatDef = CATEGORIES.find(c => c.value === activeCategory)!
 
   return (
-    <div className="configurator">
-      {/* Sidebar */}
-      <aside className="configurator__sidebar">
-        <div className="configurator__sidebar-header">
-          <h2>Ma configuration</h2>
-          <span className="configurator__sidebar-count">{selectedCount}/8</span>
+    <div className="config-wrap">
+      <aside className="config-side">
+        <div className="config-side__hd">
+          <div className="config-side__title">Ma configuration</div>
+          <div className="config-prog">
+            <div className="config-prog__bar">
+              <div className="config-prog__fill" style={{ width: `${progressPct}%` }} />
+            </div>
+            <span className="config-prog__label">{selectedCount}/{CATEGORIES.length}</span>
+          </div>
         </div>
 
-        <ul className="configurator__summary">
-          {CATEGORIES.map((cat) => {
+        <div className="config-items">
+          {CATEGORIES.map((cat, idx) => {
             const selected = config[cat.value]
+            const isActive = activeCategory === cat.value
             return (
-              <li
+              <button
                 key={cat.value}
-                className={[
-                  'configurator__summary-item',
-                  selected ? 'configurator__summary-item--filled' : '',
-                  activeCategory === cat.value ? 'configurator__summary-item--active' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
+                type="button"
+                className={`config-item ${isActive ? 'config-item--act' : ''}`}
                 onClick={() => handleCategoryChange(cat.value)}
               >
-                <span className="configurator__summary-icon">{cat.icon}</span>
-                <div className="configurator__summary-info">
-                  <span className="configurator__summary-label">{cat.label}</span>
+                <span className="config-item__n">{String(idx + 1).padStart(2, '0')}</span>
+                <span className="config-item__ico">{cat.icon}</span>
+                <div className="config-item__info">
+                  <div className="config-item__lbl">{cat.label}</div>
                   {selected ? (
-                    <span className="configurator__summary-name">{selected.name}</span>
+                    <div className="config-item__name">{selected.name}</div>
                   ) : (
-                    <span className="configurator__summary-empty">Non sélectionné</span>
+                    <div className="config-item__empty">Non sélectionné</div>
                   )}
                 </div>
                 {selected && (
-                  <button
-                    className="configurator__summary-remove"
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    className="config-item__rm"
+                    aria-label="Retirer"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeComponent(cat.value)
                     }}
-                    title="Retirer"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.stopPropagation()
+                        removeComponent(cat.value)
+                      }
+                    }}
                   >
                     ✕
-                  </button>
+                  </span>
                 )}
-              </li>
+              </button>
             )
           })}
-        </ul>
+        </div>
 
-        {selectedCount > 0 && (
-          <div className="configurator__sidebar-actions">
-            <Button variant="outline" size="sm" fullWidth onClick={clearConfig}>
-              Réinitialiser
-            </Button>
+        <div className="config-side__ft">
+          <div className="config-side__total-l">Budget estimé (moy.)</div>
+          <div className="config-side__total-v">
+            {totalAvg > 0 ? `${Math.round(totalAvg).toLocaleString('fr-FR')} €` : '—'}
           </div>
-        )}
+          {selectedCount > 0 && (
+            <button type="button" className="config-side__reset" onClick={clearConfig}>
+              Réinitialiser
+            </button>
+          )}
+        </div>
       </aside>
 
-      {/* Main */}
-      <main className="configurator__main">
-        <div className="configurator__main-header">
-          <h1>Configurateur PC</h1>
+      <main className="config-main">
+        <div className="config-main__hd">
+          <h1 className="config-main__h1">Configurateur PC</h1>
+          <p className="config-main__sub">
+            Explorez {CATEGORIES.length} catégories, ajoutez des composants compatibles, obtenez une config complète.
+          </p>
         </div>
 
-        {/* Category tabs */}
-        <div className="configurator__tabs">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              className={[
-                'configurator__tab',
-                activeCategory === cat.value ? 'configurator__tab--active' : '',
-                config[cat.value] ? 'configurator__tab--done' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              onClick={() => handleCategoryChange(cat.value)}
-            >
-              <span>{cat.icon}</span>
-              <span>{cat.label}</span>
-              {config[cat.value] && <span className="configurator__tab-check">✓</span>}
-            </button>
-          ))}
+        <div className="config-tabs">
+          {CATEGORIES.map((cat) => {
+            const done = Boolean(config[cat.value])
+            const act = activeCategory === cat.value
+            return (
+              <button
+                key={cat.value}
+                type="button"
+                className={`config-tab ${act ? 'config-tab--act' : ''}`}
+                onClick={() => handleCategoryChange(cat.value)}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+                {done && <span className="config-tab__ck">✓</span>}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Compatibility badge */}
         {compatInfo.active && (
-          <div className={`configurator__compat-badge ${compatInfo.empty ? 'configurator__compat-badge--empty' : ''}`}>
-            {compatInfo.empty ? (
-              <>⚠️ Aucun composant compatible avec {compatInfo.reason}</>
-            ) : (
-              <>✓ Filtré pour compatibilité · {compatInfo.reason}</>
-            )}
+          <div className={`compat-info ${compatInfo.empty ? 'compat-info--empty' : ''}`}>
+            {compatInfo.empty
+              ? <>⚠️ Aucun composant compatible avec {compatInfo.reason}</>
+              : <>✓ Filtré pour compatibilité · {compatInfo.reason}</>}
           </div>
         )}
 
-        {/* Search */}
         {!compatInfo.empty && (
-          <div className="configurator__search">
+          <div className="config-search">
+            <span className="config-search__ico">⌕</span>
             <input
               type="text"
-              placeholder={`Rechercher un ${CATEGORIES.find((c) => c.value === activeCategory)?.label.toLowerCase()}...`}
+              className="config-search__in"
+              placeholder={`Rechercher un ${activeCatDef.label.toLowerCase()}...`}
               value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="configurator__search-input"
+              onChange={(e) => { setSearch(e.target.value); setPage(0) }}
             />
             {totalCount > 0 && (
-              <span className="configurator__search-count">{totalCount} résultats</span>
+              <span className="config-search__cnt">{totalCount} résultats</span>
             )}
           </div>
         )}
 
-        {/* Grid */}
         {loading ? (
-          <div className="configurator__loading">Chargement...</div>
+          <div className="st-load">Chargement...</div>
         ) : compatInfo.empty ? null : products.length === 0 ? (
-          <div className="configurator__empty">Aucun résultat.</div>
+          <div className="st-empty">Aucun résultat.</div>
         ) : (
-          <div className="configurator__grid">
-            {products.map((product) => {
+          <div className="prod-grid">
+            {products.map((product, idx) => {
               const isSelected = config[activeCategory]?.id === product.id
               const keySpecs = KEY_SPECS[activeCategory] ?? []
 
               return (
                 <div
                   key={product.id}
-                  className={[
-                    'configurator__card',
-                    isSelected ? 'configurator__card--selected' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
+                  className={`prod-card ${isSelected ? 'prod-card--sel' : ''}`}
                 >
-                  {product.image_url && (
-                    <div className="configurator__card-image">
+                  <div className="prod-card__img">
+                    <span className="prod-card__idx">#{String(page * PAGE_SIZE + idx + 1).padStart(3, '0')}</span>
+                    {isSelected && <span className="prod-card__sel-tag">Sélectionné</span>}
+                    {product.image_url ? (
                       <img src={product.image_url} alt={product.name} />
-                    </div>
-                  )}
-                  <div className="configurator__card-body">
-                    <h3 className="configurator__card-name">{product.name}</h3>
-                    <p className="configurator__card-meta">
-                      {[product.manufacturer, product.series, product.release_year]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    </p>
-
-                    {product.specs && (
-                      <ul className="configurator__card-specs">
-                        {keySpecs
-                          .filter(
-                            (key) =>
-                              product.specs![key] !== null && product.specs![key] !== undefined
-                          )
-                          .map((key) => (
-                            <li key={key}>
-                              <span className="configurator__card-spec-key">
-                                {SPEC_LABELS[key] ?? key.replace(/_/g, ' ')}
-                              </span>
-                              <span className="configurator__card-spec-val">
-                                {renderSpecValue(product.specs![key], SPEC_UNITS[key])}
-                              </span>
-                            </li>
-                          ))}
-                      </ul>
+                    ) : (
+                      <span>{activeCatDef.icon}</span>
                     )}
                   </div>
 
-                  <div className="configurator__card-footer">
-                    {product.price_min_eur !== null && product.price_max_eur !== null && (
-                      <div className="configurator__card-price">
-                        <span className="configurator__card-price-range">
-                          {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
-                        </span>
-                        {product.price_avg_eur !== null && (
-                          <span className="configurator__card-price-avg">
-                            moy. {Math.round(product.price_avg_eur)}€
-                          </span>
-                        )}
+                  <div className="prod-card__body">
+                    <div className="prod-card__name">{product.name}</div>
+                    <div className="prod-card__meta">
+                      {[product.manufacturer, product.series, product.release_year].filter(Boolean).join(' · ')}
+                    </div>
+
+                    {product.specs && keySpecs.length > 0 && (
+                      <div className="prod-card__specs">
+                        {keySpecs
+                          .filter((key) => product.specs![key] !== null && product.specs![key] !== undefined)
+                          .slice(0, 3)
+                          .map((key) => (
+                            <div key={key} className="prod-card__spec">
+                              <span className="prod-card__sk">{SPEC_LABELS[key] ?? key.replace(/_/g, ' ')}</span>
+                              <span className="prod-card__sv">
+                                {renderSpecValue(product.specs![key], SPEC_UNITS[key])}
+                              </span>
+                            </div>
+                          ))}
                       </div>
                     )}
-                    <div className="configurator__card-actions">
-                      {isSelected ? (
-                        <Button
-                          variant="success"
-                          size="sm"
-                          fullWidth
-                          onClick={() => removeComponent(activeCategory)}
-                        >
-                          ✓ Sélectionné
-                        </Button>
+
+                    {product.benchmark_score !== null && (
+                      <div className="prod-card__bench">
+                        <span className="prod-card__bench-l">Bench</span>
+                        <span className="prod-card__bench-v">{product.benchmark_score}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="prod-card__ft">
+                    <div className="prod-card__price">
+                      {product.price_avg_eur !== null ? (
+                        <>
+                          <div className="prod-card__pr">~ {Math.round(product.price_avg_eur)} €</div>
+                          {product.price_min_eur !== null && product.price_max_eur !== null && (
+                            <div className="prod-card__pa">
+                              {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
+                            </div>
+                          )}
+                        </>
                       ) : (
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          fullWidth
-                          onClick={() => selectComponent(activeCategory, product)}
-                        >
-                          Sélectionner
-                        </Button>
+                        <div className="prod-card__pa">Prix non disponible</div>
                       )}
-                      <Link to={`/produit/${product.id}`} className="configurator__card-detail-link">
-                        Voir la fiche →
-                      </Link>
                     </div>
+
+                    {isSelected ? (
+                      <button
+                        type="button"
+                        className="btn btn--ok btn--full"
+                        onClick={() => removeComponent(activeCategory)}
+                      >
+                        ✓ Sélectionné
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn--ind btn--full"
+                        onClick={() => selectComponent(activeCategory, product)}
+                      >
+                        Sélectionner
+                      </button>
+                    )}
+
+                    <Link to={`/produit/${product.id}`} className="prod-detail-link">
+                      Voir la fiche →
+                    </Link>
                   </div>
                 </div>
               )
@@ -343,28 +348,27 @@ function Configurator() {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && !compatInfo.empty && (
-          <div className="configurator__pagination">
-            <Button
-              variant="outline"
-              size="sm"
+          <div className="pagination">
+            <button
+              type="button"
+              className="btn btn--ghost2"
               disabled={page === 0}
-              onClick={() => handlePage(page - 1)}
+              onClick={() => setPage(p => p - 1)}
             >
               ← Précédent
-            </Button>
-            <span className="configurator__pagination-info">
+            </button>
+            <span className="pagination__info">
               Page {page + 1} / {totalPages}
             </span>
-            <Button
-              variant="outline"
-              size="sm"
+            <button
+              type="button"
+              className="btn btn--ghost2"
               disabled={page >= totalPages - 1}
-              onClick={() => handlePage(page + 1)}
+              onClick={() => setPage(p => p + 1)}
             >
               Suivant →
-            </Button>
+            </button>
           </div>
         )}
       </main>
