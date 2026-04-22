@@ -5,7 +5,6 @@ import { useConfigStore } from '../../store'
 import { CATEGORIES } from '../../types'
 import { SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
-import { Button } from '../../components/common'
 import './ProductDetail.scss'
 
 function formatSpecValue(val: unknown, unit?: string): string {
@@ -73,18 +72,14 @@ function ProductDetail() {
   }, [id])
 
   if (loading) {
-    return (
-      <div className="product-detail product-detail--loading">
-        Chargement...
-      </div>
-    )
+    return <div className="st-load">Chargement...</div>
   }
 
   if (notFound || !product) {
     return (
-      <div className="product-detail product-detail--not-found">
-        <p>Produit introuvable.</p>
-        <Button variant="outline" onClick={() => navigate(-1)}>Retour</Button>
+      <div className="c" style={{ padding: '80px 40px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--text-2)', marginBottom: 24 }}>Produit introuvable.</p>
+        <button type="button" className="btn btn--ghost2" onClick={() => navigate(-1)}>← Retour</button>
       </div>
     )
   }
@@ -100,119 +95,121 @@ function ProductDetail() {
   const hasPrice = product.price_min_eur !== null && product.price_max_eur !== null
 
   return (
-    <div className="product-detail">
-      <div className="product-detail__breadcrumb">
-        <Link to="/configurateur">Configurateur</Link>
-        <span>/</span>
-        <span>{categoryDef?.icon} {categoryDef?.label}</span>
-        <span>/</span>
-        <span>{product.name}</span>
-      </div>
-
-      <div className="product-detail__layout">
-        {/* Left column */}
-        <div className="product-detail__left">
-          <div className="product-detail__image-wrap">
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="product-detail__image" />
-            ) : (
-              <div className="product-detail__image-placeholder">
-                <span>{categoryDef?.icon ?? '📦'}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Price block */}
-          <div className="product-detail__price-block">
-            {hasPrice ? (
-              <>
-                <p className="product-detail__price-label">Prix occasion estimé</p>
-                <p className="product-detail__price-range">
-                  {formatPrice(product.price_min_eur!)}
-                  <span className="product-detail__price-sep">–</span>
-                  {formatPrice(product.price_max_eur!)}
-                </p>
-                {product.price_avg_eur !== null && (
-                  <p className="product-detail__price-avg">
-                    Moy. {formatPrice(product.price_avg_eur)}
-                  </p>
-                )}
-                {product.price_updated_at && (
-                  <p className="product-detail__price-date">
-                    Mis à jour le {new Date(product.price_updated_at).toLocaleDateString('fr-FR')}
-                  </p>
-                )}
-              </>
-            ) : (
-              <p className="product-detail__price-unavailable">Prix non disponible</p>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="product-detail__actions">
-            {isSelected ? (
-              <Button variant="success" fullWidth onClick={() => removeComponent(categoryKey)}>
-                ✓ Dans ma configuration — Retirer
-              </Button>
-            ) : (
-              <Button variant="primary" fullWidth onClick={() => selectComponent(categoryKey, product)}>
-                Ajouter à ma configuration
-              </Button>
-            )}
-            {product.retailer_url && (
-              <a href={product.retailer_url} target="_blank" rel="noopener noreferrer" className="product-detail__retailer-link">
-                Voir chez le revendeur →
-              </a>
-            )}
-          </div>
+    <div className="pd-page">
+      <div className="c">
+        <div className="breadcrumb">
+          <Link to="/configurateur" className="breadcrumb__it">Configurateur</Link>
+          <span className="breadcrumb__sep">/</span>
+          <span className="breadcrumb__it">{categoryDef?.label}</span>
+          <span className="breadcrumb__sep">/</span>
+          <span>{product.name}</span>
         </div>
 
-        {/* Right column */}
-        <div className="product-detail__right">
-          <div className="product-detail__header">
-            <span className="product-detail__category-badge">
-              {categoryDef?.icon} {categoryDef?.label}
-            </span>
-            <h1 className="product-detail__name">{product.name}</h1>
-            <p className="product-detail__meta">
+        <div className="pd-grid">
+          <div className="pd-left">
+            <div className="pd-img">
+              {product.image_url ? (
+                <img src={product.image_url} alt={product.name} />
+              ) : (
+                <span>{categoryDef?.icon ?? '📦'}</span>
+              )}
+            </div>
+
+            <div className="pd-price">
+              <div className="pd-price__l">Prix occasion estimé</div>
+              {hasPrice ? (
+                <>
+                  <div className="pd-price__r">
+                    {product.price_avg_eur !== null
+                      ? `~ ${formatPrice(product.price_avg_eur)}`
+                      : formatPrice(product.price_min_eur!)}
+                  </div>
+                  <div className="pd-price__a">
+                    {formatPrice(product.price_min_eur!)} – {formatPrice(product.price_max_eur!)}
+                    {product.price_updated_at && (
+                      <> · MAJ {new Date(product.price_updated_at).toLocaleDateString('fr-FR')}</>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="pd-price__a">Prix non disponible</div>
+              )}
+            </div>
+
+            <div className="pd-actions">
+              {isSelected ? (
+                <button
+                  type="button"
+                  className="btn btn--ok btn--full"
+                  onClick={() => removeComponent(categoryKey)}
+                >
+                  ✓ Dans ma configuration — Retirer
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn--ind btn--full"
+                  onClick={() => selectComponent(categoryKey, product)}
+                >
+                  Ajouter à ma configuration
+                </button>
+              )}
+
+              {product.retailer_url && (
+                <a
+                  href={product.retailer_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pd-retailer"
+                >
+                  Voir chez le revendeur →
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className="pd-right">
+            <span className="pd-badge">{categoryDef?.label}</span>
+            <h1 className="pd-h1">{product.name}</h1>
+            <div className="pd-meta">
               {[product.manufacturer, product.series, product.variant, product.release_year]
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
+                .filter(Boolean).join(' · ')}
+            </div>
+
             {product.benchmark_score !== null && (
-              <div className="product-detail__benchmark">
-                <span className="product-detail__benchmark-label">Score benchmark</span>
-                <span className="product-detail__benchmark-value">{product.benchmark_score}</span>
+              <div className="pd-bench">
+                <span className="pd-bench__l">Score benchmark</span>
+                <span className="pd-bench__v">{product.benchmark_score}</span>
+              </div>
+            )}
+
+            {product.description && (
+              <div className="pd-desc">
+                <div className="pd-sec-title">Description</div>
+                <p>{product.description}</p>
+              </div>
+            )}
+
+            {specEntries.length > 0 && (
+              <div className="pd-specs">
+                <div className="pd-sec-title">Caractéristiques techniques</div>
+                <table className="pd-specs-tbl">
+                  <tbody>
+                    {specEntries.map(([key, val]) => {
+                      const label = SPEC_LABELS[key] ?? key.replace(/_/g, ' ')
+                      const unit = SPEC_UNITS[key]
+                      return (
+                        <tr key={key}>
+                          <td>{label}</td>
+                          <td>{formatSpecValue(val, unit)}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
-
-          {product.description && (
-            <div className="product-detail__description">
-              <h2>Description</h2>
-              <p>{product.description}</p>
-            </div>
-          )}
-
-          {specEntries.length > 0 && (
-            <div className="product-detail__specs">
-              <h2>Caractéristiques techniques</h2>
-              <table className="product-detail__specs-table">
-                <tbody>
-                  {specEntries.map(([key, val]) => {
-                    const label = SPEC_LABELS[key] ?? key.replace(/_/g, ' ')
-                    const unit = SPEC_UNITS[key]
-                    return (
-                      <tr key={key}>
-                        <td className="product-detail__spec-key">{label}</td>
-                        <td className="product-detail__spec-val">{formatSpecValue(val, unit)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,110 +1,99 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context";
-import { useToast } from "../../store";
-import { Button, Input, Form, Checkbox } from "../../components/common";
-import "./auth.scss";
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context'
+import { useToast } from '../../store'
+import { AuthVisual } from './AuthVisual'
+import './auth.scss'
 
 function SignIn() {
-  const navigate = useNavigate();
-  const { signIn, isLoading } = useAuth();
-  const toast = useToast();
+  const navigate = useNavigate()
+  const { signIn, isLoading } = useAuth()
+  const toast = useToast()
 
-  const [formData, setFormData] = useState({
-    identifier: "",
-    password: "",
-    rememberMe: false,
-  });
-  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState({ identifier: '', password: '', rememberMe: false })
+  const [error, setError] = useState<string | null>(null)
 
-  const handleChange =
-    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-      setError(null);
-    };
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = k === 'rememberMe' ? e.target.checked : e.target.value
+    setForm(p => ({ ...p, [k]: value }))
+    setError(null)
+  }
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, rememberMe: e.target.checked }));
-  };
-
-  const handleSubmit = async () => {
-    if (!formData.identifier || !formData.password) {
-      setError("Veuillez remplir tous les champs");
-      return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!form.identifier || !form.password) {
+      setError('Veuillez remplir tous les champs.')
+      return
     }
-
-    const { user, error } = await signIn({
-      identifier: formData.identifier,
-      password: formData.password,
-    });
-
-    if (error) {
-      setError(error);
+    const { user, error: authError } = await signIn({
+      identifier: form.identifier,
+      password: form.password,
+    })
+    if (authError) {
+      setError(authError)
     } else if (user) {
       toast.success(`Bienvenue ${user.pseudo ?? user.firstName ?? ''} !`)
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+      navigate(user.role === 'admin' ? '/admin' : '/')
     }
-  };
+  }
 
   return (
     <div className="auth-page">
-      <div className="auth-page__container">
-        <h1>Connexion</h1>
+      <AuthVisual />
+      <div className="auth-form-side">
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <h1 className="auth-form__h1">Connexion</h1>
+          <p className="auth-form__sub">Bienvenue de retour. Connecte-toi pour accéder à tes configs.</p>
 
-        <Form onSubmit={handleSubmit}>
-          {error && <Form.Error message={error} />}
+          {error && <div className="auth-err">{error}</div>}
 
-          <Form.Group>
-            <Input
+          <div className="fg">
+            <label className="fg__l" htmlFor="auth-identifier">Email ou pseudo</label>
+            <input
+              id="auth-identifier"
+              className="fg__in"
               type="text"
-              label="Email ou pseudo"
-              placeholder="exemple@email.com ou pseudo"
-              value={formData.identifier}
-              onChange={handleChange("identifier")}
+              placeholder="exemple@email.com"
+              value={form.identifier}
+              onChange={set('identifier')}
               autoComplete="username"
               required
-              fullWidth
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group>
-            <Input
+          <div className="fg">
+            <label className="fg__l" htmlFor="auth-password">Mot de passe</label>
+            <input
+              id="auth-password"
+              className="fg__in"
               type="password"
-              label="Mot de passe"
               placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange("password")}
+              value={form.password}
+              onChange={set('password')}
+              autoComplete="current-password"
               required
-              fullWidth
             />
-          </Form.Group>
+          </div>
 
-          <Form.Row>
-            <Checkbox
-              label="Se souvenir de moi"
-              checked={formData.rememberMe}
-              onChange={handleCheckboxChange}
-            />
+          <div className="form-row">
+            <label>
+              <input type="checkbox" checked={form.rememberMe} onChange={set('rememberMe')} />
+              Se souvenir de moi
+            </label>
             <Link to="/forgot-password">Mot de passe oublié ?</Link>
-          </Form.Row>
+          </div>
 
-          <Form.Actions>
-            <Button type="submit" isLoading={isLoading} fullWidth>
-              Se connecter
-            </Button>
-          </Form.Actions>
-        </Form>
+          <button type="submit" className="auth-cta" disabled={isLoading}>
+            {isLoading ? 'Connexion…' : 'Se connecter'}
+          </button>
 
-        <p>
-          Pas encore de compte ? <Link to="/signup">Créer un compte</Link>
-        </p>
+          <div className="auth-switch">
+            Pas encore de compte ? <Link to="/signup">Créer un compte</Link>
+          </div>
+        </form>
       </div>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+export default SignIn

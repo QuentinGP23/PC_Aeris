@@ -1,101 +1,73 @@
 @use "../../../styles/variables" as *;
 
 .footer {
-  background-color: $neutral-900;
-  color: $neutral-300;
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  background: var(--bg);
 
   &__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: $spacing-12 $spacing-6;
     display: flex;
-    gap: $spacing-16;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     flex-wrap: wrap;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-    }
-  }
-
-  &__brand {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-3;
-    max-width: 280px;
   }
 
   &__logo {
+    font-family: var(--fh);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.03em;
+    color: var(--text-2);
     display: flex;
     align-items: center;
-    gap: $spacing-2;
-    color: $white;
-    font-weight: $font-weight-bold;
-    font-size: $font-size-lg;
+    gap: 8px;
     text-decoration: none;
+    transition: color 0.15s;
 
-    svg {
-      color: $primary;
-    }
+    &:hover { color: var(--text); }
   }
 
-  &__tagline {
-    font-size: $font-size-sm;
-    color: $neutral-400;
-    line-height: 1.6;
+  &__logo-mark {
+    width: 20px;
+    height: 20px;
+    background: var(--ind);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
   }
 
   &__links {
     display: flex;
-    gap: $spacing-12;
+    gap: 20px;
     flex-wrap: wrap;
-    flex: 1;
-
-    @media (max-width: 768px) {
-      gap: $spacing-8;
-    }
-  }
-
-  &__col {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-3;
-  }
-
-  &__col-title {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $white;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   &__link {
-    font-size: $font-size-sm;
-    color: $neutral-400;
+    font-size: 12px;
+    color: var(--text-3);
+    cursor: pointer;
+    font-family: var(--fm);
+    letter-spacing: 0.03em;
     text-decoration: none;
-    transition: color $transition-fast;
+    transition: color 0.15s;
 
-    &:hover {
-      color: $white;
-    }
-
-    &--disabled {
-      opacity: 0.4;
-      cursor: default;
-
-      &:hover {
-        color: $neutral-400;
-      }
-    }
+    &:hover { color: var(--text-2); }
   }
 
-  &__bottom {
-    border-top: 1px solid $neutral-800;
-    padding: $spacing-5 $spacing-6;
-    text-align: center;
-    font-size: $font-size-sm;
-    color: $neutral-500;
-    max-width: 1280px;
-    margin: 0 auto;
+  &__copy {
+    font-family: var(--fm);
+    font-size: 11px;
+    color: var(--text-3);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    &__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 }

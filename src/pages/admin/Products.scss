@@ -1,235 +1,36 @@
-@use "../../styles/variables" as *;
+// Products — styles spécifiques
 
 .admin-products {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-4;
-
-  &__alert {
-    margin-bottom: $spacing-2;
-  }
-
-  &__toolbar {
-    display: flex;
-    align-items: center;
-    gap: $spacing-3;
-    flex-wrap: wrap;
-  }
-
-  &__count {
-    font-size: $font-size-sm;
-    color: $neutral-400;
-    white-space: nowrap;
-    margin-left: auto;
-  }
-
-  &__th-sortable {
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-
-    &:hover { color: $primary; }
-  }
-
-  &__sort-icon {
-    margin-left: $spacing-1;
-    font-size: $font-size-xs;
-    color: $primary;
-
-    &--idle { color: $neutral-300; }
-  }
-
-  &__loading,
-  &__empty {
-    display: flex;
-    justify-content: center;
-    padding: $spacing-16;
-    color: $neutral-400;
-    font-size: $font-size-lg;
-  }
-
-  &__thumb {
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
-    border-radius: $radius-sm;
-    background: $neutral-50;
-    border: 1px solid $neutral-100;
-    padding: 2px;
-  }
-
-  &__no-img {
-    width: 48px;
-    height: 48px;
-    background: $neutral-100;
-    border-radius: $radius-sm;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $neutral-300;
-    font-size: $font-size-sm;
-  }
-
   &__name {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $neutral-900;
-    max-width: 300px;
-    display: block;
+    max-width: 320px;
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  &__empty {
-    color: $neutral-300;
-    font-size: $font-size-sm;
-    padding: 0;
-  }
-
-  &__price {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $neutral-900;
-    white-space: nowrap;
+    vertical-align: bottom;
   }
 
   &__actions {
     display: flex;
-    gap: $spacing-2;
+    gap: 6px;
   }
 
-  &__pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-4;
-    padding: $spacing-4 0;
-  }
-
-  &__page-info {
-    font-size: $font-size-sm;
-    color: $neutral-400;
-    min-width: 100px;
-    text-align: center;
-  }
-
-  &__modal-alert {
-    margin-bottom: $spacing-4;
-  }
-
-  &__modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-  }
-
-  &__modal-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-    gap: $spacing-4;
-  }
-
-  &__modal-preview {
+  &__preview {
     display: flex;
     justify-content: center;
-    padding: $spacing-4;
-    background: $neutral-50;
-    border-radius: $radius-md;
-    border: 1px solid $neutral-200;
-
-    img {
-      max-height: 120px;
-      max-width: 200px;
-      object-fit: contain;
-    }
+    padding: 14px;
+    background: var(--surface-2);
+    border-radius: var(--rs);
+    border: 1px solid var(--border);
   }
 
-  // ── Tabs ──────────────────────────────────────────────────────────────────
-
-  &__tabs {
-    display: flex;
-    border-bottom: 2px solid $neutral-200;
-    margin-bottom: $spacing-5;
-    gap: 0;
-  }
-
-  &__tab {
-    padding: $spacing-2 $spacing-5;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $neutral-500;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
-
-    &:hover { color: $neutral-700; }
-
-    &--active {
-      color: $primary;
-      border-bottom-color: $primary;
-    }
-  }
-
-  // ── Specs panel ────────────────────────────────────────────────────────────
-
-  &__specs-panel {
-    min-height: 120px;
+  &__specs {
+    min-height: 200px;
   }
 
   &__specs-toolbar {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: $spacing-3;
-  }
-
-  &__specs-loading {
-    display: flex;
-    justify-content: center;
-    padding: $spacing-8;
-  }
-
-  &__specs-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-3 $spacing-4;
-
-    @media (max-width: 640px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__specs-field {
-    &--bool {
-      display: flex;
-      align-items: center;
-      padding-top: $spacing-5;
-    }
-
-    &--jsonb {
-      grid-column: 1 / -1;
-    }
-  }
-
-  &__specs-empty {
-    color: $neutral-400;
-    font-size: $font-size-sm;
-    text-align: center;
-    padding: $spacing-8;
-  }
-
-  &__delete-text {
-    font-size: $font-size-base;
-    color: $neutral-700;
-    margin-bottom: $spacing-2;
-  }
-
-  &__delete-warning {
-    font-size: $font-size-sm;
-    color: $error;
-    font-weight: $font-weight-medium;
+    margin-bottom: 14px;
   }
 }
