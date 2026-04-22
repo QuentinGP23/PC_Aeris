@@ -19,10 +19,10 @@
   --border:   rgba(255, 255, 255, 0.06);
   --border-s: rgba(255, 255, 255, 0.11);
 
-  // Text
-  --text:   #F0F0FA;
-  --text-2: #64647A;
-  --text-3: #32323E;
+  // Text — contrastes RGAA AA (>= 4.5:1) sur fond #04040A
+  --text:   #F0F0FA; // ~17:1 — body principal (AAA)
+  --text-2: #B5B5C8; // ~10:1 — secondaire (AAA)
+  --text-3: #8E8EA8; // ~6.5:1 — tertiaire / labels / hints (AA)
 
   // Accent indigo
   --ind:    #6366F1;

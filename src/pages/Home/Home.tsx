@@ -1,6 +1,58 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../../config'
+import { CATEGORIES } from '../../types'
 import './Home.scss'
+
+// ──────────────────────────────────────────────────────────────────────────
+// Stats publiques (depuis Supabase)
+// ──────────────────────────────────────────────────────────────────────────
+
+const NA = 'N/A'
+
+interface PublicStats {
+  totalProducts: number | null
+  byCategory: Record<string, number | null>
+}
+
+const EMPTY_STATS: PublicStats = { totalProducts: null, byCategory: {} }
+
+function usePublicStats(): PublicStats {
+  const [stats, setStats] = useState<PublicStats>(EMPTY_STATS)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      const cats = CATEGORIES.map((c) => c.value)
+      const [totalRes, ...catRess] = await Promise.all([
+        supabase.from('products').select('*', { count: 'exact', head: true }),
+        ...cats.map((cat) =>
+          supabase.from('products').select('*', { count: 'exact', head: true }).eq('category', cat),
+        ),
+      ])
+      if (cancelled) return
+      const byCategory: Record<string, number | null> = {}
+      cats.forEach((cat, i) => {
+        byCategory[cat] = catRess[i].error ? null : (catRess[i].count ?? 0)
+      })
+      setStats({
+        totalProducts: totalRes.error ? null : (totalRes.count ?? 0),
+        byCategory,
+      })
+    }
+    void load()
+    return () => { cancelled = true }
+  }, [])
+
+  return stats
+}
+
+const fmt = (n: number) => n.toLocaleString('fr-FR')
+const fmtOrNA = (n: number | null | undefined): string => (n == null ? NA : fmt(n))
+
+// ──────────────────────────────────────────────────────────────────────────
+// Terminal animé
+// ──────────────────────────────────────────────────────────────────────────
 
 type TermRow = { k?: string; v?: string; style?: 'ok' | 'dim' | 'ind' }
 
@@ -15,7 +67,7 @@ const TERM_ROWS: TermRow[] = [
   { k: 'PSU', v: '1 000W 80+ Gold' },
   {},
   { k: 'COMPAT', v: '✓ ALL SYSTEMS GO', style: 'ok' },
-  { k: 'PRIX', v: '~2 850 €', style: 'ind' },
+  { k: 'PRIX', v: NA, style: 'ind' },
 ]
 
 function Terminal() {
@@ -75,12 +127,18 @@ function Terminal() {
   )
 }
 
-function Hero() {
+// ──────────────────────────────────────────────────────────────────────────
+// Hero
+// ──────────────────────────────────────────────────────────────────────────
+
+function Hero({ stats }: { stats: PublicStats }) {
   const [ready, setReady] = useState(false)
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 80)
     return () => clearTimeout(t)
   }, [])
+
+  const totalLabel = stats.totalProducts == null ? '…' : `${fmt(stats.totalProducts)}`
 
   return (
     <section className="hero">
@@ -119,7 +177,7 @@ function Hero() {
             </h1>
 
             <p className={`hero__sub rv rv-d4 ${ready ? 'in' : ''}`}>
-              25 000+ pièces référencées. Zéro erreur de compatibilité.
+              {totalLabel} pièces référencées. Zéro erreur de compatibilité.
               Trouve ta configuration idéale en quelques minutes.
             </p>
 
@@ -130,18 +188,21 @@ function Hero() {
                   <path d="M3 7.5h9M9 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
-              <Link to="/configurateur" className="hero__secondary">
-                ↓ VOIR LES COMPOSANTS
-              </Link>
             </div>
 
             <div className={`hero__stats-row rv rv-d6 ${ready ? 'in' : ''}`}>
-              {[['25 000+', 'Composants'], ['8', 'Catégories'], ['100%', 'Gratuit']].map(([n, l]) => (
-                <div key={l} className="hero__stat">
-                  <span className="hero__stat-n">{n}</span>
-                  <span className="hero__stat-l">{l}</span>
-                </div>
-              ))}
+              <div className="hero__stat">
+                <span className="hero__stat-n">{fmtOrNA(stats.totalProducts)}</span>
+                <span className="hero__stat-l">Composants</span>
+              </div>
+              <div className="hero__stat">
+                <span className="hero__stat-n">{CATEGORIES.length}</span>
+                <span className="hero__stat-l">Catégories</span>
+              </div>
+              <div className="hero__stat">
+                <span className="hero__stat-n">100%</span>
+                <span className="hero__stat-l">Gratuit</span>
+              </div>
             </div>
           </div>
 
@@ -152,25 +213,28 @@ function Hero() {
   )
 }
 
-const TICKS: [string, string][] = [
-  ['25 000+', 'composants référencés'],
-  ['8', 'catégories'],
-  ['100%', 'gratuit'],
-  ['142k', 'configs créées'],
-  ['48', 'marques partenaires'],
-  ['3 200', 'mises à jour / semaine'],
-  ['AM5', 'socket supporté'],
-  ['DDR5', 'mémoire supportée'],
-  ['PCIe 5.0', 'standard'],
-]
+// ──────────────────────────────────────────────────────────────────────────
+// Ticker — chiffres clés en bandeau défilant
+// ──────────────────────────────────────────────────────────────────────────
 
-function Ticker() {
-  const all = [...TICKS, ...TICKS]
+function Ticker({ stats }: { stats: PublicStats }) {
+  const ticks: [string, string][] = [
+    [fmtOrNA(stats.totalProducts), 'composants référencés'],
+    [`${CATEGORIES.length}`, 'catégories'],
+    ['100%', 'gratuit'],
+    [NA, 'configs créées'],
+    [NA, 'marques partenaires'],
+    [NA, 'mises à jour / semaine'],
+    ['AM5', 'socket supporté'],
+    ['DDR5', 'mémoire supportée'],
+    ['PCIe 5.0', 'standard'],
+  ]
+  const all = [...ticks, ...ticks]
   return (
     <div className="ticker">
       <div className="ticker__track">
         {all.map(([v, l], i) => (
-          <span key={`${v}-${i}`} className="ticker__item">
+          <span key={`${v}-${l}-${i}`} className="ticker__item">
             <span className="ticker__v">{v}</span>
             {l}
             <span className="ticker__sep" />
@@ -181,14 +245,17 @@ function Ticker() {
   )
 }
 
-const STATS = [
-  { n: '25 000+', l: 'Composants', bg: '25K' },
-  { n: '142 000', l: 'Configs créées', bg: '142K' },
-  { n: '48', l: 'Marques partenaires', bg: '48' },
-  { n: '< 2 ms', l: 'Vérification compat', bg: '2ms' },
-]
+// ──────────────────────────────────────────────────────────────────────────
+// Stats grid
+// ──────────────────────────────────────────────────────────────────────────
 
-function Stats() {
+function Stats({ stats }: { stats: PublicStats }) {
+  const cells = [
+    { n: fmtOrNA(stats.totalProducts), l: 'Composants',         bg: 'CMP' },
+    { n: NA,                            l: 'Configs créées',     bg: 'CFG' },
+    { n: NA,                            l: 'Marques partenaires', bg: 'BND' },
+    { n: NA,                            l: 'Vérification compat', bg: 'CMP' },
+  ]
   return (
     <section className="s s--sm">
       <div className="c">
@@ -197,7 +264,7 @@ function Stats() {
           <span className="chmark__line" />
         </div>
         <div className="stats-grid">
-          {STATS.map((s, i) => (
+          {cells.map((s, i) => (
             <div key={s.l} className={`stats-cell rv rv-d${i + 1}`}>
               <div className="stats-cell__bg">{s.bg}</div>
               <div className="stats-cell__n">{s.n}</div>
@@ -210,29 +277,32 @@ function Stats() {
   )
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// Bento — catalogue par catégorie
+// ──────────────────────────────────────────────────────────────────────────
+
 type BentoCat = {
   value: string
   label: string
   icon: string
   color: string
   bg: string
-  count: string
   cls: string
   n: string
 }
 
 const BENTO: BentoCat[] = [
-  { value: 'cpu', label: 'Processeur', icon: '⚡', color: '#3B82F6', bg: 'rgba(59,130,246,0.12)', count: '2 400+', cls: 'bento__cell--a1', n: '01' },
-  { value: 'gpu', label: 'Carte graphique', icon: '🎮', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', count: '1 800+', cls: 'bento__cell--a2', n: '02' },
-  { value: 'pc_case', label: 'Boîtier', icon: '🖥️', color: '#14B8A6', bg: 'rgba(20,184,166,0.12)', count: '2 800+', cls: 'bento__cell--a3', n: '03' },
-  { value: 'motherboard', label: 'Carte mère', icon: '🔌', color: '#6366F1', bg: 'rgba(99,102,241,0.12)', count: '3 200+', cls: 'bento__cell--b1', n: '04' },
-  { value: 'ram', label: 'Mémoire RAM', icon: '💾', color: '#22C55E', bg: 'rgba(34,197,94,0.12)', count: '5 600+', cls: 'bento__cell--b2', n: '05' },
-  { value: 'storage', label: 'Stockage', icon: '💿', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)', count: '4 100+', cls: 'bento__cell--b3', n: '06' },
-  { value: 'psu', label: 'Alimentation', icon: '🔋', color: '#EC4899', bg: 'rgba(236,72,153,0.12)', count: '1 200+', cls: 'bento__cell--c1', n: '07' },
-  { value: 'cpu_cooler', label: 'Ventirad', icon: '❄️', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)', count: '3 500+', cls: 'bento__cell--c2', n: '08' },
+  { value: 'cpu',         label: 'Processeur',      icon: '⚡', color: '#3B82F6', bg: 'rgba(59,130,246,0.12)',  cls: 'bento__cell--a1', n: '01' },
+  { value: 'gpu',         label: 'Carte graphique', icon: '🎮', color: '#EF4444', bg: 'rgba(239,68,68,0.12)',   cls: 'bento__cell--a2', n: '02' },
+  { value: 'pc_case',     label: 'Boîtier',         icon: '🖥️', color: '#14B8A6', bg: 'rgba(20,184,166,0.12)',  cls: 'bento__cell--a3', n: '03' },
+  { value: 'motherboard', label: 'Carte mère',      icon: '🔌', color: '#6366F1', bg: 'rgba(99,102,241,0.12)',  cls: 'bento__cell--b1', n: '04' },
+  { value: 'ram',         label: 'Mémoire RAM',     icon: '💾', color: '#22C55E', bg: 'rgba(34,197,94,0.12)',   cls: 'bento__cell--b2', n: '05' },
+  { value: 'storage',     label: 'Stockage',        icon: '💿', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)',  cls: 'bento__cell--b3', n: '06' },
+  { value: 'psu',         label: 'Alimentation',    icon: '🔋', color: '#EC4899', bg: 'rgba(236,72,153,0.12)',  cls: 'bento__cell--c1', n: '07' },
+  { value: 'cpu_cooler',  label: 'Ventirad',        icon: '❄️', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)',  cls: 'bento__cell--c2', n: '08' },
 ]
 
-function Bento() {
+function Bento({ stats }: { stats: PublicStats }) {
   return (
     <section className="s">
       <div className="c">
@@ -253,35 +323,43 @@ function Bento() {
           </p>
         </div>
         <div className="bento">
-          {BENTO.map((cat, idx) => (
-            <Link
-              key={cat.value}
-              to="/configurateur"
-              className={`bento__cell ${cat.cls} rv rv-d${Math.min(idx + 1, 6)}`}
-              style={{ ['--cat-color' as string]: cat.color, ['--cat-bg' as string]: cat.bg }}
-              data-hover
-            >
-              <div className="bento__glow" />
-              <span className="bento__num">{cat.n}</span>
-              <span className="bento__big-num">{cat.n}</span>
-              <div className="bento__icon">{cat.icon}</div>
-              <div>
-                <div className="bento__label">{cat.label}</div>
-                <div className="bento__count">{cat.count} références</div>
-              </div>
-              <div className="bento__arrow">Explorer →</div>
-            </Link>
-          ))}
+          {BENTO.map((cat, idx) => {
+            const count = stats.byCategory[cat.value]
+            const countLabel = count == null ? `${NA} références` : `${fmt(count)} référence${count > 1 ? 's' : ''}`
+            return (
+              <Link
+                key={cat.value}
+                to="/configurateur"
+                className={`bento__cell ${cat.cls} rv rv-d${Math.min(idx + 1, 6)}`}
+                style={{ ['--cat-color' as string]: cat.color, ['--cat-bg' as string]: cat.bg }}
+                data-hover
+              >
+                <div className="bento__glow" />
+                <span className="bento__num">{cat.n}</span>
+                <span className="bento__big-num">{cat.n}</span>
+                <div className="bento__icon">{cat.icon}</div>
+                <div>
+                  <div className="bento__label">{cat.label}</div>
+                  <div className="bento__count">{countLabel}</div>
+                </div>
+                <div className="bento__arrow">Explorer →</div>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>
   )
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// How it works
+// ──────────────────────────────────────────────────────────────────────────
+
 const STEPS = [
-  { n: '01', tag: 'EXPLORER', title: 'Choisis tes composants', desc: 'Parcours 25 000+ composants filtrés par catégorie, marque ou budget. Chaque pièce est documentée et à jour des dernières sorties.' },
-  { n: '02', tag: 'VÉRIFIER', title: 'Compatibilité automatique', desc: 'Notre moteur vérifie en temps réel socket, type de RAM, dimensions boîtier et ventirad. Zéro mauvaise surprise à l\'assemblage.' },
-  { n: '03', tag: 'COMMANDER', title: 'Config prête à commander', desc: 'Exporte ou sauvegarde ta configuration. Toutes les pièces sont listées avec les prix, il ne reste plus qu\'à passer commande.' },
+  { n: '01', tag: 'EXPLORER',   title: 'Choisis tes composants',     desc: 'Parcours notre catalogue filtré par catégorie, marque ou budget. Chaque pièce est documentée et à jour des dernières sorties.' },
+  { n: '02', tag: 'VÉRIFIER',   title: 'Compatibilité automatique',  desc: 'Notre moteur vérifie en temps réel socket, type de RAM, dimensions boîtier et ventirad. Zéro mauvaise surprise à l\'assemblage.' },
+  { n: '03', tag: 'COMMANDER',  title: 'Config prête à commander',   desc: 'Exporte ou sauvegarde ta configuration. Toutes les pièces sont listées avec les prix, il ne reste plus qu\'à passer commande.' },
 ]
 
 function How() {
@@ -313,37 +391,17 @@ function How() {
   )
 }
 
-function Cta() {
-  return (
-    <section className="cta-s">
-      <div className="cta-s__glow" />
-      <div className="c cta-s__wrap">
-        <span className="cta-s__eyebrow rv">— PC AERIS —</span>
-        <h2 className="cta-s__h2 rv rv-d1">
-          Prêt à construire<br />
-          <mark>ton PC idéal ?</mark>
-        </h2>
-        <p className="cta-s__p rv rv-d2">Gratuit. Sans inscription. En quelques minutes.</p>
-        <Link to="/configurateur" className="cta-s__cta rv rv-d3" data-hover>
-          Commencer maintenant
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden>
-            <path d="M3 7.5h9M9 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </Link>
-      </div>
-    </section>
-  )
-}
+// ──────────────────────────────────────────────────────────────────────────
 
 function Home() {
+  const stats = usePublicStats()
   return (
     <>
-      <Hero />
-      <Ticker />
-      <Stats />
-      <Bento />
+      <Hero stats={stats} />
+      <Ticker stats={stats} />
+      <Stats stats={stats} />
+      <Bento stats={stats} />
       <How />
-      <Cta />
     </>
   )
 }
