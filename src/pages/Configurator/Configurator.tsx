@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../config'
-import { useConfigStore } from '../../store'
+import { useConfigStore, useToast } from '../../store'
 import { CATEGORIES } from '../../types'
 import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
-import { getCompatibleProductIds } from '../../utils'
+import { getCompatibleProductIds, missingPrereqs, nextPendingCategory, SELECTION_ORDER } from '../../utils'
 import './Configurator.scss'
 
 const PAGE_SIZE = 24
@@ -19,8 +19,13 @@ function renderSpecValue(val: unknown, unit?: string): string {
   return unit ? `${str} ${unit}` : str
 }
 
+function categoryLabel(cat: CategoryKey): string {
+  return CATEGORIES.find((c) => c.value === cat)?.label ?? cat
+}
+
 function Configurator() {
-  const { config, selectComponent, removeComponent, clearConfig } = useConfigStore()
+  const { config, lastInvalidated, selectComponent, removeComponent, clearInvalidated, clearConfig } = useConfigStore()
+  const toast = useToast()
 
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('cpu')
   const [products, setProducts] = useState<Product[]>([])
@@ -32,8 +37,25 @@ function Configurator() {
 
   const cpuId = config['cpu']?.id
   const motherboardId = config['motherboard']?.id
+  const pcCaseId = config['pc_case']?.id
+  const gpuId = config['gpu']?.id
+
+  const missingForActive = useMemo(
+    () => missingPrereqs(activeCategory, config),
+    [activeCategory, config],
+  )
+  const locked = missingForActive.length > 0
 
   useEffect(() => {
+    if (lastInvalidated.length === 0) return
+    const labels = lastInvalidated.map(categoryLabel).join(', ')
+    toast.warning(`Sélections incompatibles retirées : ${labels}`)
+    clearInvalidated()
+  }, [lastInvalidated, toast, clearInvalidated])
+
+  useEffect(() => {
+    if (locked) return
+
     let cancelled = false
     const categoryDef = CATEGORIES.find((c) => c.value === activeCategory)!
     const from = page * PAGE_SIZE
@@ -102,7 +124,7 @@ function Configurator() {
           productsData.map((p) => ({
             ...p,
             specs: specsMap.get(p.id) || null,
-          }))
+          })),
         )
         setLoading(false)
       }
@@ -110,12 +132,31 @@ function Configurator() {
 
     void run()
     return () => { cancelled = true }
-  }, [activeCategory, page, search, cpuId, motherboardId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeCategory, page, search, cpuId, motherboardId, pcCaseId, gpuId, locked]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCategoryChange = (cat: CategoryKey) => {
+    const missing = missingPrereqs(cat, config)
+    if (missing.length > 0) {
+      const first = missing[0]
+      toast.info(`Sélectionne d'abord ${categoryLabel(first)}`)
+      setActiveCategory(first)
+      setSearch('')
+      setPage(0)
+      return
+    }
     setActiveCategory(cat)
     setSearch('')
     setPage(0)
+  }
+
+  const handleSelect = (cat: CategoryKey, product: Product) => {
+    selectComponent(cat, product)
+    const next = nextPendingCategory({ ...config, [cat]: product })
+    if (next && next !== cat) {
+      setActiveCategory(next)
+      setSearch('')
+      setPage(0)
+    }
   }
 
   const selectedCount = Object.keys(config).length
@@ -124,7 +165,9 @@ function Configurator() {
 
   const totalAvg = Object.values(config).reduce((acc, p) => acc + (p?.price_avg_eur ?? 0), 0)
 
-  const activeCatDef = CATEGORIES.find(c => c.value === activeCategory)!
+  const activeCatDef = CATEGORIES.find((c) => c.value === activeCategory)!
+
+  const orderedCategories = SELECTION_ORDER.map((key) => CATEGORIES.find((c) => c.value === key)!).filter(Boolean)
 
   return (
     <div className="config-wrap">
@@ -140,22 +183,27 @@ function Configurator() {
         </div>
 
         <div className="config-items">
-          {CATEGORIES.map((cat, idx) => {
+          {orderedCategories.map((cat, idx) => {
             const selected = config[cat.value]
             const isActive = activeCategory === cat.value
+            const catLocked = missingPrereqs(cat.value, config).length > 0
             return (
               <button
                 key={cat.value}
                 type="button"
-                className={`config-item ${isActive ? 'config-item--act' : ''}`}
+                className={`config-item ${isActive ? 'config-item--act' : ''} ${catLocked ? 'config-item--locked' : ''}`}
                 onClick={() => handleCategoryChange(cat.value)}
+                aria-disabled={catLocked}
+                title={catLocked ? `Sélectionne d'abord ${categoryLabel(missingPrereqs(cat.value, config)[0])}` : undefined}
               >
                 <span className="config-item__n">{String(idx + 1).padStart(2, '0')}</span>
-                <span className="config-item__ico">{cat.icon}</span>
+                <span className="config-item__ico">{catLocked ? '🔒' : cat.icon}</span>
                 <div className="config-item__info">
                   <div className="config-item__lbl">{cat.label}</div>
                   {selected ? (
                     <div className="config-item__name">{selected.name}</div>
+                  ) : catLocked ? (
+                    <div className="config-item__empty">Verrouillé</div>
                   ) : (
                     <div className="config-item__empty">Non sélectionné</div>
                   )}
@@ -202,22 +250,25 @@ function Configurator() {
         <div className="config-main__hd">
           <h1 className="config-main__h1">Configurateur PC</h1>
           <p className="config-main__sub">
-            Explorez {CATEGORIES.length} catégories, ajoutez des composants compatibles, obtenez une config complète.
+            Sélectionne les composants dans l'ordre indiqué. La compatibilité est vérifiée à chaque étape.
           </p>
         </div>
 
         <div className="config-tabs">
-          {CATEGORIES.map((cat) => {
+          {orderedCategories.map((cat) => {
             const done = Boolean(config[cat.value])
             const act = activeCategory === cat.value
+            const catLocked = missingPrereqs(cat.value, config).length > 0
             return (
               <button
                 key={cat.value}
                 type="button"
-                className={`config-tab ${act ? 'config-tab--act' : ''}`}
+                className={`config-tab ${act ? 'config-tab--act' : ''} ${catLocked ? 'config-tab--locked' : ''}`}
                 onClick={() => handleCategoryChange(cat.value)}
+                aria-disabled={catLocked}
+                title={catLocked ? `Sélectionne d'abord ${categoryLabel(missingPrereqs(cat.value, config)[0])}` : undefined}
               >
-                <span>{cat.icon}</span>
+                <span>{catLocked ? '🔒' : cat.icon}</span>
                 <span>{cat.label}</span>
                 {done && <span className="config-tab__ck">✓</span>}
               </button>
@@ -225,151 +276,159 @@ function Configurator() {
           })}
         </div>
 
-        {compatInfo.active && (
-          <div className={`compat-info ${compatInfo.empty ? 'compat-info--empty' : ''}`}>
-            {compatInfo.empty
-              ? <>⚠️ Aucun composant compatible avec {compatInfo.reason}</>
-              : <>✓ Filtré pour compatibilité · {compatInfo.reason}</>}
+        {locked ? (
+          <div className="compat-info compat-info--locked">
+            🔒 Sélectionne d'abord {missingForActive.map(categoryLabel).join(', ')} pour débloquer {activeCatDef.label.toLowerCase()}
           </div>
-        )}
-
-        {!compatInfo.empty && (
-          <div className="config-search">
-            <span className="config-search__ico">⌕</span>
-            <input
-              type="text"
-              className="config-search__in"
-              placeholder={`Rechercher un ${activeCatDef.label.toLowerCase()}...`}
-              value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-            />
-            {totalCount > 0 && (
-              <span className="config-search__cnt">{totalCount} résultats</span>
-            )}
-          </div>
-        )}
-
-        {loading ? (
-          <div className="st-load">Chargement...</div>
-        ) : compatInfo.empty ? null : products.length === 0 ? (
-          <div className="st-empty">Aucun résultat.</div>
         ) : (
-          <div className="prod-grid">
-            {products.map((product, idx) => {
-              const isSelected = config[activeCategory]?.id === product.id
-              const keySpecs = KEY_SPECS[activeCategory] ?? []
+          <>
+            {compatInfo.active && (
+              <div className={`compat-info ${compatInfo.empty ? 'compat-info--empty' : ''}`}>
+                {compatInfo.empty
+                  ? <>⚠️ Aucun composant compatible avec {compatInfo.reason}</>
+                  : <>✓ Filtré pour compatibilité · {compatInfo.reason}</>}
+              </div>
+            )}
 
-              return (
-                <div
-                  key={product.id}
-                  className={`prod-card ${isSelected ? 'prod-card--sel' : ''}`}
-                >
-                  <div className="prod-card__img">
-                    <span className="prod-card__idx">#{String(page * PAGE_SIZE + idx + 1).padStart(3, '0')}</span>
-                    {isSelected && <span className="prod-card__sel-tag">Sélectionné</span>}
-                    {product.image_url ? (
-                      <img src={product.image_url} alt={product.name} />
-                    ) : (
-                      <span>{activeCatDef.icon}</span>
-                    )}
-                  </div>
+            {!compatInfo.empty && (
+              <div className="config-search">
+                <span className="config-search__ico">⌕</span>
+                <input
+                  type="text"
+                  className="config-search__in"
+                  placeholder={`Rechercher un ${activeCatDef.label.toLowerCase()}...`}
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(0) }}
+                />
+                {totalCount > 0 && (
+                  <span className="config-search__cnt">{totalCount} résultats</span>
+                )}
+              </div>
+            )}
 
-                  <div className="prod-card__body">
-                    <div className="prod-card__name">{product.name}</div>
-                    <div className="prod-card__meta">
-                      {[product.manufacturer, product.series, product.release_year].filter(Boolean).join(' · ')}
-                    </div>
+            {loading ? (
+              <div className="st-load">Chargement...</div>
+            ) : compatInfo.empty ? null : products.length === 0 ? (
+              <div className="st-empty">Aucun résultat.</div>
+            ) : (
+              <div className="prod-grid">
+                {products.map((product, idx) => {
+                  const isSelected = config[activeCategory]?.id === product.id
+                  const keySpecs = KEY_SPECS[activeCategory] ?? []
 
-                    {product.specs && keySpecs.length > 0 && (
-                      <div className="prod-card__specs">
-                        {keySpecs
-                          .filter((key) => product.specs![key] !== null && product.specs![key] !== undefined)
-                          .slice(0, 3)
-                          .map((key) => (
-                            <div key={key} className="prod-card__spec">
-                              <span className="prod-card__sk">{SPEC_LABELS[key] ?? key.replace(/_/g, ' ')}</span>
-                              <span className="prod-card__sv">
-                                {renderSpecValue(product.specs![key], SPEC_UNITS[key])}
-                              </span>
-                            </div>
-                          ))}
+                  return (
+                    <div
+                      key={product.id}
+                      className={`prod-card ${isSelected ? 'prod-card--sel' : ''}`}
+                    >
+                      <div className="prod-card__img">
+                        <span className="prod-card__idx">#{String(page * PAGE_SIZE + idx + 1).padStart(3, '0')}</span>
+                        {isSelected && <span className="prod-card__sel-tag">Sélectionné</span>}
+                        {product.image_url ? (
+                          <img src={product.image_url} alt={product.name} />
+                        ) : (
+                          <span>{activeCatDef.icon}</span>
+                        )}
                       </div>
-                    )}
 
-                    {product.benchmark_score !== null && (
-                      <div className="prod-card__bench">
-                        <span className="prod-card__bench-l">Bench</span>
-                        <span className="prod-card__bench-v">{product.benchmark_score}</span>
+                      <div className="prod-card__body">
+                        <div className="prod-card__name">{product.name}</div>
+                        <div className="prod-card__meta">
+                          {[product.manufacturer, product.series, product.release_year].filter(Boolean).join(' · ')}
+                        </div>
+
+                        {product.specs && keySpecs.length > 0 && (
+                          <div className="prod-card__specs">
+                            {keySpecs
+                              .filter((key) => product.specs![key] !== null && product.specs![key] !== undefined)
+                              .slice(0, 3)
+                              .map((key) => (
+                                <div key={key} className="prod-card__spec">
+                                  <span className="prod-card__sk">{SPEC_LABELS[key] ?? key.replace(/_/g, ' ')}</span>
+                                  <span className="prod-card__sv">
+                                    {renderSpecValue(product.specs![key], SPEC_UNITS[key])}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+
+                        {product.benchmark_score !== null && (
+                          <div className="prod-card__bench">
+                            <span className="prod-card__bench-l">Bench</span>
+                            <span className="prod-card__bench-v">{product.benchmark_score}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  <div className="prod-card__ft">
-                    <div className="prod-card__price">
-                      {product.price_avg_eur !== null ? (
-                        <>
-                          <div className="prod-card__pr">~ {Math.round(product.price_avg_eur)} €</div>
-                          {product.price_min_eur !== null && product.price_max_eur !== null && (
-                            <div className="prod-card__pa">
-                              {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
-                            </div>
+                      <div className="prod-card__ft">
+                        <div className="prod-card__price">
+                          {product.price_avg_eur !== null ? (
+                            <>
+                              <div className="prod-card__pr">~ {Math.round(product.price_avg_eur)} €</div>
+                              {product.price_min_eur !== null && product.price_max_eur !== null && (
+                                <div className="prod-card__pa">
+                                  {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="prod-card__pa">Prix non disponible</div>
                           )}
-                        </>
-                      ) : (
-                        <div className="prod-card__pa">Prix non disponible</div>
-                      )}
+                        </div>
+
+                        {isSelected ? (
+                          <button
+                            type="button"
+                            className="btn btn--ok btn--full"
+                            onClick={() => removeComponent(activeCategory)}
+                          >
+                            ✓ Sélectionné
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn--ind btn--full"
+                            onClick={() => handleSelect(activeCategory, product)}
+                          >
+                            Sélectionner
+                          </button>
+                        )}
+
+                        <Link to={`/produit/${product.id}`} className="prod-detail-link">
+                          Voir la fiche →
+                        </Link>
+                      </div>
                     </div>
+                  )
+                })}
+              </div>
+            )}
 
-                    {isSelected ? (
-                      <button
-                        type="button"
-                        className="btn btn--ok btn--full"
-                        onClick={() => removeComponent(activeCategory)}
-                      >
-                        ✓ Sélectionné
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn btn--ind btn--full"
-                        onClick={() => selectComponent(activeCategory, product)}
-                      >
-                        Sélectionner
-                      </button>
-                    )}
-
-                    <Link to={`/produit/${product.id}`} className="prod-detail-link">
-                      Voir la fiche →
-                    </Link>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-
-        {totalPages > 1 && !compatInfo.empty && (
-          <div className="pagination">
-            <button
-              type="button"
-              className="btn btn--ghost2"
-              disabled={page === 0}
-              onClick={() => setPage(p => p - 1)}
-            >
-              ← Précédent
-            </button>
-            <span className="pagination__info">
-              Page {page + 1} / {totalPages}
-            </span>
-            <button
-              type="button"
-              className="btn btn--ghost2"
-              disabled={page >= totalPages - 1}
-              onClick={() => setPage(p => p + 1)}
-            >
-              Suivant →
-            </button>
-          </div>
+            {totalPages > 1 && !compatInfo.empty && (
+              <div className="pagination">
+                <button
+                  type="button"
+                  className="btn btn--ghost2"
+                  disabled={page === 0}
+                  onClick={() => setPage((p) => p - 1)}
+                >
+                  ← Précédent
+                </button>
+                <span className="pagination__info">
+                  Page {page + 1} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  className="btn btn--ghost2"
+                  disabled={page >= totalPages - 1}
+                  onClick={() => setPage((p) => p + 1)}
+                >
+                  Suivant →
+                </button>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
