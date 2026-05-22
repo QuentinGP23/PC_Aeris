@@ -3,13 +3,14 @@ import { getCompatibleProductIds } from '../compatibility'
 import type { Product } from '../../types'
 
 // Chainable mock that resolves with configurable data
-let mockResolvedData: { product_id: string; form_factor?: string }[] = []
+let mockResolvedData: { product_id: string; form_factor?: string; height_mm?: number; length_mm?: number }[] = []
 
 const mockBuilder = {
   select: vi.fn().mockReturnThis(),
   eq: vi.fn().mockReturnThis(),
   contains: vi.fn().mockReturnThis(),
   gte: vi.fn().mockReturnThis(),
+  or: vi.fn().mockReturnThis(),
   then(resolve: (v: { data: typeof mockResolvedData; error: null }) => void) {
     return Promise.resolve({ data: mockResolvedData, error: null }).then(resolve)
   },
@@ -47,27 +48,44 @@ beforeEach(() => {
 
 describe('getCompatibleProductIds', () => {
   describe('cpu', () => {
-    it('returns filtered:false when no motherboard selected', async () => {
+    it('is never filtered (cpu is first in selection order)', async () => {
       const result = await getCompatibleProductIds('cpu', {})
       expect(result.filtered).toBe(false)
     })
+  })
 
-    it('returns filtered:false when motherboard has no socket', async () => {
-      const result = await getCompatibleProductIds('cpu', {
-        motherboard: makeProduct({}),
-      })
+  describe('motherboard', () => {
+    it('returns filtered:false when no cpu selected', async () => {
+      const result = await getCompatibleProductIds('motherboard', {})
       expect(result.filtered).toBe(false)
     })
 
-    it('queries cpu_specs by socket and returns ids', async () => {
-      mockResolvedData = [{ product_id: 'cpu-1' }, { product_id: 'cpu-2' }]
-      const result = await getCompatibleProductIds('cpu', {
-        motherboard: makeProduct({ socket: 'AM4' }),
+    it('filters by cpu socket', async () => {
+      mockResolvedData = [{ product_id: 'mb-1' }]
+      const result = await getCompatibleProductIds('motherboard', {
+        cpu: makeProduct({ socket: 'AM5' }),
       })
       expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['cpu-1', 'cpu-2'])
-      expect(result.reason).toBe('Socket AM4')
-      expect(mockBuilder.eq).toHaveBeenCalledWith('socket', 'AM4')
+      expect(result.productIds).toEqual(['mb-1'])
+      expect(mockBuilder.eq).toHaveBeenCalledWith('socket', 'AM5')
+      expect(result.reason).toBe('Socket AM5')
+    })
+  })
+
+  describe('pc_case', () => {
+    it('returns filtered:false when no motherboard selected', async () => {
+      const result = await getCompatibleProductIds('pc_case', {})
+      expect(result.filtered).toBe(false)
+    })
+
+    it('queries pc_case_specs by form_factor containment', async () => {
+      mockResolvedData = [{ product_id: 'case-1' }]
+      const result = await getCompatibleProductIds('pc_case', {
+        motherboard: makeProduct({ form_factor: 'ATX' }),
+      })
+      expect(result.filtered).toBe(true)
+      expect(result.productIds).toEqual(['case-1'])
+      expect(mockBuilder.contains).toHaveBeenCalledWith('supported_mobo_form_factors', ['ATX'])
     })
   })
 
@@ -89,95 +107,21 @@ describe('getCompatibleProductIds', () => {
     })
   })
 
-  describe('cpu_cooler', () => {
-    it('returns filtered:false when no cpu selected', async () => {
-      const result = await getCompatibleProductIds('cpu_cooler', {})
+  describe('gpu', () => {
+    it('returns filtered:false when no pc_case selected', async () => {
+      const result = await getCompatibleProductIds('gpu', {})
       expect(result.filtered).toBe(false)
     })
 
-    it('queries cpu_cooler_specs by socket array containment', async () => {
-      mockResolvedData = [{ product_id: 'cooler-1' }]
-      const result = await getCompatibleProductIds('cpu_cooler', {
-        cpu: makeProduct({ socket: 'LGA1700' }),
+    it('filters by case max GPU length', async () => {
+      mockResolvedData = [{ product_id: 'gpu-1' }]
+      const result = await getCompatibleProductIds('gpu', {
+        pc_case: makeProduct({ max_gpu_length_mm: 320 }),
       })
       expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['cooler-1'])
-      expect(mockBuilder.contains).toHaveBeenCalledWith('cpu_sockets', ['LGA1700'])
-    })
-  })
-
-  describe('pc_case', () => {
-    it('returns filtered:false when no motherboard selected', async () => {
-      const result = await getCompatibleProductIds('pc_case', {})
-      expect(result.filtered).toBe(false)
-    })
-
-    it('queries pc_case_specs by form_factor containment', async () => {
-      mockResolvedData = [{ product_id: 'case-1' }]
-      const result = await getCompatibleProductIds('pc_case', {
-        motherboard: makeProduct({ form_factor: 'ATX' }),
-      })
-      expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['case-1'])
-      expect(mockBuilder.contains).toHaveBeenCalledWith('supported_mobo_form_factors', ['ATX'])
-    })
-  })
-
-  describe('motherboard', () => {
-    it('returns filtered:false when neither cpu nor pc_case selected', async () => {
-      const result = await getCompatibleProductIds('motherboard', {})
-      expect(result.filtered).toBe(false)
-    })
-
-    it('filters by cpu socket only', async () => {
-      mockResolvedData = [{ product_id: 'mb-1', form_factor: 'ATX' }]
-      const result = await getCompatibleProductIds('motherboard', {
-        cpu: makeProduct({ socket: 'AM5' }),
-      })
-      expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['mb-1'])
-      expect(mockBuilder.eq).toHaveBeenCalledWith('socket', 'AM5')
-    })
-
-    it('filters by both socket and case form factors', async () => {
-      mockResolvedData = [
-        { product_id: 'mb-1', form_factor: 'ATX' },
-        { product_id: 'mb-2', form_factor: 'mATX' },
-      ]
-      const result = await getCompatibleProductIds('motherboard', {
-        cpu: makeProduct({ socket: 'AM5' }),
-        pc_case: makeProduct({ supported_mobo_form_factors: ['ATX'] }),
-      })
-      expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['mb-1'])
-    })
-  })
-
-  describe('psu', () => {
-    it('returns filtered:false when no gpu or cpu tdp', async () => {
-      const result = await getCompatibleProductIds('psu', {})
-      expect(result.filtered).toBe(false)
-    })
-
-    it('calculates min wattage from gpu+cpu TDP with 20% headroom', async () => {
-      mockResolvedData = [{ product_id: 'psu-1' }]
-      // gpu: 300W, cpu: 65W → system = 300+65+100 = 465W → min = ceil(465*1.2) = 558W
-      const result = await getCompatibleProductIds('psu', {
-        gpu: makeProduct({ tdp: 300 }),
-        cpu: makeProduct({ tdp: 65 }),
-      })
-      expect(result.filtered).toBe(true)
-      expect(mockBuilder.gte).toHaveBeenCalledWith('wattage', 558)
-      expect(result.reason).toContain('558W')
-    })
-
-    it('works with gpu only (no cpu)', async () => {
-      mockResolvedData = []
-      // gpu: 200W → system = 200+0+100 = 300W → min = ceil(300*1.2) = 360W
-      await getCompatibleProductIds('psu', {
-        gpu: makeProduct({ tdp: 200 }),
-      })
-      expect(mockBuilder.gte).toHaveBeenCalledWith('wattage', 360)
+      expect(result.productIds).toEqual(['gpu-1'])
+      expect(mockBuilder.or).toHaveBeenCalledWith('length_mm.lte.320,length_mm.is.null')
+      expect(result.reason).toContain('320 mm')
     })
   })
 
@@ -215,10 +159,60 @@ describe('getCompatibleProductIds', () => {
     })
   })
 
-  describe('default / unhandled categories', () => {
-    it('returns filtered:false for gpu category', async () => {
-      const result = await getCompatibleProductIds('gpu', {})
+  describe('cpu_cooler', () => {
+    it('returns filtered:false when no cpu selected', async () => {
+      const result = await getCompatibleProductIds('cpu_cooler', {})
       expect(result.filtered).toBe(false)
+    })
+
+    it('filters by socket only when no case is selected', async () => {
+      mockResolvedData = [{ product_id: 'cooler-1' }]
+      const result = await getCompatibleProductIds('cpu_cooler', {
+        cpu: makeProduct({ socket: 'LGA1700' }),
+      })
+      expect(result.filtered).toBe(true)
+      expect(mockBuilder.contains).toHaveBeenCalledWith('cpu_sockets', ['LGA1700'])
+      expect(mockBuilder.or).not.toHaveBeenCalled()
+      expect(result.reason).toBe('Socket LGA1700')
+    })
+
+    it('filters by socket and case max cooler height', async () => {
+      mockResolvedData = [{ product_id: 'cooler-2' }]
+      const result = await getCompatibleProductIds('cpu_cooler', {
+        cpu: makeProduct({ socket: 'AM5' }),
+        pc_case: makeProduct({ max_cpu_cooler_height_mm: 165 }),
+      })
+      expect(result.filtered).toBe(true)
+      expect(mockBuilder.contains).toHaveBeenCalledWith('cpu_sockets', ['AM5'])
+      expect(mockBuilder.or).toHaveBeenCalledWith('height_mm.lte.165,height_mm.is.null')
+      expect(result.reason).toContain('165 mm')
+    })
+  })
+
+  describe('psu', () => {
+    it('returns filtered:false when no gpu or cpu tdp', async () => {
+      const result = await getCompatibleProductIds('psu', {})
+      expect(result.filtered).toBe(false)
+    })
+
+    it('calculates min wattage from gpu+cpu TDP with 20% headroom', async () => {
+      mockResolvedData = [{ product_id: 'psu-1' }]
+      const result = await getCompatibleProductIds('psu', {
+        gpu: makeProduct({ tdp: 300 }),
+        cpu: makeProduct({ tdp: 65 }),
+      })
+      expect(result.filtered).toBe(true)
+      expect(mockBuilder.gte).toHaveBeenCalledWith('wattage', 558)
+      expect(result.reason).toContain('558W')
+    })
+
+    it('works with cpu only (no gpu)', async () => {
+      mockResolvedData = []
+      // cpu: 65W → system = 65+0+100 = 165W → min = ceil(165*1.2) = 198W
+      await getCompatibleProductIds('psu', {
+        cpu: makeProduct({ tdp: 65 }),
+      })
+      expect(mockBuilder.gte).toHaveBeenCalledWith('wattage', 198)
     })
   })
 })

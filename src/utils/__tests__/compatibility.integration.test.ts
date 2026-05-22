@@ -46,20 +46,21 @@ beforeEach(() => {
 })
 
 describe('Configurator flow — chained compatibility filters', () => {
-  it('AM5 build: selects mobo → filters CPU and RAM with correct constraints', async () => {
+  it('AM5 build: selects CPU → mobo filtered by socket; once mobo picked → RAM by ram_type', async () => {
+    const cpu = prod({ socket: 'AM5', tdp: 105 })
     const mobo = prod({ socket: 'AM5', ram_type: 'DDR5', form_factor: 'ATX' })
 
     state.queue = [
-      { data: [{ product_id: 'cpu-1' }, { product_id: 'cpu-2' }], error: null },
+      { data: [{ product_id: 'mb-1' }, { product_id: 'mb-2' }], error: null },
       { data: [{ product_id: 'ram-1' }], error: null },
     ]
 
-    const cpuRes = await getCompatibleProductIds('cpu', { motherboard: mobo })
-    const ramRes = await getCompatibleProductIds('ram', { motherboard: mobo })
+    const moboRes = await getCompatibleProductIds('motherboard', { cpu })
+    const ramRes = await getCompatibleProductIds('ram', { cpu, motherboard: mobo })
 
-    expect(cpuRes.productIds).toEqual(['cpu-1', 'cpu-2'])
+    expect(moboRes.productIds).toEqual(['mb-1', 'mb-2'])
     expect(ramRes.productIds).toEqual(['ram-1'])
-    expect(state.callLog[0].table).toBe('cpu_specs')
+    expect(state.callLog[0].table).toBe('motherboard_specs')
     expect(state.callLog[0].ops).toContain('eq(socket=AM5)')
     expect(state.callLog[1].table).toBe('ram_specs')
     expect(state.callLog[1].ops).toContain('eq(ram_type=DDR5)')
@@ -90,22 +91,19 @@ describe('Configurator flow — chained compatibility filters', () => {
     expect(state.callLog[0].ops).toContainEqual('gte(wattage>=864)')
   })
 
-  it('ITX build: mobo filtered by both CPU socket AND case form factor', async () => {
-    const cpu = prod({ socket: 'AM5' })
-    const pcCase = prod({ supported_mobo_form_factors: ['Mini ITX'] })
+  it('ITX build: mobo (Mini ITX) selected → case filtered by form factor', async () => {
+    const mobo = prod({ form_factor: 'Mini ITX', ram_type: 'DDR5' })
 
     state.queue = [{
-      data: [
-        { product_id: 'mb-atx', form_factor: 'ATX' },
-        { product_id: 'mb-itx', form_factor: 'Mini ITX' },
-      ],
+      data: [{ product_id: 'case-itx' }],
       error: null,
     }]
 
-    const res = await getCompatibleProductIds('motherboard', { cpu, pc_case: pcCase })
+    const res = await getCompatibleProductIds('pc_case', { motherboard: mobo })
 
-    expect(res.productIds).toEqual(['mb-itx'])
-    expect(res.reason).toContain('Socket AM5')
+    expect(res.productIds).toEqual(['case-itx'])
+    expect(state.callLog[0].table).toBe('pc_case_specs')
+    expect(state.callLog[0].ops).toContainEqual('contains(supported_mobo_form_factors=["Mini ITX"])')
     expect(res.reason).toContain('Mini ITX')
   })
 
