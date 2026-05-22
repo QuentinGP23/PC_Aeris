@@ -10,8 +10,13 @@ interface ConfigStore {
   config: Partial<Record<CategoryKey, Product>>
   /** Dernière cascade d'invalidation (catégories retirées automatiquement). */
   lastInvalidated: CategoryKey[]
+  /** Id de la config chargée depuis Supabase (null si config locale non sauvegardée). */
+  loadedConfigId: string | null
+  loadedConfigName: string | null
   selectComponent: (category: CategoryKey, product: Product) => void
   removeComponent: (category: CategoryKey) => void
+  loadConfig: (id: string, name: string, products: Partial<Record<CategoryKey, Product>>) => void
+  setLoadedConfigName: (name: string) => void
   clearInvalidated: () => void
   clearConfig: () => void
 }
@@ -21,6 +26,8 @@ export const useConfigStore = create<ConfigStore>()(
     (set) => ({
       config: {},
       lastInvalidated: [],
+      loadedConfigId: null,
+      loadedConfigName: null,
       selectComponent: (category, product) =>
         set((state) => {
           const next: Partial<Record<CategoryKey, Product>> = { ...state.config, [category]: product }
@@ -36,12 +43,19 @@ export const useConfigStore = create<ConfigStore>()(
           for (const cat of invalidated) delete next[cat]
           return { config: next, lastInvalidated: invalidated }
         }),
+      loadConfig: (id, name, products) =>
+        set({ config: products, lastInvalidated: [], loadedConfigId: id, loadedConfigName: name }),
+      setLoadedConfigName: (name) => set({ loadedConfigName: name }),
       clearInvalidated: () => set({ lastInvalidated: [] }),
-      clearConfig: () => set({ config: {}, lastInvalidated: [] }),
+      clearConfig: () => set({ config: {}, lastInvalidated: [], loadedConfigId: null, loadedConfigName: null }),
     }),
     {
       name: 'pc-aeris-config',
-      partialize: (state) => ({ config: state.config }),
+      partialize: (state) => ({
+        config: state.config,
+        loadedConfigId: state.loadedConfigId,
+        loadedConfigName: state.loadedConfigName,
+      }),
     },
   ),
 )
