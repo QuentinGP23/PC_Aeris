@@ -306,6 +306,23 @@
     background: rgba(245, 158, 11, 0.06);
     color: var(--warn);
   }
+
+  &--locked {
+    border-color: rgba(99, 102, 241, 0.25);
+    background: rgba(99, 102, 241, 0.06);
+    color: var(--ind);
+  }
+}
+
+.config-item--locked,
+.config-tab--locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover {
+    background: inherit;
+    border-color: var(--border);
+  }
 }
 
 .config-search {
