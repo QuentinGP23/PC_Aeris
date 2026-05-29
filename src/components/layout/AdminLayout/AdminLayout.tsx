@@ -23,7 +23,10 @@ function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actio
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   // Ferme le drawer à chaque changement de route.
+  // setState dans un effect est ici intentionnel : on synchronise l'UI avec
+  // l'URL qui peut changer hors de notre contrôle (back/forward navigateur).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDrawerOpen(false)
   }, [pathname])
 
