@@ -49,7 +49,7 @@ function Configurator() {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
-  const [compatInfo, setCompatInfo] = useState<{ active: boolean; reason?: string; empty?: boolean }>({ active: false })
+  const [compatInfo, setCompatInfo] = useState<{ active: boolean; reason?: string; empty?: boolean; fallback?: boolean }>({ active: false })
 
   const cpuId = config['cpu']?.id
   const motherboardId = config['motherboard']?.id
@@ -81,15 +81,18 @@ function Configurator() {
       const compat = await getCompatibleProductIds(activeCategory, config)
       if (cancelled) return
 
-      if (compat.filtered && compat.productIds.length === 0) {
-        setProducts([])
-        setTotalCount(0)
-        setCompatInfo({ active: true, reason: compat.reason, empty: true })
-        setLoading(false)
-        return
+      // Si le filtre de compat retourne 0 produit alors qu'on a un filtre actif,
+      // c'est probablement que les données en base sont incomplètes ou que les
+      // règles sont trop strictes. On bascule en mode "fallback" : on affiche
+      // TOUT le catalogue de la catégorie avec un message d'avertissement,
+      // plutôt que de laisser l'utilisateur bloqué sur une liste vide.
+      const fallback = compat.filtered && compat.productIds.length === 0
+      if (fallback) {
+        setCompatInfo({ active: true, reason: compat.reason, fallback: true })
+      } else {
+        setCompatInfo(compat.filtered ? { active: true, reason: compat.reason } : { active: false })
       }
 
-      setCompatInfo(compat.filtered ? { active: true, reason: compat.reason } : { active: false })
       setLoading(true)
 
       let query = supabase
@@ -103,7 +106,9 @@ function Configurator() {
         query = query.ilike('name', `%${search.trim()}%`)
       }
 
-      if (compat.filtered) {
+      // On n'applique le filtre par IDs que si on a réellement des IDs.
+      // En fallback (0 IDs alors que filtered=true), on laisse passer tout.
+      if (compat.filtered && compat.productIds.length > 0) {
         query = query.in('id', compat.productIds)
       }
 
@@ -356,14 +361,14 @@ function Configurator() {
         ) : (
           <>
             {compatInfo.active && (
-              <div className={`compat-info ${compatInfo.empty ? 'compat-info--empty' : ''}`}>
-                {compatInfo.empty
-                  ? <>⚠️ Aucun composant compatible avec {compatInfo.reason}</>
+              <div className={`compat-info ${compatInfo.fallback ? 'compat-info--empty' : ''}`}>
+                {compatInfo.fallback
+                  ? <>⚠️ Aucun produit ne passe le filtre {compatInfo.reason} — affichage du catalogue complet. Vérifie manuellement la compatibilité.</>
                   : <>✓ Filtré pour compatibilité · {compatInfo.reason}</>}
               </div>
             )}
 
-            {!compatInfo.empty && (
+            {!false && (
               <div className="config-search">
                 <span className="config-search__ico">⌕</span>
                 <input
@@ -381,7 +386,7 @@ function Configurator() {
 
             {loading ? (
               <div className="st-load">Chargement...</div>
-            ) : compatInfo.empty ? null : products.length === 0 ? (
+            ) : false ? null : products.length === 0 ? (
               <div className="st-empty">Aucun résultat.</div>
             ) : (
               <div className="prod-grid">
@@ -478,7 +483,7 @@ function Configurator() {
               </div>
             )}
 
-            {totalPages > 1 && !compatInfo.empty && (
+            {totalPages > 1 && !false && (
               <div className="pagination">
                 <button
                   type="button"
