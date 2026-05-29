@@ -470,8 +470,31 @@ function AdminProducts() {
 
       {loading ? (
         <div className="ad-loading">Chargement…</div>
+      ) : error ? (
+        <div className="ad-empty-state">
+          <div style={{ textAlign: 'center', maxWidth: 480 }}>
+            <strong style={{ color: 'var(--text)' }}>Impossible de charger les produits.</strong>
+            <div style={{ marginTop: 8, fontSize: 12, fontFamily: 'var(--fm)', color: 'var(--text-3)' }}>
+              {error}
+            </div>
+            <div style={{ marginTop: 16, fontSize: 12, color: 'var(--text-3)', lineHeight: 1.6 }}>
+              Vérifie que la table <code>products</code> est accessible et que les RLS l'autorisent en lecture pour ton rôle.
+            </div>
+          </div>
+        </div>
+      ) : total === 0 && !search.trim() && category === 'all' ? (
+        <div className="ad-empty-state">
+          <div style={{ textAlign: 'center' }}>
+            <strong style={{ color: 'var(--text)' }}>Catalogue vide.</strong>
+            <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-3)' }}>
+              Importe des produits via les scripts <code>scripts/import-buildcores.mjs</code> ou crée-en depuis ce panneau.
+            </div>
+          </div>
+        </div>
       ) : products.length === 0 ? (
-        <div className="ad-empty-state">Aucun produit trouvé.</div>
+        <div className="ad-empty-state">
+          Aucun produit ne correspond aux filtres actuels.
+        </div>
       ) : (
         <div className="ad-table-wrap">
           <table className="ad-table">
