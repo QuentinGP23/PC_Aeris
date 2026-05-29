@@ -3,7 +3,13 @@ import { getCompatibleProductIds } from '../compatibility'
 import type { Product } from '../../types'
 
 // Chainable mock that resolves with configurable data
-let mockResolvedData: { product_id: string; form_factor?: string; height_mm?: number; length_mm?: number }[] = []
+let mockResolvedData: Array<{
+  product_id: string
+  form_factor?: string
+  height_mm?: number
+  length_mm?: number
+  supported_mobo_form_factors?: string[] | null
+}> = []
 
 const mockBuilder = {
   select: vi.fn().mockReturnThis(),
