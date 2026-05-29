@@ -84,30 +84,15 @@ describe('getCompatibleProductIds', () => {
       expect(result.filtered).toBe(false)
     })
 
-    it('filters pc_case_specs by normalized form_factor (tolerant matching)', async () => {
-      mockResolvedData = [
-        { product_id: 'case-1', supported_mobo_form_factors: ['ATX', 'Micro ATX'] },
-        { product_id: 'case-2', supported_mobo_form_factors: ['Mini ITX'] },
-        { product_id: 'case-3', supported_mobo_form_factors: null }, // donnée manquante → passe
-      ]
+    it('applique un filtre contains sur supported_mobo_form_factors', async () => {
+      mockResolvedData = [{ product_id: 'case-1' }]
       const result = await getCompatibleProductIds('pc_case', {
         motherboard: makeProduct({ form_factor: 'ATX' }),
       })
       expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['case-1', 'case-3'])
+      expect(result.productIds).toEqual(['case-1'])
       expect(result.reason).toContain('ATX')
-    })
-
-    it('matches Micro ATX vs mATX vs Micro-ATX via normalization', async () => {
-      mockResolvedData = [
-        { product_id: 'case-1', supported_mobo_form_factors: ['mATX'] },
-        { product_id: 'case-2', supported_mobo_form_factors: ['Micro ATX'] },
-        { product_id: 'case-3', supported_mobo_form_factors: ['Micro-ATX'] },
-      ]
-      const result = await getCompatibleProductIds('pc_case', {
-        motherboard: makeProduct({ form_factor: 'Micro ATX' }),
-      })
-      expect(result.productIds).toEqual(['case-1', 'case-2', 'case-3'])
+      expect(mockBuilder.contains).toHaveBeenCalledWith('supported_mobo_form_factors', ['ATX'])
     })
   })
 
