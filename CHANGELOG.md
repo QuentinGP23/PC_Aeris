@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.3.0...v2.3.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* **configurator:** verrouille l'ordre de sélection et corrige les imp… ([c8b8273](https://github.com/QuentinGP23/PC_Aeris/commit/c8b8273f84971921b5dadb7901b592c7f8cdbc54))
+* **configurator:** verrouille l'ordre de sélection et corrige les impasses de compatibilité ([25cf7de](https://github.com/QuentinGP23/PC_Aeris/commit/25cf7dedb2f000c928c1043097fb5b873d732f60))
+
 ## [2.3.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.2.0...v2.3.0) (2026-04-22)
 
 
