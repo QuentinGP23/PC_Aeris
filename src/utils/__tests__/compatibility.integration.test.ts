@@ -95,14 +95,11 @@ describe('Configurator flow — chained compatibility filters', () => {
     expect(state.callLog[0].ops).toContainEqual('gte(wattage>=864)')
   })
 
-  it('ITX build: mobo (Mini ITX) selected → case filtered en JS avec normalisation', async () => {
-    const mobo = prod({ form_factor: 'Mini ITX', ram_type: 'DDR5' })
+  it('ITX build: appelle contains(supported_mobo_form_factors, [form_factor mobo])', async () => {
+    const mobo = prod({ form_factor: 'Mini-ITX', ram_type: 'DDR5' })
 
     state.queue = [{
-      data: [
-        { product_id: 'case-itx', supported_mobo_form_factors: ['Mini-ITX'] }, // notation différente, doit matcher
-        { product_id: 'case-atx', supported_mobo_form_factors: ['ATX'] },
-      ],
+      data: [{ product_id: 'case-itx' }],
       error: null,
     }]
 
@@ -110,7 +107,8 @@ describe('Configurator flow — chained compatibility filters', () => {
 
     expect(res.productIds).toEqual(['case-itx'])
     expect(state.callLog[0].table).toBe('pc_case_specs')
-    expect(res.reason).toContain('Mini ITX')
+    expect(state.callLog[0].ops).toContainEqual('contains(supported_mobo_form_factors=["Mini-ITX"])')
+    expect(res.reason).toContain('Mini-ITX')
   })
 
   it('SATA-only mobo: storage exclut NVMe mais accepte nvme=null', async () => {

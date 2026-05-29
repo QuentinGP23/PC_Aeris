@@ -6,7 +6,7 @@ import { useAuth } from '../../context/useAuth'
 import { CATEGORIES } from '../../types'
 import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
-import { getCompatibleProductIds, missingPrereqs, nextPendingCategory, SELECTION_ORDER } from '../../utils'
+import { buildCompatibilityFilter, missingPrereqs, nextPendingCategory, SELECTION_ORDER } from '../../utils'
 import { savedConfigsService } from '../../services'
 import SavedConfigsModal from './components/SavedConfigsModal'
 import './Configurator.scss'
@@ -78,26 +78,21 @@ function Configurator() {
     const to = from + PAGE_SIZE - 1
 
     async function run() {
-      const compat = await getCompatibleProductIds(activeCategory, config)
-      if (cancelled) return
-
-      // Si le filtre de compat retourne 0 produit alors qu'on a un filtre actif,
-      // c'est probablement que les données en base sont incomplètes ou que les
-      // règles sont trop strictes. On bascule en mode "fallback" : on affiche
-      // TOUT le catalogue de la catégorie avec un message d'avertissement,
-      // plutôt que de laisser l'utilisateur bloqué sur une liste vide.
-      const fallback = compat.filtered && compat.productIds.length === 0
-      if (fallback) {
-        setCompatInfo({ active: true, reason: compat.reason, fallback: true })
-      } else {
-        setCompatInfo(compat.filtered ? { active: true, reason: compat.reason } : { active: false })
-      }
-
+      const compat = buildCompatibilityFilter(activeCategory, config)
+      setCompatInfo(compat ? { active: true, reason: compat.reason } : { active: false })
       setLoading(true)
+
+      // On joint la table des specs en inner pour pouvoir filtrer côté SQL
+      // (nécessaire dès qu'on a un filtre, sinon on plantait sur des URLs
+      // de >100KB en passant 3000+ UUIDs dans `.in('id', [...])`).
+      // Sans filtre, on joint quand même (left) pour récupérer les specs.
+      const specsTable = compat?.specsTable ?? categoryDef.specsTable
+      const specsRel = compat ? `${specsTable}!inner(*)` : `${specsTable}(*)`
+      const baseSelect = 'id, name, manufacturer, series, variant, release_year, category, image_url, description, price_min_eur, price_max_eur, price_avg_eur, price_updated_at, retailer_url, benchmark_score'
 
       let query = supabase
         .from('products')
-        .select('id, name, manufacturer, series, variant, release_year, category, image_url, description, price_min_eur, price_max_eur, price_avg_eur, price_updated_at, retailer_url, benchmark_score', { count: 'exact' })
+        .select(`${baseSelect}, ${specsRel}`, { count: 'exact' })
         .eq('category', activeCategory)
         .order('name')
         .range(from, to)
@@ -106,14 +101,57 @@ function Configurator() {
         query = query.ilike('name', `%${search.trim()}%`)
       }
 
-      // On n'applique le filtre par IDs que si on a réellement des IDs.
-      // En fallback (0 IDs alors que filtered=true), on laisse passer tout.
-      if (compat.filtered && compat.productIds.length > 0) {
-        query = query.in('id', compat.productIds)
+      // Application des opérations de filtre sur la table embarquée.
+      // PostgREST autorise le préfixe `table.column` côté Supabase JS pour
+      // les filtres directs ; pour `.or()` on passe `referencedTable`.
+      if (compat) {
+        for (const op of compat.ops) {
+          if (op.kind === 'eq') {
+            query = query.eq(`${specsTable}.${op.column}`, op.value)
+          } else if (op.kind === 'contains') {
+            query = query.contains(`${specsTable}.${op.column}`, op.value)
+          } else if (op.kind === 'gte') {
+            query = query.gte(`${specsTable}.${op.column}`, op.value)
+          } else if (op.kind === 'or') {
+            query = query.or(op.condition, { referencedTable: specsTable })
+          }
+        }
       }
 
-      const { data: productsData, error, count } = await query
+      type ProductRow = Product & { [key: string]: unknown }
+      const { data: productsData, error, count } = (await query) as {
+        data: ProductRow[] | null
+        error: unknown
+        count: number | null
+      }
+
       if (cancelled) return
+
+      // Fallback : si on a un filtre actif et que le résultat est vide, on
+      // refait la requête sans le filtre pour ne pas laisser l'utilisateur
+      // bloqué (données incomplètes côté base, format inattendu, etc.).
+      if (compat && (error || !productsData || productsData.length === 0)) {
+        const fallbackRel = `${specsTable}(*)`
+        let fallbackQuery = supabase
+          .from('products')
+          .select(`${baseSelect}, ${fallbackRel}`, { count: 'exact' })
+          .eq('category', activeCategory)
+          .order('name')
+          .range(from, to)
+        if (search.trim()) {
+          fallbackQuery = fallbackQuery.ilike('name', `%${search.trim()}%`)
+        }
+        const { data: fbData, count: fbCount } = (await fallbackQuery) as {
+          data: ProductRow[] | null
+          count: number | null
+        }
+        if (cancelled) return
+        setCompatInfo({ active: true, reason: compat.reason, fallback: true })
+        setTotalCount(fbCount ?? 0)
+        setProducts(extractProducts(fbData, specsTable))
+        setLoading(false)
+        return
+      }
 
       if (error || !productsData) {
         setProducts([])
@@ -122,33 +160,25 @@ function Configurator() {
       }
 
       setTotalCount(count ?? 0)
+      setProducts(extractProducts(productsData, specsTable))
+      setLoading(false)
+    }
 
-      const productIds = productsData.map((p) => p.id)
-      const specsMap = new Map<string, Record<string, unknown>>()
-
-      if (productIds.length > 0) {
-        const { data: specsData } = await supabase
-          .from(categoryDef.specsTable)
-          .select('*')
-          .in('product_id', productIds)
-
-        if (specsData && !cancelled) {
-          for (const s of specsData) {
-            const row = s as Record<string, unknown>
-            specsMap.set(row.product_id as string, row)
-          }
+    function extractProducts(rows: Array<Record<string, unknown>> | null, specsTable: string): Product[] {
+      if (!rows) return []
+      return rows.map((row) => {
+        const specsValue = row[specsTable]
+        let specs: Record<string, unknown> | null = null
+        if (Array.isArray(specsValue) && specsValue.length > 0) {
+          specs = specsValue[0] as Record<string, unknown>
+        } else if (specsValue && typeof specsValue === 'object') {
+          specs = specsValue as Record<string, unknown>
         }
-      }
-
-      if (!cancelled) {
-        setProducts(
-          productsData.map((p) => ({
-            ...p,
-            specs: specsMap.get(p.id) || null,
-          })),
-        )
-        setLoading(false)
-      }
+        // Retire la clé jointe et fusionne les specs dans le produit final.
+        const { [specsTable]: _omit, ...rest } = row
+        void _omit
+        return { ...(rest as unknown as Product), specs }
+      })
     }
 
     void run()
@@ -368,8 +398,7 @@ function Configurator() {
               </div>
             )}
 
-            {!false && (
-              <div className="config-search">
+            <div className="config-search">
                 <span className="config-search__ico">⌕</span>
                 <input
                   type="text"
@@ -382,11 +411,10 @@ function Configurator() {
                   <span className="config-search__cnt">{totalCount} résultats</span>
                 )}
               </div>
-            )}
 
             {loading ? (
               <div className="st-load">Chargement...</div>
-            ) : false ? null : products.length === 0 ? (
+            ) : products.length === 0 ? (
               <div className="st-empty">Aucun résultat.</div>
             ) : (
               <div className="prod-grid">
@@ -483,7 +511,7 @@ function Configurator() {
               </div>
             )}
 
-            {totalPages > 1 && !false && (
+            {totalPages > 1 && (
               <div className="pagination">
                 <button
                   type="button"
