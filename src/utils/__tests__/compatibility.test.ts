@@ -3,7 +3,13 @@ import { getCompatibleProductIds } from '../compatibility'
 import type { Product } from '../../types'
 
 // Chainable mock that resolves with configurable data
-let mockResolvedData: { product_id: string; form_factor?: string; height_mm?: number; length_mm?: number }[] = []
+let mockResolvedData: Array<{
+  product_id: string
+  form_factor?: string
+  height_mm?: number
+  length_mm?: number
+  supported_mobo_form_factors?: string[] | null
+}> = []
 
 const mockBuilder = {
   select: vi.fn().mockReturnThis(),
@@ -78,14 +84,30 @@ describe('getCompatibleProductIds', () => {
       expect(result.filtered).toBe(false)
     })
 
-    it('queries pc_case_specs by form_factor containment', async () => {
-      mockResolvedData = [{ product_id: 'case-1' }]
+    it('filters pc_case_specs by normalized form_factor (tolerant matching)', async () => {
+      mockResolvedData = [
+        { product_id: 'case-1', supported_mobo_form_factors: ['ATX', 'Micro ATX'] },
+        { product_id: 'case-2', supported_mobo_form_factors: ['Mini ITX'] },
+        { product_id: 'case-3', supported_mobo_form_factors: null }, // donnée manquante → passe
+      ]
       const result = await getCompatibleProductIds('pc_case', {
         motherboard: makeProduct({ form_factor: 'ATX' }),
       })
       expect(result.filtered).toBe(true)
-      expect(result.productIds).toEqual(['case-1'])
-      expect(mockBuilder.contains).toHaveBeenCalledWith('supported_mobo_form_factors', ['ATX'])
+      expect(result.productIds).toEqual(['case-1', 'case-3'])
+      expect(result.reason).toContain('ATX')
+    })
+
+    it('matches Micro ATX vs mATX vs Micro-ATX via normalization', async () => {
+      mockResolvedData = [
+        { product_id: 'case-1', supported_mobo_form_factors: ['mATX'] },
+        { product_id: 'case-2', supported_mobo_form_factors: ['Micro ATX'] },
+        { product_id: 'case-3', supported_mobo_form_factors: ['Micro-ATX'] },
+      ]
+      const result = await getCompatibleProductIds('pc_case', {
+        motherboard: makeProduct({ form_factor: 'Micro ATX' }),
+      })
+      expect(result.productIds).toEqual(['case-1', 'case-2', 'case-3'])
     })
   })
 
@@ -131,30 +153,45 @@ describe('getCompatibleProductIds', () => {
       expect(result.filtered).toBe(false)
     })
 
-    it('returns filtered:false when motherboard has both M.2 and SATA', async () => {
+    it('returns filtered:false when motherboard has both M.2 and SATA (numbers)', async () => {
       const result = await getCompatibleProductIds('storage', {
         motherboard: makeProduct({ m2_slots: 2, sata_6gbs: 4 }),
       })
       expect(result.filtered).toBe(false)
     })
 
-    it('excludes NVMe when motherboard has no M.2 slot', async () => {
+    it('returns filtered:false when m2_slots est un objet JSONB non-vide (BuildCores) — info présente', async () => {
+      // Cas réel : m2_slots = { count: 2, types: [...] } stocké en JSONB.
+      const result = await getCompatibleProductIds('storage', {
+        motherboard: makeProduct({ m2_slots: { count: 2, types: ['PCIe 4.0'] }, sata_6gbs: 4 }),
+      })
+      expect(result.filtered).toBe(false)
+    })
+
+    it('returns filtered:false when slots info is unknown (does not over-filter)', async () => {
+      const result = await getCompatibleProductIds('storage', {
+        motherboard: makeProduct({ m2_slots: null, sata_6gbs: 4 }),
+      })
+      expect(result.filtered).toBe(false)
+    })
+
+    it('excludes NVMe when m2 absent and SATA present (mais accepte nvme=null)', async () => {
       mockResolvedData = [{ product_id: 'sata-1' }]
       const result = await getCompatibleProductIds('storage', {
         motherboard: makeProduct({ m2_slots: 0, sata_6gbs: 4 }),
       })
       expect(result.filtered).toBe(true)
-      expect(mockBuilder.eq).toHaveBeenCalledWith('nvme', false)
+      expect(mockBuilder.or).toHaveBeenCalledWith('nvme.eq.false,nvme.is.null')
       expect(result.reason).toContain('SATA')
     })
 
-    it('excludes SATA when motherboard has no SATA ports', async () => {
+    it('excludes SATA when sata absent and M.2 present (mais accepte nvme=null)', async () => {
       mockResolvedData = [{ product_id: 'nvme-1' }]
       const result = await getCompatibleProductIds('storage', {
         motherboard: makeProduct({ m2_slots: 2, sata_6gbs: 0 }),
       })
       expect(result.filtered).toBe(true)
-      expect(mockBuilder.eq).toHaveBeenCalledWith('nvme', true)
+      expect(mockBuilder.or).toHaveBeenCalledWith('nvme.eq.true,nvme.is.null')
       expect(result.reason).toContain('NVMe')
     })
   })

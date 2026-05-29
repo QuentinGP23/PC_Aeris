@@ -2,7 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { getCompatibleProductIds } from '../compatibility'
 import type { Product } from '../../types'
 
-type FromResponse = { data: { product_id: string; form_factor?: string }[] | null; error: null }
+type FromResponse = {
+  data: { product_id: string; form_factor?: string; supported_mobo_form_factors?: string[] | null }[] | null
+  error: null
+}
 
 const { state, makeBuilder } = vi.hoisted(() => {
   const state = {
@@ -17,6 +20,7 @@ const { state, makeBuilder } = vi.hoisted(() => {
       eq: vi.fn((c: string, v: unknown) => { entry.ops.push(`eq(${c}=${String(v)})`); return builder }),
       contains: vi.fn((c: string, v: unknown) => { entry.ops.push(`contains(${c}=${JSON.stringify(v)})`); return builder }),
       gte: vi.fn((c: string, v: unknown) => { entry.ops.push(`gte(${c}>=${String(v)})`); return builder }),
+      or: vi.fn((s: string) => { entry.ops.push(`or(${s})`); return builder }),
       then(resolve: (r: FromResponse) => void) {
         const r = state.queue.shift() ?? { data: [], error: null }
         return Promise.resolve(r).then(resolve)
@@ -91,11 +95,14 @@ describe('Configurator flow — chained compatibility filters', () => {
     expect(state.callLog[0].ops).toContainEqual('gte(wattage>=864)')
   })
 
-  it('ITX build: mobo (Mini ITX) selected → case filtered by form factor', async () => {
+  it('ITX build: mobo (Mini ITX) selected → case filtered en JS avec normalisation', async () => {
     const mobo = prod({ form_factor: 'Mini ITX', ram_type: 'DDR5' })
 
     state.queue = [{
-      data: [{ product_id: 'case-itx' }],
+      data: [
+        { product_id: 'case-itx', supported_mobo_form_factors: ['Mini-ITX'] }, // notation différente, doit matcher
+        { product_id: 'case-atx', supported_mobo_form_factors: ['ATX'] },
+      ],
       error: null,
     }]
 
@@ -103,17 +110,16 @@ describe('Configurator flow — chained compatibility filters', () => {
 
     expect(res.productIds).toEqual(['case-itx'])
     expect(state.callLog[0].table).toBe('pc_case_specs')
-    expect(state.callLog[0].ops).toContainEqual('contains(supported_mobo_form_factors=["Mini ITX"])')
     expect(res.reason).toContain('Mini ITX')
   })
 
-  it('SATA-only mobo: storage excludes NVMe', async () => {
+  it('SATA-only mobo: storage exclut NVMe mais accepte nvme=null', async () => {
     const mobo = prod({ m2_slots: 0, sata_6gbs: 4 })
     state.queue = [{ data: [{ product_id: 'sata-ssd' }, { product_id: 'hdd' }], error: null }]
 
     const res = await getCompatibleProductIds('storage', { motherboard: mobo })
 
     expect(res.filtered).toBe(true)
-    expect(state.callLog[0].ops).toContain('eq(nvme=false)')
+    expect(state.callLog[0].ops).toContain('or(nvme.eq.false,nvme.is.null)')
   })
 })
