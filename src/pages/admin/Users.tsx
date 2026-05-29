@@ -94,28 +94,28 @@ function AdminUsers() {
   return (
     <div className="admin-users">
       {error && (
-        <div className="ad-alert-err">
+        <div className="adm-alert-err">
           <span>{error}</span>
           <button onClick={() => setError(null)} aria-label="Fermer">×</button>
         </div>
       )}
 
-      <div className="ad-toolbar">
+      <div className="adm-toolbar">
         <input
-          className="ad-input"
+          className="adm-input"
           type="search"
           placeholder="Rechercher un utilisateur…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{ minWidth: 280 }}
         />
-        <span className="ad-count">{filtered.length} utilisateur{filtered.length !== 1 ? 's' : ''}</span>
+        <span className="adm-count">{filtered.length} utilisateur{filtered.length !== 1 ? 's' : ''}</span>
       </div>
 
       {loading ? (
-        <div className="ad-loading">Chargement…</div>
+        <div className="adm-loading">Chargement…</div>
       ) : error ? (
-        <div className="ad-empty-state">
+        <div className="adm-empty-state">
           <div style={{ textAlign: 'center', maxWidth: 480 }}>
             <strong style={{ color: 'var(--text)' }}>Impossible de charger la liste des utilisateurs.</strong>
             <div style={{ marginTop: 8, fontSize: 12, fontFamily: 'var(--fm)', color: 'var(--text-3)' }}>
@@ -127,7 +127,7 @@ function AdminUsers() {
           </div>
         </div>
       ) : users.length === 0 ? (
-        <div className="ad-empty-state">
+        <div className="adm-empty-state">
           <div style={{ textAlign: 'center' }}>
             <strong style={{ color: 'var(--text)' }}>Aucun utilisateur en base.</strong>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-3)' }}>
@@ -136,10 +136,10 @@ function AdminUsers() {
           </div>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="ad-empty-state">Aucun utilisateur ne correspond à « {search} ».</div>
+        <div className="adm-empty-state">Aucun utilisateur ne correspond à « {search} ».</div>
       ) : (
-        <div className="ad-table-wrap">
-          <table className="ad-table">
+        <div className="adm-table-wrap">
+          <table className="adm-table">
             <thead>
               <tr>
                 <th>Utilisateur</th>
@@ -156,31 +156,31 @@ function AdminUsers() {
                 <tr key={u.id}>
                   <td>
                     <div className="admin-users__cell">
-                      <div className="ad-avatar">{initialFromName(u.pseudo || u.email)}</div>
+                      <div className="adm-avatar">{initialFromName(u.pseudo || u.email)}</div>
                       <span className="td-main">{u.email}</span>
-                      {u.id === currentUser?.id && <span className="ad-badge ad-badge--me">Moi</span>}
+                      {u.id === currentUser?.id && <span className="adm-badge adm-badge--me">Moi</span>}
                     </div>
                   </td>
-                  <td>{u.pseudo || <span className="ad-empty-cell">—</span>}</td>
+                  <td>{u.pseudo || <span className="adm-empty-cell">—</span>}</td>
                   <td>
                     {u.first_name || u.last_name
                       ? `${u.first_name ?? ''} ${u.last_name ?? ''}`.trim()
-                      : <span className="ad-empty-cell">—</span>}
+                      : <span className="adm-empty-cell">—</span>}
                   </td>
-                  <td className="td-mono">{u.phone_number || <span className="ad-empty-cell">—</span>}</td>
+                  <td className="td-mono">{u.phone_number || <span className="adm-empty-cell">—</span>}</td>
                   <td>
-                    <span className={`ad-badge ${u.role === 'admin' ? 'ad-badge--admin' : 'ad-badge--user'}`}>
+                    <span className={`adm-badge ${u.role === 'admin' ? 'adm-badge--admin' : 'adm-badge--user'}`}>
                       {u.role === 'admin' ? 'Admin' : 'User'}
                     </span>
                   </td>
                   <td className="td-mono">{new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
                   <td>
                     <div className="admin-users__actions">
-                      <button className="ad-btn ad-btn--ghost ad-btn--sm" onClick={() => openEdit(u)}>
+                      <button className="adm-btn adm-btn--ghost adm-btn--sm" onClick={() => openEdit(u)}>
                         Modifier
                       </button>
                       <button
-                        className="ad-btn ad-btn--danger ad-btn--sm"
+                        className="adm-btn adm-btn--danger adm-btn--sm"
                         onClick={() => setDeletingUser(u)}
                         disabled={u.id === currentUser?.id}
                       >
@@ -197,56 +197,56 @@ function AdminUsers() {
 
       {/* Edit modal */}
       {editingUser && (
-        <div className="ad-modal-overlay" onClick={() => setEditingUser(null)}>
-          <div className="ad-modal ad-modal--md" onClick={(e) => e.stopPropagation()}>
-            <div className="ad-modal__hd">
-              <div className="ad-modal__title">Modifier l'utilisateur</div>
-              <button className="ad-modal__close" onClick={() => setEditingUser(null)} aria-label="Fermer">×</button>
+        <div className="adm-modal-overlay" onClick={() => setEditingUser(null)}>
+          <div className="adm-modal adm-modal--md" onClick={(e) => e.stopPropagation()}>
+            <div className="adm-modal__hd">
+              <div className="adm-modal__title">Modifier l'utilisateur</div>
+              <button className="adm-modal__close" onClick={() => setEditingUser(null)} aria-label="Fermer">×</button>
             </div>
-            <div className="ad-modal__body">
-              {editError && <div className="ad-alert-err">{editError}</div>}
+            <div className="adm-modal__body">
+              {editError && <div className="adm-alert-err">{editError}</div>}
               <p className="admin-users__modal-email">{editingUser.email}</p>
 
-              <div className="ad-form">
-                <div className="ad-fg">
-                  <label className="ad-fg__l">Pseudo</label>
+              <div className="adm-form">
+                <div className="adm-fg">
+                  <label className="adm-fg__l">Pseudo</label>
                   <input
-                    className="ad-fg__in"
+                    className="adm-fg__in"
                     value={editForm.pseudo}
                     onChange={(e) => setEditForm({ ...editForm, pseudo: e.target.value })}
                   />
                 </div>
-                <div className="ad-row ad-row--2">
-                  <div className="ad-fg">
-                    <label className="ad-fg__l">Prénom</label>
+                <div className="adm-row adm-row--2">
+                  <div className="adm-fg">
+                    <label className="adm-fg__l">Prénom</label>
                     <input
-                      className="ad-fg__in"
+                      className="adm-fg__in"
                       value={editForm.first_name}
                       onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
                     />
                   </div>
-                  <div className="ad-fg">
-                    <label className="ad-fg__l">Nom</label>
+                  <div className="adm-fg">
+                    <label className="adm-fg__l">Nom</label>
                     <input
-                      className="ad-fg__in"
+                      className="adm-fg__in"
                       value={editForm.last_name}
                       onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
                     />
                   </div>
                 </div>
-                <div className="ad-fg">
-                  <label className="ad-fg__l">Téléphone</label>
+                <div className="adm-fg">
+                  <label className="adm-fg__l">Téléphone</label>
                   <input
-                    className="ad-fg__in"
+                    className="adm-fg__in"
                     type="tel"
                     value={editForm.phone_number}
                     onChange={(e) => setEditForm({ ...editForm, phone_number: e.target.value })}
                   />
                 </div>
-                <div className="ad-fg">
-                  <label className="ad-fg__l">Rôle</label>
+                <div className="adm-fg">
+                  <label className="adm-fg__l">Rôle</label>
                   <select
-                    className="ad-fg__sel"
+                    className="adm-fg__sel"
                     value={editForm.role}
                     onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
                   >
@@ -257,9 +257,9 @@ function AdminUsers() {
                 </div>
               </div>
             </div>
-            <div className="ad-modal__ft">
-              <button className="ad-btn ad-btn--ghost" onClick={() => setEditingUser(null)}>Annuler</button>
-              <button className="ad-btn ad-btn--ind" onClick={handleEdit} disabled={editLoading}>
+            <div className="adm-modal__ft">
+              <button className="adm-btn adm-btn--ghost" onClick={() => setEditingUser(null)}>Annuler</button>
+              <button className="adm-btn adm-btn--ind" onClick={handleEdit} disabled={editLoading}>
                 {editLoading ? 'Enregistrement…' : 'Enregistrer'}
               </button>
             </div>
@@ -269,21 +269,21 @@ function AdminUsers() {
 
       {/* Delete modal */}
       {deletingUser && (
-        <div className="ad-modal-overlay" onClick={() => setDeletingUser(null)}>
-          <div className="ad-modal ad-modal--sm" onClick={(e) => e.stopPropagation()}>
-            <div className="ad-modal__hd">
-              <div className="ad-modal__title">Supprimer l'utilisateur</div>
-              <button className="ad-modal__close" onClick={() => setDeletingUser(null)} aria-label="Fermer">×</button>
+        <div className="adm-modal-overlay" onClick={() => setDeletingUser(null)}>
+          <div className="adm-modal adm-modal--sm" onClick={(e) => e.stopPropagation()}>
+            <div className="adm-modal__hd">
+              <div className="adm-modal__title">Supprimer l'utilisateur</div>
+              <button className="adm-modal__close" onClick={() => setDeletingUser(null)} aria-label="Fermer">×</button>
             </div>
-            <div className="ad-modal__body">
-              <p className="ad-warn-text">
+            <div className="adm-modal__body">
+              <p className="adm-warn-text">
                 Es-tu sûr de vouloir supprimer <strong style={{ color: 'var(--text)' }}>{deletingUser.pseudo || deletingUser.email}</strong> ?
               </p>
-              <p className="ad-warn-danger">Cette action est irréversible.</p>
+              <p className="adm-warn-danger">Cette action est irréversible.</p>
             </div>
-            <div className="ad-modal__ft">
-              <button className="ad-btn ad-btn--ghost" onClick={() => setDeletingUser(null)}>Annuler</button>
-              <button className="ad-btn ad-btn--danger" onClick={handleDelete} disabled={deleteLoading}>
+            <div className="adm-modal__ft">
+              <button className="adm-btn adm-btn--ghost" onClick={() => setDeletingUser(null)}>Annuler</button>
+              <button className="adm-btn adm-btn--danger" onClick={handleDelete} disabled={deleteLoading}>
                 {deleteLoading ? 'Suppression…' : 'Supprimer'}
               </button>
             </div>
