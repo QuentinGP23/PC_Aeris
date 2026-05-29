@@ -114,8 +114,29 @@ function AdminUsers() {
 
       {loading ? (
         <div className="ad-loading">Chargement…</div>
+      ) : error ? (
+        <div className="ad-empty-state">
+          <div style={{ textAlign: 'center', maxWidth: 480 }}>
+            <strong style={{ color: 'var(--text)' }}>Impossible de charger la liste des utilisateurs.</strong>
+            <div style={{ marginTop: 8, fontSize: 12, fontFamily: 'var(--fm)', color: 'var(--text-3)' }}>
+              {error}
+            </div>
+            <div style={{ marginTop: 16, fontSize: 12, color: 'var(--text-3)', lineHeight: 1.6 }}>
+              Vérifie que tu es connecté en tant qu'administrateur et que la fonction RPC <code>admin_list_users</code> est bien déployée côté Supabase.
+            </div>
+          </div>
+        </div>
+      ) : users.length === 0 ? (
+        <div className="ad-empty-state">
+          <div style={{ textAlign: 'center' }}>
+            <strong style={{ color: 'var(--text)' }}>Aucun utilisateur en base.</strong>
+            <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-3)' }}>
+              La table profiles est vide ou la RPC ne retourne rien.
+            </div>
+          </div>
+        </div>
       ) : filtered.length === 0 ? (
-        <div className="ad-empty-state">Aucun utilisateur trouvé.</div>
+        <div className="ad-empty-state">Aucun utilisateur ne correspond à « {search} ».</div>
       ) : (
         <div className="ad-table-wrap">
           <table className="ad-table">
