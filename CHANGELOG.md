@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.4.2](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.1...v2.4.2) (2026-05-29)
+
+
+### Bug Fixes
+
+* **compatibility:** boîtier et stockage ne disparaissent plus à tort ([60cd538](https://github.com/QuentinGP23/PC_Aeris/commit/60cd5387d6a7edcf8282c36b2286c6adc9caa2a8))
+* **compatibility:** boîtier et stockage ne disparaissent plus à tort ([fb87306](https://github.com/QuentinGP23/PC_Aeris/commit/fb87306145c747585ef0cb38659a0ce17991b323))
+* **test:** élargir le type mock pour inclure supported_mobo_form_factors ([b1ef6b9](https://github.com/QuentinGP23/PC_Aeris/commit/b1ef6b96ff2a293db753bfbc2982d4379d1c2e59))
+
 ## [2.4.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.0...v2.4.1) (2026-05-29)
 
 
