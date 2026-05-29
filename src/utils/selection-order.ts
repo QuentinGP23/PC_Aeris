@@ -47,27 +47,36 @@ export const SELECTION_ORDER: CategoryKey[] = [
 ]
 
 /**
- * Pré-requis stricts : pour pouvoir sélectionner X, ces catégories doivent
- * déjà être renseignées (faute de quoi les règles de compatibilité ne peuvent
- * pas s'appliquer correctement).
+ * Pré-requis stricts en cascade : pour sélectionner la catégorie X, TOUTES
+ * les catégories qui la précèdent dans SELECTION_ORDER doivent être renseignées.
+ * C'est un ordre fixe imposé — l'utilisateur ne peut pas sauter une étape.
+ *
+ * Conservé en plus de `missingPrereqs` pour la rétrocompatibilité avec les
+ * tests existants qui inspectent la structure des pré-requis directs.
  */
 export const PREREQS: Record<CategoryKey, CategoryKey[]> = {
   cpu: [],
   motherboard: ['cpu'],
-  pc_case: ['motherboard'],
-  ram: ['motherboard'],
-  storage: ['motherboard'],
-  gpu: [],
-  cpu_cooler: ['cpu'],
-  psu: ['cpu'],
+  pc_case: ['cpu', 'motherboard'],
+  ram: ['cpu', 'motherboard', 'pc_case'],
+  gpu: ['cpu', 'motherboard', 'pc_case', 'ram'],
+  storage: ['cpu', 'motherboard', 'pc_case', 'ram', 'gpu'],
+  cpu_cooler: ['cpu', 'motherboard', 'pc_case', 'ram', 'gpu', 'storage'],
+  psu: ['cpu', 'motherboard', 'pc_case', 'ram', 'gpu', 'storage', 'cpu_cooler'],
 }
 
-/** Pré-requis manquants pour une catégorie donnée. */
+/**
+ * Pré-requis manquants pour une catégorie donnée — tout ce qui précède dans
+ * SELECTION_ORDER et qui n'est pas encore sélectionné. L'ordre est strict :
+ * pour entrer dans la catégorie N, il faut avoir validé 0..N-1.
+ */
 export function missingPrereqs(
   category: CategoryKey,
   config: Partial<Record<CategoryKey, Product>>,
 ): CategoryKey[] {
-  return PREREQS[category].filter((p) => !config[p])
+  const idx = SELECTION_ORDER.indexOf(category)
+  if (idx <= 0) return []
+  return SELECTION_ORDER.slice(0, idx).filter((c) => !config[c])
 }
 
 /** Toutes les pré-conditions sont-elles satisfaites ? */

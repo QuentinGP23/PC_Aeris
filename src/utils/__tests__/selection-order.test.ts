@@ -80,8 +80,10 @@ describe('missingPrereqs / prereqsMet', () => {
     expect(prereqsMet('motherboard', config)).toBe(true)
   })
 
-  it('returns missing prereqs', () => {
-    expect(missingPrereqs('ram', {})).toEqual(['motherboard'])
+  it('returns all upstream missing categories in strict order', () => {
+    // ram est à l'index 3 ; tout ce qui précède (cpu, motherboard, pc_case)
+    // doit être renseigné, sinon les pré-requis manquants sont retournés.
+    expect(missingPrereqs('ram', {})).toEqual(['cpu', 'motherboard', 'pc_case'])
     expect(prereqsMet('ram', {})).toBe(false)
   })
 })
