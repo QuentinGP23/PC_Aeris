@@ -1,8 +1,36 @@
 # Périmètre MVP — PC Aeris
 
-> **Dernière mise à jour :** 27 mars 2026
-> **Target MVP :** Sprint 4 — fin semaine ~8
+> **Dernière mise à jour :** 29 mai 2026
+> **Cible MVP initiale :** Sprint 4 (fin mai 2026)
+> **Cible MVP révisée :** fin Sprint 5 (juin 2026) — décalée en raison du bloqueur prix (credentials API non obtenus)
 > **Objectif :** Avoir un produit utilisable et démontrable pour valider les hypothèses commerciales et satisfaire les exigences du projet M2
+
+---
+
+## État du MVP au 29 mai 2026
+
+**Acquis (Sprints 1 à 4 + travaux mai 2026)** :
+- ✅ Authentification complète (signup/signin email + pseudo / forgot / reset / déconnexion) — bug pseudo corrigé S2
+- ✅ Configurateur PC fonctionnel avec compatibilité complète sur les 8 catégories (CPU/MOBO/RAM/GPU/Stockage/PSU/Boîtier/Ventirad)
+- ✅ Ordre verrouillé du configurateur (zéro impasse) — mai 2026
+- ✅ Configurations sauvegardées (US-040 à 044) — avancées du V1 vers le MVP, livrées mai 2026
+- ✅ Interface admin CRUD produits + édition prix
+- ✅ Toast notifications globales
+- ✅ Page 404 personnalisée
+- ✅ Page profil utilisateur (modification infos)
+- ✅ Identité visuelle Aeris Dark (RGAA AA)
+- ✅ 67 tests (unitaires + intégration) — couverture critique
+
+**Reste à faire pour MVP complet (Sprint 5)** :
+- ☐ Affichage prix UI dans catalogue/configurateur (US-010, 028, 039) — bloqué par credentials API
+- ☐ Responsive mobile pages principales (US-006)
+- ☐ Tarifs d'assemblage sur la home (US-004)
+- ☐ Remember me (US-016)
+- ☐ Modification pseudo + mot de passe depuis profil (US-063, 064)
+- ☐ Recherche utilisateurs admin (US-074)
+- ☐ Images composants dans la liste (US-030)
+
+**Bloqueur principal** : la **tuyauterie multi-sources des prix** (Amazon Partenaires, Rakuten Affiliés, Cdiscount, eBay) est scaffoldée côté code mais les credentials API n'ont pas pu être obtenus. L'UI prix sera implémentée en Sprint 5 et affichera des valeurs dès que les credentials seront branchés.
 
 ---
 
@@ -45,9 +73,12 @@ Ce MVP exclut volontairement le tunnel de commande et le paiement : la valeur pr
 
 ### Prix des produits visibles
 **Pourquoi :** Sans prix, le configurateur n'a pas de valeur commerciale réelle. L'utilisateur ne peut pas savoir combien lui coûterait sa configuration. C'est un élément bloquant pour la validation du concept commercial.
-- Champ prix en base de données
-- Prix visible sur chaque composant dans le configurateur
-- Prix total calculé dans le récapitulatif
+- ✅ Champ prix en base de données (colonnes `price_min_eur`, `price_max_eur`, `price_avg_eur`, `price_new_eur`)
+- ✅ Édition manuelle du prix côté admin (Sprint 4)
+- ☐ Affichage prix sur chaque composant dans le configurateur (Sprint 5, UI prête, données dépendantes des credentials API)
+- ☐ Prix total calculé dans le récapitulatif (Sprint 5)
+
+> **Statut réel** : aucune donnée prix en base — la tuyauterie multi-sources est scaffoldée mais les credentials API (Amazon Partenaires, Rakuten Affiliés, Cdiscount, eBay) n'ont pas pu être obtenus à temps. L'UI sera développée en Sprint 5, le branchement effectif des sources sera fait dès credentials disponibles.
 
 ### Notifications toast globales
 **Pourquoi :** Sans feedback visuel sur les actions, l'expérience utilisateur est dégradée. Les toasts sont un prérequis UX minimal pour que le produit soit utilisable.
@@ -76,8 +107,8 @@ Ce MVP exclut volontairement le tunnel de commande et le paiement : la valeur pr
 ### Intégration Stripe
 **Pourquoi exclu :** Stripe nécessite des certificats SSL, des webhooks, une gestion des erreurs de paiement, des remboursements, une conformité PCI-DSS et des tests spécifiques. Ce travail est significatif et ne doit pas être bâclé. Il sera intégré en V1 quand la base est solide.
 
-### Configurations sauvegardées
-**Pourquoi exclu :** Ajouter la persistance des configurations en base nécessite une migration Supabase et un développement. C'est une fonctionnalité de confort, pas un prérequis pour valider le concept. Repoussé en début de V1.
+### Configurations sauvegardées — ✅ **avancées en MVP** (mai 2026)
+**Décision révisée** : initialement prévues en V1, ces fonctionnalités (US-040 à US-044) ont été livrées en mai 2026 pendant la phase de polish. L'effort s'est avéré raisonnable (1 table Supabase + 1 service + 1 modal) et démontre une valeur produit forte pour la présentation client.
 
 ### Responsive mobile complet
 **Pourquoi exclu :** La refonte responsive est transversale et chronophage (8 points estimés). Le MVP cible d'abord les utilisateurs desktop, qui représentent la large majorité des builders PC.
@@ -98,48 +129,55 @@ Ce MVP exclut volontairement le tunnel de commande et le paiement : la valeur pr
 
 ## User stories incluses dans le MVP
 
-| ID | User Story | Sprint |
-|---|---|---|
-| US-001 | Page d'accueil | S1 ✓ |
-| US-002 | Hero banner avec CTA | S2 |
-| US-005 | Navigation principale | S1 ✓ |
-| US-008 | Catalogue composants | S1 ✓ |
-| US-010 | Prix dans le catalogue | S5 → avancé S4 |
-| US-011 | Inscription | S1 ✓ |
-| US-012 | Pseudo à l'inscription | S1 ✓ |
-| US-014 | Connexion email | S1 ✓ |
-| US-015 | Connexion pseudo (bug fix) | S2 |
-| US-017 | Reset mot de passe | S1 ✓ |
-| US-018 | Nouveau mot de passe | S1 ✓ |
-| US-019 | Déconnexion | S1 ✓ |
-| US-020 | Accès configurateur | S1 ✓ |
-| US-021 | Catégories composants | S1 ✓ |
-| US-023 | Pagination configurateur | S1 ✓ |
-| US-024 | Recherche composant | S1 ✓ |
-| US-025 | Specs techniques clés | S1 ✓ |
-| US-026 | Sélection composant | S1 ✓ |
-| US-027 | Suppression composant | S1 ✓ |
-| US-028 | Prix composant dans configurateur | S5 → avancé S4 |
-| US-031 | Compatibilité CPU/MB/RAM | S1 ✓ |
-| US-032 | Explication filtre compatibilité | S1 ✓ |
-| US-033 | Compatibilité GPU/PSU | S3 |
-| US-034 | Compatibilité Boîtier/Format MB | S3 |
-| US-035 | Compatibilité Stockage/MB | S3 |
-| US-038 | Récapitulatif configuration | S1 ✓ |
-| US-039 | Prix total configuration | S5 → avancé S4 |
-| US-061 | Page profil (version basique) | S5 → avancé S4 |
-| US-062 | Modification infos personnelles | S5 → avancé S4 |
-| US-069 | Dashboard admin | S1 ✓ |
-| US-071 | Liste utilisateurs admin | S1 ✓ |
-| US-072 | Modification rôle utilisateur | S1 ✓ |
-| US-073 | Suppression utilisateur | S1 ✓ |
-| US-075 | Liste produits admin | S1 ✓ |
-| US-076 | Modification produit | S1 ✓ |
-| US-077 | Suppression produit | S1 ✓ |
-| US-078 | Création produit admin | S4 |
-| US-079 | Prix produits | S4 |
-| US-084 | Toast notifications | S2 |
-| US-085 | Page 404 | S4 |
+| ID | User Story | Sprint | Statut |
+|---|---|---|---|
+| US-001 | Page d'accueil | S1 | ✅ |
+| US-002 | Hero banner avec CTA | S2 | ✅ |
+| US-005 | Navigation principale | S1 | ✅ |
+| US-008 | Catalogue composants | S1 | ✅ |
+| US-010 | Prix dans le catalogue | S5 | ☐ UI à faire, données bloquées |
+| US-011 | Inscription | S1 | ✅ |
+| US-012 | Pseudo à l'inscription | S1 | ✅ |
+| US-014 | Connexion email | S1 | ✅ |
+| US-015 | Connexion pseudo (bug fix) | S2 | ✅ |
+| US-017 | Reset mot de passe | S1 | ✅ |
+| US-018 | Nouveau mot de passe | S1 | ✅ |
+| US-019 | Déconnexion | S1 | ✅ |
+| US-020 | Accès configurateur | S1 | ✅ |
+| US-021 | Catégories composants | S1 | ✅ |
+| US-023 | Pagination configurateur | S1 | ✅ |
+| US-024 | Recherche composant | S1 | ✅ |
+| US-025 | Specs techniques clés | S1 | ✅ |
+| US-026 | Sélection composant | S1 | ✅ |
+| US-027 | Suppression composant | S1 | ✅ |
+| US-028 | Prix composant dans configurateur | S5 | ☐ UI à faire, données bloquées |
+| US-031 | Compatibilité CPU/MB/RAM | S1 | ✅ |
+| US-032 | Explication filtre compatibilité | S1 | ✅ |
+| US-033 | Compatibilité GPU/PSU | S3 | ✅ |
+| US-034 | Compatibilité Boîtier/Format MB | S3 | ✅ |
+| US-035 | Compatibilité Stockage/MB | S3 | ✅ |
+| US-038 | Récapitulatif configuration | S1 | ✅ |
+| US-039 | Prix total configuration | S5 | ☐ UI à faire, données bloquées |
+| US-040 | Indicateur de complétude | Mai 2026 | ✅ avancé V1→MVP |
+| US-041 | Sauvegarder une configuration | Mai 2026 | ✅ avancé V1→MVP |
+| US-042 | Nommer une config sauvegardée | Mai 2026 | ✅ avancé V1→MVP |
+| US-043 | Accéder aux configs sauvegardées | Mai 2026 | ✅ avancé V1→MVP |
+| US-044 | Supprimer une config sauvegardée | Mai 2026 | ✅ avancé V1→MVP |
+| US-061 | Page profil (version basique) | Avril 2026 | ✅ hors sprint |
+| US-062 | Modification infos personnelles | Avril 2026 | ✅ hors sprint |
+| US-069 | Dashboard admin | S1 | ✅ |
+| US-071 | Liste utilisateurs admin | S1 | ✅ |
+| US-072 | Modification rôle utilisateur | S1 | ✅ |
+| US-073 | Suppression utilisateur | S1 | ✅ |
+| US-075 | Liste produits admin | S1 | ✅ |
+| US-076 | Modification produit | S1 | ✅ |
+| US-077 | Suppression produit | S1 | ✅ |
+| US-078 | Création produit admin | S4 | ✅ |
+| US-079 | Édition prix produits | S4 | ✅ |
+| US-084 | Toast notifications | S2 | ✅ |
+| US-085 | Page 404 | Avril 2026 | ✅ hors sprint |
+| US-086 | Tests unitaires utils/services | S3 | ✅ (27 tests Vitest) |
+| US-087 | Tests intégration flux critiques | S4 | ✅ (15 tests) |
 
 ---
 
@@ -159,10 +197,11 @@ Ce MVP exclut volontairement le tunnel de commande et le paiement : la valeur pr
 - [ ] Le projet est déployé en production sur Vercel et accessible publiquement
 
 ### Critères de validation M2
-- [ ] Story map complète et documentée
-- [ ] Backlog priorisé avec points de complexité
-- [ ] Revue de Sprint 1 documentée
-- [ ] README à jour avec instructions de démarrage
+- [x] Story map complète et documentée
+- [x] Backlog priorisé avec points de complexité
+- [x] Revue de Sprint 1 documentée
+- [x] Revues Sprints 2 à 5 documentées (sprint-2-3-4-review.md)
+- [x] README à jour avec instructions de démarrage
 
 ---
 

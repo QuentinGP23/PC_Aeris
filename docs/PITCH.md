@@ -88,19 +88,30 @@ Ces données couvrent le neuf comme l'occasion.
 
 ---
 
-## État d'avancement
+## État d'avancement (au 29 mai 2026)
 
-Les fondations techniques sont opérationnelles :
+**MVP atteint à ~85 %** — Sprints 1 à 4 livrés (avril 2026), polish et features additionnelles en mai 2026.
 
-- Architecture applicative
-- Système d'authentification
-- Composants d'interface
+**Fonctionnel disponible** :
+- Authentification complète (email + pseudo, reset mot de passe)
+- Configurateur PC avec compatibilité vérifiée sur 8 catégories
+- Ordre verrouillé de sélection (zéro impasse possible)
+- Configurations sauvegardées (création, nommage, chargement, suppression)
+- Catalogue admin complet (CRUD produits + édition prix)
+- Page profil utilisateur, page 404, fiche produit
+- 67 tests automatisés (unitaires + intégration)
+- Identité visuelle complète (Aeris Dark, conforme RGAA AA)
 
-**Prochaines étapes** :
+**À finir pour clore le MVP (Sprint 5, juin 2026)** :
 
-- Développement du configurateur intelligent
-- Intégration de l'IA de suggestion
-- Connexion aux sources de données de prix
+- Affichage UI des prix dans le catalogue et le configurateur
+- Branchement effectif des sources de prix (en attente des credentials API)
+- Responsive mobile complet sur les pages principales
+- Affichage des tarifs d'assemblage
+
+**V1 publique cible :** fin août 2026 (panier + tunnel de commande + Stripe + suivi commandes).
+
+**V2 (sept. 2026+) :** IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.
 
 ---
 

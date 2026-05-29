@@ -1,8 +1,9 @@
 # User Stories détaillées — PC Aeris
 
 > **Scope :** User stories de priorité Critique et Haute
-> **Dernière mise à jour :** 27 mars 2026
+> **Dernière mise à jour :** 29 mai 2026
 > **Convention :** Les critères d'acceptation (CA) sont les conditions vérifiables en recette
+> **Source de vérité statuts :** [backlog.md](./backlog.md) — ce document liste les CA détaillés, le backlog liste les statuts à jour.
 
 ---
 

@@ -1,5 +1,8 @@
 # Roadmap & Organisation opérationnelle — PC Aeris
 
+> **Dernière mise à jour :** 29 mai 2026
+> **Source de vérité fine sur les sprints :** [docs/agile/roadmap.md](./agile/roadmap.md)
+
 ---
 
 ## 1. Roadmap produit
@@ -9,16 +12,18 @@
 ```
 2026                                          2027                    2028
 │                                             │                       │
-├─── T1 ────┼─── T2 ────┼─── T3 ────┼─── T4 ──┼─── T1-T2 ───┼─── T3+ ─┤
-│           │           │           │         │             │         │
-│   MVP     │    V1     │   V1.5    │   V2    │  CROISSANCE │ EXPAND  │
-│           │           │           │         │             │         │
-└───────────┴───────────┴───────────┴─────────┴─────────────┴─────────┘
+├ T1 ─┼ T2 ─┼ T3 ─┼ T4 ─┼─ T1-T2 ─┼─ T3+ ─┤
+│     │     │     │     │         │       │
+│ MVP │ V1  │V1.5 │ V2  │CROIS    │ EXPAND│
+│     │     │     │     │         │       │
+└─────┴─────┴─────┴─────┴─────────┴───────┘
 ```
+
+État réel au 29 mai 2026 : **MVP atteint à ~85 %**, finalisation en juin (Sprint 5 reste).
 
 ---
 
-### Phase 1 : MVP (T1 2026)
+### Phase 1 : MVP (T1-T2 2026) — ~85% atteint
 
 **Objectif** : Valider le concept avec un produit fonctionnel minimum.
 
@@ -28,12 +33,18 @@
 | Système d'authentification (inscription/connexion) | 🔴 Critique  | ✅ Fait     |
 | Composants UI de base (Button, Input, Form)        | 🔴 Critique  | ✅ Fait     |
 | Structure routing                                  | 🔴 Critique  | ✅ Fait     |
-| Base de données composants (structure)             | 🔴 Critique  | 🔄 En cours |
-| Configurateur basique (sélection manuelle)         | 🔴 Critique  | ⏳ À faire  |
-| Page produit composant                             | 🟡 Important | ⏳ À faire  |
-| Panier / Récapitulatif configuration               | 🟡 Important | ⏳ À faire  |
+| Base de données composants (structure complète)    | 🔴 Critique  | ✅ Fait     |
+| Configurateur avec compatibilité (8 catégories)    | 🔴 Critique  | ✅ Fait     |
+| Ordre verrouillé + cascade d'invalidation          | 🔴 Critique  | ✅ Fait     |
+| Page produit composant                             | 🟡 Important | ✅ Fait     |
+| Configurations sauvegardées (CRUD)                 | 🟡 Important | ✅ Fait (avancé V1→MVP) |
+| Back-office admin (CRUD produits + édition prix)   | 🟡 Important | ✅ Fait     |
+| Tests automatisés (67 unitaires + intégration)     | 🟡 Important | ✅ Fait     |
+| Identité visuelle Aeris Dark (RGAA AA)             | 🟡 Important | ✅ Fait     |
+| Affichage UI prix dans catalogue/configurateur     | 🔴 Critique  | 🔄 Sprint 5 (juin) — UI à faire, données bloquées par credentials API |
+| Responsive mobile (pages principales)              | 🟡 Important | ⏳ Sprint 5 |
 
-**Livrable** : Configurateur fonctionnel sans IA, utilisable en beta fermée.
+**Livrable** : Configurateur fonctionnel avec compatibilité vérifiée, utilisable en beta fermée. **IA non incluse** (V2).
 
 ---
 
@@ -292,35 +303,35 @@
 
 ---
 
-## 3. Planning détaillé T1-T2 2026
+## 3. Planning détaillé (état réel + prévisionnel révisé)
 
-### Janvier - Février 2026
+### Janvier – Mars 2026 — Sprint 1 ✅
+Architecture, auth, design system (17 composants UI), configurateur de base avec compatibilité CPU/MOBO/RAM/Ventirad, admin CRUD utilisateurs + produits (edit/delete), scripts d'import BuildCores/BestBuy. **~57 points livrés.**
 
-| Semaine | Objectifs                                    |
-| ------- | -------------------------------------------- |
-| S1-S2   | Finaliser architecture, auth, composants UI  |
-| S3-S4   | Structure BDD composants, modèles de données |
-| S5-S6   | Configurateur v0 (sélection manuelle)        |
-| S7-S8   | Pages produits, filtres, recherche           |
+### Avril 2026 — Sprints 2, 3, 4 ✅ + travaux hors sprint
+- **17 avril (Sprint 2)** : fix bug login pseudo, toasts globaux, hero banner home, refactor home, scaffolding multi-sources prix.
+- **17-20 avril (Sprint 3)** : compatibilité GPU/PSU, boîtier/format mobo, stockage M.2/SATA, setup Vitest + 27 tests.
+- **20 avril (Sprint 4)** : création produit admin, édition prix, 15 tests d'intégration.
+- **Hors sprint** : page profil utilisateur (US-061, 062), page 404 (US-085), fiche produit publique, enrichissement images.
 
-### Mars - Avril 2026
+### Mai 2026 — Polish et features additionnelles 🔄
+- **22-29 mai** : refonte design Aeris Dark sur tout le site (RGAA AA), fix ordre verrouillé du configurateur (cascade d'invalidation), nouveaux filtres GPU/cooler vs boîtier, configurations sauvegardées (US-040 à 044 avancées en MVP).
 
-| Semaine | Objectifs                                 |
-| ------- | ----------------------------------------- |
-| S9-S10  | Panier, récapitulatif, tunnel de commande |
-| S11-S12 | Intégration paiement (Stripe)             |
-| S13-S14 | Tests, corrections, beta fermée           |
-| S15-S16 | Retours beta, ajustements                 |
+### Juin 2026 — Sprint 5 (reste) pour clore le MVP ⏳
+Affichage UI des prix, responsive mobile, tarifs d'assemblage, remember me, modifications profil, recherche utilisateurs admin, images composants.
 
-### Mai - Juin 2026
+### Juillet 2026 — Sprint 6 (V1) ⏳
+Panier et catalogue amélioré (filtres, fourchettes prix, configurations populaires, usage cible, adresses livraison, graphiques admin).
 
-| Semaine | Objectifs                         |
-| ------- | --------------------------------- |
-| S17-S18 | IA compatibilité v1               |
-| S19-S20 | Système de prix (API ou scraping) |
-| S21-S22 | Questionnaire guidé débutants     |
-| S23-S24 | Lancement V1 publique 🚀          |
+### Juillet 2026 — Sprint 7 (V1) ⏳
+Tunnel de commande : adresse, livraison, Stripe, email confirmation, gestion commandes admin, OAuth Google.
+
+### Août 2026 — Sprint 8 (V1) ⏳
+Suivi commande client, partage de configuration par lien, import CSV produits, tests E2E Playwright. **🚀 Lancement V1 publique fin août.**
+
+### Septembre 2026+ — V2
+IA recommandation, responsive complet, paiement multi-fois, PayPal, avatar, RGPD, notifications email.
 
 ---
 
-_Document de travail — PC Aeris — Janvier 2026_
+_Document de travail — PC Aeris — mis à jour le 29 mai 2026_

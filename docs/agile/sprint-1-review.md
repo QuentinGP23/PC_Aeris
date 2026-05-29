@@ -6,6 +6,8 @@
 > **Date de revue :** 27 mars 2026
 > **Format :** Document de présentation pour entretien M2
 
+> ℹ️ **Mise à jour 29 mai 2026** — Les revues des Sprints 2, 3 et 4 sont consolidées dans [sprint-2-3-4-review.md](./sprint-2-3-4-review.md). La section 6 ci-dessous (objectifs Sprint 2) est conservée pour archive mais n'est plus le document de référence.
+
 ---
 
 ## 1. Objectif du Sprint 1
