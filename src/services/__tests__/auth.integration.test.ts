@@ -10,6 +10,7 @@ vi.mock('../../config', () => ({
     auth: { signInWithPassword },
     rpc,
   },
+  setRememberMe: vi.fn(),
 }))
 
 import { authService } from '../auth.service'

@@ -1,5 +1,4 @@
-import { supabase } from '../config'
-import { setRememberMe } from '../config/supabase'
+import { supabase, setRememberMe } from '../config'
 import type { SignUpData, SignInData, User } from '../types'
 
 // Admin credentials (hardcoded for now)
