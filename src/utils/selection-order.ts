@@ -1,5 +1,34 @@
 import type { CategoryKey, Product } from '../types'
 
+// Helpers locaux : mêmes règles que compatibility.ts, dupliquées ici pour
+// éviter un import circulaire (selection-order est consommé par le store).
+function normalizeFormFactorLocal(v: string): string {
+  let s = v.toLowerCase().replace(/[\s\-_.]+/g, '')
+  s = s.replace(/^(micro|u|µ)atx$/, 'matx')
+  s = s.replace(/^extendedatx$/, 'eatx')
+  s = s.replace(/^miniitx$/, 'mitx')
+  return s
+}
+
+function detectSlotPresenceLocal(raw: unknown): 'present' | 'absent' | 'unknown' {
+  if (raw === null || raw === undefined) return 'unknown'
+  if (typeof raw === 'number') return Number.isNaN(raw) ? 'unknown' : (raw > 0 ? 'present' : 'absent')
+  if (typeof raw === 'string') {
+    const n = Number(raw)
+    return Number.isNaN(n) ? 'unknown' : (n > 0 ? 'present' : 'absent')
+  }
+  if (Array.isArray(raw)) return raw.length > 0 ? 'present' : 'absent'
+  if (typeof raw === 'object') {
+    const obj = raw as Record<string, unknown>
+    if (typeof obj['count'] === 'number') return obj['count'] > 0 ? 'present' : 'absent'
+    if (Array.isArray(obj['types'])) return obj['types'].length > 0 ? 'present' : 'absent'
+    const anyPositive = Object.values(obj).some((v) => typeof v === 'number' && v > 0)
+    if (anyPositive) return 'present'
+    return Object.keys(obj).length > 0 ? 'present' : 'absent'
+  }
+  return 'unknown'
+}
+
 /**
  * Ordre recommandé de sélection des composants.
  * Suit la logique d'un montage PC : on part du CPU (qui définit le socket),
@@ -79,17 +108,22 @@ function specIsCompatible(
     case 'pc_case': {
       const mobof = motherboard?.specs?.['form_factor'] as string | undefined
       const supported = specs['supported_mobo_form_factors'] as string[] | undefined
-      if (mobof && supported && !supported.includes(mobof)) return false
-      return true
+      // Si la spec boîtier n'a pas de liste ou que la mobo n'a pas de format renseigné,
+      // on laisse passer (ne pas exclure à tort).
+      if (!mobof || !supported || !Array.isArray(supported) || supported.length === 0) return true
+      const target = normalizeFormFactorLocal(mobof)
+      return supported.some((s) => normalizeFormFactorLocal(s) === target)
     }
     case 'storage': {
-      const m2Slots = motherboard?.specs?.['m2_slots'] as number | undefined
-      const sataPorts = motherboard?.specs?.['sata_6gbs'] as number | undefined
+      const m2Status = detectSlotPresenceLocal(motherboard?.specs?.['m2_slots'])
+      const sataStatus = detectSlotPresenceLocal(motherboard?.specs?.['sata_6gbs'])
       const isNvme = specs['nvme'] as boolean | undefined
-      if (m2Slots !== undefined && sataPorts !== undefined && isNvme !== undefined) {
-        if (isNvme && m2Slots === 0) return false
-        if (!isNvme && sataPorts === 0) return false
-      }
+      // Si une info manque → on laisse passer.
+      if (m2Status === 'unknown' || sataStatus === 'unknown' || isNvme === undefined) return true
+      // NVMe mais pas de slot M.2 → KO.
+      if (isNvme && m2Status === 'absent') return false
+      // SATA mais pas de port SATA → KO.
+      if (!isNvme && sataStatus === 'absent') return false
       return true
     }
     case 'cpu_cooler': {
