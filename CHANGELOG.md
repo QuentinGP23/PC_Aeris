@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.4.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.3.1...v2.4.0) (2026-05-29)
+
+
+### Features
+
+* **sprint-5:** remember me, tarifs assemblage, responsive admin ([233f158](https://github.com/QuentinGP23/PC_Aeris/commit/233f158ba33e252d20b2d15a418b7e48fb24ba49))
+
+
+### Bug Fixes
+
+* **admin:** désactive react-hooks/set-state-in-effect pour la fermeture du drawer ([49d6729](https://github.com/QuentinGP23/PC_Aeris/commit/49d6729e9d0f074481939a53f700799a9e4236c0))
+* **admin:** sidebar pleine hauteur, drawer mobile, diagnostic vide/erreur ([0257265](https://github.com/QuentinGP23/PC_Aeris/commit/025726539d639dc23273e897c3cca872dd32217d))
+* **admin:** sidebar pleine hauteur, drawer mobile, états vides explicites ([5c0f02d](https://github.com/QuentinGP23/PC_Aeris/commit/5c0f02d41ad114afc0d874621dc8e3bd2c235982))
+* **test:** mock setRememberMe dans les tests auth pour passer le CI ([790c9b5](https://github.com/QuentinGP23/PC_Aeris/commit/790c9b5aa4d827c5bbdef8e28d1911ca696cea84))
+
 ## [2.3.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.3.0...v2.3.1) (2026-05-22)
 
 
