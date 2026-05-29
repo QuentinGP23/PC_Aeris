@@ -55,76 +55,76 @@ function AdminDashboard() {
   return (
     <div className="dashboard">
       {error && (
-        <div className="ad-alert-err">
+        <div className="adm-alert-err">
           <span>{error}</span>
           <button onClick={() => setError(null)} aria-label="Fermer">×</button>
         </div>
       )}
 
       {loading ? (
-        <div className="ad-loading">Chargement…</div>
+        <div className="adm-loading">Chargement…</div>
       ) : (
         <>
-          <div className="ad-stats">
+          <div className="adm-stats">
             {statCards.map((s) => (
-              <div key={s.key} className="ad-stat">
+              <div key={s.key} className="adm-stat">
                 <div
-                  className="ad-stat__ico"
+                  className="adm-stat__ico"
                   style={{ background: `${s.color}1A`, color: s.color }}
                 >
                   {s.icon}
                 </div>
-                <div className="ad-stat__n">{s.value.toLocaleString('fr-FR')}</div>
-                <div className="ad-stat__l">{s.label}</div>
-                <div className="ad-stat__bg">{s.bg}</div>
+                <div className="adm-stat__n">{s.value.toLocaleString('fr-FR')}</div>
+                <div className="adm-stat__l">{s.label}</div>
+                <div className="adm-stat__bg">{s.bg}</div>
               </div>
             ))}
           </div>
 
-          <div className="ad-quick">
-            <Link to="/admin/users" className="ad-quick__item">
-              <div className="ad-quick__ico" style={{ background: 'rgba(99,102,241,0.12)', color: '#818CF8' }}>◉</div>
+          <div className="adm-quick">
+            <Link to="/admin/users" className="adm-quick__item">
+              <div className="adm-quick__ico" style={{ background: 'rgba(99,102,241,0.12)', color: '#818CF8' }}>◉</div>
               <div>
-                <div className="ad-quick__label">Gérer les utilisateurs</div>
-                <div className="ad-quick__sub">Comptes, rôles, accès</div>
+                <div className="adm-quick__label">Gérer les utilisateurs</div>
+                <div className="adm-quick__sub">Comptes, rôles, accès</div>
               </div>
             </Link>
-            <Link to="/admin/products" className="ad-quick__item">
-              <div className="ad-quick__ico" style={{ background: 'rgba(168,85,247,0.12)', color: '#C084FC' }}>◫</div>
+            <Link to="/admin/products" className="adm-quick__item">
+              <div className="adm-quick__ico" style={{ background: 'rgba(168,85,247,0.12)', color: '#C084FC' }}>◫</div>
               <div>
-                <div className="ad-quick__label">Gérer les produits</div>
-                <div className="ad-quick__sub">Catalogue & specs</div>
+                <div className="adm-quick__label">Gérer les produits</div>
+                <div className="adm-quick__sub">Catalogue & specs</div>
               </div>
             </Link>
-            <Link to="/" className="ad-quick__item">
-              <div className="ad-quick__ico" style={{ background: 'rgba(16,185,129,0.12)', color: '#34D399' }}>↗</div>
+            <Link to="/" className="adm-quick__item">
+              <div className="adm-quick__ico" style={{ background: 'rgba(16,185,129,0.12)', color: '#34D399' }}>↗</div>
               <div>
-                <div className="ad-quick__label">Voir le site public</div>
-                <div className="ad-quick__sub">Aperçu utilisateur</div>
+                <div className="adm-quick__label">Voir le site public</div>
+                <div className="adm-quick__sub">Aperçu utilisateur</div>
               </div>
             </Link>
           </div>
 
-          <div className="ad-block">
-            <div className="ad-block__hd">
-              <div className="ad-block__title">Produits par catégorie</div>
-              <div className="ad-count">{totalProducts.toLocaleString('fr-FR')} produits</div>
+          <div className="adm-block">
+            <div className="adm-block__hd">
+              <div className="adm-block__title">Produits par catégorie</div>
+              <div className="adm-count">{totalProducts.toLocaleString('fr-FR')} produits</div>
             </div>
-            <div className="ad-block__body">
+            <div className="adm-block__body">
               {Object.entries(CATEGORY_META).map(([key, meta]) => {
                 const count = stats?.productsByCategory[key] ?? 0
                 const pct = totalProducts > 0 ? Math.round((count / totalProducts) * 100) : 0
                 return (
-                  <div key={key} className="ad-cat-row">
-                    <div className="ad-cat-ico" style={{ color: meta.color }}>{meta.icon}</div>
-                    <div className="ad-cat-lbl">{meta.label}</div>
-                    <div className="ad-cat-bar-wrap">
+                  <div key={key} className="adm-cat-row">
+                    <div className="adm-cat-ico" style={{ color: meta.color }}>{meta.icon}</div>
+                    <div className="adm-cat-lbl">{meta.label}</div>
+                    <div className="adm-cat-bar-wrap">
                       <div
-                        className="ad-cat-bar"
+                        className="adm-cat-bar"
                         style={{ width: `${pct}%`, background: meta.color }}
                       />
                     </div>
-                    <div className="ad-cat-count">{count.toLocaleString('fr-FR')}</div>
+                    <div className="adm-cat-count">{count.toLocaleString('fr-FR')}</div>
                   </div>
                 )
               })}

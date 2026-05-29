@@ -159,7 +159,7 @@
     border-right: 1px solid var(--border);
     position: sticky;
     top: var(--nav-h);
-    height: calc(100vh - var(--nav-h));
+    height: 100vh;
 
     @media (max-width: 900px) {
       display: none;
@@ -354,7 +354,7 @@
 
 // ── STAT CARDS ─────────────────────────────────────────────────────────────
 
-.ad-stats {
+.adm-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
@@ -364,7 +364,7 @@
   @media (max-width: 600px) { grid-template-columns: 1fr; }
 }
 
-.ad-stat {
+.adm-stat {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rl);
@@ -427,7 +427,7 @@
 
 // ── QUICK LINKS ────────────────────────────────────────────────────────────
 
-.ad-quick {
+.adm-quick {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
@@ -436,7 +436,7 @@
   @media (max-width: 900px) { grid-template-columns: 1fr; }
 }
 
-.ad-quick__item {
+.adm-quick__item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rl);
@@ -456,7 +456,7 @@
   }
 }
 
-.ad-quick__ico {
+.adm-quick__ico {
   width: 38px;
   height: 38px;
   border-radius: 10px;
@@ -467,7 +467,7 @@
   flex-shrink: 0;
 }
 
-.ad-quick__label {
+.adm-quick__label {
   font-family: var(--fh);
   font-size: 14px;
   font-weight: 600;
@@ -475,7 +475,7 @@
   color: var(--text);
 }
 
-.ad-quick__sub {
+.adm-quick__sub {
   font-family: var(--fm);
   font-size: 10px;
   color: var(--text-3);
@@ -485,7 +485,7 @@
 
 // ── SECTION BLOCK ──────────────────────────────────────────────────────────
 
-.ad-block {
+.adm-block {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rl);
@@ -510,7 +510,7 @@
 
 // ── CATEGORY BARS ──────────────────────────────────────────────────────────
 
-.ad-cat-row {
+.adm-cat-row {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -522,20 +522,20 @@
   &:hover { background: rgba(255, 255, 255, 0.02); }
 }
 
-.ad-cat-ico {
+.adm-cat-ico {
   font-size: 16px;
   width: 24px;
   text-align: center;
   flex-shrink: 0;
 }
 
-.ad-cat-lbl {
+.adm-cat-lbl {
   font-size: 13px;
   color: var(--text-2);
   min-width: 150px;
 }
 
-.ad-cat-bar-wrap {
+.adm-cat-bar-wrap {
   flex: 1;
   height: 2px;
   background: var(--surface-3);
@@ -543,14 +543,14 @@
   overflow: hidden;
 }
 
-.ad-cat-bar {
+.adm-cat-bar {
   height: 100%;
   border-radius: 1px;
   transition: width 1s var(--ease);
   min-width: 2px;
 }
 
-.ad-cat-count {
+.adm-cat-count {
   font-family: var(--fm);
   font-size: 12px;
   color: var(--text);
@@ -560,7 +560,7 @@
 
 // ── TABLE ──────────────────────────────────────────────────────────────────
 
-.ad-table-wrap {
+.adm-table-wrap {
   display: block;
   width: 100%;
   background: var(--surface);
@@ -572,7 +572,7 @@
   // Sur petit écran, le tableau peut être plus large que l'écran et scroller horizontalement.
 }
 
-.ad-table {
+.adm-table {
   display: table;
   width: 100%;
   border-collapse: collapse;
@@ -618,7 +618,7 @@
   .td-dim  { color: var(--text-3); font-style: italic; }
 }
 
-.ad-sort {
+.adm-sort {
   margin-left: 4px;
   font-size: 10px;
   color: var(--ind-l);
@@ -628,7 +628,7 @@
 
 // ── TOOLBAR ────────────────────────────────────────────────────────────────
 
-.ad-toolbar {
+.adm-toolbar {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -636,7 +636,7 @@
   flex-wrap: wrap;
 }
 
-.ad-input {
+.adm-input {
   padding: 8px 13px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -655,7 +655,7 @@
   &::placeholder { color: var(--text-3); }
 }
 
-.ad-select {
+.adm-select {
   padding: 8px 13px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -672,7 +672,7 @@
   option { background: var(--surface); color: var(--text); }
 }
 
-.ad-count {
+.adm-count {
   font-family: var(--fm);
   font-size: 10px;
   color: var(--text-3);
@@ -682,7 +682,7 @@
 
 // ── BUTTONS ────────────────────────────────────────────────────────────────
 
-.ad-btn {
+.adm-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -728,7 +728,7 @@
 
 // ── BADGES ─────────────────────────────────────────────────────────────────
 
-.ad-badge {
+.adm-badge {
   display: inline-flex;
   align-items: center;
   padding: 3px 9px;
@@ -755,7 +755,7 @@
 
 // ── AVATAR ─────────────────────────────────────────────────────────────────
 
-.ad-avatar {
+.adm-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -772,7 +772,7 @@
 
 // ── MODAL ──────────────────────────────────────────────────────────────────
 
-.ad-modal-overlay {
+.adm-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.72);
@@ -784,7 +784,7 @@
   padding: 24px;
 }
 
-.ad-modal {
+.adm-modal {
   background: var(--surface);
   border: 1px solid var(--border-s);
   border-radius: var(--rl);
@@ -851,14 +851,14 @@
 
 // ── TABS ───────────────────────────────────────────────────────────────────
 
-.ad-tabs {
+.adm-tabs {
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--border);
   margin-bottom: 20px;
 }
 
-.ad-tab {
+.adm-tab {
   padding: 8px 18px;
   font-size: 13px;
   font-weight: 500;
@@ -876,13 +876,13 @@
 
 // ── FORM ───────────────────────────────────────────────────────────────────
 
-.ad-form {
+.adm-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.ad-row {
+.adm-row {
   display: grid;
   gap: 12px;
 
@@ -892,7 +892,7 @@
   @media (max-width: 640px) { grid-template-columns: 1fr; }
 }
 
-.ad-fg {
+.adm-fg {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -931,7 +931,7 @@
 
 // ── TOGGLE ─────────────────────────────────────────────────────────────────
 
-.ad-toggle {
+.adm-toggle {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -951,7 +951,7 @@
     &--on {
       background: var(--ind);
       border-color: var(--ind);
-      .ad-toggle__knob { transform: translateX(16px); }
+      .adm-toggle__knob { transform: translateX(16px); }
     }
   }
 
@@ -981,7 +981,7 @@
 
 // ── SPECS GRID ─────────────────────────────────────────────────────────────
 
-.ad-specs-grid {
+.adm-specs-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
@@ -993,7 +993,7 @@
 
 // ── PAGINATION ─────────────────────────────────────────────────────────────
 
-.ad-pagination {
+.adm-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1003,7 +1003,7 @@
   margin-top: 16px;
 }
 
-.ad-page-info {
+.adm-page-info {
   font-family: var(--fm);
   font-size: 11px;
   color: var(--text-2);
@@ -1011,7 +1011,7 @@
 
 // ── MISC ───────────────────────────────────────────────────────────────────
 
-.ad-thumb {
+.adm-thumb {
   width: 36px;
   height: 36px;
   border-radius: 6px;
@@ -1020,7 +1020,7 @@
   padding: 4px;
 }
 
-.ad-thumb-empty {
+.adm-thumb-empty {
   width: 36px;
   height: 36px;
   border-radius: 6px;
@@ -1032,9 +1032,9 @@
   font-size: 12px;
 }
 
-.ad-empty-cell { color: var(--text-3); }
+.adm-empty-cell { color: var(--text-3); }
 
-.ad-alert-err {
+.adm-alert-err {
   padding: 10px 14px;
   background: rgba(239, 68, 68, 0.07);
   border: 1px solid rgba(239, 68, 68, 0.18);
@@ -1058,7 +1058,7 @@
   }
 }
 
-.ad-loading {
+.adm-loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1070,7 +1070,7 @@
   text-transform: uppercase;
 }
 
-.ad-empty-state {
+.adm-empty-state {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1079,20 +1079,20 @@
   font-size: 13px;
 }
 
-.ad-warn-text {
+.adm-warn-text {
   font-size: 13px;
   color: var(--text-2);
   margin-bottom: 6px;
 }
 
-.ad-warn-danger {
+.adm-warn-danger {
   font-family: var(--fm);
   font-size: 11px;
   color: var(--err);
   letter-spacing: 0.04em;
 }
 
-.ad-preview-img {
+.adm-preview-img {
   width: 80px;
   height: 80px;
   border-radius: var(--rs);
