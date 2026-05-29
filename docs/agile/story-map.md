@@ -1,8 +1,9 @@
 # Story Map — PC Aeris
 
-> **Dernière mise à jour :** 27 mars 2026
+> **Dernière mise à jour :** 29 mai 2026
 > **Projet :** PC Aeris — Configurateur PC sur mesure
-> **Légende :** [MVP] = Sprint 1-4 | [V1] = Sprint 5-8 | [V2] = Sprint 9+
+> **Légende :** [MVP] = Sprint 1-5 | [V1] = Sprint 6-8 | [V2] = Sprint 9+
+> **Note :** US-040 à US-044 (configurations sauvegardées) ont été avancées de V1 vers MVP en mai 2026.
 
 ---
 

@@ -656,3 +656,125 @@
   }
 }
 
+// ── US-004 — Tarifs d'assemblage ─────────────────────────────────────────
+.assembly {
+  background: var(--bg);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 56px;
+
+    @media (max-width: 900px) { grid-template-columns: 1fr; }
+  }
+
+  &__tier {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--rl);
+    padding: 36px 28px;
+    position: relative;
+    transition: transform 0.2s var(--ease), border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      border-color: var(--border-s);
+      transform: translateY(-3px);
+    }
+
+    &--hl {
+      border-color: var(--ind);
+      background: linear-gradient(180deg, rgba(99,102,241,0.05) 0%, var(--surface) 60%);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -10px;
+    left: 28px;
+    background: var(--ind);
+    color: #fff;
+    font-family: var(--fm);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  &__name {
+    font-family: var(--fh);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  &__price-from {
+    font-family: var(--fm);
+    font-size: 10px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  &__price-val {
+    font-family: var(--fh);
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text);
+  }
+
+  &__desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+    margin-bottom: 24px;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 0 8px 0;
+    padding: 0;
+    flex: 1;
+
+    li {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-2);
+      padding-left: 22px;
+      margin-bottom: 8px;
+      position: relative;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--ind);
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__note {
+    font-family: var(--fm);
+    font-size: 11px;
+    color: var(--text-3);
+    text-align: center;
+    margin-top: 28px;
+    letter-spacing: 0.04em;
+  }
+}
+

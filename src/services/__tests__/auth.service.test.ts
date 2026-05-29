@@ -3,6 +3,7 @@ import { validateSignUpData } from '../auth.service'
 
 vi.mock('../../config', () => ({
   supabase: { auth: {}, rpc: vi.fn() },
+  setRememberMe: vi.fn(),
 }))
 
 describe('validateSignUpData', () => {

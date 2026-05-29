@@ -2,10 +2,13 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../config'
 import { useConfigStore, useToast } from '../../store'
+import { useAuth } from '../../context/useAuth'
 import { CATEGORIES } from '../../types'
 import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
 import type { Product, CategoryKey } from '../../types'
 import { getCompatibleProductIds, missingPrereqs, nextPendingCategory, SELECTION_ORDER } from '../../utils'
+import { savedConfigsService } from '../../services'
+import SavedConfigsModal from './components/SavedConfigsModal'
 import './Configurator.scss'
 
 const PAGE_SIZE = 24
@@ -24,8 +27,21 @@ function categoryLabel(cat: CategoryKey): string {
 }
 
 function Configurator() {
-  const { config, lastInvalidated, selectComponent, removeComponent, clearInvalidated, clearConfig } = useConfigStore()
+  const {
+    config,
+    lastInvalidated,
+    loadedConfigName,
+    selectComponent,
+    removeComponent,
+    setLoadedConfigName,
+    clearInvalidated,
+    clearConfig,
+  } = useConfigStore()
   const toast = useToast()
+  const { isAuthenticated } = useAuth()
+
+  const [savedModalOpen, setSavedModalOpen] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('cpu')
   const [products, setProducts] = useState<Product[]>([])
@@ -162,8 +178,34 @@ function Configurator() {
   const selectedCount = Object.keys(config).length
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
   const progressPct = Math.round((selectedCount / CATEGORIES.length) * 100)
+  const isComplete = selectedCount === CATEGORIES.length
 
   const totalAvg = Object.values(config).reduce((acc, p) => acc + (p?.price_avg_eur ?? 0), 0)
+
+  const handleSave = async () => {
+    if (saving) return
+    const defaultName = loadedConfigName ?? `Config du ${new Date().toLocaleDateString('fr-FR')}`
+    const name = window.prompt('Nom de la configuration :', defaultName)
+    if (!name) return
+    const trimmed = name.trim()
+    if (!trimmed) {
+      toast.error('Le nom ne peut pas être vide')
+      return
+    }
+    setSaving(true)
+    const components: Partial<Record<CategoryKey, string>> = {}
+    for (const [cat, prod] of Object.entries(config) as [CategoryKey, Product][]) {
+      components[cat] = prod.id
+    }
+    const { data, error } = await savedConfigsService.create(trimmed, components)
+    setSaving(false)
+    if (error || !data) {
+      toast.error(error ?? 'Erreur de sauvegarde')
+      return
+    }
+    setLoadedConfigName(trimmed)
+    toast.success(`"${trimmed}" sauvegardée`)
+  }
 
   const activeCatDef = CATEGORIES.find((c) => c.value === activeCategory)!
 
@@ -173,13 +215,18 @@ function Configurator() {
     <div className="config-wrap">
       <aside className="config-side">
         <div className="config-side__hd">
-          <div className="config-side__title">Ma configuration</div>
+          <div className="config-side__title">
+            {loadedConfigName ?? 'Ma configuration'}
+          </div>
           <div className="config-prog">
             <div className="config-prog__bar">
               <div className="config-prog__fill" style={{ width: `${progressPct}%` }} />
             </div>
             <span className="config-prog__label">{selectedCount}/{CATEGORIES.length}</span>
           </div>
+          {isComplete && (
+            <div className="config-prog__complete">✓ Configuration complète</div>
+          )}
         </div>
 
         <div className="config-items">
@@ -238,6 +285,30 @@ function Configurator() {
           <div className="config-side__total-v">
             {totalAvg > 0 ? `${Math.round(totalAvg).toLocaleString('fr-FR')} €` : '—'}
           </div>
+          {isAuthenticated && (
+            <div className="config-side__cta">
+              <button
+                type="button"
+                className="config-side__save"
+                onClick={() => void handleSave()}
+                disabled={saving || selectedCount === 0}
+              >
+                {saving ? 'Sauvegarde…' : '💾 Sauvegarder'}
+              </button>
+              <button
+                type="button"
+                className="config-side__load"
+                onClick={() => setSavedModalOpen(true)}
+              >
+                Mes configs
+              </button>
+            </div>
+          )}
+          {!isAuthenticated && selectedCount > 0 && (
+            <div className="config-side__login-hint">
+              <Link to="/connexion">Connecte-toi</Link> pour sauvegarder ta configuration.
+            </div>
+          )}
           {selectedCount > 0 && (
             <button type="button" className="config-side__reset" onClick={clearConfig}>
               Réinitialiser
@@ -245,6 +316,8 @@ function Configurator() {
           )}
         </div>
       </aside>
+
+      <SavedConfigsModal isOpen={savedModalOpen} onClose={() => setSavedModalOpen(false)} />
 
       <main className="config-main">
         <div className="config-main__hd">

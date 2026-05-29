@@ -28,6 +28,7 @@ function SignIn() {
     const { user, error: authError } = await signIn({
       identifier: form.identifier,
       password: form.password,
+      rememberMe: form.rememberMe,
     })
     if (authError) {
       setError(authError)

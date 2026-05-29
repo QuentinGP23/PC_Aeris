@@ -1,1 +1,1 @@
-export { supabase } from './supabase'
+export { supabase, setRememberMe } from './supabase'
