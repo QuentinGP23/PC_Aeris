@@ -30,6 +30,7 @@ export interface SignUpData {
 export interface SignInData {
   identifier: string // email or pseudo
   password: string
+  rememberMe?: boolean
 }
 
 export interface AuthError {
