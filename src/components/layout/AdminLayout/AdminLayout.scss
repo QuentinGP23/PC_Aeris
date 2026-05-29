@@ -230,10 +230,15 @@
 
 // ── ADMIN CONTENT ──────────────────────────────────────────────────────────
 
+// IMPORTANT : min-width: 0 empêche le contenu d'une cellule grid 1fr de la
+// pousser au-delà de la largeur disponible. Sans ça, un <table width=100%> à
+// l'intérieur peut faire grandir la colonne et donc se rendre invisible si le
+// reste du layout sature.
 .admin-content {
   background: var(--bg);
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .admin-hd {
@@ -340,6 +345,7 @@
 .admin-body {
   padding: 28px 36px;
   flex: 1;
+  min-width: 0;
 
   @media (max-width: 640px) {
     padding: 18px;
@@ -555,6 +561,8 @@
 // ── TABLE ──────────────────────────────────────────────────────────────────
 
 .ad-table-wrap {
+  display: block;
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rl);
@@ -565,6 +573,7 @@
 }
 
 .ad-table {
+  display: table;
   width: 100%;
   border-collapse: collapse;
 
