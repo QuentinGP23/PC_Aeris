@@ -1,4 +1,4 @@
-import { supabase } from '../config'
+import { supabase, setRememberMe } from '../config'
 import type { SignUpData, SignInData, User } from '../types'
 
 // Admin credentials (hardcoded for now)
@@ -74,8 +74,12 @@ export const authService = {
 
   // Sign in with email or pseudo and password
   async signIn(data: SignInData): Promise<{ user: User | null; error: string | null }> {
+    // Doit être appelé AVANT signInWithPassword pour que Supabase écrive la
+    // session dans le bon storage (local vs session).
+    setRememberMe(Boolean(data.rememberMe))
+
     let email = data.identifier
-    
+
     // If identifier is not an email, it's a pseudo - need to find the email
     if (!isEmail(data.identifier)) {
       // Check if it's the admin
@@ -122,6 +126,8 @@ export const authService = {
   // Sign out
   async signOut(): Promise<{ error: string | null }> {
     const { error } = await supabase.auth.signOut()
+    // On efface aussi le flag remember pour repartir d'un état propre.
+    setRememberMe(false)
     return { error: error?.message || null }
   },
 

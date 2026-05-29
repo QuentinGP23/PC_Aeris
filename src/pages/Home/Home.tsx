@@ -392,6 +392,88 @@ function How() {
 }
 
 // ──────────────────────────────────────────────────────────────────────────
+// US-004 — Tarifs indicatifs d'assemblage
+// Affichés à titre indicatif. Tarifs ajustables côté business sans déploiement
+// en remontant les valeurs dans un futur CMS / table de config.
+
+const ASSEMBLY_TIERS = [
+  {
+    name: 'Essentiel',
+    price: 79,
+    desc: 'Montage standard, vérification fonctionnelle, test de boot.',
+    includes: ['Montage des composants', 'Câble management de base', 'Test POST + démarrage Windows'],
+  },
+  {
+    name: 'Confort',
+    price: 129,
+    desc: 'Montage soigné, optimisation thermique, installation OS et drivers.',
+    includes: [
+      'Tout l\'offre Essentiel',
+      'Câble management premium',
+      'Installation Windows + drivers à jour',
+      'Profil de courbes ventilateurs',
+    ],
+    highlight: true,
+  },
+  {
+    name: 'Premium',
+    price: 199,
+    desc: 'Tuning complet, benchmarks, profil overclock léger si compatible.',
+    includes: [
+      'Tout l\'offre Confort',
+      'Benchmarks 3DMark + Cinebench',
+      'Profil XMP / EXPO + courbes optimisées',
+      'Rapport de tests délivré au client',
+    ],
+  },
+]
+
+function AssemblyPricing() {
+  return (
+    <section className="s assembly" id="tarifs-assemblage">
+      <div className="c">
+        <div className="chmark rv">
+          <span className="chmark__n">04 / TARIFS</span>
+          <span className="chmark__line" />
+        </div>
+        <div className="s__head">
+          <h2 className="s__h2 rv">Tarifs<br />d&apos;assemblage</h2>
+          <p className="s__p rv s__p--right">
+            Forfaits indicatifs pour l&apos;assemblage et la mise en service de votre configuration. Le devis final est ajusté selon la complexité.
+          </p>
+        </div>
+
+        <div className="assembly__grid">
+          {ASSEMBLY_TIERS.map((tier, i) => (
+            <article
+              key={tier.name}
+              className={`assembly__tier rv rv-d${i + 1} ${tier.highlight ? 'assembly__tier--hl' : ''}`}
+            >
+              {tier.highlight && <span className="assembly__badge">Recommandé</span>}
+              <div className="assembly__name">{tier.name}</div>
+              <div className="assembly__price">
+                <span className="assembly__price-from">à partir de</span>
+                <span className="assembly__price-val">{tier.price}€</span>
+              </div>
+              <p className="assembly__desc">{tier.desc}</p>
+              <ul className="assembly__list">
+                {tier.includes.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        <p className="assembly__note rv">
+          Les tarifs sont indicatifs et hors composants. Un devis personnalisé est établi après validation de votre configuration.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+// ──────────────────────────────────────────────────────────────────────────
 
 function Home() {
   const stats = usePublicStats()
@@ -402,6 +484,7 @@ function Home() {
       <Stats stats={stats} />
       <Bento stats={stats} />
       <How />
+      <AssemblyPricing />
     </>
   )
 }

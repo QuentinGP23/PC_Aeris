@@ -6,6 +6,10 @@
   display: grid;
   grid-template-columns: 248px 1fr;
   min-height: calc(100vh - var(--nav-h));
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 // ── ADMIN SIDEBAR ──────────────────────────────────────────────────────────
@@ -19,6 +23,29 @@
   top: var(--nav-h);
   height: calc(100vh - var(--nav-h));
   overflow: hidden;
+
+  @media (max-width: 900px) {
+    position: relative;
+    top: auto;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &__hd { display: none; }
+    &__body {
+      display: flex;
+      flex-direction: row;
+      padding: 0;
+    }
+    &__section { display: none; }
+    &__item {
+      white-space: nowrap;
+      padding: 14px 18px;
+    }
+  }
 
   &__hd {
     padding: 24px 24px 20px;
@@ -166,6 +193,14 @@
   flex-shrink: 0;
   gap: 16px;
 
+  @media (max-width: 640px) {
+    padding: 20px 18px 16px;
+    flex-direction: column;
+    align-items: stretch;
+
+    &__ghost { font-size: 64px; right: -8px; bottom: -16px; }
+  }
+
   &__ghost {
     position: absolute;
     right: -12px;
@@ -213,6 +248,10 @@
 .admin-body {
   padding: 28px 36px;
   flex: 1;
+
+  @media (max-width: 640px) {
+    padding: 18px;
+  }
 }
 
 // ── STAT CARDS ─────────────────────────────────────────────────────────────
@@ -427,7 +466,10 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rl);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // Sur petit écran, le tableau peut être plus large que l'écran et scroller horizontalement.
 }
 
 .ad-table {
