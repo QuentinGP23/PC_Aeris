@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.4.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.0...v2.4.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* **admin:** ad-table invisible — min-width:0 sur grid + display block explicite ([11b5184](https://github.com/QuentinGP23/PC_Aeris/commit/11b51844b1686ce8f44d3bb175da731b4b951c99))
+* **admin:** ad-table invisible — min-width:0 sur grid cell ([e80caf6](https://github.com/QuentinGP23/PC_Aeris/commit/e80caf6ba04d515fa568ab65d0aa6c97963371ad))
+* **admin:** renomme préfixe ad- en adm- + hauteur sidebar à 100vh ([e07cbe5](https://github.com/QuentinGP23/PC_Aeris/commit/e07cbe5130564dae255e1fc2ae2bc5a0f1d1abae))
+* **admin:** sidebar desktop sticky en top:0 ([942f28b](https://github.com/QuentinGP23/PC_Aeris/commit/942f28b6148cb91cf26ac5b6c08dde3676dca492))
+* **admin:** sidebar desktop sticky en top:0 au lieu de top:var(--nav-h) ([96f7866](https://github.com/QuentinGP23/PC_Aeris/commit/96f78662f92889ccf04e0a35b64f12307ea5fee1))
+
 ## [2.4.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.3.1...v2.4.0) (2026-05-29)
 
 
