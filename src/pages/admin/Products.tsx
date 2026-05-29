@@ -12,14 +12,14 @@ const CATEGORY_OPTIONS = [
 ]
 
 const BADGE_CLASS: Record<string, string> = {
-  cpu: 'ad-badge--cpu',
-  gpu: 'ad-badge--gpu',
-  ram: 'ad-badge--ram',
-  motherboard: 'ad-badge--mb',
-  storage: 'ad-badge--storage',
-  psu: 'ad-badge--psu',
-  pc_case: 'ad-badge--case',
-  cpu_cooler: 'ad-badge--cooler',
+  cpu: 'adm-badge--cpu',
+  gpu: 'adm-badge--gpu',
+  ram: 'adm-badge--ram',
+  motherboard: 'adm-badge--mb',
+  storage: 'adm-badge--storage',
+  psu: 'adm-badge--psu',
+  pc_case: 'adm-badge--case',
+  cpu_cooler: 'adm-badge--cooler',
 }
 
 type FieldType = 'text' | 'number' | 'boolean' | 'array' | 'jsonb'
@@ -221,8 +221,8 @@ function specsFormToUpdates(form: SpecsFormValues, schema: Record<string, SpecsF
 }
 
 function SortIcon({ col, sortBy, sortDir }: { col: string; sortBy: string; sortDir: 'asc' | 'desc' }) {
-  if (sortBy !== col) return <span className="ad-sort ad-sort--idle">↕</span>
-  return <span className="ad-sort">{sortDir === 'asc' ? '↑' : '↓'}</span>
+  if (sortBy !== col) return <span className="adm-sort adm-sort--idle">↕</span>
+  return <span className="adm-sort">{sortDir === 'asc' ? '↑' : '↓'}</span>
 }
 
 type EditFormValues = {
@@ -440,15 +440,15 @@ function AdminProducts() {
   return (
     <div className="admin-products">
       {error && (
-        <div className="ad-alert-err">
+        <div className="adm-alert-err">
           <span>{error}</span>
           <button onClick={() => setError(null)} aria-label="Fermer">×</button>
         </div>
       )}
 
-      <div className="ad-toolbar">
+      <div className="adm-toolbar">
         <select
-          className="ad-select"
+          className="adm-select"
           value={category}
           onChange={(e) => handleCategoryChange(e.target.value)}
         >
@@ -457,21 +457,21 @@ function AdminProducts() {
           ))}
         </select>
         <input
-          className="ad-input"
+          className="adm-input"
           type="search"
           placeholder="Rechercher un produit…"
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
           style={{ minWidth: 260 }}
         />
-        <span className="ad-count">{total.toLocaleString('fr-FR')} produit{total !== 1 ? 's' : ''}</span>
-        <button className="ad-btn ad-btn--ind" onClick={openCreate}>+ Créer un produit</button>
+        <span className="adm-count">{total.toLocaleString('fr-FR')} produit{total !== 1 ? 's' : ''}</span>
+        <button className="adm-btn adm-btn--ind" onClick={openCreate}>+ Créer un produit</button>
       </div>
 
       {loading ? (
-        <div className="ad-loading">Chargement…</div>
+        <div className="adm-loading">Chargement…</div>
       ) : error ? (
-        <div className="ad-empty-state">
+        <div className="adm-empty-state">
           <div style={{ textAlign: 'center', maxWidth: 480 }}>
             <strong style={{ color: 'var(--text)' }}>Impossible de charger les produits.</strong>
             <div style={{ marginTop: 8, fontSize: 12, fontFamily: 'var(--fm)', color: 'var(--text-3)' }}>
@@ -483,7 +483,7 @@ function AdminProducts() {
           </div>
         </div>
       ) : total === 0 && !search.trim() && category === 'all' ? (
-        <div className="ad-empty-state">
+        <div className="adm-empty-state">
           <div style={{ textAlign: 'center' }}>
             <strong style={{ color: 'var(--text)' }}>Catalogue vide.</strong>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-3)' }}>
@@ -492,12 +492,12 @@ function AdminProducts() {
           </div>
         </div>
       ) : products.length === 0 ? (
-        <div className="ad-empty-state">
+        <div className="adm-empty-state">
           Aucun produit ne correspond aux filtres actuels.
         </div>
       ) : (
-        <div className="ad-table-wrap">
-          <table className="ad-table">
+        <div className="adm-table-wrap">
+          <table className="adm-table">
             <thead>
               <tr>
                 <th style={{ width: 60 }}>Image</th>
@@ -515,31 +515,31 @@ function AdminProducts() {
                 <tr key={p.id}>
                   <td>
                     {p.image_url ? (
-                      <img src={p.image_url} alt={p.name} className="ad-thumb" />
+                      <img src={p.image_url} alt={p.name} className="adm-thumb" />
                     ) : (
-                      <div className="ad-thumb-empty">—</div>
+                      <div className="adm-thumb-empty">—</div>
                     )}
                   </td>
                   <td>
                     <span className="td-main admin-products__name">{p.name}</span>
                   </td>
                   <td>
-                    <span className={`ad-badge ${BADGE_CLASS[p.category] ?? 'ad-badge--cat'}`}>
+                    <span className={`adm-badge ${BADGE_CLASS[p.category] ?? 'adm-badge--cat'}`}>
                       {CATEGORIES.find((c) => c.value === p.category)?.label ?? p.category}
                     </span>
                   </td>
-                  <td>{p.manufacturer || <span className="ad-empty-cell">—</span>}</td>
-                  <td>{p.series || <span className="ad-empty-cell">—</span>}</td>
-                  <td className="td-mono">{p.release_year || <span className="ad-empty-cell">—</span>}</td>
+                  <td>{p.manufacturer || <span className="adm-empty-cell">—</span>}</td>
+                  <td>{p.series || <span className="adm-empty-cell">—</span>}</td>
+                  <td className="td-mono">{p.release_year || <span className="adm-empty-cell">—</span>}</td>
                   <td className="td-mono">
                     {p.price_avg_eur != null
                       ? <span className="td-main">{p.price_avg_eur.toFixed(2)} €</span>
-                      : <span className="ad-empty-cell">—</span>}
+                      : <span className="adm-empty-cell">—</span>}
                   </td>
                   <td>
                     <div className="admin-products__actions">
-                      <button className="ad-btn ad-btn--ghost ad-btn--sm" onClick={() => { void openEdit(p) }}>Modifier</button>
-                      <button className="ad-btn ad-btn--danger ad-btn--sm" onClick={() => setDeletingProduct(p)}>Supprimer</button>
+                      <button className="adm-btn adm-btn--ghost adm-btn--sm" onClick={() => { void openEdit(p) }}>Modifier</button>
+                      <button className="adm-btn adm-btn--danger adm-btn--sm" onClick={() => setDeletingProduct(p)}>Supprimer</button>
                     </div>
                   </td>
                 </tr>
@@ -550,35 +550,35 @@ function AdminProducts() {
       )}
 
       {totalPages > 1 && (
-        <div className="ad-pagination">
-          <button className="ad-btn ad-btn--ghost ad-btn--sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Précédent</button>
-          <span className="ad-page-info">Page {page + 1} / {totalPages}</span>
-          <button className="ad-btn ad-btn--ghost ad-btn--sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant →</button>
+        <div className="adm-pagination">
+          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Précédent</button>
+          <span className="adm-page-info">Page {page + 1} / {totalPages}</span>
+          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant →</button>
         </div>
       )}
 
       {/* Create / Edit modal */}
       {modalOpen && (
-        <div className="ad-modal-overlay" onClick={() => setModalMode(null)}>
-          <div className="ad-modal ad-modal--xl" onClick={(e) => e.stopPropagation()}>
-            <div className="ad-modal__hd">
-              <div className="ad-modal__title">{isCreateMode ? 'Créer un produit' : 'Modifier le produit'}</div>
-              <button className="ad-modal__close" onClick={() => setModalMode(null)} aria-label="Fermer">×</button>
+        <div className="adm-modal-overlay" onClick={() => setModalMode(null)}>
+          <div className="adm-modal adm-modal--xl" onClick={(e) => e.stopPropagation()}>
+            <div className="adm-modal__hd">
+              <div className="adm-modal__title">{isCreateMode ? 'Créer un produit' : 'Modifier le produit'}</div>
+              <button className="adm-modal__close" onClick={() => setModalMode(null)} aria-label="Fermer">×</button>
             </div>
-            <div className="ad-modal__body">
-              {editError && <div className="ad-alert-err">{editError}</div>}
+            <div className="adm-modal__body">
+              {editError && <div className="adm-alert-err">{editError}</div>}
 
-              <div className="ad-tabs">
+              <div className="adm-tabs">
                 <button
                   type="button"
-                  className={`ad-tab ${activeTab === 'info' ? 'ad-tab--act' : ''}`}
+                  className={`adm-tab ${activeTab === 'info' ? 'adm-tab--act' : ''}`}
                   onClick={() => setActiveTab('info')}
                 >
                   Informations
                 </button>
                 <button
                   type="button"
-                  className={`ad-tab ${activeTab === 'specs' ? 'ad-tab--act' : ''}`}
+                  className={`adm-tab ${activeTab === 'specs' ? 'adm-tab--act' : ''}`}
                   onClick={() => setActiveTab('specs')}
                 >
                   Caractéristiques
@@ -586,12 +586,12 @@ function AdminProducts() {
               </div>
 
               {activeTab === 'info' && (
-                <div className="ad-form">
+                <div className="adm-form">
                   {isCreateMode && (
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Catégorie *</label>
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Catégorie *</label>
                       <select
-                        className="ad-fg__sel"
+                        className="adm-fg__sel"
                         value={createCategory}
                         onChange={(e) => handleCreateCategoryChange(e.target.value as CategoryKey)}
                       >
@@ -601,91 +601,91 @@ function AdminProducts() {
                       </select>
                     </div>
                   )}
-                  <div className="ad-fg">
-                    <label className="ad-fg__l">Nom *</label>
+                  <div className="adm-fg">
+                    <label className="adm-fg__l">Nom *</label>
                     <input
-                      className="ad-fg__in"
+                      className="adm-fg__in"
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                     />
                   </div>
-                  <div className="ad-row ad-row--2">
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Fabricant</label>
+                  <div className="adm-row adm-row--2">
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Fabricant</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         value={editForm.manufacturer}
                         onChange={(e) => setEditForm({ ...editForm, manufacturer: e.target.value })}
                       />
                     </div>
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Série</label>
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Série</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         value={editForm.series}
                         onChange={(e) => setEditForm({ ...editForm, series: e.target.value })}
                       />
                     </div>
                   </div>
-                  <div className="ad-row ad-row--2">
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Variante</label>
+                  <div className="adm-row adm-row--2">
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Variante</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         value={editForm.variant}
                         onChange={(e) => setEditForm({ ...editForm, variant: e.target.value })}
                       />
                     </div>
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Année de sortie</label>
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Année de sortie</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         type="number"
                         value={editForm.release_year}
                         onChange={(e) => setEditForm({ ...editForm, release_year: e.target.value })}
                       />
                     </div>
                   </div>
-                  <div className="ad-row ad-row--3">
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Prix min (€)</label>
+                  <div className="adm-row adm-row--3">
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Prix min (€)</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         type="number"
                         value={editForm.price_min_eur}
                         onChange={(e) => setEditForm({ ...editForm, price_min_eur: e.target.value })}
                       />
                     </div>
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Prix moyen (€)</label>
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Prix moyen (€)</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         type="number"
                         value={editForm.price_avg_eur}
                         onChange={(e) => setEditForm({ ...editForm, price_avg_eur: e.target.value })}
                       />
                     </div>
-                    <div className="ad-fg">
-                      <label className="ad-fg__l">Prix max (€)</label>
+                    <div className="adm-fg">
+                      <label className="adm-fg__l">Prix max (€)</label>
                       <input
-                        className="ad-fg__in"
+                        className="adm-fg__in"
                         type="number"
                         value={editForm.price_max_eur}
                         onChange={(e) => setEditForm({ ...editForm, price_max_eur: e.target.value })}
                       />
                     </div>
                   </div>
-                  <div className="ad-fg">
-                    <label className="ad-fg__l">URL image</label>
+                  <div className="adm-fg">
+                    <label className="adm-fg__l">URL image</label>
                     <input
-                      className="ad-fg__in"
+                      className="adm-fg__in"
                       value={editForm.image_url}
                       onChange={(e) => setEditForm({ ...editForm, image_url: e.target.value })}
                     />
                   </div>
                   {editForm.image_url && (
                     <div className="admin-products__preview">
-                      <img src={editForm.image_url} alt="Aperçu" className="ad-preview-img" />
+                      <img src={editForm.image_url} alt="Aperçu" className="adm-preview-img" />
                     </div>
                   )}
                 </div>
@@ -695,41 +695,41 @@ function AdminProducts() {
                 <div className="admin-products__specs">
                   {!specsLoading && specsSchema && (
                     <div className="admin-products__specs-toolbar">
-                      <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={handleResetSpecs}>
+                      <button type="button" className="adm-btn adm-btn--ghost adm-btn--sm" onClick={handleResetSpecs}>
                         Réinitialiser
                       </button>
                     </div>
                   )}
                   {specsLoading ? (
-                    <div className="ad-loading">Chargement des specs…</div>
+                    <div className="adm-loading">Chargement des specs…</div>
                   ) : specsSchema ? (
-                    <div className="ad-specs-grid">
+                    <div className="adm-specs-grid">
                       {Object.entries(specsSchema).map(([key, field]) => {
                         if (field.type === 'boolean') {
                           const checked = specsForm[key] as boolean
                           return (
-                            <label key={key} className="ad-toggle" onClick={(e) => e.preventDefault()}>
+                            <label key={key} className="adm-toggle" onClick={(e) => e.preventDefault()}>
                               <input
                                 type="checkbox"
                                 checked={checked}
                                 onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.checked })}
                               />
                               <span
-                                className={`ad-toggle__sw ${checked ? 'ad-toggle__sw--on' : ''}`}
+                                className={`adm-toggle__sw ${checked ? 'adm-toggle__sw--on' : ''}`}
                                 onClick={() => setSpecsForm({ ...specsForm, [key]: !checked })}
                               >
-                                <span className="ad-toggle__knob" />
+                                <span className="adm-toggle__knob" />
                               </span>
-                              <span className="ad-toggle__label">{field.label}</span>
+                              <span className="adm-toggle__label">{field.label}</span>
                             </label>
                           )
                         }
                         if (field.type === 'jsonb') {
                           return (
-                            <div key={key} className="ad-fg ad-specs-grid__full">
-                              <label className="ad-fg__l">{field.label}</label>
+                            <div key={key} className="adm-fg adm-specs-grid__full">
+                              <label className="adm-fg__l">{field.label}</label>
                               <textarea
-                                className="ad-fg__ta"
+                                className="adm-fg__ta"
                                 rows={3}
                                 value={specsForm[key] as string}
                                 onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
@@ -738,10 +738,10 @@ function AdminProducts() {
                           )
                         }
                         return (
-                          <div key={key} className="ad-fg">
-                            <label className="ad-fg__l">{field.label}{field.type === 'array' ? ' (virgules)' : ''}</label>
+                          <div key={key} className="adm-fg">
+                            <label className="adm-fg__l">{field.label}{field.type === 'array' ? ' (virgules)' : ''}</label>
                             <input
-                              className="ad-fg__in"
+                              className="adm-fg__in"
                               type={field.type === 'number' ? 'number' : 'text'}
                               value={specsForm[key] as string}
                               onChange={(e) => setSpecsForm({ ...specsForm, [key]: e.target.value })}
@@ -751,14 +751,14 @@ function AdminProducts() {
                       })}
                     </div>
                   ) : (
-                    <p className="ad-empty-state">Aucun schéma disponible pour cette catégorie.</p>
+                    <p className="adm-empty-state">Aucun schéma disponible pour cette catégorie.</p>
                   )}
                 </div>
               )}
             </div>
-            <div className="ad-modal__ft">
-              <button className="ad-btn ad-btn--ghost" onClick={() => setModalMode(null)}>Annuler</button>
-              <button className="ad-btn ad-btn--ind" onClick={() => { void handleSubmit() }} disabled={editLoading}>
+            <div className="adm-modal__ft">
+              <button className="adm-btn adm-btn--ghost" onClick={() => setModalMode(null)}>Annuler</button>
+              <button className="adm-btn adm-btn--ind" onClick={() => { void handleSubmit() }} disabled={editLoading}>
                 {editLoading ? 'Enregistrement…' : (isCreateMode ? 'Créer' : 'Enregistrer')}
               </button>
             </div>
@@ -768,21 +768,21 @@ function AdminProducts() {
 
       {/* Delete modal */}
       {deletingProduct && (
-        <div className="ad-modal-overlay" onClick={() => setDeletingProduct(null)}>
-          <div className="ad-modal ad-modal--sm" onClick={(e) => e.stopPropagation()}>
-            <div className="ad-modal__hd">
-              <div className="ad-modal__title">Supprimer le produit</div>
-              <button className="ad-modal__close" onClick={() => setDeletingProduct(null)} aria-label="Fermer">×</button>
+        <div className="adm-modal-overlay" onClick={() => setDeletingProduct(null)}>
+          <div className="adm-modal adm-modal--sm" onClick={(e) => e.stopPropagation()}>
+            <div className="adm-modal__hd">
+              <div className="adm-modal__title">Supprimer le produit</div>
+              <button className="adm-modal__close" onClick={() => setDeletingProduct(null)} aria-label="Fermer">×</button>
             </div>
-            <div className="ad-modal__body">
-              <p className="ad-warn-text">
+            <div className="adm-modal__body">
+              <p className="adm-warn-text">
                 Es-tu sûr de vouloir supprimer <strong style={{ color: 'var(--text)' }}>{deletingProduct.name}</strong> ?
               </p>
-              <p className="ad-warn-danger">Cette action est irréversible.</p>
+              <p className="adm-warn-danger">Cette action est irréversible.</p>
             </div>
-            <div className="ad-modal__ft">
-              <button className="ad-btn ad-btn--ghost" onClick={() => setDeletingProduct(null)}>Annuler</button>
-              <button className="ad-btn ad-btn--danger" onClick={() => { void handleDelete() }} disabled={deleteLoading}>
+            <div className="adm-modal__ft">
+              <button className="adm-btn adm-btn--ghost" onClick={() => setDeletingProduct(null)}>Annuler</button>
+              <button className="adm-btn adm-btn--danger" onClick={() => { void handleDelete() }} disabled={deleteLoading}>
                 {deleteLoading ? 'Suppression…' : 'Supprimer'}
               </button>
             </div>
