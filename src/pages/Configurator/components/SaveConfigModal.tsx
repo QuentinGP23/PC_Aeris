@@ -14,18 +14,27 @@ const MAX_LEN = 80
 
 function SaveConfigModal({ isOpen, defaultName, saving, onClose, onSubmit }: Props) {
   const [name, setName] = useState(defaultName)
+  const [wasOpen, setWasOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Réinitialise le champ à l'ouverture — pattern React : ajuster l'état au
+  // changement de prop pendant le rendu (plutôt qu'un setState dans un effet).
+  if (isOpen && !wasOpen) {
+    setWasOpen(true)
+    setName(defaultName)
+  } else if (!isOpen && wasOpen) {
+    setWasOpen(false)
+  }
 
   useEffect(() => {
     if (!isOpen) return
-    setName(defaultName)
-    // Focus + pré-sélection du nom par défaut au prochain frame (modal monté).
+    // Focus + pré-sélection au prochain frame (modal monté).
     const id = requestAnimationFrame(() => {
       inputRef.current?.focus()
       inputRef.current?.select()
     })
     return () => cancelAnimationFrame(id)
-  }, [isOpen, defaultName])
+  }, [isOpen])
 
   const trimmed = name.trim()
   const valid = trimmed.length > 0 && trimmed.length <= MAX_LEN
