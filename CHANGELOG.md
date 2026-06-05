@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.5.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.2...v2.5.0) (2026-06-05)
+
+
+### Features
+
+* **configurator:** configs prêtes, questionnaire guidé, tri par benc… ([8ea974b](https://github.com/QuentinGP23/PC_Aeris/commit/8ea974b887479479192dacbd1b8c83708178a976))
+* **configurator:** configs prêtes, questionnaire guidé, tri par benchmark + popin de sauvegarde ([dcbcc69](https://github.com/QuentinGP23/PC_Aeris/commit/dcbcc69a6d5d614364f54aea0abb44b0fdc21fee))
+
+
+### Bug Fixes
+
+* **configurator:** filtre compat côté SQL via embedding PostgREST ([64311d3](https://github.com/QuentinGP23/PC_Aeris/commit/64311d33f3427bae99997c6f98ff535164448737))
+* **configurator:** ordre strict + fallback robuste sur filtre vide ([05e7430](https://github.com/QuentinGP23/PC_Aeris/commit/05e74307902c65ab1a0e2d7170c7a29a8534fb1c))
+* **configurator:** ordre strict + fallback robuste sur filtre vide ([bf82308](https://github.com/QuentinGP23/PC_Aeris/commit/bf82308ead43d89fd818ddf082773f510c956420))
+* **lint:** évite setState synchrone dans l'effet de SaveConfigModal ([aeb017e](https://github.com/QuentinGP23/PC_Aeris/commit/aeb017e83a2026546596f2023e6c5d3db972b094))
+
 ## [2.4.2](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.1...v2.4.2) (2026-05-29)
 
 
