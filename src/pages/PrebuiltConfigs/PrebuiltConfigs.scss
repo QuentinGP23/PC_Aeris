@@ -1,0 +1,63 @@
+@use "../../styles/variables" as *;
+
+.prebuilts {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+
+  &__hd { margin-bottom: 28px; }
+  &__title { font-family: var(--fh); font-size: 32px; font-weight: 800; color: var(--text); margin: 0 0 10px; }
+  &__sub { font-family: var(--fb); font-size: 15px; color: var(--text-2); max-width: 720px; line-height: 1.5; }
+  &__link {
+    background: none; border: none; padding: 0; color: var(--ind-l); cursor: pointer;
+    font: inherit; text-decoration: underline;
+  }
+
+  &__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  &__chip {
+    background: transparent; border: 1px solid var(--border); color: var(--text-2);
+    padding: 7px 14px; border-radius: 999px; font-family: var(--fm); font-size: 12px; cursor: pointer;
+    transition: all 0.13s;
+    &:hover { border-color: var(--border-s); color: var(--text); }
+    &.is-on { background: var(--ind-g); border-color: var(--ind); color: var(--ind-l); }
+  }
+
+  &__state { padding: 60px; text-align: center; color: var(--text-3); font-family: var(--fb); }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+}
+
+.pb-card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  transition: border-color 0.15s, transform 0.15s;
+
+  &:hover { border-color: var(--ind); transform: translateY(-3px); }
+
+  &__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  &__usage { font-family: var(--fm); font-size: 11px; color: var(--ind-l); letter-spacing: 0.04em; }
+  &__tier { font-family: var(--fm); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  &__name { font-family: var(--fh); font-size: 19px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
+  &__summary { font-family: var(--fb); font-size: 13.5px; color: var(--text-2); line-height: 1.5; margin: 0 0 18px; flex: 1; }
+
+  &__budget { display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; }
+  &__budget-v { font-family: var(--fh); font-size: 22px; font-weight: 800; color: var(--text); }
+  &__budget-l { font-family: var(--fm); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  &__cta {
+    background: var(--ind); color: #fff; border: none; border-radius: var(--rs);
+    padding: 11px 14px; font-family: var(--fb); font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.14s;
+    &:hover:not(:disabled) { background: #7577f5; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+}

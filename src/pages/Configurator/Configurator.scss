@@ -435,6 +435,43 @@
   }
 }
 
+// ── SORT ──
+.config-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -10px 0 22px;
+  flex-wrap: wrap;
+
+  &__lbl {
+    font-family: var(--fm);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  &__b {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    padding: 5px 11px;
+    border-radius: var(--rs);
+    font-family: var(--fm);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.13s;
+
+    &:hover { border-color: var(--border-s); color: var(--text); }
+
+    &.is-on {
+      background: var(--ind-g);
+      border-color: var(--ind);
+      color: var(--ind-l);
+    }
+  }
+}
+
 // ── PRODUCT GRID ──
 .prod-grid {
   display: grid;

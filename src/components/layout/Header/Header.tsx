@@ -7,6 +7,8 @@ import './Header.scss'
 
 const NAV_LINKS = [
   { to: '/', label: 'Accueil' },
+  { to: '/questionnaire', label: 'Trouver mon PC' },
+  { to: '/configs-pretes', label: 'Configs prêtes' },
   { to: '/configurateur', label: 'Configurateur' },
 ]
 

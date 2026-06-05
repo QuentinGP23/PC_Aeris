@@ -1,0 +1,76 @@
+@use "../../../styles/variables" as *;
+
+// Override du Modal blanc de base pour rester dans le thème Aeris Dark.
+.save-config-modal {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+
+  .modal__header {
+    border-bottom-color: var(--border);
+  }
+
+  .modal__title {
+    color: var(--text);
+  }
+
+  .modal__close {
+    color: var(--text-3);
+
+    &:hover {
+      color: var(--text);
+    }
+  }
+
+  .modal__footer {
+    border-top-color: var(--border);
+  }
+}
+
+.save-config {
+  &__label {
+    display: block;
+    font-family: var(--fm);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-bottom: 8px;
+  }
+
+  &__input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border-s);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: var(--rs);
+    font-family: var(--fh);
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &::placeholder {
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
+    &:focus {
+      border-color: var(--ind);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__hint {
+    margin-top: 6px;
+    text-align: right;
+    font-family: var(--fm);
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.04em;
+  }
+}
