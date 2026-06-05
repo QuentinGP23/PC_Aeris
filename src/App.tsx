@@ -12,6 +12,8 @@ import {
   NotFound,
   Components,
   Configurator,
+  PrebuiltConfigs,
+  Questionnaire,
   ProductDetail,
   Profile,
   SignIn,
@@ -51,6 +53,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/components" element={<Components />} />
           <Route path="/configurateur" element={<Configurator />} />
+          <Route path="/configs-pretes" element={<PrebuiltConfigs />} />
+          <Route path="/questionnaire" element={<Questionnaire />} />
           <Route path="/produit/:id" element={<ProductDetail />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

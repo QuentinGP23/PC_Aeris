@@ -9,6 +9,7 @@ import type { Product, CategoryKey } from '../../types'
 import { buildCompatibilityFilter, missingPrereqs, nextPendingCategory, SELECTION_ORDER } from '../../utils'
 import { savedConfigsService } from '../../services'
 import SavedConfigsModal from './components/SavedConfigsModal'
+import SaveConfigModal from './components/SaveConfigModal'
 import './Configurator.scss'
 
 const PAGE_SIZE = 24
@@ -41,12 +42,14 @@ function Configurator() {
   const { isAuthenticated } = useAuth()
 
   const [savedModalOpen, setSavedModalOpen] = useState(false)
+  const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [saving, setSaving] = useState(false)
 
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('cpu')
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState('')
+  const [sort, setSort] = useState<'name' | 'bench' | 'price'>('name')
   const [page, setPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const [compatInfo, setCompatInfo] = useState<{ active: boolean; reason?: string; empty?: boolean; fallback?: boolean }>({ active: false })
@@ -90,12 +93,23 @@ function Configurator() {
       const specsRel = compat ? `${specsTable}!inner(*)` : `${specsTable}(*)`
       const baseSelect = 'id, name, manufacturer, series, variant, release_year, category, image_url, description, price_min_eur, price_max_eur, price_avg_eur, price_updated_at, retailer_url, benchmark_score'
 
-      let query = supabase
-        .from('products')
-        .select(`${baseSelect}, ${specsRel}`, { count: 'exact' })
-        .eq('category', activeCategory)
-        .order('name')
-        .range(from, to)
+      // Tri : benchmark (desc) seulement là où il a un sens (CPU/GPU), prix (asc),
+      // sinon nom. Les nuls passent en fin pour ne pas polluer le haut de liste.
+      const benchCat = activeCategory === 'cpu' || activeCategory === 'gpu'
+      const applyOrder = <T extends { order: (...a: never[]) => T }>(q: T): T => {
+        if (sort === 'bench' && benchCat)
+          return (q.order as (c: string, o: object) => T)('benchmark_score', { ascending: false, nullsFirst: false })
+        if (sort === 'price')
+          return (q.order as (c: string, o: object) => T)('price_avg_eur', { ascending: true, nullsFirst: false })
+        return (q.order as (c: string) => T)('name')
+      }
+
+      let query = applyOrder(
+        supabase
+          .from('products')
+          .select(`${baseSelect}, ${specsRel}`, { count: 'exact' })
+          .eq('category', activeCategory),
+      ).range(from, to)
 
       if (search.trim()) {
         query = query.ilike('name', `%${search.trim()}%`)
@@ -132,12 +146,12 @@ function Configurator() {
       // bloqué (données incomplètes côté base, format inattendu, etc.).
       if (compat && (error || !productsData || productsData.length === 0)) {
         const fallbackRel = `${specsTable}(*)`
-        let fallbackQuery = supabase
-          .from('products')
-          .select(`${baseSelect}, ${fallbackRel}`, { count: 'exact' })
-          .eq('category', activeCategory)
-          .order('name')
-          .range(from, to)
+        let fallbackQuery = applyOrder(
+          supabase
+            .from('products')
+            .select(`${baseSelect}, ${fallbackRel}`, { count: 'exact' })
+            .eq('category', activeCategory),
+        ).range(from, to)
         if (search.trim()) {
           fallbackQuery = fallbackQuery.ilike('name', `%${search.trim()}%`)
         }
@@ -183,7 +197,7 @@ function Configurator() {
 
     void run()
     return () => { cancelled = true }
-  }, [activeCategory, page, search, cpuId, motherboardId, pcCaseId, gpuId, locked]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeCategory, page, search, sort, cpuId, motherboardId, pcCaseId, gpuId, locked]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCategoryChange = (cat: CategoryKey) => {
     const missing = missingPrereqs(cat, config)
@@ -217,29 +231,24 @@ function Configurator() {
 
   const totalAvg = Object.values(config).reduce((acc, p) => acc + (p?.price_avg_eur ?? 0), 0)
 
-  const handleSave = async () => {
+  const defaultSaveName = loadedConfigName ?? `Config du ${new Date().toLocaleDateString('fr-FR')}`
+
+  const handleSave = async (name: string) => {
     if (saving) return
-    const defaultName = loadedConfigName ?? `Config du ${new Date().toLocaleDateString('fr-FR')}`
-    const name = window.prompt('Nom de la configuration :', defaultName)
-    if (!name) return
-    const trimmed = name.trim()
-    if (!trimmed) {
-      toast.error('Le nom ne peut pas être vide')
-      return
-    }
     setSaving(true)
     const components: Partial<Record<CategoryKey, string>> = {}
     for (const [cat, prod] of Object.entries(config) as [CategoryKey, Product][]) {
       components[cat] = prod.id
     }
-    const { data, error } = await savedConfigsService.create(trimmed, components)
+    const { data, error } = await savedConfigsService.create(name, components)
     setSaving(false)
     if (error || !data) {
       toast.error(error ?? 'Erreur de sauvegarde')
       return
     }
-    setLoadedConfigName(trimmed)
-    toast.success(`"${trimmed}" sauvegardée`)
+    setLoadedConfigName(name)
+    setSaveModalOpen(false)
+    toast.success(`"${name}" sauvegardée`)
   }
 
   const activeCatDef = CATEGORIES.find((c) => c.value === activeCategory)!
@@ -325,7 +334,7 @@ function Configurator() {
               <button
                 type="button"
                 className="config-side__save"
-                onClick={() => void handleSave()}
+                onClick={() => setSaveModalOpen(true)}
                 disabled={saving || selectedCount === 0}
               >
                 {saving ? 'Sauvegarde…' : '💾 Sauvegarder'}
@@ -353,6 +362,14 @@ function Configurator() {
       </aside>
 
       <SavedConfigsModal isOpen={savedModalOpen} onClose={() => setSavedModalOpen(false)} />
+
+      <SaveConfigModal
+        isOpen={saveModalOpen}
+        defaultName={defaultSaveName}
+        saving={saving}
+        onClose={() => setSaveModalOpen(false)}
+        onSubmit={(name) => void handleSave(name)}
+      />
 
       <main className="config-main">
         <div className="config-main__hd">
@@ -411,6 +428,33 @@ function Configurator() {
                   <span className="config-search__cnt">{totalCount} résultats</span>
                 )}
               </div>
+
+            <div className="config-sort">
+              <span className="config-sort__lbl">Trier par</span>
+              <button
+                type="button"
+                className={`config-sort__b ${sort === 'name' ? 'is-on' : ''}`}
+                onClick={() => { setSort('name'); setPage(0) }}
+              >
+                Nom
+              </button>
+              {(activeCategory === 'cpu' || activeCategory === 'gpu') && (
+                <button
+                  type="button"
+                  className={`config-sort__b ${sort === 'bench' ? 'is-on' : ''}`}
+                  onClick={() => { setSort('bench'); setPage(0) }}
+                >
+                  Performance ↓
+                </button>
+              )}
+              <button
+                type="button"
+                className={`config-sort__b ${sort === 'price' ? 'is-on' : ''}`}
+                onClick={() => { setSort('price'); setPage(0) }}
+              >
+                Prix ↑
+              </button>
+            </div>
 
             {loading ? (
               <div className="st-load">Chargement...</div>
