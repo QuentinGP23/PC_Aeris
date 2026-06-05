@@ -309,19 +309,19 @@ Comment on gagne de l'argent.
        ┌─────────────────────────┐
        │  REVENUS PC AERIS       │
        │                         │
-       │ • PC assemblés (15-20%) │ ← cœur du modèle
-       │ • Configurations (8-12%)│
-       │ • Affiliation (3-7%)    │
-       │ • Service assemblage    │ ← 79 / 129 / 199 €
-       │ • Garantie étendue      │
-       │ • Abonnement Pro (futur)│
+       │ • Montage à prix fixe   │ ← cœur du modèle
+       │   Essentiel  79 €       │
+       │   Confort   129 €       │
+       │   Premium   199 €       │
+       │ • Composants à coût     │   (sans marge)
+       │ • Garantie / Abo (futur)│
        └─────────────────────────┘
 ```
 
 **Script (1 min 30)**
-> "Le modèle économique combine plusieurs sources. La plus importante : la commission sur les PC assemblés clé en main, entre 15 et 20 % de marge. Sur les configurations où le client achète juste les composants validés, on est sur du 8 à 12 %. Sur les renvois en affiliation vers des partenaires (Amazon, LDLC), 3 à 7 %.
+> "Le modèle est simple et c'est important de bien le saisir : on ne prend pas de marge sur les composants — le client les paie au meilleur prix du marché. Ce qui nous rémunère, c'est le **montage**, vendu à prix fixe, via trois offres : Essentiel à 79 €, Confort à 129 € — la plus choisie —, et Premium à 199 € avec tuning, benchmarks et rapport de tests. Le prix total, c'est donc les composants au meilleur prix plus l'offre de montage choisie, soit environ 120 € de revenu en moyenne par commande.
 >
-> À ça s'ajoutent des **revenus complémentaires** : un service d'assemblage facturé entre 79 et 199 € selon le niveau de finition — Essentiel, Confort, Premium. Une garantie étendue optionnelle. Et à terme, un abonnement Pro pour les utilisateurs intensifs avec alertes prix, configurations illimitées, historique.
+> À ça s'ajouteront des **revenus complémentaires** : une garantie étendue optionnelle, et à terme un abonnement Pro pour les utilisateurs intensifs — alertes prix, configurations illimitées, historique.
 >
 > Le modèle est volontairement **asset-light** : on ne tient pas de stock. C'est une force pour le besoin en fonds de roulement, c'est une contrainte pour les délais de livraison qu'il faut maîtriser via les partenaires."
 
@@ -340,14 +340,14 @@ Hypothèses prudentes, croissance par bouche-à-oreille.
 
 | Année | Commandes/mois | Panier moyen | CA annuel | Marge brute |
 |---|---|---|---|---|
-| N+1 | 10 | 1 200 € | **144 K€** | 17 – 22 K€ |
-| N+2 | 25 | 1 250 € | **375 K€** | 45 – 56 K€ |
-| N+3 | 50 | 1 300 € | **780 K€** | 94 – 117 K€ |
+| N+1 | ~6 (montée) | 1 200 € | **~86 K€** | 10 – 13 K€ |
+| N+2 | ~16 | 1 250 € | **~240 K€** | 29 – 36 K€ |
+| N+3 | ~32 | 1 300 € | **~500 K€** | 60 – 75 K€ |
 
 **Script (1 min 30)**
-> "Voici nos projections. Ce sont des hypothèses **délibérément prudentes** pour une marque sans notoriété initiale. 10 commandes par mois la première année, 25 la seconde, 50 la troisième. Avec un panier moyen entre 1 200 et 1 300 €.
+> "Voici nos projections. Ce sont des hypothèses **délibérément prudentes**, avec une montée en charge, pour une marque sans notoriété initiale. L'année 1 est une phase de lancement, autour de 6 commandes par mois en moyenne, puis 16 la seconde année et 32 la troisième. Avec un panier moyen entre 1 200 et 1 300 €.
 >
-> Ça nous met à 144 K€ de chiffre d'affaires la première année, **375 K€ la seconde, 780 K€ la troisième**. La marge brute est de 12-15 % du chiffre d'affaires — cohérente avec un modèle de revente de hardware où les composants représentent l'essentiel du coût.
+> Ça nous met à environ 86 K€ de chiffre d'affaires la première année, **240 K€ la seconde, 500 K€ la troisième**. La marge brute, c'est essentiellement l'offre de montage — environ 10 % du chiffre d'affaires, les composants étant vendus à prix coûtant.
 >
 > Pour atteindre ces chiffres, on mise sur le **bouche-à-oreille** (taux de recommandation cible : 30 %), le **SEO** sur des requêtes très intentionnistes — 'PC gaming sur-mesure', 'configurateur compatible 2026' — et des **partenariats avec des créateurs YouTube tech/gaming**."
 

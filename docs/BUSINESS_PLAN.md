@@ -13,7 +13,7 @@
 | **Problème**          | Acheter un PC adapté est complexe, chronophage et source d'erreurs         |
 | **Solution**          | Plateforme tout-en-un : questionnaire, configurateur IA, prix transparents |
 | **Cible**             | Particuliers et professionnels individuels (gamers, créatifs, étudiants)   |
-| **Modèle économique** | Commission sur ventes (8-20%) + services (assemblage, garantie)            |
+| **Modèle économique** | Offres de montage à prix fixe (79–199 €), composants à prix coûtant ; services à venir |
 | **Différenciation**   | Compatibilité garantie par IA + fourchettes de prix marché                 |
 
 ---
@@ -43,7 +43,7 @@ Simplifier l'achat de PC sur-mesure grâce à la technologie et la transparence.
 | **Questionnaire guidé**  | Quelques questions → configuration recommandée      | Débutants    |
 | **Configurateur IA**     | Sélection composants avec suggestions intelligentes | Connaisseurs |
 | **PC prêts à l'emploi**  | Configurations assemblées et testées                | Tous         |
-| **Service d'assemblage** | Montage par nos soins (50-100 €)                    | Option       |
+| **Offres de montage**    | Montage par nos soins — Essentiel 79 € / Confort 129 € / Premium 199 € | Cœur du revenu |
 | **Garantie étendue**     | Extension de garantie sur PC assemblés              | Option       |
 
 ---
@@ -101,26 +101,29 @@ Simplifier l'achat de PC sur-mesure grâce à la technologie et la transparence.
 
 ### Sources de revenus
 
-| Source                     | Marge/Prix    |
-| -------------------------- | ------------- |
-| PC assemblé (clé en main)  | 15 - 20 %     |
-| Configuration (composants) | 8 - 12 %      |
-| Affiliation partenaires    | 3 - 7 %       |
-| Service d'assemblage       | 50 - 100 €    |
-| Garantie étendue           | 30 - 80 €     |
-| Abonnement Pro (futur)     | 5 - 10 €/mois |
+Le client paie les composants **au meilleur prix du marché** (sans marge de notre part) **+ une offre de montage à prix fixe**. Le montage est notre revenu principal — pas un pourcentage sur les composants.
+
+| Source                        | Prix          |
+| ----------------------------- | ------------- |
+| Montage — **Essentiel**       | 79 €          |
+| Montage — **Confort**         | 129 €         |
+| Montage — **Premium**         | 199 €         |
+| Garantie étendue (à venir)    | 30 - 80 €     |
+| Abonnement Pro (à venir)      | 5 - 10 €/mois |
+
+> Revenu moyen par commande ≈ **120 €** (mix des offres de montage).
 
 ### Projections financières (réalistes)
 
 | Année | Commandes/mois | Panier moyen | CA annuel | Marge brute |
 | ----- | -------------- | ------------ | --------- | ----------- |
-| N+1   | 10             | 1 200 €      | 144 K€    | 17 - 22 K€  |
-| N+2   | 25             | 1 250 €      | 375 K€    | 45 - 56 K€  |
-| N+3   | 50             | 1 300 €      | 780 K€    | 94 - 117 K€ |
+| N+1   | ~6 (montée)    | 1 200 €      | ~86 K€    | 10 - 13 K€  |
+| N+2   | ~16            | 1 250 €      | ~240 K€   | 29 - 36 K€  |
+| N+3   | ~32            | 1 300 €      | ~500 K€   | 60 - 75 K€  |
 
 > Hypothèses prudentes pour une marque sans notoriété initiale. La croissance dépend du bouche-à-oreille, du SEO et des partenariats créateurs.
 
-_Hypothèses conservatives, marge brute 12-15%_
+_Hypothèses conservatrices avec montée en charge. Marge brute ≈ l'offre de montage (~10 % du CA, composants à prix coûtant)_
 
 ---
 
@@ -201,10 +204,10 @@ _Hypothèses conservatives, marge brute 12-15%_
 
 | Catégorie        | KPI                    | Objectif N+1 |
 | ---------------- | ---------------------- | ------------ |
-| **Acquisition**  | Visiteurs uniques/mois | 10 000       |
+| **Acquisition**  | Visiteurs uniques/mois | ~1 500       |
 | **Conversion**   | Taux de conversion     | 0,5 %        |
 | **Satisfaction** | NPS                    | > 40         |
-| **Financier**    | CA mensuel moyen       | 60 000 €     |
+| **Financier**    | CA mensuel moyen (N+1, en montée) | ~7 000 €     |
 | **Rétention**    | Taux de recommandation | 30 %         |
 
 ---

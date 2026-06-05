@@ -35,32 +35,36 @@ PC Aeris ne vend pas en gros. Chaque configuration est unique et sur-mesure. Un 
 
 ## 3. Sources de revenus
 
-### Modèle principal : Commission sur ventes
+### Modèle principal : offres de montage à prix fixe
 
-| Type de vente                              | Marge estimée |
-| ------------------------------------------ | ------------- |
-| PC assemblé (clé en main)                  | 15 - 20 %     |
-| Configuration commandée (composants)       | 8 - 12 %      |
-| Redirection vers partenaires (affiliation) | 3 - 7 %       |
+Le client paie **les composants au meilleur prix du marché** — sans marge de notre part — **plus une offre de montage à prix fixe**. C'est le montage qui constitue notre revenu, et non un pourcentage prélevé sur les composants. Prix total client = composants + offre de montage.
 
-### Revenus complémentaires
+| Offre                          | Prix  | Inclus                                                                       |
+| ------------------------------ | ----- | ---------------------------------------------------------------------------- |
+| **Essentiel**                  | 79 €  | Montage, câble management de base, test POST + démarrage Windows             |
+| **Confort** _(la plus choisie)_ | 129 € | + câblage premium, installation Windows + drivers, profil courbes ventilateurs |
+| **Premium**                    | 199 € | + benchmarks 3DMark/Cinebench, profil XMP/EXPO, rapport de tests livré        |
 
-| Source                    | Description                                                                                 |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| **Services d'assemblage** | Facturation de l'assemblage pour les configurations personnalisées (50 - 100 €)             |
-| **Garantie étendue**      | Extension de garantie sur les PC assemblés                                                  |
-| **Abonnement Pro**        | Accès à des fonctionnalités avancées (alertes prix, historiques, configurations illimitées) |
-| **Partenariats marques**  | Mise en avant de produits sponsorisés (avec transparence)                                   |
+> Revenu moyen par commande ≈ **120 €** (mix des trois offres).
+
+### Revenus complémentaires (à venir)
+
+| Source                   | Description                                                              |
+| ------------------------ | ------------------------------------------------------------------------ |
+| **Garantie étendue**     | Extension de garantie sur les PC assemblés                               |
+| **Abonnement Pro**       | Fonctionnalités avancées (alertes prix, historiques, configs illimitées) |
+| **Affiliation**          | Rémunération éventuelle sur le sourcing des composants                   |
+| **Partenariats marques** | Mise en avant de produits sponsorisés (avec transparence)                |
 
 ### Projection revenus (hypothèse réaliste)
 
 | Année | Commandes/mois | Panier moyen | CA annuel estimé |
 | ----- | -------------- | ------------ | ---------------- |
-| N+1   | 10             | 1 200 €      | 144 000 €        |
-| N+2   | 25             | 1 250 €      | 375 000 €        |
-| N+3   | 50             | 1 300 €      | 780 000 €        |
+| N+1   | ~6 (montée)    | 1 200 €      | ~86 000 €        |
+| N+2   | ~16            | 1 250 €      | ~240 000 €       |
+| N+3   | ~32            | 1 300 €      | ~500 000 €       |
 
-_Marge brute estimée : 12-15% du CA_
+_Marge brute ≈ l'offre de montage, soit ~10 % du CA (les composants sont vendus à prix coûtant)_
 
 > **Note** : projections prudentes pour une marque sans notoriété. Croissance conditionnée au bouche-à-oreille et aux partenariats.
 

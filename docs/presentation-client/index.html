@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PC Aeris — Présentation client</title>
+<style>
+  :root {
+    --bg: #04040a; --surface: #0b0b14; --surface-2: #12121f;
+    --ind: #6366f1; --ind-l: #818cf8; --ind-d: #4338ca;
+    --text: #f0f0fa; --text-2: #b5b5c8; --text-3: #8e8ea8;
+    --ok: #34d399; --warn: #fbbf24; --err: #f87171;
+    --line: rgba(255,255,255,.08); --line-s: rgba(255,255,255,.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; color: var(--text);
+    font-family: "Segoe UI", -apple-system, Inter, Helvetica, Arial, sans-serif; }
+
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .slide {
+    position: absolute; inset: 0; display: none;
+    flex-direction: column; justify-content: center;
+    padding: 64px 88px 78px;
+    background:
+      radial-gradient(1200px 600px at 78% -10%, rgba(99,102,241,.16), transparent 60%),
+      radial-gradient(900px 500px at -5% 110%, rgba(67,56,202,.14), transparent 55%),
+      linear-gradient(160deg, #06060e 0%, #04040a 60%, #070711 100%);
+  }
+  .slide.active { display: flex; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform:none; } }
+
+  /* en-tête / pied */
+  .eyebrow { display:flex; align-items:center; gap:10px; font-size:13px; letter-spacing:.18em;
+    text-transform:uppercase; color: var(--ind-l); font-weight:600; margin-bottom:18px; }
+  .eyebrow .dot { width:8px; height:8px; border-radius:50%; background:var(--ind); box-shadow:0 0 14px var(--ind); }
+  h1.title { font-size:46px; line-height:1.08; letter-spacing:-.02em; font-weight:800; margin-bottom:8px; }
+  h1.title .grad { background:linear-gradient(90deg,#a5b4fc,#6366f1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { font-size:20px; color:var(--text-2); margin-bottom:30px; max-width:1000px; line-height:1.45; }
+  .foot { position:absolute; left:88px; right:88px; bottom:30px; display:flex; justify-content:space-between;
+    align-items:center; font-size:12.5px; color:var(--text-3); letter-spacing:.04em; }
+  .progress { position:absolute; left:0; bottom:0; height:4px; background:linear-gradient(90deg,var(--ind),var(--ind-l)); transition:width .35s; }
+
+  /* primitives */
+  .cols { display:grid; gap:22px; }
+  .c2 { grid-template-columns:1fr 1fr; } .c3 { grid-template-columns:1fr 1fr 1fr; }
+  .card { background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border:1px solid var(--line); border-radius:16px; padding:22px 24px; }
+  .card.hl { border-color:rgba(99,102,241,.4); background:linear-gradient(180deg, rgba(99,102,241,.12), rgba(99,102,241,.03)); }
+  .card h3 { font-size:19px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .card p { font-size:15.5px; color:var(--text-2); line-height:1.5; }
+  .ico { font-size:22px; }
+  ul.bul { list-style:none; display:flex; flex-direction:column; gap:14px; }
+  ul.bul li { font-size:19px; color:var(--text); line-height:1.4; padding-left:30px; position:relative; }
+  ul.bul li::before { content:"›"; position:absolute; left:4px; color:var(--ind-l); font-weight:800; }
+  ul.bul li b { color:#fff; } ul.bul li span { color:var(--text-2); font-size:16.5px; }
+
+  .stat { font-size:54px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+  .stat .u { font-size:22px; color:var(--text-2); font-weight:600; }
+  .statlbl { font-size:15px; color:var(--text-3); margin-top:8px; text-transform:uppercase; letter-spacing:.08em; }
+
+  table { width:100%; border-collapse:collapse; font-size:15.5px; }
+  th,td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); }
+  th { color:var(--ind-l); font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; font-weight:700; }
+  tr:last-child td { border-bottom:none; }
+
+  .chips { display:flex; flex-wrap:wrap; gap:10px; }
+  .chip { font-size:14.5px; padding:8px 14px; border-radius:999px; border:1px solid var(--line-s);
+    background:rgba(255,255,255,.03); color:var(--text); }
+  .chip.ok { border-color:rgba(52,211,153,.35); color:#a7f3d0; background:rgba(52,211,153,.07); }
+
+  .pill { display:inline-flex; align-items:center; gap:8px; font-size:13px; padding:6px 13px; border-radius:999px;
+    border:1px solid var(--line-s); color:var(--text-2); }
+
+  /* cover */
+  .cover { justify-content:center; }
+  .logo { font-size:22px; font-weight:800; letter-spacing:.02em; display:flex; align-items:center; gap:12px; margin-bottom:34px; }
+  .logo .mark { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--ind),var(--ind-d));
+    display:grid; place-items:center; font-size:20px; box-shadow:0 8px 30px rgba(99,102,241,.45); }
+  .cover h1 { font-size:76px; line-height:1; letter-spacing:-.03em; font-weight:800; }
+  .cover .base { font-size:26px; color:var(--text-2); margin-top:18px; font-weight:500; }
+  .cover .meta { margin-top:46px; display:flex; gap:14px; flex-wrap:wrap; }
+  .rule { width:90px; height:6px; border-radius:4px; background:linear-gradient(90deg,var(--ind),var(--ind-l)); margin-bottom:28px; }
+
+  .roadmap { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:10px; }
+  .rm { padding:0 20px; border-left:2px solid var(--line); position:relative; }
+  .rm:first-child { border-left:none; padding-left:0; }
+  .rm .when { color:var(--ind-l); font-weight:700; font-size:14px; letter-spacing:.04em; }
+  .rm .now { display:inline-block; font-size:11px; background:var(--ind); color:#fff; padding:2px 8px; border-radius:6px; margin-left:6px; }
+  .rm h4 { font-size:17px; margin:8px 0 8px; }
+  .rm p { font-size:14px; color:var(--text-2); line-height:1.45; }
+
+  .hint { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:#555; z-index:50; }
+
+  /* ---- mode impression / PDF : toutes les slides empilées ---- */
+  /* Fond plat (un seul dégradé linéaire) au lieu des 3 dégradés radiaux :
+     évite des objets "shading" PDF lourds qui rament dans le lecteur. */
+  body.print { background:#000; }
+  body.print .deck { width:auto; height:auto; overflow:visible; }
+  body.print .slide {
+    position:relative; inset:auto; display:flex; overflow:hidden;
+    width:1280px; height:720px; page-break-after:always; break-after:page; animation:none;
+    background:linear-gradient(160deg, #0b0b16 0%, #05050d 100%);
+  }
+  body.print .slide:last-child { page-break-after:avoid; break-after:avoid; }
+  body.print .hint { display:none; }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 — COUVERTURE -->
+  <section class="slide cover active">
+    <div class="logo"><span class="mark">▲</span> PC&nbsp;Aeris</div>
+    <div class="rule"></div>
+    <h1>Le PC sur-mesure,<br><span class="grad">enfin accessible à tous.</span></h1>
+    <div class="base">Configurez le PC parfait — sans stress, sans erreur, au juste prix.</div>
+    <div class="meta">
+      <span class="pill">🖥️ Démo live · pc-aeris.vercel.app</span>
+      <span class="pill">👤 Quentin Geoffroy</span>
+      <span class="pill">📅 Présentation client · Juin 2026</span>
+    </div>
+  </section>
+
+  <!-- 2 — PROBLÈME -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Le problème</div>
+    <h1 class="title">Acheter le bon PC, c'est<br>un parcours du combattant.</h1>
+    <div class="sub">Des dizaines de sites, des centaines de composants, un jargon opaque. L'acheteur se retrouve seul face à des questions qu'il ne sait pas trancher :</div>
+    <div class="cols c3">
+      <div class="card"><h3>🔌 Compatibilité</h3><p>« Cette carte graphique va-t-elle avec cette carte mère ? »</p></div>
+      <div class="card"><h3>⚡ Alimentation</h3><p>« Mon alim est-elle assez puissante pour cette config ? »</p></div>
+      <div class="card"><h3>💸 Juste prix</h3><p>« Est-ce que je paie le bon prix, ou je me fais avoir ? »</p></div>
+    </div>
+    <div class="sub" style="margin-top:26px;color:var(--text)"><b>Résultat :</b> la majorité abandonne, ou perd des heures pour finir par un mauvais choix.</div>
+  </section>
+
+  <!-- 3 — SOLUTION -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> La solution</div>
+    <h1 class="title">PC Aeris démocratise<br>le PC sur-mesure.</h1>
+    <div class="cols c2" style="margin-top:14px;align-items:center">
+      <div>
+        <div class="card hl">
+          <h3 style="font-size:23px">🎯 Notre promesse</h3>
+          <p style="font-size:19px;color:var(--text)">« Vous nous dites ce que vous voulez faire.<br>Nous nous occupons du reste. »</p>
+        </div>
+      </div>
+      <ul class="bul">
+        <li><b>Compatibilité garantie</b> <span>— plus jamais d'erreur de montage.</span></li>
+        <li><b>Prix transparents</b> <span>— vous savez ce que vous payez, et pourquoi.</span></li>
+        <li><b>Adapté à votre niveau</b> <span>— du débutant total à l'expert.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 — 3 PARCOURS -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Un parcours pour chaque profil</div>
+    <h1 class="title">Trois façons d'arriver au bon PC.</h1>
+    <div class="cols c3" style="margin-top:22px">
+      <div class="card"><h3><span class="ico">🌱</span> Débutants</h3><p>Un questionnaire simple (usage, budget) génère des configurations prêtes à l'emploi, optimisées et garanties compatibles.</p></div>
+      <div class="card hl"><h3><span class="ico">🧠</span> Connaisseurs</h3><p>Un configurateur intelligent : vous choisissez un composant, le système ne propose que ce qui est compatible et cohérent.</p></div>
+      <div class="card"><h3><span class="ico">⚡</span> Pressés</h3><p>Des PC déjà assemblés, testés et prêts à être livrés. Zéro réflexion, performance garantie.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 — MOTEUR DE VALEUR : BENCHMARKS -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Notre moteur de valeur</div>
+    <h1 class="title">On ne compare pas des specs.<br>On mesure la <span class="grad">performance</span>.</h1>
+    <div class="sub">Une fiche technique ne dit pas si un composant est un bon achat. On note chaque composant sur un <b>indice de performance</b> (benchmarks de référence), qu'on croise avec son prix marché pour révéler le meilleur rapport <b>performance / euro</b>.</div>
+    <div class="cols c2" style="align-items:center">
+      <ul class="bul">
+        <li><b>Score de performance</b> <span>— normalisé, par catégorie.</span></li>
+        <li><b>Croisé au prix réel</b> <span>— le coût par point de performance.</span></li>
+        <li><b>Recommandation de valeur</b> <span>— le bon choix, pas le plus cher.</span></li>
+      </ul>
+      <div class="card hl">
+        <h3>Donnée réelle — processeurs AM5</h3>
+        <table style="margin-top:6px">
+          <tr><th>Processeur</th><th>Perf</th><th>Prix</th><th>€/1k&nbsp;pts</th></tr>
+          <tr><td style="color:var(--ok)">Ryzen 5 7500F ✓</td><td>26 555</td><td class="num">155 €</td><td class="num" style="color:var(--ok)">5,8</td></tr>
+          <tr><td>Ryzen 7 7700X</td><td>35 534</td><td class="num">282 €</td><td class="num">7,9</td></tr>
+          <tr><td>Ryzen 7 9800X3D</td><td>39 967</td><td class="num">470 €</td><td class="num">11,8</td></tr>
+        </table>
+        <p style="margin-top:10px">Le 7500F : <b style="color:#fff">~2× plus de performance par euro</b> que le 9800X3D.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 — DIFFÉRENCIATION PRIX -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Notre différenciation</div>
+    <h1 class="title">La transparence des prix,<br>façon <span class="grad">StockX</span>.</h1>
+    <div class="sub">Pour chaque composant, trois indicateurs de marché en temps réel :</div>
+    <div class="cols c3" style="margin-top:6px">
+      <div class="card"><div class="stat" style="color:var(--ok)">449<span class="u"> €</span></div><div class="statlbl">Prix bas du marché</div></div>
+      <div class="card hl"><div class="stat">469<span class="u"> €</span></div><div class="statlbl">Prix moyen</div></div>
+      <div class="card"><div class="stat" style="color:var(--warn)">489<span class="u"> €</span></div><div class="statlbl">Prix haut</div></div>
+    </div>
+    <div class="sub" style="margin-top:24px;color:var(--text)">À la validation, l'utilisateur reçoit un <b>devis avec une fourchette réaliste</b> — pas un tarif fixe artificiel. <span style="color:var(--text-3)">Une transparence intégrée au configurateur, qu'aucun concurrent ne propose.</span></div>
+  </section>
+
+  <!-- 7 — COMMENT ON CONSTRUIT LE PRIX -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> La justification des prix</div>
+    <h1 class="title">Un prix de marché,<br>pas un prix sorti du chapeau.</h1>
+    <div class="cols c2" style="align-items:start;margin-top:6px">
+      <ul class="bul">
+        <li><b>1 · Agrégation multi-sources</b> <span>— on relève en continu les prix réels des marchands (neuf) et des marketplaces (occasion).</span></li>
+        <li><b>2 · Fourchette calculée</b> <span>— bas / moyen / haut, rafraîchie régulièrement.</span></li>
+        <li><b>3 · Devis réaliste</b> <span>— à la validation, la fourchette du PC complet.</span></li>
+      </ul>
+      <div class="card hl">
+        <h3>Donnée réelle — Ryzen 7 7700X</h3>
+        <table style="margin-top:8px">
+          <tr><th>Bas</th><th>Moyen</th><th>Haut</th></tr>
+          <tr><td class="num" style="color:var(--ok)">275 €</td><td class="num">282 €</td><td class="num" style="color:var(--warn)">290 €</td></tr>
+        </table>
+        <p style="margin-top:12px">Relevé marché en temps réel — <b style="color:#fff">en base, sur la plateforme</b>.</p>
+      </div>
+    </div>
+    <div class="sub" style="margin-top:20px;color:var(--text)"><b>Pourquoi c'est défendable :</b> agréger des prix multi-sources fiables est complexe et long à construire — <span style="color:var(--text-3)">une barrière que les revendeurs classiques n'ont pas franchie.</span></div>
+  </section>
+
+  <!-- 8 — LE PRODUIT AUJOURD'HUI -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Le produit, aujourd'hui</div>
+    <h1 class="title">Pas une maquette — un produit qui tourne.</h1>
+    <div class="sub">MVP quasi finalisé, en ligne sur <b>pc-aeris.vercel.app</b>. Démo live disponible.</div>
+    <div class="cols c2">
+      <div class="chips">
+        <span class="chip ok">✓ Configurateur 8 catégories</span>
+        <span class="chip ok">✓ Questionnaire guidé (besoin → config)</span>
+        <span class="chip ok">✓ Configs prêtes par usage & gamme</span>
+        <span class="chip ok">✓ Compatibilité vérifiée (CPU/alim/format/connectique)</span>
+        <span class="chip ok">✓ Tri par performance (benchmark)</span>
+        <span class="chip ok">✓ Ordre de sélection verrouillé — zéro impasse</span>
+        <span class="chip ok">✓ Configurations sauvegardées</span>
+        <span class="chip ok">✓ Comptes & espace utilisateur</span>
+        <span class="chip ok">✓ Back-office admin (produits + prix)</span>
+        <span class="chip ok">✓ Moteur de prix réels (intégration LDLC)</span>
+        <span class="chip ok">✓ Benchmarks de perf (CPU/GPU, PassMark)</span>
+        <span class="chip ok">✓ Identité Aeris Dark · accessibilité RGAA AA</span>
+      </div>
+      <div class="cols" style="grid-template-columns:1fr 1fr;gap:18px;align-content:start">
+        <div class="card"><div class="stat">25k<span class="u"></span></div><div class="statlbl">composants en base</div></div>
+        <div class="card"><div class="stat">69</div><div class="statlbl">tests automatisés</div></div>
+        <div class="card"><div class="stat">8</div><div class="statlbl">catégories compatibles</div></div>
+        <div class="card hl"><div class="stat">live</div><div class="statlbl">démo en production</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 — EXEMPLE DE CONFIG -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Concret — une config générée</div>
+    <h1 class="title">Un build gaming complet,<br>cohérent et compatible.</h1>
+    <div class="cols c2" style="align-items:start;margin-top:6px">
+      <table>
+        <tr><th>Composant</th><th>Choix</th><th>Prix*</th></tr>
+        <tr><td>Processeur</td><td>Ryzen 5 7500F</td><td class="num">155 €</td></tr>
+        <tr><td>Carte graphique</td><td>GeForce RTX 4060</td><td class="num">300 €</td></tr>
+        <tr><td>Carte mère</td><td>B650</td><td class="num">150 €</td></tr>
+        <tr><td>Mémoire</td><td>32 Go DDR5-6000</td><td class="num">95 €</td></tr>
+        <tr><td>Stockage</td><td>1 To NVMe Gen4</td><td class="num">75 €</td></tr>
+        <tr><td>Alimentation</td><td>750 W Gold</td><td class="num">120 €</td></tr>
+        <tr><td>Boîtier</td><td>NZXT H5 Flow</td><td class="num">95 €</td></tr>
+      </table>
+      <div class="cols" style="grid-template-columns:1fr 1fr;gap:16px;align-content:start">
+        <div class="card hl"><div class="stat">~990<span class="u"> €</span></div><div class="statlbl">budget total estimé</div></div>
+        <div class="card"><div class="stat" style="color:var(--ok)">✓</div><div class="statlbl">compatibilité garantie</div></div>
+        <div class="card" style="grid-column:span 2"><h3>Gaming 1080p / 1440p</h3><p>Chaque pièce choisie au meilleur rapport <b style="color:#fff">performance / prix</b> — et garantie compatible avec les autres.</p></div>
+      </div>
+    </div>
+    <div class="sub" style="margin-top:12px;color:var(--text-3)">*Prix = fourchette de marché en temps réel. Exemple représentatif d'une configuration générée.</div>
+  </section>
+
+  <!-- 10 — MARCHÉ -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Le marché</div>
+    <h1 class="title">Un marché porteur,<br>une niche inexploitée.</h1>
+    <div class="cols c2" style="margin-top:10px;align-items:center">
+      <div class="cols" style="grid-template-columns:1fr 1fr;gap:18px">
+        <div class="card"><div class="stat">~4<span class="u"> Mds €</span></div><div class="statlbl">marché PC France / an</div></div>
+        <div class="card hl"><div class="stat">+8-10<span class="u"> %</span></div><div class="statlbl">croissance gaming / workstation</div></div>
+      </div>
+      <ul class="bul">
+        <li><b>Gamers</b> <span>— débutants & confirmés, premier PC ou upgrade.</span></li>
+        <li><b>Créatifs & freelances</b> <span>— montage, 3D, développement.</span></li>
+        <li><b>Étudiants tech & pros indépendants</b> <span>— besoins précis, budget maîtrisé.</span></li>
+        <li><span style="color:var(--text-3)">Point commun : du sur-mesure, sans la complexité.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 — POURQUOI ON SE DÉMARQUE -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Pourquoi on se démarque</div>
+    <h1 class="title">Les autres vendent des composants.<br>Nous livrons une <span class="grad">décision</span>.</h1>
+    <table style="margin-top:10px;font-size:15px">
+      <tr><th style="width:32%"></th><th>LDLC / Materiel</th><th>TopAchat</th><th>Amazon</th><th>Config. marques</th><th style="color:var(--ind-l)">PC Aeris</th></tr>
+      <tr><td>Compatibilité garantie</td><td>✗</td><td>✗</td><td>✗</td><td>~</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
+      <tr><td>Reco performance / prix</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
+      <tr><td>Prix transparents (fourchette)</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
+      <tr><td>Parcours adapté au niveau</td><td>✗</td><td>✗</td><td>✗</td><td>~</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
+      <tr><td>Conseil / accompagnement</td><td>~</td><td>✗</td><td>✗</td><td>~</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
+    </table>
+    <div class="chips" style="margin-top:24px">
+      <span class="chip">🛡️ IA de compatibilité</span>
+      <span class="chip">🛡️ Moteur perf/prix propriétaire</span>
+      <span class="chip">🛡️ Agrégation prix multi-sources</span>
+      <span class="chip">🛡️ Effet réseau — configs partagées</span>
+    </div>
+    <div class="sub" style="margin-top:18px;color:var(--text-3)">On ne fait pas la guerre des prix à Amazon : on occupe le quadrant inexploité <b style="color:var(--text-2)">expertise + simplicité</b>.</div>
+  </section>
+
+  <!-- 9 — BUSINESS MODEL -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Modèle économique</div>
+    <h1 class="title">On gagne sur le <span class="grad">montage</span>,<br>pas sur les composants.</h1>
+    <div class="sub">Le client paie les composants <b>au meilleur prix du marché</b> — sans marge de notre part — plus une <b>offre de montage à prix fixe</b>. C'est le montage qui nous rémunère.</div>
+    <div class="cols c3" style="margin-top:8px">
+      <div class="card"><h3>Essentiel</h3><div class="stat">79<span class="u"> €</span></div><p>Montage, câble management de base, test POST + démarrage Windows.</p></div>
+      <div class="card hl"><h3>Confort</h3><div class="stat">129<span class="u"> €</span></div><p>+ câblage premium, Windows et drivers à jour, profil de courbes ventilateurs.</p></div>
+      <div class="card"><h3>Premium</h3><div class="stat">199<span class="u"> €</span></div><p>+ benchmarks 3DMark / Cinebench, profil XMP/EXPO, rapport de tests livré.</p></div>
+    </div>
+    <div class="sub" style="margin-top:18px;color:var(--text-2)"><b style="color:#fff">Prix total = composants au meilleur prix + offre de montage.</b> Modèle <b>asset-light</b> (pas de stock), complété demain par la garantie étendue et un abonnement Pro.</div>
+  </section>
+
+  <!-- 12 — ÉCONOMIE UNITAIRE / RENTABILITÉ -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Rentabilité</div>
+    <h1 class="title">Rentable dès la petite échelle.</h1>
+    <div class="sub">Le modèle <b>asset-light</b> (pas de stock) rend chaque commande contributive — et abaisse fortement le seuil de rentabilité.</div>
+    <div class="cols c2" style="align-items:start">
+      <div class="card">
+        <h3>💶 Par commande</h3>
+        <table style="margin-top:6px">
+          <tr><td>Panier moyen (composants + montage)</td><td class="num">~1 200 €</td></tr>
+          <tr><td>Composants (au meilleur prix, sans marge)</td><td class="num">~1 080 €</td></tr>
+          <tr><td>Revenu PC Aeris = offre de montage</td><td class="num">~120 €</td></tr>
+          <tr><td>Coûts variables (paiement, SAV)</td><td class="num">− 30 €</td></tr>
+          <tr><td style="color:var(--ok)"><b>Marge de contribution</b></td><td class="num" style="color:var(--ok)"><b>~90 €</b></td></tr>
+        </table>
+      </div>
+      <div class="card hl">
+        <h3>📈 Seuil de rentabilité</h3>
+        <table style="margin-top:6px">
+          <tr><td>Coûts fixes mensuels (infra, outils, marketing)</td><td class="num">~1 500 €</td></tr>
+          <tr><td>Commandes pour l'équilibre</td><td class="num">~17 / mois</td></tr>
+        </table>
+        <p style="margin-top:14px">Année 1 : montée en charge <b style="color:#fff">sous le seuil</b> ; l'équilibre (~17/mois) est atteint courant année 2. Pas de stock = pas d'invendus, BFR minimal.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 — PROJECTIONS -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Projections financières</div>
+    <h1 class="title">Une trajectoire prudente.</h1>
+    <div class="sub">Hypothèses conservatrices pour une marque sans notoriété — l'<b>année 1 est une montée en charge</b> (sous le seuil). Croissance par bouche-à-oreille, SEO et partenariats.</div>
+    <table style="margin-top:6px">
+      <tr><th>Année</th><th>Commandes / mois</th><th>Panier moyen</th><th>CA annuel</th><th>Marge brute</th></tr>
+      <tr><td>2027 <span style="color:var(--text-3);font-size:12px">· lancement</span></td><td>~6</td><td>1 200 €</td><td class="num">~86 K€</td><td class="num">8-10 K€</td></tr>
+      <tr><td>2028</td><td>~16</td><td>1 250 €</td><td class="num">~240 K€</td><td class="num">21-25 K€</td></tr>
+      <tr><td>2029</td><td>~32</td><td>1 300 €</td><td class="num">~500 K€</td><td class="num">42-50 K€</td></tr>
+    </table>
+  </section>
+
+  <!-- 11 — ROADMAP -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Roadmap</div>
+    <h1 class="title">Du MVP au lancement commercial.</h1>
+    <div class="roadmap" style="margin-top:28px">
+      <div class="rm"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, prix réels. En production.</p></div>
+      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Panier, tunnel de commande, paiement Stripe, suivi des commandes.</p></div>
+      <div class="rm"><div class="when">Sept. 2026 +</div><h4>V2</h4><p>IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.</p></div>
+      <div class="rm"><div class="when">2027 +</div><h4>Expansion</h4><p>App mobile, abonnement Pro, communauté, internationalisation.</p></div>
+    </div>
+  </section>
+
+  <!-- 16 — ÉQUIPE -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> L'équipe</div>
+    <h1 class="title">Une exécution prouvée,<br>une équipe à <span class="grad">staffer</span>.</h1>
+    <div class="cols c2" style="align-items:start;margin-top:6px">
+      <div class="card hl">
+        <h3>👤 Quentin Geoffroy — Fondateur</h3>
+        <p>Produit, stratégie et développement. A conçu et mis en production le MVP <b style="color:#fff">en solo</b> : configurateur, moteur de compatibilité, intégration des prix et des benchmarks. La preuve qu'on sait exécuter.</p>
+      </div>
+      <div>
+        <div class="sub" style="margin-top:0">Avec l'amorçage, les premiers renforts :</div>
+        <ul class="bul">
+          <li><b>Développeur full-stack</b> <span>— accélérer la V1 et l'IA.</span></li>
+          <li><b>Responsable marketing</b> <span>— acquisition, SEO, partenariats créateurs.</span></li>
+          <li><b>Support & expert hardware</b> <span>— curation des données, conseil, SAV.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 — VISION / ASK -->
+  <section class="slide cover">
+    <div class="eyebrow"><span class="dot"></span> En résumé</div>
+    <h1 class="title" style="font-size:54px">Le PC parfait pour chacun —<br><span class="grad">sans stress, sans erreur, au juste prix.</span></h1>
+    <div class="cols c3" style="margin-top:30px">
+      <div class="card"><h3>✅ Produit réel</h3><p>MVP en production, fondations techniques solides.</p></div>
+      <div class="card"><h3>🎯 Niche claire</h3><p>Sur-mesure simplifié, là où les géants n'adressent pas.</p></div>
+      <div class="card hl"><h3>🚀 Ce qu'on recherche</h3><p>Amorçage <b style="color:#fff">35 K€</b> → V1 commerciale + premiers clients.</p></div>
+    </div>
+    <div class="meta" style="margin-top:34px">
+      <span class="pill">🖥️ pc-aeris.vercel.app</span>
+      <span class="pill">📧 quentgeoffpit000@gmail.com</span>
+    </div>
+  </section>
+
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="hint">← → ou Espace pour naviguer · F plein écran</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  const progress = document.getElementById('progress');
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    location.hash = i + 1;
+  }
+  function fs() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  }
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') fs();
+  });
+  document.addEventListener('click', (e) => { if (!e.target.closest('a')) show(i + 1); });
+  window.addEventListener('hashchange', () => {
+    const n = parseInt(location.hash.slice(1)) - 1;
+    if (Number.isFinite(n) && n !== i) show(n);
+  });
+  const start = parseInt(location.hash.slice(1)) - 1;
+  show(Number.isFinite(start) && start >= 0 ? start : 0);
+</script>
+</body>
+</html>

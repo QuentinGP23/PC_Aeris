@@ -415,9 +415,9 @@ Le modèle est volontairement asset-light : on ne tient pas de stock. C'est une 
 
 | Année | Commandes / mois | Panier moyen | CA annuel | Marge brute |
 |---|---|---|---|---|
-| **N+1** | 10 | 1 200 € | **144 K€** | 17 – 22 K€ |
-| **N+2** | 25 | 1 250 € | **375 K€** | 45 – 56 K€ |
-| **N+3** | 50 | 1 300 € | **780 K€** | 94 – 117 K€ |
+| **N+1** | ~6 (montée) | 1 200 € | **~86 K€** | 10 – 13 K€ |
+| **N+2** | ~16 | 1 250 € | **~240 K€** | 29 – 36 K€ |
+| **N+3** | ~32 | 1 300 € | **~500 K€** | 60 – 75 K€ |
 
 <br>
 
@@ -428,9 +428,9 @@ Le modèle est volontairement asset-light : on ne tient pas de stock. C'est une 
 
 <!--
 [1 min 30]
-Voici nos projections. Ce sont des hypothèses délibérément prudentes. 10 commandes par mois la première année, 25 la seconde, 50 la troisième. Panier moyen entre 1 200 et 1 300 €.
+Voici nos projections. Ce sont des hypothèses délibérément prudentes, avec une montée en charge. Année 1 de lancement : environ 6 commandes par mois en moyenne, puis 16 la seconde année, 32 la troisième. Panier moyen entre 1 200 et 1 300 €.
 
-Ça nous met à 144 K€ la première année, 375 K€ la seconde, 780 K€ la troisième. La marge brute est de 12-15 % du chiffre d'affaires.
+Ça nous met à environ 86 K€ la première année, 240 K€ la seconde, 500 K€ la troisième. La marge brute, c'est l'offre de montage — environ 10 % du chiffre d'affaires, les composants étant à prix coûtant.
 
 Pour atteindre ces chiffres, on mise sur le bouche-à-oreille, le SEO sur des requêtes très intentionnistes, et des partenariats avec des créateurs YouTube.
 -->
