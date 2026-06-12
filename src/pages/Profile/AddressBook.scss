@@ -1,0 +1,44 @@
+.addrbook {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+
+  &__card {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    background: var(--surface-2);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    &.is-default { border-color: var(--ind); }
+  }
+  &__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  &__label { font-family: var(--fh); font-size: 13px; font-weight: 700; color: var(--text); }
+  &__badge {
+    font-family: var(--fm); font-size: 9px; font-weight: 700; color: var(--ind);
+    border: 1px solid var(--ind); border-radius: 999px; padding: 2px 8px; letter-spacing: 0.02em;
+  }
+  &__name { font-family: var(--fb); font-size: 13px; font-weight: 600; color: var(--text); margin: 0; }
+  &__lines { font-family: var(--fb); font-size: 12.5px; color: var(--text-2); margin: 0; line-height: 1.5; }
+  &__phone { font-family: var(--fm); font-size: 11.5px; color: var(--text-3); margin: 2px 0 0; }
+
+  &__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+  &__act {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-family: var(--fm); font-size: 11.5px; color: var(--ind-l);
+    &:hover { text-decoration: underline; }
+    &--del { color: var(--err); }
+  }
+
+  &__add {
+    border: 1.5px dashed var(--border); border-radius: var(--r); background: transparent;
+    color: var(--text-2); cursor: pointer; min-height: 130px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--fb); font-size: 13px;
+    &:hover { border-color: var(--ind); color: var(--text); }
+  }
+  &__add-plus { font-size: 26px; line-height: 1; color: var(--ind); }
+
+  &__form { display: flex; flex-direction: column; gap: 14px; }
+}

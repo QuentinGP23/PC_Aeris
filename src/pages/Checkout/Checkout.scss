@@ -31,6 +31,34 @@
     }
   }
 
+  &__card-hd { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;
+    h2 { margin: 0; } }
+  &__addnew { background: none; border: none; cursor: pointer; font-family: var(--fm); font-size: 12px; color: var(--ind-l);
+    &:hover { text-decoration: underline; } }
+  &__muted { font-family: var(--fb); font-size: 12.5px; color: var(--text-3); line-height: 1.5; margin: 0 0 12px; }
+  &__err { font-family: var(--fb); font-size: 12.5px; color: var(--err); margin: 0 0 4px; }
+
+  &__addr-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  &__addr {
+    display: flex; gap: 10px; padding: 14px; cursor: pointer;
+    border: 1px solid var(--border); border-radius: var(--rs); background: var(--surface);
+    transition: border-color 0.14s;
+    &:hover { border-color: var(--border-s); }
+    &.is-selected { border-color: var(--ind); box-shadow: 0 0 0 1px var(--ind) inset; }
+    input { margin-top: 3px; accent-color: var(--ind); }
+  }
+  &__addr-body { display: flex; flex-direction: column; gap: 2px; font-family: var(--fb); }
+  &__addr-top { display: flex; align-items: center; gap: 8px; b { font-family: var(--fh); font-size: 13px; color: var(--text); } }
+  &__addr-badge { font-family: var(--fm); font-size: 9px; font-weight: 700; color: var(--ind);
+    border: 1px solid var(--ind); border-radius: 999px; padding: 1px 7px; }
+  &__addr-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  &__addr-lines { font-size: 12px; color: var(--text-2); line-height: 1.45; }
+  &__addr-phone { font-family: var(--fm); font-size: 11px; color: var(--text-3); }
+
+  &__form { display: flex; flex-direction: column; gap: 14px; }
+  &__form-actions { display: flex; justify-content: flex-end; gap: 10px; }
+  &__hint { font-family: var(--fm); font-size: 11px; color: var(--text-3); text-align: center; margin: 8px 0 0; }
+
   &__pay {
     display: flex; gap: 12px; align-items: flex-start;
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--rs); padding: 14px;
@@ -77,4 +105,5 @@
   .ck__grid { grid-template-columns: 1fr; }
   .ck__sum { position: static; }
   .ck__fields { grid-template-columns: 1fr; }
+  .ck__addr-list { grid-template-columns: 1fr; }
 }
