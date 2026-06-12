@@ -54,9 +54,9 @@ function Checkout() {
       <div className="ck ck--center">
         <div className="ck__done">
           <div className="ck__done-ico">✓</div>
-          <h1>Commande confirmée&nbsp;!</h1>
-          <p>Merci pour votre confiance. Votre commande <b>#{orderId.slice(0, 8).toUpperCase()}</b> a bien été enregistrée et payée.</p>
-          <p className="ck__done-sub">Nous sourçons vos composants au meilleur prix, assemblons votre PC selon l'offre choisie, puis vous l'expédions avec son rapport.</p>
+          <h1>Demande enregistrée&nbsp;!</h1>
+          <p>Merci&nbsp;! Votre demande <b>#{orderId.slice(0, 8).toUpperCase()}</b> a bien été reçue. Vous allez recevoir un premier devis estimatif par email.</p>
+          <p className="ck__done-sub">Notre équipe vérifie ensuite le prix réel de chaque composant et le meilleur vendeur, puis vous renvoie un <b>devis final</b> à <b>accepter ou refuser</b> depuis « Mes commandes ».</p>
           <div className="ck__done-actions">
             <button className="ck-btn ck-btn--ind" onClick={() => navigate('/configurateur')}>Configurer un autre PC</button>
             <button className="ck-btn ck-btn--ghost" onClick={() => navigate('/')}>Retour à l'accueil</button>
@@ -126,12 +126,12 @@ function Checkout() {
           </section>
 
           <section className="ck__card">
-            <h2>Paiement</h2>
+            <h2>Comment ça marche</h2>
             <div className="ck__pay">
-              <span className="ck__pay-ico">💳</span>
+              <span className="ck__pay-ico">📝</span>
               <div>
-                <b>Paiement sécurisé</b>
-                <p>Le paiement par carte (Stripe) est en cours d'intégration. Pour cette démonstration, la commande est validée sans débit réel.</p>
+                <b>Devis, pas de paiement maintenant</b>
+                <p>Les prix affichés sont <b>estimatifs</b>. Après validation, notre équipe confirme le prix réel de chaque composant et le meilleur vendeur, puis vous renvoie un <b>devis final</b>. Vous l'acceptez (ou non) avant tout paiement.</p>
               </div>
             </div>
           </section>
@@ -149,7 +149,7 @@ function Checkout() {
           </div>
           <div className="ck__row ck__row--total"><span>Total ({cartCount(items)} PC)</span><span>{eur(total)}</span></div>
           <button type="submit" className="ck-btn ck-btn--ind ck-btn--full" disabled={submitting}>
-            {submitting ? 'Validation…' : `Valider et payer ${eur(total)}`}
+            {submitting ? 'Envoi…' : 'Demander mon devis'}
           </button>
           <button type="button" className="ck-btn ck-btn--ghost ck-btn--full" onClick={() => navigate('/panier')}>Retour au panier</button>
         </aside>

@@ -71,8 +71,13 @@ Deno.serve(async (req) => {
 
     const admin = createClient(url, serviceKey)
     const { data: order, error: oErr } = await admin
-      .from('orders').select('id, user_id, items, total_eur, shipping').eq('id', orderId).single()
+      .from('orders').select('id, user_id, items, total_eur, shipping, final_items, final_total').eq('id', orderId).single()
     if (oErr || !order) return json({ error: 'Commande introuvable' }, 404)
+
+    // Devis final (prix réels validés par l'admin) s'il existe, sinon devis estimatif.
+    const isFinal = order.final_items != null
+    const devisItems = (isFinal ? order.final_items : order.items) ?? []
+    const devisTotal = Number(isFinal ? order.final_total : order.total_eur)
 
     const { data: cu } = await admin.auth.admin.getUserById(order.user_id)
     const clientEmail = cu?.user?.email
@@ -95,7 +100,7 @@ Deno.serve(async (req) => {
 
     const ref = String(orderId).slice(0, 8).toUpperCase()
     const client = (order.shipping as { fullName?: string } | null)?.fullName
-    const html = buildHtml((order.items ?? []) as Item[], Number(order.total_eur), ref, client)
+    const html = buildHtml(devisItems as Item[], devisTotal, ref, client)
 
     if (!RESEND) return json({ sent: false, reason: 'RESEND_API_KEY non configuré', recipients: { to: clientEmail, bcc } })
 
@@ -106,7 +111,7 @@ Deno.serve(async (req) => {
         from: SENDER,
         to,
         bcc: bccList.length ? bccList : undefined,
-        subject: `Votre devis PC Aeris #${ref}`,
+        subject: `Votre devis ${isFinal ? 'final ' : ''}PC Aeris #${ref}${isFinal ? ' — à valider' : ''}`,
         html,
         attachments: pdfBase64 ? [{ filename: `devis-${ref}.pdf`, content: pdfBase64 }] : undefined,
       }),

@@ -40,7 +40,9 @@ export const ASSEMBLY_PRICE: Record<AssemblyTier, number> = { essentiel: 79, con
 
 // ── Statuts de commande ──────────────────────────────────────────────────────
 
-export type OrderStatus = 'pending' | 'paid' | 'assembling' | 'shipped' | 'delivered' | 'cancelled'
+export type OrderStatus =
+  | 'pending' | 'quote_sent' | 'accepted' | 'refused'
+  | 'paid' | 'assembling' | 'shipped' | 'delivered' | 'cancelled'
 
 export interface OrderStatusMeta {
   value: OrderStatus
@@ -49,13 +51,19 @@ export interface OrderStatusMeta {
 }
 
 export const ORDER_STATUSES: OrderStatusMeta[] = [
-  { value: 'pending', label: 'En attente de paiement', color: '#c97a12' },
+  { value: 'pending', label: 'Devis en préparation', color: '#c97a12' },
+  { value: 'quote_sent', label: 'Devis final envoyé', color: '#0ea5e9' },
+  { value: 'accepted', label: 'Devis accepté', color: '#4f46e5' },
+  { value: 'refused', label: 'Devis refusé', color: '#d14343' },
   { value: 'paid', label: 'Payée', color: '#4f46e5' },
-  { value: 'assembling', label: 'En assemblage', color: '#0ea5e9' },
-  { value: 'shipped', label: 'Expédiée', color: '#8b5cf6' },
+  { value: 'assembling', label: 'En assemblage', color: '#8b5cf6' },
+  { value: 'shipped', label: 'Expédiée', color: '#6366f1' },
   { value: 'delivered', label: 'Livrée', color: '#0f9d6e' },
   { value: 'cancelled', label: 'Annulée', color: '#d14343' },
 ]
+
+// Statuts proposés à l'admin après acceptation du devis (suivi de production).
+export const FULFILLMENT_STATUSES: OrderStatus[] = ['accepted', 'assembling', 'shipped', 'delivered', 'cancelled']
 
 export const orderStatusMeta = (s: string): OrderStatusMeta =>
   ORDER_STATUSES.find((x) => x.value === s) ?? { value: 'pending', label: s, color: '#6b7185' }

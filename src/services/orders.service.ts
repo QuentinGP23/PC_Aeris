@@ -15,6 +15,8 @@ export interface OrderSummary {
   total_eur: number
   status: string
   created_at: string
+  final_items?: CartItem[] | null
+  final_total?: number | null
 }
 
 export interface OrderAdmin extends OrderSummary {
@@ -25,7 +27,7 @@ export interface OrderAdmin extends OrderSummary {
 }
 
 export const ordersService = {
-  /** Crée une commande (paiement simulé : statut « paid »). */
+  /** Crée une commande (devis demandé : statut « pending », en attente du devis final admin). */
   async create(
     items: CartItem[],
     total: number,
@@ -37,7 +39,7 @@ export const ordersService = {
 
     const { data, error } = await supabase
       .from('orders')
-      .insert({ user_id: userId, items, total_eur: total, shipping, status: 'paid' })
+      .insert({ user_id: userId, items, total_eur: total, shipping, status: 'pending' })
       .select('id')
       .single()
 
@@ -46,7 +48,7 @@ export const ordersService = {
   },
 
   /** Envoie le devis PDF par email au client et aux admins (Edge Function). Best-effort. */
-  async emailDevis(payload: { orderId: string; clientName: string; total: number; pdfBase64: string }): Promise<{ error: string | null }> {
+  async emailDevis(payload: { orderId: string; clientName: string; total: number; pdfBase64?: string }): Promise<{ error: string | null }> {
     const { error } = await supabase.functions.invoke('send-devis', { body: payload })
     return { error: error ? error.message : null }
   },
@@ -55,10 +57,26 @@ export const ordersService = {
   async list(): Promise<{ data: OrderSummary[]; error: string | null }> {
     const { data, error } = await supabase
       .from('orders')
-      .select('id, items, total_eur, status, created_at')
+      .select('id, items, total_eur, status, created_at, final_items, final_total')
       .order('created_at', { ascending: false })
     if (error) return { data: [], error: error.message }
     return { data: (data ?? []) as OrderSummary[], error: null }
+  },
+
+  /** Client : accepte (true) ou refuse (false) le devis final. */
+  async respondQuote(orderId: string, accept: boolean): Promise<{ error: string | null }> {
+    const { error } = await supabase.rpc('respond_quote', { order_id: orderId, accept })
+    return { error: error?.message ?? null }
+  },
+
+  /** Admin : enregistre le devis final (vendeur + prix par composant) et l'envoie. */
+  async finalize(orderId: string, finalItems: CartItem[], finalTotal: number): Promise<{ error: string | null }> {
+    const { error } = await supabase.rpc('admin_finalize_order', {
+      order_id: orderId,
+      p_final_items: finalItems,
+      p_final_total: finalTotal,
+    })
+    return { error: error?.message ?? null }
   },
 
   /** Toutes les commandes (admin). */
