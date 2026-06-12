@@ -38,6 +38,28 @@ export const ASSEMBLY_OFFERS: AssemblyOffer[] = [
 
 export const ASSEMBLY_PRICE: Record<AssemblyTier, number> = { essentiel: 79, confort: 129, premium: 199 }
 
+// ── Statuts de commande ──────────────────────────────────────────────────────
+
+export type OrderStatus = 'pending' | 'paid' | 'assembling' | 'shipped' | 'delivered' | 'cancelled'
+
+export interface OrderStatusMeta {
+  value: OrderStatus
+  label: string
+  color: string // couleur d'accent (badge)
+}
+
+export const ORDER_STATUSES: OrderStatusMeta[] = [
+  { value: 'pending', label: 'En attente de paiement', color: '#c97a12' },
+  { value: 'paid', label: 'Payée', color: '#4f46e5' },
+  { value: 'assembling', label: 'En assemblage', color: '#0ea5e9' },
+  { value: 'shipped', label: 'Expédiée', color: '#8b5cf6' },
+  { value: 'delivered', label: 'Livrée', color: '#0f9d6e' },
+  { value: 'cancelled', label: 'Annulée', color: '#d14343' },
+]
+
+export const orderStatusMeta = (s: string): OrderStatusMeta =>
+  ORDER_STATUSES.find((x) => x.value === s) ?? { value: 'pending', label: s, color: '#6b7185' }
+
 // ── Specs affichées sur les cartes du configurateur (par catégorie) ──────────
 
 export const KEY_SPECS: Record<CategoryKey, string[]> = {

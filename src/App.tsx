@@ -16,6 +16,8 @@ import {
   Questionnaire,
   Cart,
   Checkout,
+  Orders,
+  AdminOrders,
   ProductDetail,
   Profile,
   SignIn,
@@ -59,6 +61,7 @@ function App() {
           <Route path="/questionnaire" element={<Questionnaire />} />
           <Route path="/panier" element={<Cart />} />
           <Route path="/commande" element={<Checkout />} />
+          <Route path="/commandes" element={<Orders />} />
           <Route path="/produit/:id" element={<ProductDetail />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
@@ -104,6 +107,16 @@ function App() {
             <ProtectedRoute requiredRole="admin">
               <AdminLayout title="Produits" ghost="STOCK">
                 <AdminProducts />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminLayout title="Commandes" ghost="ORDERS">
+                <AdminOrders />
               </AdminLayout>
             </ProtectedRoute>
           }

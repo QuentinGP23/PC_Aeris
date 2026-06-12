@@ -74,6 +74,7 @@ function Header() {
               {user.role === 'admin' && (
                 <Link to="/admin" className="btn-ghost">Admin</Link>
               )}
+              <Link to="/commandes" className="btn-ghost">Mes commandes</Link>
               <Link to="/profile" className="btn-ghost">{user.pseudo || user.email}</Link>
               <button type="button" className="btn-primary" onClick={() => void signOut()}>
                 Déconnexion
@@ -111,6 +112,7 @@ function Header() {
           {isAuthenticated && user ? (
             <>
               {user.role === 'admin' && <Link to="/admin" className="nav__mobile-link">Admin</Link>}
+              <Link to="/commandes" className="nav__mobile-link">Mes commandes</Link>
               <Link to="/profile" className="nav__mobile-link">Mon profil</Link>
               <button type="button" className="nav__mobile-link nav__mobile-link--danger" onClick={() => void signOut()}>
                 Déconnexion

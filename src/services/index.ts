@@ -6,4 +6,4 @@ export type { SavedConfig, SavedConfigWithProducts } from './savedConfigs.servic
 export { prebuiltsService } from './prebuilts.service'
 export type { PrebuiltConfig, PrebuiltUsage, PrebuiltTier } from './prebuilts.service'
 export { ordersService } from './orders.service'
-export type { ShippingAddress, OrderSummary } from './orders.service'
+export type { ShippingAddress, OrderSummary, OrderAdmin } from './orders.service'

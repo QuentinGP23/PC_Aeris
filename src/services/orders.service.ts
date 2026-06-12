@@ -17,6 +17,13 @@ export interface OrderSummary {
   created_at: string
 }
 
+export interface OrderAdmin extends OrderSummary {
+  user_id: string
+  client_email: string | null
+  client_name: string | null
+  shipping: { fullName?: string; address?: string; zip?: string; city?: string; phone?: string } | null
+}
+
 export const ordersService = {
   /** Crée une commande (paiement simulé : statut « paid »). */
   async create(
@@ -44,6 +51,7 @@ export const ordersService = {
     return { error: error ? error.message : null }
   },
 
+  /** Commandes de l'utilisateur connecté (RLS : les siennes uniquement). */
   async list(): Promise<{ data: OrderSummary[]; error: string | null }> {
     const { data, error } = await supabase
       .from('orders')
@@ -51,5 +59,18 @@ export const ordersService = {
       .order('created_at', { ascending: false })
     if (error) return { data: [], error: error.message }
     return { data: (data ?? []) as OrderSummary[], error: null }
+  },
+
+  /** Toutes les commandes (admin). */
+  async adminList(): Promise<{ data: OrderAdmin[]; error: string | null }> {
+    const { data, error } = await supabase.rpc('admin_list_orders')
+    if (error) return { data: [], error: error.message }
+    return { data: (data ?? []) as OrderAdmin[], error: null }
+  },
+
+  /** Change le statut d'une commande (admin). */
+  async adminUpdateStatus(orderId: string, status: string): Promise<{ error: string | null }> {
+    const { error } = await supabase.rpc('admin_update_order_status', { order_id: orderId, new_status: status })
+    return { error: error?.message ?? null }
   },
 }
