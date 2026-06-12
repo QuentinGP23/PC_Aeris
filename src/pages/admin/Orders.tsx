@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ordersService, type OrderAdmin } from '../../services'
 import { useToast, type CartItem } from '../../store'
+import { Modal, Button } from '../../components/common'
 import { ORDER_STATUSES, FULFILLMENT_STATUSES, ASSEMBLY_PRICE, orderStatusMeta } from '../../constants'
 import { CATEGORIES, type CategoryKey } from '../../types'
 import './Orders.scss'
@@ -12,7 +13,7 @@ const lineKey = (itemId: string, cat: string) => `${itemId}|${cat}`
 
 function StatusBadge({ status }: { status: string }) {
   const m = orderStatusMeta(status)
-  return <span className="ostatus" style={{ color: m.color, borderColor: m.color, background: `${m.color}1a` }}>{m.label}</span>
+  return <span className="ostatus" style={{ color: m.color, borderColor: m.color, background: `${m.color}22` }}>{m.label}</span>
 }
 
 type EditMap = Record<string, { merchant: string; price: string }>
@@ -49,7 +50,6 @@ function AdminOrders() {
     const map: EditMap = {}
     for (const it of o.items) for (const l of it.lines) map[lineKey(it.id, l.category)] = { merchant: l.merchant ?? '', price: l.price != null ? String(l.price) : '' }
     setEdit({ orderId: o.id, map })
-    setOpenId(o.id)
   }
 
   const setField = (k: string, field: 'merchant' | 'price', v: string) =>
@@ -69,8 +69,9 @@ function AdminOrders() {
     return { items, total }
   }
 
-  const sendFinal = async (o: OrderAdmin) => {
-    if (!edit || edit.orderId !== o.id) return
+  const sendFinal = async () => {
+    const o = orders?.find((x) => x.id === edit?.orderId)
+    if (!o || !edit) return
     const { items, total } = buildFinal(o, edit.map)
     setBusy(true)
     const { error } = await ordersService.finalize(o.id, items, total)
@@ -85,6 +86,8 @@ function AdminOrders() {
   if (error) return <div className="adm-orders__state adm-orders__state--err">{error}</div>
   if (orders === null) return <div className="adm-orders__state">Chargement…</div>
 
+  const editOrder = orders.find((o) => o.id === edit?.orderId) ?? null
+
   return (
     <div className="adm-orders">
       <div className="adm-orders__hd"><span>{orders.length} commande{orders.length > 1 ? 's' : ''}</span></div>
@@ -98,7 +101,7 @@ function AdminOrders() {
             const isOpen = openId === o.id
             const display = o.final_items ?? o.items
             const displayTotal = o.final_total ?? o.total_eur
-            const editing = edit?.orderId === o.id
+            const isFulfil = FULFILLMENT_STATUSES.includes(o.status as never)
             return (
               <div key={o.id} className="ogroup">
                 <div className="otr">
@@ -106,13 +109,12 @@ function AdminOrders() {
                   <span className="otr__client">{o.client_name ?? '—'}<small>{o.client_email}</small></span>
                   <span className="otr__items">{count} PC · {o.items.map((i) => i.name).join(', ')}</span>
                   <span className="otr__total num">{eur(displayTotal)}</span>
-                  <span>
-                    {FULFILLMENT_STATUSES.includes(o.status as never) ? (
+                  <span className="otr__status">
+                    <StatusBadge status={o.status} />
+                    {isFulfil && (
                       <select className="osel" value={o.status} onChange={(e) => void changeStatus(o, e.target.value)}>
                         {ORDER_STATUSES.filter((s) => FULFILLMENT_STATUSES.includes(s.value)).map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                       </select>
-                    ) : (
-                      <StatusBadge status={o.status} />
                     )}
                   </span>
                   <span><button className="otr__exp" onClick={() => setOpenId(isOpen ? null : o.id)}>{isOpen ? '▲' : '▾'}</button></span>
@@ -124,54 +126,16 @@ function AdminOrders() {
                       <div className="odetail__ship">Livraison : {o.shipping.fullName} — {o.shipping.address}, {o.shipping.zip} {o.shipping.city} · {o.shipping.phone}</div>
                     )}
 
-                    {/* PENDING → formulaire de finalisation */}
                     {o.status === 'pending' && (
-                      editing ? (
-                        <div className="ofinal">
-                          <div className="ofinal__intro">Renseigne le <b>vendeur</b> et le <b>prix réel</b> de chaque composant, puis envoie le devis final au client.</div>
-                          {o.items.map((it) => (
-                            <div key={it.id} className="oitem">
-                              <div className="oitem__name">{it.name}{it.quantity > 1 ? ` × ${it.quantity}` : ''} <span>· montage {it.assembly} ({eur(ASSEMBLY_PRICE[it.assembly])})</span></div>
-                              <table className="ofinal__t">
-                                <thead><tr><th>Composant</th><th>Vendeur</th><th>Prix réel</th></tr></thead>
-                                <tbody>
-                                  {it.lines.map((l) => {
-                                    const k = lineKey(it.id, l.category)
-                                    const e = edit!.map[k] ?? { merchant: '', price: '' }
-                                    return (
-                                      <tr key={l.category}>
-                                        <td><span className="ofinal__cat">{catLabel(l.category)}</span> {l.name}</td>
-                                        <td><input value={e.merchant} placeholder="ex. LDLC" onChange={(ev) => setField(k, 'merchant', ev.target.value)} /></td>
-                                        <td><input type="number" min="0" value={e.price} placeholder="0" onChange={(ev) => setField(k, 'price', ev.target.value)} /> €</td>
-                                      </tr>
-                                    )
-                                  })}
-                                </tbody>
-                              </table>
-                            </div>
-                          ))}
-                          <div className="ofinal__ft">
-                            <div className="ofinal__total">Total devis : <b>{eur(buildFinal(o, edit!.map).total)}</b></div>
-                            <div>
-                              <button className="ob ob--ghost" onClick={() => setEdit(null)} disabled={busy}>Annuler</button>
-                              <button className="ob ob--ind" onClick={() => void sendFinal(o)} disabled={busy}>{busy ? 'Envoi…' : 'Envoyer le devis final →'}</button>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="ofinal__cta">
-                          <span>Commande à traiter : complète le devis avec les prix réels.</span>
-                          <button className="ob ob--ind" onClick={() => startFinalize(o)}>Compléter le devis</button>
-                        </div>
-                      )
+                      <div className="ofinal__cta">
+                        <span>Commande à traiter : complète le devis avec les prix réels avant de l'envoyer au client.</span>
+                        <Button size="sm" onClick={() => startFinalize(o)}>Compléter le devis</Button>
+                      </div>
                     )}
-
-                    {/* quote_sent → en attente client */}
-                    {o.status === 'quote_sent' && <div className="odetail__note">Devis final envoyé — en attente de la réponse du client.</div>}
-                    {o.status === 'refused' && <div className="odetail__note odetail__note--err">Devis refusé par le client.</div>}
+                    {o.status === 'quote_sent' && <div className="odetail__note">Devis final envoyé — en attente de la réponse du client. <button className="odetail__relink" onClick={() => startFinalize(o)}>Modifier / renvoyer</button></div>}
                     {o.status === 'accepted' && <div className="odetail__note odetail__note--ok">Devis accepté par le client — à mettre en assemblage.</div>}
+                    {o.status === 'refused' && <div className="odetail__note odetail__note--err">Devis refusé par le client.</div>}
 
-                    {/* Devis (final si dispo, sinon estimatif) */}
                     {o.status !== 'pending' && display.map((it) => (
                       <div key={it.id} className="oitem">
                         <div className="oitem__name">{it.name}{it.quantity > 1 ? ` × ${it.quantity}` : ''} <span>· montage {it.assembly}</span></div>
@@ -190,6 +154,48 @@ function AdminOrders() {
           })}
         </div>
       )}
+
+      {/* ── Popin de finalisation du devis ── */}
+      <Modal
+        isOpen={!!editOrder}
+        onClose={() => { if (!busy) setEdit(null) }}
+        title="Compléter le devis final"
+        size="lg"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setEdit(null)} disabled={busy}>Annuler</Button>
+            <Button onClick={() => { void sendFinal() }} isLoading={busy}>Envoyer le devis final</Button>
+          </>
+        }
+      >
+        {editOrder && edit && (
+          <div className="ofinal">
+            <p className="ofinal__intro">Renseigne le <b>vendeur</b> et le <b>prix réel</b> de chaque composant. Le client recevra ce devis à accepter ou refuser.</p>
+            {editOrder.items.map((it) => (
+              <div key={it.id} className="ofinal__block">
+                <div className="ofinal__bname">{it.name}{it.quantity > 1 ? ` × ${it.quantity}` : ''} <span>· montage {it.assembly} ({eur(ASSEMBLY_PRICE[it.assembly])})</span></div>
+                <table className="ofinal__t">
+                  <thead><tr><th>Composant</th><th>Vendeur</th><th>Prix réel</th></tr></thead>
+                  <tbody>
+                    {it.lines.map((l) => {
+                      const k = lineKey(it.id, l.category)
+                      const e = edit.map[k] ?? { merchant: '', price: '' }
+                      return (
+                        <tr key={l.category}>
+                          <td><span className="ofinal__cat">{catLabel(l.category)}</span><br />{l.name}</td>
+                          <td><input value={e.merchant} placeholder="ex. LDLC" onChange={(ev) => setField(k, 'merchant', ev.target.value)} /></td>
+                          <td className="ofinal__price"><input type="number" min="0" value={e.price} placeholder="0" onChange={(ev) => setField(k, 'price', ev.target.value)} /><span>€</span></td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+            <div className="ofinal__total">Total du devis <b>{eur(buildFinal(editOrder, edit.map).total)}</b></div>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
