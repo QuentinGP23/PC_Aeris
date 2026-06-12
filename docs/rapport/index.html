@@ -9,43 +9,49 @@
     --brand:#4f46e5; --brand-d:#3730a3; --brand-l:#6366f1; --brand-soft:#eef0fe;
     --ok:#0f9d6e; --warn:#c97a12; --err:#d14343;
   }
+
+  /* ===== Mise en page A4 (Paged.js) ===== */
+  @page{
+    size: A4;
+    margin: 17mm 16mm 16mm;
+    @top-right{ content:"PC Aeris — Rapport de projet"; font-family:"Segoe UI",Arial; font-size:7pt; color:#aab0c0; }
+    @bottom-left{ content:"Quentin Geoffroy · ECV — Master 2 Développement"; font-family:"Segoe UI",Arial; font-size:7pt; color:#aab0c0; }
+    @bottom-right{ content:"Page " counter(page) " / " counter(pages); font-family:"Segoe UI",Arial; font-size:7pt; color:#aab0c0; }
+  }
+  @page cover{ margin:0; @top-right{content:none} @bottom-left{content:none} @bottom-right{content:none} }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:#fff;color:var(--ink);
     font-family:"Segoe UI",-apple-system,Helvetica,Arial,sans-serif;font-size:10.6px;line-height:1.62;}
-  p{margin:0 0 9px;}
-  strong{color:var(--ink);}
-  a{color:var(--brand-d);text-decoration:none;}
-  em{color:var(--brand-d);font-style:normal;}
+  p{margin:0 0 9px;} strong{color:var(--ink);}
+  a{color:var(--brand-d);text-decoration:none;} em{color:var(--brand-d);font-style:normal;}
 
   h1,h2,h3,h4{color:var(--ink);line-height:1.22;}
-  /* h1 = grande partie / section principale : nouvelle page */
   h1.sec{font-size:23px;margin:0 0 4px;padding:0 0 10px;border-bottom:2.5px solid var(--brand);
-    page-break-before:always;letter-spacing:-.01em;}
+    break-before:page;letter-spacing:-.01em;}
   h1.sec .num{color:var(--brand);font-weight:800;}
   h1.sec + .lead{color:var(--muted);font-size:12px;margin:-2px 0 16px;}
-  h2{font-size:14.5px;margin:20px 0 7px;color:var(--brand-d);}
-  h3{font-size:11.8px;margin:14px 0 4px;color:var(--ink);}
+  h2{font-size:14.5px;margin:20px 0 7px;color:var(--brand-d);break-after:avoid;}
+  h3{font-size:11.8px;margin:14px 0 4px;color:var(--ink);break-after:avoid;}
   h4{font-size:10.8px;margin:10px 0 3px;color:var(--ink-2);}
 
-  ul,ol{margin:6px 0 9px;padding-left:18px;}
-  li{margin:2.5px 0;}
+  ul,ol{margin:6px 0 9px;padding-left:18px;} li{margin:2.5px 0;}
 
-  table{border-collapse:collapse;width:100%;margin:8px 0 4px;font-size:9.5px;page-break-inside:avoid;}
+  table{border-collapse:collapse;width:100%;margin:8px 0 4px;font-size:9.5px;break-inside:avoid;}
   th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;}
   th{background:var(--brand);color:#fff;font-weight:600;font-size:8.8px;letter-spacing:.02em;}
   tr:nth-child(even) td{background:var(--soft);}
   td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 
   blockquote{margin:10px 0;padding:9px 14px;background:var(--brand-soft);border-left:3px solid var(--brand);
-    border-radius:0 5px 5px 0;color:var(--ink-2);}
+    border-radius:0 5px 5px 0;color:var(--ink-2);break-inside:avoid;}
   blockquote p{margin:3px 0;}
 
   .tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     padding:2px 7px;border-radius:20px;background:var(--brand-soft);color:var(--brand-d);}
   .tag.ok{background:#e4f6ee;color:var(--ok);} .tag.todo{background:#fdeede;color:var(--warn);}
 
-  /* Figures */
-  figure{margin:12px 0;page-break-inside:avoid;}
+  figure{margin:12px 0;break-inside:avoid;}
   figcaption{font-size:8.6px;color:var(--muted);margin-top:5px;font-style:italic;}
   figcaption b{color:var(--brand-d);font-style:normal;}
   .fig{border:1px solid var(--line);border-radius:7px;padding:14px 16px;background:#fff;}
@@ -53,94 +59,91 @@
   .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
   .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
   .box{border:1px solid var(--line);border-radius:7px;padding:11px 13px;background:var(--soft);}
-  .box h4{margin:0 0 5px;color:var(--brand-d);}
-  .box.hl{background:var(--brand-soft);border-color:#c9cdfb;}
+  .box h4{margin:0 0 5px;color:var(--brand-d);} .box.hl{background:var(--brand-soft);border-color:#c9cdfb;}
   .box ul{margin:2px 0;padding-left:15px;}
   .stat{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1;}
   .stat .u{font-size:12px;color:var(--muted);font-weight:600;}
   .statl{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px;}
 
-  /* SWOT */
   .swot{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
   .swot .q{border-radius:6px;padding:10px 12px;}
-  .swot .s{background:#e4f6ee;border:1px solid #bfe6d3;}
-  .swot .w{background:#fdecec;border:1px solid #f3c9c9;}
-  .swot .o{background:#e9f0fe;border:1px solid #cdd8fb;}
-  .swot .t{background:#fdf2e2;border:1px solid #f1ddb8;}
-  .swot h4{margin:0 0 5px;font-size:9.5px;}
-  .swot ul{margin:0;padding-left:14px;font-size:9px;}
+  .swot .s{background:#e4f6ee;border:1px solid #bfe6d3;} .swot .w{background:#fdecec;border:1px solid #f3c9c9;}
+  .swot .o{background:#e9f0fe;border:1px solid #cdd8fb;} .swot .t{background:#fdf2e2;border:1px solid #f1ddb8;}
+  .swot h4{margin:0 0 5px;font-size:9.5px;} .swot ul{margin:0;padding-left:14px;font-size:9px;}
 
-  /* timeline roadmap */
   .tl{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:10px 0;}
   .tl .ph{padding:0 12px;border-left:2px solid var(--line);}
   .tl .ph:first-child{border-left:3px solid var(--brand);padding-left:10px;}
   .tl .when{font-size:9px;font-weight:700;color:var(--brand-d);letter-spacing:.03em;}
   .tl .when .now{font-size:7px;background:var(--brand);color:#fff;padding:1px 5px;border-radius:4px;margin-left:4px;}
-  .tl h4{margin:5px 0 4px;font-size:10.5px;}
-  .tl p{font-size:8.8px;color:var(--ink-2);margin:0;line-height:1.45;}
+  .tl h4{margin:5px 0 4px;font-size:10.5px;} .tl p{font-size:8.8px;color:var(--ink-2);margin:0;line-height:1.45;}
 
-  /* bars */
   .bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden;display:flex;}
   .bar i{display:block;height:100%;}
   .bar .done{background:var(--ok);} .bar .ready{background:var(--brand-l);} .bar .todo{background:#d7dae6;}
-
   hr{border:none;border-top:1px solid var(--line);margin:14px 0;}
 
-  /* ── COVER ── */
-  .cover{height:1015px;display:flex;flex-direction:column;page-break-after:always;position:relative;padding:0;}
-  .cover__band{height:13px;background:linear-gradient(90deg,var(--brand-d),var(--brand-l));}
-  .cover__in{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 14px;}
-  .cover__ey{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);}
-  .cover__logo{display:flex;align-items:center;gap:10px;margin-bottom:40px;font-size:15px;font-weight:800;color:var(--ink);}
+  /* ===== Couverture ===== */
+  .cover{page:cover;break-after:page;display:flex;flex-direction:column;min-height:262mm;padding:0 17mm;position:relative;}
+  .cover__top{padding-top:30mm;}
+  .cover__logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px;}
   .cover__mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand-d));
     color:#fff;display:grid;place-items:center;font-size:16px;}
-  .cover h1{font-size:62px;line-height:1;letter-spacing:-.03em;margin:14px 0 6px;color:var(--ink);border:none;page-break-before:avoid;}
-  .cover .base{font-size:21px;color:var(--ink-2);font-weight:500;margin-bottom:34px;}
-  .cover .rule{width:84px;height:5px;background:var(--brand);border-radius:3px;margin:8px 0 30px;}
-  .cover__meta{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--ink-2);}
-  .cover__meta b{color:var(--ink);}
-  .cover__links{margin-top:26px;font-size:11px;color:var(--muted);}
+  .cover__rule{width:84px;height:5px;background:linear-gradient(90deg,var(--brand-d),var(--brand-l));border-radius:3px;margin:34px 0 22px;}
+  .cover__ey{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);}
+  .cover h1{font-size:60px;line-height:1;letter-spacing:-.03em;margin:12px 0 8px;color:var(--ink);border:none;}
+  .cover .base{font-size:20px;color:var(--ink-2);font-weight:500;}
+  .cover__mid{flex:1;}
+  .cover__meta{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--ink-2);margin-bottom:14px;}
+  .cover__meta b{color:var(--ink);font-size:14px;}
+  .cover__links{font-size:11px;color:var(--muted);}
   .cover__links a{color:var(--brand-d);}
-  .cover__ft{position:absolute;bottom:26px;left:14px;right:14px;display:flex;justify-content:space-between;
-    font-size:9px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;}
+  .cover__ft{border-top:1px solid var(--line);padding:8px 0 24px;display:flex;justify-content:space-between;
+    font-size:9px;color:var(--muted);}
 
-  /* ── front-matter lists (sommaire / illustrations / annexes) ── */
-  .fm{page-break-before:always;}
-  .fm h1{font-size:21px;margin:0 0 14px;padding-bottom:9px;border-bottom:2.5px solid var(--brand);page-break-before:avoid;}
+  /* ===== Sommaire / illustrations / annexes ===== */
+  .fm{break-before:page;}
+  .fm h1{font-size:21px;margin:0 0 14px;padding-bottom:9px;border-bottom:2.5px solid var(--brand);}
   ul.toc{list-style:none;padding:0;margin:0;}
   ul.toc li{margin:0;}
   ul.toc a{display:flex;align-items:baseline;text-decoration:none;color:var(--ink);}
-  .toc .l0{margin-top:14px;padding-top:7px;border-top:1px solid var(--line);}
-  .toc .l0 a{font-weight:700;color:var(--brand-d);font-size:11.5px;}
-  .toc .l1{padding-left:16px;margin-top:3px;}
-  .toc .l1 a{font-size:10px;color:var(--ink-2);}
-  .toc .dots{flex:1;border-bottom:1px dotted #c2c7d6;margin:0 6px;position:relative;top:-3px;}
-  .toc .pg{flex:0 0 auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:9.5px;}
-  .toc .l0 .pg{color:var(--brand-d);}
-
+  ul.toc a::after{content:target-counter(attr(href url),page);flex:0 0 auto;color:var(--muted);
+    font-variant-numeric:tabular-nums;font-size:9.5px;}
+  .toc .t{flex:0 0 auto;} .toc .dots{flex:1 1 auto;border-bottom:1px dotted #c2c7d6;margin:0 6px;position:relative;top:-3px;}
+  .toc .l0{margin-top:13px;padding-top:7px;border-top:1px solid var(--line);}
+  .toc .l0 a{font-weight:700;color:var(--brand-d);font-size:11.5px;} .toc .l0 a::after{color:var(--brand-d);}
+  .toc .l1{padding-left:16px;margin-top:3px;} .toc .l1 a{font-size:10px;color:var(--ink-2);}
+  .toc .fg a{font-size:10px;color:var(--ink-2);margin-top:3px;}
   .resume{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:4px 0 0;}
   .resume h4{margin:0 0 5px;color:var(--brand-d);}
+
+  /* ===== Aperçu écran : feuilles A4 sur fond gris ===== */
+  @media screen{
+    body{background:#52555c;}
+    .pagedjs_pages{display:flex;flex-direction:column;align-items:center;}
+    .pagedjs_page{background:#fff;box-shadow:0 1px 14px rgba(0,0,0,.45);margin:7mm 0;}
+  }
 </style>
 </head>
 <body>
 
 <!-- ============================ COUVERTURE ============================ -->
 <section class="cover">
-  <div class="cover__band"></div>
-  <div class="cover__in">
+  <div class="cover__top">
     <div class="cover__logo"><span class="cover__mark">▲</span> PC&nbsp;Aeris</div>
+    <div class="cover__rule"></div>
     <div class="cover__ey">Rapport de projet</div>
     <h1>PC Aeris</h1>
     <div class="base">Le PC sur-mesure, enfin accessible à tous.</div>
-    <div class="rule"></div>
-    <div class="cover__meta">
-      <span><b>Quentin Geoffroy</b></span>
-      <span>ECV — Master 2 Développement</span>
-      <span>15 juin 2026</span>
-    </div>
-    <div class="cover__links">
-      Démo en production : <a>pc-aeris.vercel.app</a> &nbsp;·&nbsp; Code source : <a>github.com/QuentinGP23/PC_Aeris</a>
-    </div>
+  </div>
+  <div class="cover__mid"></div>
+  <div class="cover__meta">
+    <span><b>Quentin Geoffroy</b></span>
+    <span>ECV — Master 2 Développement</span>
+    <span>15 juin 2026</span>
+  </div>
+  <div class="cover__links">
+    Démo en production : <a>pc-aeris.vercel.app</a> &nbsp;·&nbsp; Code source : <a>github.com/QuentinGP23/PC_Aeris</a>
   </div>
   <div class="cover__ft"><span>PC Aeris — Plateforme de configuration de PC sur-mesure</span><span>Rapport de fin de Master 2</span></div>
 </section>
@@ -148,32 +151,30 @@
 <!-- ============================ SOMMAIRE ============================ -->
 <section class="fm">
   <h1>Sommaire</h1>
-
   <div class="resume">
     <h4>Résumé</h4>
     <p>PC Aeris est une plateforme web qui démocratise l'accès au PC sur-mesure. Elle répond à trois questions que tout acheteur se pose — compatibilité, performance et juste prix — grâce à un configurateur à compatibilité garantie, un moteur de valeur fondé sur les benchmarks, et une transparence radicale des prix de marché. Le produit est <b>en production</b> ; ce rapport présente la vision, le modèle économique, l'étude de marché, la démarche agile et l'état d'avancement technique du projet.</p>
   </div>
-
   <ul class="toc" style="margin-top:16px;">
-    <li class="l0"><a href="#intro"><span>Introduction</span><span class="dots"></span><span class="pg" data-find="Introduction"></span></a></li>
-    <li class="l0"><a href="#s1"><span>1. Contexte et problème</span><span class="dots"></span><span class="pg" data-find="1. Contexte et probleme"></span></a></li>
-    <li class="l1"><a><span>1.1 Un parcours du combattant · 1.2 Le marché</span><span class="dots"></span><span class="pg" data-find="1.1 Un parcours du combattant"></span></a></li>
-    <li class="l0"><a href="#s2"><span>2. La solution PC Aeris</span><span class="dots"></span><span class="pg" data-find="2. La solution PC Aeris"></span></a></li>
-    <li class="l1"><a><span>2.1 Proposition de valeur · 2.2 Trois parcours · 2.3 Moteur de valeur</span><span class="dots"></span><span class="pg" data-find="2.1 Proposition de valeur"></span></a></li>
-    <li class="l0"><a href="#s3"><span>3. Étude de marché</span><span class="dots"></span><span class="pg" data-find="3. Etude de marche"></span></a></li>
-    <li class="l1"><a><span>3.1 SWOT · 3.2 PESTEL · 3.3 Cinq forces de Porter</span><span class="dots"></span><span class="pg" data-find="3.1 Analyse SWOT"></span></a></li>
-    <li class="l0"><a href="#s4"><span>4. Modèle économique</span><span class="dots"></span><span class="pg" data-find="4. Modele economique"></span></a></li>
-    <li class="l1"><a><span>4.1 Offres de montage · 4.2 Asset-light · 4.3 Business Model Canvas</span><span class="dots"></span><span class="pg" data-find="4.1 On gagne sur le montage"></span></a></li>
-    <li class="l0"><a href="#s5"><span>5. Business plan et trajectoire financière</span><span class="dots"></span><span class="pg" data-find="5. Business plan et trajectoire"></span></a></li>
-    <li class="l1"><a><span>5.1 Positionnement · 5.2 Projections · 5.3 Financement · 5.4 KPIs et risques</span><span class="dots"></span><span class="pg" data-find="5.1 Positionnement concurrentiel"></span></a></li>
-    <li class="l0"><a href="#s6"><span>6. Organisation, roadmap et équipe</span><span class="dots"></span><span class="pg" data-find="6. Organisation, roadmap et equipe"></span></a></li>
-    <li class="l1"><a><span>6.1 Roadmap · 6.2 Processus · 6.3 Environnement technique · 6.4 Équipe</span><span class="dots"></span><span class="pg" data-find="6.1 Roadmap produit"></span></a></li>
-    <li class="l0"><a href="#s7"><span>7. Démarche agile et pilotage produit</span><span class="dots"></span><span class="pg" data-find="7. Demarche agile et pilotage"></span></a></li>
-    <li class="l1"><a><span>7.1 Story mapping · 7.2 Périmètre du MVP · 7.3 Sprints</span><span class="dots"></span><span class="pg" data-find="7.1 Story mapping"></span></a></li>
-    <li class="l0"><a href="#s8"><span>8. Réalisations et état d'avancement</span><span class="dots"></span><span class="pg" data-find="8. Realisations et etat"></span></a></li>
-    <li class="l1"><a><span>8.1 Configurateur · 8.2 Données · 8.3 Qualité · 8.4 Bilan</span><span class="dots"></span><span class="pg" data-find="8.1 Le configurateur et la compatibilite"></span></a></li>
-    <li class="l0"><a href="#concl"><span>Conclusion</span><span class="dots"></span><span class="pg" data-find="Conclusion"></span></a></li>
-    <li class="l0"><a href="#annexes"><span>Annexes</span><span class="dots"></span><span class="pg" data-find="Annexe A"></span></a></li>
+    <li class="l0"><a href="#intro"><span class="t">Introduction</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s1"><span class="t">1. Contexte et problème</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s1-1"><span class="t">1.1 Un parcours du combattant · 1.2 Le marché</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s2"><span class="t">2. La solution PC Aeris</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s2-1"><span class="t">2.1 Proposition de valeur · 2.2 Trois parcours · 2.3 Moteur de valeur</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s3"><span class="t">3. Étude de marché</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s3-1"><span class="t">3.1 SWOT · 3.2 PESTEL · 3.3 Cinq forces de Porter</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s4"><span class="t">4. Modèle économique</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s4-1"><span class="t">4.1 Offres de montage · 4.2 Asset-light · 4.3 Business Model Canvas</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s5"><span class="t">5. Business plan et trajectoire financière</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s5-1"><span class="t">5.1 Positionnement · 5.2 Projections · 5.3 Financement · 5.4 KPIs et risques</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s6"><span class="t">6. Organisation, roadmap et équipe</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s6-1"><span class="t">6.1 Roadmap · 6.2 Processus · 6.3 Environnement technique · 6.4 Équipe</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s7"><span class="t">7. Démarche agile et pilotage produit</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s7-1"><span class="t">7.1 Story mapping · 7.2 Périmètre du MVP · 7.3 Sprints</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#s8"><span class="t">8. Réalisations et état d'avancement</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s8-1"><span class="t">8.1 Configurateur · 8.2 Données · 8.3 Qualité · 8.4 Bilan</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#concl"><span class="t">Conclusion</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#annexes"><span class="t">Annexes</span><span class="dots"></span></a></li>
   </ul>
 </section>
 
@@ -181,19 +182,19 @@
 <section class="fm">
   <h1>Table des illustrations</h1>
   <ul class="toc">
-    <li class="l1"><a><span>Figure 1 — Les trois questions sans réponse simple</span><span class="dots"></span><span class="pg" data-find="Figure 1"></span></a></li>
-    <li class="l1"><a><span>Figure 2 — Les trois parcours utilisateur</span><span class="dots"></span><span class="pg" data-find="Figure 2"></span></a></li>
-    <li class="l1"><a><span>Figure 3 — Le moteur de valeur : performance / prix</span><span class="dots"></span><span class="pg" data-find="Figure 3"></span></a></li>
-    <li class="l1"><a><span>Figure 4 — Analyse SWOT</span><span class="dots"></span><span class="pg" data-find="Figure 4"></span></a></li>
-    <li class="l1"><a><span>Figure 5 — Analyse PESTEL</span><span class="dots"></span><span class="pg" data-find="Figure 5"></span></a></li>
-    <li class="l1"><a><span>Figure 6 — Les cinq forces de Porter</span><span class="dots"></span><span class="pg" data-find="Figure 6"></span></a></li>
-    <li class="l1"><a><span>Figure 7 — Les trois offres de montage</span><span class="dots"></span><span class="pg" data-find="Figure 7"></span></a></li>
-    <li class="l1"><a><span>Figure 8 — Business Model Canvas</span><span class="dots"></span><span class="pg" data-find="Figure 8"></span></a></li>
-    <li class="l1"><a><span>Figure 9 — Projections financières 2027-2029</span><span class="dots"></span><span class="pg" data-find="Figure 9"></span></a></li>
-    <li class="l1"><a><span>Figure 10 — Roadmap produit</span><span class="dots"></span><span class="pg" data-find="Figure 10"></span></a></li>
-    <li class="l1"><a><span>Figure 11 — Carte des parcours (story map)</span><span class="dots"></span><span class="pg" data-find="Figure 11"></span></a></li>
-    <li class="l1"><a><span>Figure 12 — Avancement du backlog</span><span class="dots"></span><span class="pg" data-find="Figure 12"></span></a></li>
-    <li class="l1"><a><span>Figure 13 — Architecture technique</span><span class="dots"></span><span class="pg" data-find="Figure 13"></span></a></li>
+    <li class="fg"><a href="#fig1"><span class="t">Figure 1 — Les trois questions sans réponse simple</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig2"><span class="t">Figure 2 — Les trois parcours utilisateur</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig3"><span class="t">Figure 3 — Le moteur de valeur : performance / prix</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig4"><span class="t">Figure 4 — Analyse SWOT</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig5"><span class="t">Figure 5 — Analyse PESTEL</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig6"><span class="t">Figure 6 — Les cinq forces de Porter</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig7"><span class="t">Figure 7 — Les trois offres de montage</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig8"><span class="t">Figure 8 — Business Model Canvas</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig9"><span class="t">Figure 9 — Projections financières 2027-2029</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig10"><span class="t">Figure 10 — Roadmap produit</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig11"><span class="t">Figure 11 — Carte des parcours (story map)</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig12"><span class="t">Figure 12 — Avancement du backlog</span><span class="dots"></span></a></li>
+    <li class="fg"><a href="#fig13"><span class="t">Figure 13 — Architecture technique</span><span class="dots"></span></a></li>
   </ul>
 </section>
 
@@ -201,10 +202,10 @@
 <section class="fm">
   <h1>Table des annexes</h1>
   <ul class="toc">
-    <li class="l0"><a href="#annexeA"><span>Annexe A — Backlog priorisé complet</span><span class="dots"></span><span class="pg" data-find="Annexe A"></span></a></li>
-    <li class="l0"><a href="#annexeB"><span>Annexe B — User Stories formatées (critères d'acceptation)</span><span class="dots"></span><span class="pg" data-find="Annexe B"></span></a></li>
-    <li class="l0"><a href="#annexeC"><span>Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span><span class="pg" data-find="Annexe C"></span></a></li>
-    <li class="l0"><a href="#annexeD"><span>Annexe D — Liens et ressources du projet</span><span class="dots"></span><span class="pg" data-find="Annexe D"></span></a></li>
+    <li class="l0"><a href="#annexeA"><span class="t">Annexe A — Backlog priorisé complet</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#annexeB"><span class="t">Annexe B — User Stories formatées (critères d'acceptation)</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#annexeC"><span class="t">Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#annexeD"><span class="t">Annexe D — Liens et ressources du projet</span><span class="dots"></span></a></li>
   </ul>
 </section>
 
@@ -220,8 +221,7 @@
 
 <h2 id="s1-1">1.1 Un parcours du combattant</h2>
 <p>L'acheteur d'aujourd'hui fait face à une offre fragmentée et à un jargon opaque. Confronté à des dizaines de sites et des centaines de références, il reste seul face à trois questions qu'il ne sait pas trancher. Ces trois interrogations résument la friction du marché.</p>
-
-<figure>
+<figure id="fig1">
   <div class="fig grid3">
     <div class="box"><h4>🔌 Compatibilité</h4><p>« Cette carte graphique est-elle compatible avec cette carte mère ? Mon ventirad entre-t-il dans ce boîtier ? »</p></div>
     <div class="box"><h4>⚡ Puissance</h4><p>« Mon alimentation est-elle suffisante pour l'ensemble de ma configuration ? »</p></div>
@@ -229,7 +229,6 @@
   </div>
   <figcaption><b>Figure 1</b> — Les trois questions que tout acheteur se pose, sans réponse simple aujourd'hui.</figcaption>
 </figure>
-
 <p><strong>Le résultat est documenté :</strong> la majorité des acheteurs abandonnent leur projet, ou passent des heures de recherche pour finalement faire un mauvais choix — un composant incompatible, une alimentation sous-dimensionnée, ou un prix payé trop cher. Cette friction est précisément le problème que PC Aeris adresse.</p>
 
 <h2 id="s1-2">1.2 Le marché</h2>
@@ -255,7 +254,7 @@
 
 <h2 id="s2-2">2.2 Trois parcours</h2>
 <p>Un seul parcours ne convient pas à tous. PC Aeris propose donc trois portes d'entrée, qui existent réellement dans le produit.</p>
-<figure>
+<figure id="fig2">
   <div class="fig grid3">
     <div class="box"><h4>🌱 Débutants — le questionnaire</h4><p>Quelques questions (usage, niveau) débouchent sur une configuration recommandée, optimisée et garantie compatible. Aucune connaissance technique requise.</p></div>
     <div class="box hl"><h4>🧠 Connaisseurs — le configurateur</h4><p>Sélection composant par composant : à chaque choix, seuls les éléments compatibles restent proposés. Tri par performance ou par prix. Zéro impasse.</p></div>
@@ -266,7 +265,7 @@
 
 <h2 id="s2-3">2.3 Le moteur de valeur : performance / prix</h2>
 <p>Une fiche technique ne dit pas si un composant est un <em>bon achat</em>. PC Aeris attribue à chaque composant un <strong>score de performance</strong> issu des benchmarks de référence (PassMark, déjà intégrés sur les processeurs et cartes graphiques), puis le croise avec son prix marché pour obtenir un <strong>coût par point de performance</strong>. La plateforme recommande ainsi la meilleure valeur — ni le plus cher, ni le moins cher, mais le plus pertinent.</p>
-<figure>
+<figure id="fig3">
   <div class="fig">
     <table>
       <tr><th>Processeur</th><th class="n">Performance</th><th class="n">Prix</th><th class="n">€ / 1000 pts</th><th></th></tr>
@@ -285,7 +284,7 @@
 <p class="lead">SWOT, PESTEL et cinq forces de Porter : un environnement favorable, une niche inexploitée.</p>
 
 <h2 id="s3-1">3.1 Analyse SWOT</h2>
-<figure>
+<figure id="fig4">
   <div class="swot">
     <div class="q s"><h4>Forces</h4><ul><li>Proposition de valeur unique (sur-mesure simplifié)</li><li>Transparence des prix — différenciation forte</li><li>Moteur perf/prix et compatibilité (barrière technique)</li><li>Modèle sans stock — pas de BFR élevé</li></ul></div>
     <div class="q w"><h4>Faiblesses</h4><ul><li>Notoriété à construire de zéro</li><li>Marge unitaire faible (hardware)</li><li>Dépendance aux fournisseurs tiers</li><li>Équipe réduite au lancement</li></ul></div>
@@ -296,7 +295,7 @@
 </figure>
 
 <h2 id="s3-2">3.2 Analyse PESTEL</h2>
-<figure>
+<figure id="fig5">
   <div class="fig">
     <table>
       <tr><th style="width:18%;">Facteur</th><th>Impact sur PC Aeris</th></tr>
@@ -312,7 +311,7 @@
 </figure>
 
 <h2 id="s3-3">3.3 Les cinq forces de Porter</h2>
-<figure>
+<figure id="fig6">
   <div class="fig">
     <table>
       <tr><th>Force</th><th style="width:14%;">Intensité</th><th>Analyse</th></tr>
@@ -333,7 +332,7 @@
 
 <h2 id="s4-1">4.1 On gagne sur le montage</h2>
 <p>Le modèle de PC Aeris est volontairement simple et honnête : <strong>nous ne prenons aucune marge sur les composants</strong>. Le client les paie au meilleur prix que nous avons trouvé sur le marché. Ce qui nous rémunère, c'est le <strong>montage</strong>, vendu à prix fixe via trois offres. Le prix total payé par le client est donc : <em>composants au meilleur prix + offre de montage choisie</em>.</p>
-<figure>
+<figure id="fig7">
   <div class="fig grid3">
     <div class="box"><h4>Essentiel — 79 €</h4><ul><li>Montage des composants</li><li>Câble management de base</li><li>Test POST + démarrage Windows</li></ul></div>
     <div class="box hl"><h4>Confort — 129 € <span class="tag">le + choisi</span></h4><ul><li>Tout l'Essentiel</li><li>Câblage premium</li><li>Windows + drivers à jour</li><li>Profil de courbes ventilateurs</li></ul></div>
@@ -347,7 +346,7 @@
 <p>PC Aeris ne porte <strong>pas de stock</strong> : les composants sont sourcés à la commande. Cela réduit fortement le besoin en fonds de roulement et le risque d'invendus, et rend le modèle peu capitalistique. La marge brute correspond essentiellement à l'offre de montage — soit environ 10 % du panier, les composants étant vendus à prix coûtant.</p>
 
 <h2 id="s4-3">4.3 Business Model Canvas</h2>
-<figure>
+<figure id="fig8">
   <div class="fig">
     <div class="grid4" style="font-size:8.6px;">
       <div class="box"><h4>Partenaires</h4><ul><li>Grossistes hardware</li><li>Marketplaces (sourcing)</li><li>Créateurs de contenu</li><li>Prestataires logistiques</li></ul></div>
@@ -384,7 +383,7 @@
 
 <h2 id="s5-2">5.2 Projections financières</h2>
 <p>Les projections sont volontairement <strong>prudentes</strong> et intègrent une montée en charge. L'année 1 est une phase de lancement, sous le seuil de rentabilité — ce qui est normal pour une marque sans notoriété. La croissance repose sur des leviers maîtrisables : bouche-à-oreille, référencement naturel, et partenariats créateurs.</p>
-<figure>
+<figure id="fig9">
   <div class="fig">
     <table>
       <tr><th>Année</th><th class="n">Commandes / mois</th><th class="n">Panier moyen</th><th class="n">CA annuel</th><th class="n">Marge brute (montage)</th></tr>
@@ -420,7 +419,7 @@
 <p class="lead">Une feuille de route en quatre temps, un processus sans stock, une équipe à staffer.</p>
 
 <h2 id="s6-1">6.1 Roadmap produit</h2>
-<figure>
+<figure id="fig10">
   <div class="fig">
     <div class="tl">
       <div class="ph"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, prix, benchmarks, questionnaire, configs prêtes. En production.</p></div>
@@ -436,7 +435,7 @@
 <p>Le cycle d'une commande, sans stock, suit cinq étapes : <strong>(1)</strong> le client configure et valide ; <strong>(2)</strong> PC Aeris source les composants au meilleur prix ; <strong>(3)</strong> les composants sont reçus et assemblés selon l'offre de montage choisie ; <strong>(4)</strong> la machine est testée (POST, démarrage, benchmarks selon l'offre) ; <strong>(5)</strong> elle est expédiée avec son rapport. Ce flux asset-light évite l'immobilisation de capital et concentre la valeur sur le service.</p>
 
 <h2 id="s6-3">6.3 Environnement technique</h2>
-<figure>
+<figure id="fig13">
   <div class="fig grid2">
     <div class="box"><h4>Front-end</h4><p>React · TypeScript · Vite · SCSS · Zustand (état) · React Router. Identité <b>Aeris Dark</b>, accessibilité conforme RGAA AA.</p></div>
     <div class="box"><h4>Back-end & données</h4><p>Supabase (PostgreSQL, Auth, RLS) · &gt; 25 000 composants · prix de marché (LDLC) · scores PassMark · déploiement continu sur Vercel.</p></div>
@@ -455,7 +454,7 @@
 
 <h2 id="s7-1">7.1 Story mapping</h2>
 <p>Le besoin a été structuré en une <em>story map</em> organisée autour des grandes activités de l'utilisateur, de la découverte à la gestion de son compte. Chaque activité regroupe des tâches déclinées en user stories priorisées.</p>
-<figure>
+<figure id="fig11">
   <div class="fig">
     <div class="grid3" style="font-size:8.8px;">
       <div class="box"><h4>1 · Découvrir</h4><p>Accueil, présentation, navigation, parcours par profil.</p></div>
@@ -513,7 +512,7 @@
 
 <h2 id="s8-4">8.4 Bilan d'avancement</h2>
 <p>À ce jour, le périmètre fonctionnel du MVP est atteint. Sur les 87 user stories du backlog, 45 sont livrées (≈ 137 points) ; il reste principalement le tunnel de commande et le paiement, planifiés pour la V1 d'août 2026.</p>
-<figure>
+<figure id="fig12">
   <div class="fig">
     <div class="bar" style="margin-bottom:6px;">
       <i class="done" style="width:52%;"></i><i class="ready" style="width:3%;"></i><i class="todo" style="width:45%;"></i>
@@ -559,23 +558,18 @@
 
 <h2 id="annexeB">Annexe B — User Stories formatées (extrait représentatif)</h2>
 <p>Chaque user story suit le format <em>« En tant que … je veux … afin de … »</em> assorti de critères d'acceptation (CA) vérifiables en recette. Extrait des stories critiques et hautes.</p>
-
 <h4>US-031 — Filtrage automatique par compatibilité</h4>
 <p><b>En tant que</b> configurateur, <b>je veux</b> que seuls les composants compatibles avec mes choix précédents soient proposés, <b>afin de</b> ne jamais assembler une configuration invalide.</p>
 <ul><li>CA1 — la sélection d'un processeur restreint les cartes mères au bon socket ;</li><li>CA2 — un composant incompatible n'apparaît pas dans la liste ;</li><li>CA3 — un message explique le filtre actif.</li></ul>
-
 <h4>US-033 — Compatibilité carte graphique / alimentation</h4>
 <p><b>En tant que</b> configurateur, <b>je veux</b> que l'alimentation proposée soit suffisante pour la configuration, <b>afin de</b> garantir un fonctionnement stable.</p>
 <ul><li>CA1 — la puissance requise est calculée à partir des TDP processeur et carte graphique + une marge ;</li><li>CA2 — les alimentations sous-dimensionnées sont exclues.</li></ul>
-
 <h4>US-041 — Sauvegarde de configuration</h4>
 <p><b>En tant qu'</b>utilisateur connecté, <b>je veux</b> sauvegarder ma configuration sous un nom, <b>afin de</b> la retrouver et la modifier plus tard.</p>
 <ul><li>CA1 — une fenêtre permet de nommer la configuration ;</li><li>CA2 — la configuration est listée dans mon espace ;</li><li>CA3 — elle peut être rechargée dans le configurateur.</li></ul>
-
 <h4>US-079 — Gestion des prix produits (admin)</h4>
 <p><b>En tant qu'</b>administrateur, <b>je veux</b> éditer les prix des produits, <b>afin de</b> maintenir des données de marché à jour.</p>
 <ul><li>CA1 — édition des prix bas / moyen / haut depuis la table admin ;</li><li>CA2 — la modification est immédiatement reflétée côté configurateur.</li></ul>
-
 <p style="font-size:9px;color:var(--muted);margin-top:8px;">L'intégralité des user stories formatées est maintenue dans le dépôt du projet (<code>docs/agile/user-stories.md</code>).</p>
 
 <h2 id="annexeC">Annexe C — Revues de sprint (Sprints 1 à 4)</h2>
@@ -593,5 +587,6 @@
   <tr><td>Documentation produit & agile</td><td>dépôt <code>/docs</code> (pitch, business model, étude de marché, backlog, user stories, revues de sprint)</td></tr>
 </table>
 
+<script src="paged.polyfill.js"></script>
 </body>
 </html>
