@@ -85,6 +85,14 @@ Deno.serve(async (req) => {
       .map((x: { email?: string }) => x.email).filter(Boolean) as string[]
     const bcc = Array.from(new Set([ADMIN_EMAIL, ...adminEmails])).filter((e) => e && e !== clientEmail)
 
+    // Mode démo (Resend sans domaine vérifié) : si DEVIS_TEST_TO est défini, tous
+    // les devis partent vers cette unique adresse autorisée (pas de bcc).
+    // Mode démo Resend (sans domaine vérifié). En prod, l'adresse de démo est
+    // injectée via le secret DEVIS_TEST_TO ; non versionnée dans le code public.
+    const demoTo = Deno.env.get('DEVIS_TEST_TO')
+    const to = demoTo ? [demoTo] : [clientEmail]
+    const bccList = demoTo ? [] : bcc
+
     const ref = String(orderId).slice(0, 8).toUpperCase()
     const client = (order.shipping as { fullName?: string } | null)?.fullName
     const html = buildHtml((order.items ?? []) as Item[], Number(order.total_eur), ref, client)
@@ -96,8 +104,8 @@ Deno.serve(async (req) => {
       headers: { Authorization: `Bearer ${RESEND}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: SENDER,
-        to: [clientEmail],
-        bcc,
+        to,
+        bcc: bccList.length ? bccList : undefined,
         subject: `Votre devis PC Aeris #${ref}`,
         html,
         attachments: pdfBase64 ? [{ filename: `devis-${ref}.pdf`, content: pdfBase64 }] : undefined,
