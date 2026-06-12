@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>PC Aeris — Rapport de projet</title>
+<style>
+  :root{
+    --ink:#1a1d29; --ink-2:#41465a; --muted:#6b7185; --line:#e3e6ef; --soft:#f6f7fb;
+    --brand:#4f46e5; --brand-d:#3730a3; --brand-l:#6366f1; --brand-soft:#eef0fe;
+    --ok:#0f9d6e; --warn:#c97a12; --err:#d14343;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);
+    font-family:"Segoe UI",-apple-system,Helvetica,Arial,sans-serif;font-size:10.6px;line-height:1.62;}
+  p{margin:0 0 9px;}
+  strong{color:var(--ink);}
+  a{color:var(--brand-d);text-decoration:none;}
+  em{color:var(--brand-d);font-style:normal;}
+
+  h1,h2,h3,h4{color:var(--ink);line-height:1.22;}
+  /* h1 = grande partie / section principale : nouvelle page */
+  h1.sec{font-size:23px;margin:0 0 4px;padding:0 0 10px;border-bottom:2.5px solid var(--brand);
+    page-break-before:always;letter-spacing:-.01em;}
+  h1.sec .num{color:var(--brand);font-weight:800;}
+  h1.sec + .lead{color:var(--muted);font-size:12px;margin:-2px 0 16px;}
+  h2{font-size:14.5px;margin:20px 0 7px;color:var(--brand-d);}
+  h3{font-size:11.8px;margin:14px 0 4px;color:var(--ink);}
+  h4{font-size:10.8px;margin:10px 0 3px;color:var(--ink-2);}
+
+  ul,ol{margin:6px 0 9px;padding-left:18px;}
+  li{margin:2.5px 0;}
+
+  table{border-collapse:collapse;width:100%;margin:8px 0 4px;font-size:9.5px;page-break-inside:avoid;}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--brand);color:#fff;font-weight:600;font-size:8.8px;letter-spacing:.02em;}
+  tr:nth-child(even) td{background:var(--soft);}
+  td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  blockquote{margin:10px 0;padding:9px 14px;background:var(--brand-soft);border-left:3px solid var(--brand);
+    border-radius:0 5px 5px 0;color:var(--ink-2);}
+  blockquote p{margin:3px 0;}
+
+  .tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 7px;border-radius:20px;background:var(--brand-soft);color:var(--brand-d);}
+  .tag.ok{background:#e4f6ee;color:var(--ok);} .tag.todo{background:#fdeede;color:var(--warn);}
+
+  /* Figures */
+  figure{margin:12px 0;page-break-inside:avoid;}
+  figcaption{font-size:8.6px;color:var(--muted);margin-top:5px;font-style:italic;}
+  figcaption b{color:var(--brand-d);font-style:normal;}
+  .fig{border:1px solid var(--line);border-radius:7px;padding:14px 16px;background:#fff;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+  .box{border:1px solid var(--line);border-radius:7px;padding:11px 13px;background:var(--soft);}
+  .box h4{margin:0 0 5px;color:var(--brand-d);}
+  .box.hl{background:var(--brand-soft);border-color:#c9cdfb;}
+  .box ul{margin:2px 0;padding-left:15px;}
+  .stat{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1;}
+  .stat .u{font-size:12px;color:var(--muted);font-weight:600;}
+  .statl{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px;}
+
+  /* SWOT */
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .swot .q{border-radius:6px;padding:10px 12px;}
+  .swot .s{background:#e4f6ee;border:1px solid #bfe6d3;}
+  .swot .w{background:#fdecec;border:1px solid #f3c9c9;}
+  .swot .o{background:#e9f0fe;border:1px solid #cdd8fb;}
+  .swot .t{background:#fdf2e2;border:1px solid #f1ddb8;}
+  .swot h4{margin:0 0 5px;font-size:9.5px;}
+  .swot ul{margin:0;padding-left:14px;font-size:9px;}
+
+  /* timeline roadmap */
+  .tl{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:10px 0;}
+  .tl .ph{padding:0 12px;border-left:2px solid var(--line);}
+  .tl .ph:first-child{border-left:3px solid var(--brand);padding-left:10px;}
+  .tl .when{font-size:9px;font-weight:700;color:var(--brand-d);letter-spacing:.03em;}
+  .tl .when .now{font-size:7px;background:var(--brand);color:#fff;padding:1px 5px;border-radius:4px;margin-left:4px;}
+  .tl h4{margin:5px 0 4px;font-size:10.5px;}
+  .tl p{font-size:8.8px;color:var(--ink-2);margin:0;line-height:1.45;}
+
+  /* bars */
+  .bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden;display:flex;}
+  .bar i{display:block;height:100%;}
+  .bar .done{background:var(--ok);} .bar .ready{background:var(--brand-l);} .bar .todo{background:#d7dae6;}
+
+  hr{border:none;border-top:1px solid var(--line);margin:14px 0;}
+
+  /* ── COVER ── */
+  .cover{height:1015px;display:flex;flex-direction:column;page-break-after:always;position:relative;padding:0;}
+  .cover__band{height:13px;background:linear-gradient(90deg,var(--brand-d),var(--brand-l));}
+  .cover__in{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 14px;}
+  .cover__ey{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);}
+  .cover__logo{display:flex;align-items:center;gap:10px;margin-bottom:40px;font-size:15px;font-weight:800;color:var(--ink);}
+  .cover__mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand-d));
+    color:#fff;display:grid;place-items:center;font-size:16px;}
+  .cover h1{font-size:62px;line-height:1;letter-spacing:-.03em;margin:14px 0 6px;color:var(--ink);border:none;page-break-before:avoid;}
+  .cover .base{font-size:21px;color:var(--ink-2);font-weight:500;margin-bottom:34px;}
+  .cover .rule{width:84px;height:5px;background:var(--brand);border-radius:3px;margin:8px 0 30px;}
+  .cover__meta{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--ink-2);}
+  .cover__meta b{color:var(--ink);}
+  .cover__links{margin-top:26px;font-size:11px;color:var(--muted);}
+  .cover__links a{color:var(--brand-d);}
+  .cover__ft{position:absolute;bottom:26px;left:14px;right:14px;display:flex;justify-content:space-between;
+    font-size:9px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;}
+
+  /* ── front-matter lists (sommaire / illustrations / annexes) ── */
+  .fm{page-break-before:always;}
+  .fm h1{font-size:21px;margin:0 0 14px;padding-bottom:9px;border-bottom:2.5px solid var(--brand);page-break-before:avoid;}
+  ul.toc{list-style:none;padding:0;margin:0;}
+  ul.toc li{margin:0;}
+  ul.toc a{display:flex;align-items:baseline;text-decoration:none;color:var(--ink);}
+  .toc .l0{margin-top:14px;padding-top:7px;border-top:1px solid var(--line);}
+  .toc .l0 a{font-weight:700;color:var(--brand-d);font-size:11.5px;}
+  .toc .l1{padding-left:16px;margin-top:3px;}
+  .toc .l1 a{font-size:10px;color:var(--ink-2);}
+  .toc .dots{flex:1;border-bottom:1px dotted #c2c7d6;margin:0 6px;position:relative;top:-3px;}
+  .toc .pg{flex:0 0 auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:9.5px;}
+  .toc .l0 .pg{color:var(--brand-d);}
+
+  .resume{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:4px 0 0;}
+  .resume h4{margin:0 0 5px;color:var(--brand-d);}
+</style>
+</head>
+<body>
+
+<!-- ============================ COUVERTURE ============================ -->
+<section class="cover">
+  <div class="cover__band"></div>
+  <div class="cover__in">
+    <div class="cover__logo"><span class="cover__mark">▲</span> PC&nbsp;Aeris</div>
+    <div class="cover__ey">Rapport de projet</div>
+    <h1>PC Aeris</h1>
+    <div class="base">Le PC sur-mesure, enfin accessible à tous.</div>
+    <div class="rule"></div>
+    <div class="cover__meta">
+      <span><b>Quentin Geoffroy</b></span>
+      <span>ECV — Master 2 Développement</span>
+      <span>15 juin 2026</span>
+    </div>
+    <div class="cover__links">
+      Démo en production : <a>pc-aeris.vercel.app</a> &nbsp;·&nbsp; Code source : <a>github.com/QuentinGP23/PC_Aeris</a>
+    </div>
+  </div>
+  <div class="cover__ft"><span>PC Aeris — Plateforme de configuration de PC sur-mesure</span><span>Rapport de fin de Master 2</span></div>
+</section>
+
+<!-- ============================ SOMMAIRE ============================ -->
+<section class="fm">
+  <h1>Sommaire</h1>
+
+  <div class="resume">
+    <h4>Résumé</h4>
+    <p>PC Aeris est une plateforme web qui démocratise l'accès au PC sur-mesure. Elle répond à trois questions que tout acheteur se pose — compatibilité, performance et juste prix — grâce à un configurateur à compatibilité garantie, un moteur de valeur fondé sur les benchmarks, et une transparence radicale des prix de marché. Le produit est <b>en production</b> ; ce rapport présente la vision, le modèle économique, l'étude de marché, la démarche agile et l'état d'avancement technique du projet.</p>
+  </div>
+
+  <ul class="toc" style="margin-top:16px;">
+    <li class="l0"><a href="#intro"><span>Introduction</span><span class="dots"></span><span class="pg" data-find="Introduction"></span></a></li>
+    <li class="l0"><a href="#s1"><span>1. Contexte et problème</span><span class="dots"></span><span class="pg" data-find="1. Contexte et probleme"></span></a></li>
+    <li class="l1"><a><span>1.1 Un parcours du combattant · 1.2 Le marché</span><span class="dots"></span><span class="pg" data-find="1.1 Un parcours du combattant"></span></a></li>
+    <li class="l0"><a href="#s2"><span>2. La solution PC Aeris</span><span class="dots"></span><span class="pg" data-find="2. La solution PC Aeris"></span></a></li>
+    <li class="l1"><a><span>2.1 Proposition de valeur · 2.2 Trois parcours · 2.3 Moteur de valeur</span><span class="dots"></span><span class="pg" data-find="2.1 Proposition de valeur"></span></a></li>
+    <li class="l0"><a href="#s3"><span>3. Étude de marché</span><span class="dots"></span><span class="pg" data-find="3. Etude de marche"></span></a></li>
+    <li class="l1"><a><span>3.1 SWOT · 3.2 PESTEL · 3.3 Cinq forces de Porter</span><span class="dots"></span><span class="pg" data-find="3.1 Analyse SWOT"></span></a></li>
+    <li class="l0"><a href="#s4"><span>4. Modèle économique</span><span class="dots"></span><span class="pg" data-find="4. Modele economique"></span></a></li>
+    <li class="l1"><a><span>4.1 Offres de montage · 4.2 Asset-light · 4.3 Business Model Canvas</span><span class="dots"></span><span class="pg" data-find="4.1 On gagne sur le montage"></span></a></li>
+    <li class="l0"><a href="#s5"><span>5. Business plan et trajectoire financière</span><span class="dots"></span><span class="pg" data-find="5. Business plan et trajectoire"></span></a></li>
+    <li class="l1"><a><span>5.1 Positionnement · 5.2 Projections · 5.3 Financement · 5.4 KPIs et risques</span><span class="dots"></span><span class="pg" data-find="5.1 Positionnement concurrentiel"></span></a></li>
+    <li class="l0"><a href="#s6"><span>6. Organisation, roadmap et équipe</span><span class="dots"></span><span class="pg" data-find="6. Organisation, roadmap et equipe"></span></a></li>
+    <li class="l1"><a><span>6.1 Roadmap · 6.2 Processus · 6.3 Environnement technique · 6.4 Équipe</span><span class="dots"></span><span class="pg" data-find="6.1 Roadmap produit"></span></a></li>
+    <li class="l0"><a href="#s7"><span>7. Démarche agile et pilotage produit</span><span class="dots"></span><span class="pg" data-find="7. Demarche agile et pilotage"></span></a></li>
+    <li class="l1"><a><span>7.1 Story mapping · 7.2 Périmètre du MVP · 7.3 Sprints</span><span class="dots"></span><span class="pg" data-find="7.1 Story mapping"></span></a></li>
+    <li class="l0"><a href="#s8"><span>8. Réalisations et état d'avancement</span><span class="dots"></span><span class="pg" data-find="8. Realisations et etat"></span></a></li>
+    <li class="l1"><a><span>8.1 Configurateur · 8.2 Données · 8.3 Qualité · 8.4 Bilan</span><span class="dots"></span><span class="pg" data-find="8.1 Le configurateur et la compatibilite"></span></a></li>
+    <li class="l0"><a href="#concl"><span>Conclusion</span><span class="dots"></span><span class="pg" data-find="Conclusion"></span></a></li>
+    <li class="l0"><a href="#annexes"><span>Annexes</span><span class="dots"></span><span class="pg" data-find="Annexe A"></span></a></li>
+  </ul>
+</section>
+
+<!-- ============================ TABLE DES ILLUSTRATIONS ============================ -->
+<section class="fm">
+  <h1>Table des illustrations</h1>
+  <ul class="toc">
+    <li class="l1"><a><span>Figure 1 — Les trois questions sans réponse simple</span><span class="dots"></span><span class="pg" data-find="Figure 1"></span></a></li>
+    <li class="l1"><a><span>Figure 2 — Les trois parcours utilisateur</span><span class="dots"></span><span class="pg" data-find="Figure 2"></span></a></li>
+    <li class="l1"><a><span>Figure 3 — Le moteur de valeur : performance / prix</span><span class="dots"></span><span class="pg" data-find="Figure 3"></span></a></li>
+    <li class="l1"><a><span>Figure 4 — Analyse SWOT</span><span class="dots"></span><span class="pg" data-find="Figure 4"></span></a></li>
+    <li class="l1"><a><span>Figure 5 — Analyse PESTEL</span><span class="dots"></span><span class="pg" data-find="Figure 5"></span></a></li>
+    <li class="l1"><a><span>Figure 6 — Les cinq forces de Porter</span><span class="dots"></span><span class="pg" data-find="Figure 6"></span></a></li>
+    <li class="l1"><a><span>Figure 7 — Les trois offres de montage</span><span class="dots"></span><span class="pg" data-find="Figure 7"></span></a></li>
+    <li class="l1"><a><span>Figure 8 — Business Model Canvas</span><span class="dots"></span><span class="pg" data-find="Figure 8"></span></a></li>
+    <li class="l1"><a><span>Figure 9 — Projections financières 2027-2029</span><span class="dots"></span><span class="pg" data-find="Figure 9"></span></a></li>
+    <li class="l1"><a><span>Figure 10 — Roadmap produit</span><span class="dots"></span><span class="pg" data-find="Figure 10"></span></a></li>
+    <li class="l1"><a><span>Figure 11 — Carte des parcours (story map)</span><span class="dots"></span><span class="pg" data-find="Figure 11"></span></a></li>
+    <li class="l1"><a><span>Figure 12 — Avancement du backlog</span><span class="dots"></span><span class="pg" data-find="Figure 12"></span></a></li>
+    <li class="l1"><a><span>Figure 13 — Architecture technique</span><span class="dots"></span><span class="pg" data-find="Figure 13"></span></a></li>
+  </ul>
+</section>
+
+<!-- ============================ TABLE DES ANNEXES ============================ -->
+<section class="fm">
+  <h1>Table des annexes</h1>
+  <ul class="toc">
+    <li class="l0"><a href="#annexeA"><span>Annexe A — Backlog priorisé complet</span><span class="dots"></span><span class="pg" data-find="Annexe A"></span></a></li>
+    <li class="l0"><a href="#annexeB"><span>Annexe B — User Stories formatées (critères d'acceptation)</span><span class="dots"></span><span class="pg" data-find="Annexe B"></span></a></li>
+    <li class="l0"><a href="#annexeC"><span>Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span><span class="pg" data-find="Annexe C"></span></a></li>
+    <li class="l0"><a href="#annexeD"><span>Annexe D — Liens et ressources du projet</span><span class="dots"></span><span class="pg" data-find="Annexe D"></span></a></li>
+  </ul>
+</section>
+
+<!-- ============================ INTRODUCTION ============================ -->
+<h1 class="sec" id="intro">Introduction</h1>
+<p>Acheter un ordinateur performant et réellement adapté à ses besoins reste, en 2026, une épreuve. Entre les dizaines de revendeurs, les centaines de composants et un vocabulaire technique impénétrable, la majorité des acheteurs renoncent ou se trompent. <strong>PC Aeris</strong> est né de ce constat : il existe un espace, entre les revendeurs purement techniques et les machines pré-montées sans personnalisation, pour une plateforme qui rende le PC sur-mesure <em>simple, transparent et fiable</em>.</p>
+<p>Ce rapport présente le projet dans son ensemble : le problème adressé et le marché visé, la solution et ses différenciateurs, l'étude de marché, le modèle économique et le business plan, l'organisation et la démarche agile, et enfin l'état d'avancement d'un produit qui est aujourd'hui <strong>en production</strong>. Les détails opérationnels — backlog complet, user stories et revues de sprint — sont reportés en annexe afin de préserver la lisibilité du corps du document.</p>
+<p>Une particularité de ce projet mérite d'être soulignée d'emblée : il n'est pas resté à l'état de maquette. Le configurateur, le moteur de compatibilité, l'intégration des prix de marché et des scores de performance, le questionnaire guidé et les configurations pré-faites sont des fonctionnalités <strong>réelles et accessibles en ligne</strong>, construites au cours de plusieurs sprints.</p>
+
+<!-- ============================ 1. CONTEXTE & PROBLÈME ============================ -->
+<h1 class="sec" id="s1"><span class="num">1.</span> Contexte et problème</h1>
+<p class="lead">Pourquoi acheter le bon PC est devenu un parcours du combattant — et pourquoi le marché est prêt.</p>
+
+<h2 id="s1-1">1.1 Un parcours du combattant</h2>
+<p>L'acheteur d'aujourd'hui fait face à une offre fragmentée et à un jargon opaque. Confronté à des dizaines de sites et des centaines de références, il reste seul face à trois questions qu'il ne sait pas trancher. Ces trois interrogations résument la friction du marché.</p>
+
+<figure>
+  <div class="fig grid3">
+    <div class="box"><h4>🔌 Compatibilité</h4><p>« Cette carte graphique est-elle compatible avec cette carte mère ? Mon ventirad entre-t-il dans ce boîtier ? »</p></div>
+    <div class="box"><h4>⚡ Puissance</h4><p>« Mon alimentation est-elle suffisante pour l'ensemble de ma configuration ? »</p></div>
+    <div class="box"><h4>💸 Juste prix</h4><p>« Est-ce que je paie le bon prix, ou est-ce que je me fais avoir ? »</p></div>
+  </div>
+  <figcaption><b>Figure 1</b> — Les trois questions que tout acheteur se pose, sans réponse simple aujourd'hui.</figcaption>
+</figure>
+
+<p><strong>Le résultat est documenté :</strong> la majorité des acheteurs abandonnent leur projet, ou passent des heures de recherche pour finalement faire un mauvais choix — un composant incompatible, une alimentation sous-dimensionnée, ou un prix payé trop cher. Cette friction est précisément le problème que PC Aeris adresse.</p>
+
+<h2 id="s1-2">1.2 Le marché</h2>
+<p>Le marché du PC en France représente environ <strong>4 milliards d'euros par an</strong>. Le segment qui nous intéresse — le gaming et les stations de travail — croît de <strong>8 à 10 % par an</strong>, porté par l'essor de l'esport, du streaming et des usages créatifs. C'est un marché à la fois vaste et en croissance.</p>
+<div class="grid3">
+  <div class="box hl"><div class="stat">~4<span class="u"> Mds €</span></div><div class="statl">marché PC France / an</div></div>
+  <div class="box hl"><div class="stat">+8-10<span class="u"> %</span></div><div class="statl">croissance gaming / workstation</div></div>
+  <div class="box hl"><div class="stat">0<span class="u"></span></div><div class="statl">acteur sur le « sur-mesure simplifié »</div></div>
+</div>
+<p style="margin-top:9px;">Nos cibles sont des particuliers et des professionnels individuels : gamers débutants et confirmés, créatifs et freelances (montage, 3D, développement), étudiants des filières techniques et indépendants. Tous partagent un même besoin : du sur-mesure, <em>sans la complexité</em> qui l'accompagne habituellement.</p>
+
+<!-- ============================ 2. SOLUTION ============================ -->
+<h1 class="sec" id="s2"><span class="num">2.</span> La solution PC Aeris</h1>
+<p class="lead">Une promesse simple, trois parcours, et un moteur de valeur fondé sur la donnée.</p>
+
+<h2 id="s2-1">2.1 Proposition de valeur</h2>
+<p>PC Aeris démocratise le PC sur-mesure. La promesse tient en une phrase : <em>« Vous nous dites ce que vous voulez faire de votre PC, nous nous occupons du reste. »</em> Elle repose sur trois engagements :</p>
+<ul>
+  <li><strong>Compatibilité garantie</strong> — il devient impossible de se tromper : le système n'autorise que des assemblages cohérents.</li>
+  <li><strong>Prix transparents</strong> — l'utilisateur sait ce qu'il paie, et pourquoi, grâce aux fourchettes de marché.</li>
+  <li><strong>Expérience adaptée au niveau</strong> — du débutant complet à l'expert qui veut tout ajuster.</li>
+</ul>
+
+<h2 id="s2-2">2.2 Trois parcours</h2>
+<p>Un seul parcours ne convient pas à tous. PC Aeris propose donc trois portes d'entrée, qui existent réellement dans le produit.</p>
+<figure>
+  <div class="fig grid3">
+    <div class="box"><h4>🌱 Débutants — le questionnaire</h4><p>Quelques questions (usage, niveau) débouchent sur une configuration recommandée, optimisée et garantie compatible. Aucune connaissance technique requise.</p></div>
+    <div class="box hl"><h4>🧠 Connaisseurs — le configurateur</h4><p>Sélection composant par composant : à chaque choix, seuls les éléments compatibles restent proposés. Tri par performance ou par prix. Zéro impasse.</p></div>
+    <div class="box"><h4>⚡ Pressés — les configs prêtes</h4><p>Des PC complets, par usage et par gamme, déjà composés et garantis compatibles, chargeables en un clic.</p></div>
+  </div>
+  <figcaption><b>Figure 2</b> — Les trois parcours utilisateur : questionnaire, configurateur, configurations pré-faites.</figcaption>
+</figure>
+
+<h2 id="s2-3">2.3 Le moteur de valeur : performance / prix</h2>
+<p>Une fiche technique ne dit pas si un composant est un <em>bon achat</em>. PC Aeris attribue à chaque composant un <strong>score de performance</strong> issu des benchmarks de référence (PassMark, déjà intégrés sur les processeurs et cartes graphiques), puis le croise avec son prix marché pour obtenir un <strong>coût par point de performance</strong>. La plateforme recommande ainsi la meilleure valeur — ni le plus cher, ni le moins cher, mais le plus pertinent.</p>
+<figure>
+  <div class="fig">
+    <table>
+      <tr><th>Processeur</th><th class="n">Performance</th><th class="n">Prix</th><th class="n">€ / 1000 pts</th><th></th></tr>
+      <tr><td>AMD Ryzen 5 7500F</td><td class="n">26 555</td><td class="n">155 €</td><td class="n" style="color:var(--ok);font-weight:700;">5,8</td><td><span class="tag ok">meilleure valeur</span></td></tr>
+      <tr><td>AMD Ryzen 7 7700X</td><td class="n">35 534</td><td class="n">282 €</td><td class="n">7,9</td><td></td></tr>
+      <tr><td>AMD Ryzen 7 9800X3D</td><td class="n">39 967</td><td class="n">470 €</td><td class="n">11,8</td><td></td></tr>
+    </table>
+    <p style="margin:6px 0 0;font-size:9px;color:var(--ink-2);">À l'arrivée, le Ryzen 5 7500F offre environ <b>deux fois plus de performance par euro</b> que le 9800X3D — une recommandation qu'aucune fiche technique ne donne.</p>
+  </div>
+  <figcaption><b>Figure 3</b> — Le moteur de valeur croise score de performance et prix de marché (données réelles).</figcaption>
+</figure>
+<p>À cette logique de valeur s'ajoute la <strong>transparence des prix</strong>, inspirée de StockX : pour chaque composant, trois indicateurs de marché en temps réel (bas, moyen, haut). À la validation, l'utilisateur reçoit un devis en fourchette réaliste plutôt qu'un tarif fixe artificiel — une transparence intégrée au configurateur qu'aucun concurrent ne propose.</p>
+
+<!-- ============================ 3. ÉTUDE DE MARCHÉ ============================ -->
+<h1 class="sec" id="s3"><span class="num">3.</span> Étude de marché</h1>
+<p class="lead">SWOT, PESTEL et cinq forces de Porter : un environnement favorable, une niche inexploitée.</p>
+
+<h2 id="s3-1">3.1 Analyse SWOT</h2>
+<figure>
+  <div class="swot">
+    <div class="q s"><h4>Forces</h4><ul><li>Proposition de valeur unique (sur-mesure simplifié)</li><li>Transparence des prix — différenciation forte</li><li>Moteur perf/prix et compatibilité (barrière technique)</li><li>Modèle sans stock — pas de BFR élevé</li></ul></div>
+    <div class="q w"><h4>Faiblesses</h4><ul><li>Notoriété à construire de zéro</li><li>Marge unitaire faible (hardware)</li><li>Dépendance aux fournisseurs tiers</li><li>Équipe réduite au lancement</li></ul></div>
+    <div class="q o"><h4>Opportunités</h4><ul><li>Croissance du gaming (+8-10 %/an)</li><li>Méfiance envers les PC pré-assemblés</li><li>Génération Z habituée au sur-mesure digital</li><li>Essor des usages créatifs et du télétravail</li></ul></div>
+    <div class="q t"><h4>Menaces</h4><ul><li>Acteurs établis (LDLC, Amazon)</li><li>Volatilité des prix des composants</li><li>Pénuries (GPU notamment)</li><li>Évolution technologique rapide</li></ul></div>
+  </div>
+  <figcaption><b>Figure 4</b> — Analyse SWOT de PC Aeris.</figcaption>
+</figure>
+
+<h2 id="s3-2">3.2 Analyse PESTEL</h2>
+<figure>
+  <div class="fig">
+    <table>
+      <tr><th style="width:18%;">Facteur</th><th>Impact sur PC Aeris</th></tr>
+      <tr><td><b>Politique</b></td><td>🟢 Soutien aux startups tech (BPI, French Tech), réglementation e-commerce stable.</td></tr>
+      <tr><td><b>Économique</b></td><td>🟡 Inflation et arbitrages budgétaires, mais le gaming reste prioritaire pour la cible. Marché ~4 Mds €.</td></tr>
+      <tr><td><b>Socioculturel</b></td><td>🟢 Gaming mainstream, esport en croissance, attente forte de personnalisation et de transparence.</td></tr>
+      <tr><td><b>Technologique</b></td><td>🟢 IA accessible, outils modernes. Évolution rapide des composants = besoin de conseil.</td></tr>
+      <tr><td><b>Écologique</b></td><td>🟡 Pression sur l'obsolescence ; opportunité d'intégrer l'occasion et la durabilité.</td></tr>
+      <tr><td><b>Légal</b></td><td>🟢 Garantie légale de conformité (2 ans), RGPD à respecter sur les données utilisateurs.</td></tr>
+    </table>
+  </div>
+  <figcaption><b>Figure 5</b> — Analyse PESTEL : un environnement globalement favorable.</figcaption>
+</figure>
+
+<h2 id="s3-3">3.3 Les cinq forces de Porter</h2>
+<figure>
+  <div class="fig">
+    <table>
+      <tr><th>Force</th><th style="width:14%;">Intensité</th><th>Analyse</th></tr>
+      <tr><td>Pouvoir des fournisseurs</td><td>🔴 Élevé</td><td>Marché concentré (Intel, AMD, Nvidia), pénuries récurrentes.</td></tr>
+      <tr><td>Pouvoir des clients</td><td>🔴 Élevé</td><td>Clients informés, comparant facilement, sensibles au prix.</td></tr>
+      <tr><td>Nouveaux entrants</td><td>🟡 Moyenne</td><td>Barrières techniques (données, moteur) mais peu de barrières capitalistiques.</td></tr>
+      <tr><td>Produits de substitution</td><td>🟡 Moyenne</td><td>Portables, consoles, cloud gaming — le fixe reste supérieur en perf/prix.</td></tr>
+      <tr><td>Intensité concurrentielle</td><td>🔴 Élevée</td><td>LDLC, Materiel.net, Amazon… mais peu d'acteurs sur le « sur-mesure simplifié ».</td></tr>
+    </table>
+  </div>
+  <figcaption><b>Figure 6</b> — Les cinq forces de Porter : concurrence intense, mais créneau peu exploité.</figcaption>
+</figure>
+<blockquote><p><strong>Conclusion de l'étude :</strong> un marché porteur, un environnement favorable, une concurrence intense — mais un créneau, le sur-mesure accessible, que les géants n'occupent pas. La clé de succès est la différenciation par l'UX, la transparence et la donnée.</p></blockquote>
+
+<!-- ============================ 4. MODÈLE ÉCONOMIQUE ============================ -->
+<h1 class="sec" id="s4"><span class="num">4.</span> Modèle économique</h1>
+<p class="lead">On gagne sur le montage, pas sur les composants.</p>
+
+<h2 id="s4-1">4.1 On gagne sur le montage</h2>
+<p>Le modèle de PC Aeris est volontairement simple et honnête : <strong>nous ne prenons aucune marge sur les composants</strong>. Le client les paie au meilleur prix que nous avons trouvé sur le marché. Ce qui nous rémunère, c'est le <strong>montage</strong>, vendu à prix fixe via trois offres. Le prix total payé par le client est donc : <em>composants au meilleur prix + offre de montage choisie</em>.</p>
+<figure>
+  <div class="fig grid3">
+    <div class="box"><h4>Essentiel — 79 €</h4><ul><li>Montage des composants</li><li>Câble management de base</li><li>Test POST + démarrage Windows</li></ul></div>
+    <div class="box hl"><h4>Confort — 129 € <span class="tag">le + choisi</span></h4><ul><li>Tout l'Essentiel</li><li>Câblage premium</li><li>Windows + drivers à jour</li><li>Profil de courbes ventilateurs</li></ul></div>
+    <div class="box"><h4>Premium — 199 €</h4><ul><li>Tout le Confort</li><li>Benchmarks 3DMark / Cinebench</li><li>Profil XMP / EXPO optimisé</li><li>Rapport de tests livré</li></ul></div>
+  </div>
+  <figcaption><b>Figure 7</b> — Les trois offres de montage à prix fixe (revenu moyen ≈ 120 € par commande).</figcaption>
+</figure>
+<p>À ce revenu principal s'ajouteront des <strong>revenus complémentaires</strong> : garantie étendue, abonnement Pro (alertes prix, configurations illimitées), affiliation éventuelle sur le sourcing, et partenariats marques.</p>
+
+<h2 id="s4-2">4.2 Un modèle asset-light</h2>
+<p>PC Aeris ne porte <strong>pas de stock</strong> : les composants sont sourcés à la commande. Cela réduit fortement le besoin en fonds de roulement et le risque d'invendus, et rend le modèle peu capitalistique. La marge brute correspond essentiellement à l'offre de montage — soit environ 10 % du panier, les composants étant vendus à prix coûtant.</p>
+
+<h2 id="s4-3">4.3 Business Model Canvas</h2>
+<figure>
+  <div class="fig">
+    <div class="grid4" style="font-size:8.6px;">
+      <div class="box"><h4>Partenaires</h4><ul><li>Grossistes hardware</li><li>Marketplaces (sourcing)</li><li>Créateurs de contenu</li><li>Prestataires logistiques</li></ul></div>
+      <div class="box"><h4>Activités clés</h4><ul><li>Développement produit</li><li>Curation des données</li><li>Acquisition</li><li>Montage & expédition</li></ul></div>
+      <div class="box hl"><h4>Proposition de valeur</h4><p>PC sur-mesure simplifié, compatible garanti, transparent et au meilleur rapport perf/prix.</p></div>
+      <div class="box"><h4>Relation client</h4><ul><li>Self-service</li><li>Support & conseil</li><li>Communauté</li></ul></div>
+    </div>
+    <div class="grid4" style="font-size:8.6px;margin-top:8px;">
+      <div class="box"><h4>Ressources clés</h4><ul><li>Plateforme React/Supabase</li><li>Base composants</li><li>Moteurs compat & perf/prix</li></ul></div>
+      <div class="box"><h4>Segments</h4><ul><li>Gamers</li><li>Créatifs / freelances</li><li>Étudiants & indépendants</li></ul></div>
+      <div class="box"><h4>Canaux</h4><ul><li>Site web</li><li>SEO / contenu</li><li>Réseaux & créateurs</li></ul></div>
+      <div class="box hl"><h4>Revenus</h4><p><b>Offres de montage</b> (79/129/199 €) · composants à prix coûtant · services à venir.</p></div>
+    </div>
+    <div class="box" style="margin-top:8px;font-size:8.6px;"><h4>Structure de coûts</h4><p>Sourcing composants (≈ revenu composants, neutre) · infrastructure & outils · marketing · main-d'œuvre de montage. Pas de stock.</p></div>
+  </div>
+  <figcaption><b>Figure 8</b> — Business Model Canvas de PC Aeris.</figcaption>
+</figure>
+
+<!-- ============================ 5. BUSINESS PLAN ============================ -->
+<h1 class="sec" id="s5"><span class="num">5.</span> Business plan et trajectoire financière</h1>
+<p class="lead">Un positionnement inexploité, des projections prudentes, un amorçage maîtrisé.</p>
+
+<h2 id="s5-1">5.1 Positionnement concurrentiel</h2>
+<p>PC Aeris ne concurrence pas frontalement les revendeurs : il crée une catégorie. Le tableau ci-dessous compare, critère par critère, l'expérience proposée.</p>
+<table>
+  <tr><th>Critère</th><th>LDLC / Materiel</th><th>TopAchat</th><th>Amazon</th><th>Config. marques</th><th>PC Aeris</th></tr>
+  <tr><td>Compatibilité garantie</td><td>✗</td><td>✗</td><td>✗</td><td>~</td><td><b style="color:var(--ok);">✓</b></td></tr>
+  <tr><td>Recommandation perf / prix</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td><b style="color:var(--ok);">✓</b></td></tr>
+  <tr><td>Prix transparents (fourchette)</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td><b style="color:var(--ok);">✓</b></td></tr>
+  <tr><td>Parcours adapté au niveau</td><td>✗</td><td>✗</td><td>✗</td><td>~</td><td><b style="color:var(--ok);">✓</b></td></tr>
+  <tr><td>Conseil / accompagnement</td><td>~</td><td>✗</td><td>✗</td><td>~</td><td><b style="color:var(--ok);">✓</b></td></tr>
+</table>
+<p>Les barrières à l'entrée sont réelles : moteur de compatibilité, moteur perf/prix, agrégation multi-sources des prix, et effet réseau des configurations partagées. PC Aeris occupe le quadrant inexploité : <strong>expertise + simplicité</strong>.</p>
+
+<h2 id="s5-2">5.2 Projections financières</h2>
+<p>Les projections sont volontairement <strong>prudentes</strong> et intègrent une montée en charge. L'année 1 est une phase de lancement, sous le seuil de rentabilité — ce qui est normal pour une marque sans notoriété. La croissance repose sur des leviers maîtrisables : bouche-à-oreille, référencement naturel, et partenariats créateurs.</p>
+<figure>
+  <div class="fig">
+    <table>
+      <tr><th>Année</th><th class="n">Commandes / mois</th><th class="n">Panier moyen</th><th class="n">CA annuel</th><th class="n">Marge brute (montage)</th></tr>
+      <tr><td>2027 <span class="tag">lancement</span></td><td class="n">~6 (montée ~2→~12)</td><td class="n">1 200 €</td><td class="n">~86 K€</td><td class="n">8 – 10 K€</td></tr>
+      <tr><td>2028</td><td class="n">~16</td><td class="n">1 250 €</td><td class="n">~240 K€</td><td class="n">21 – 25 K€</td></tr>
+      <tr><td>2029</td><td class="n">~32</td><td class="n">1 300 €</td><td class="n">~500 K€</td><td class="n">42 – 50 K€</td></tr>
+    </table>
+    <p style="margin:6px 0 0;font-size:9px;color:var(--ink-2);">La marge brute correspond à l'offre de montage (~120 € par commande). Avec ~1 500 € de coûts fixes mensuels et une contribution d'environ 90 € par commande, le <b>seuil de rentabilité se situe autour de 17 commandes/mois</b>, atteint courant 2028.</p>
+  </div>
+  <figcaption><b>Figure 9</b> — Projections financières 2027-2029 (hypothèses prudentes, montée en charge).</figcaption>
+</figure>
+
+<h2 id="s5-3">5.3 Besoins de financement</h2>
+<p>Un amorçage de <strong>35 000 €</strong> est visé pour la phase de lancement (6-12 mois), afin de livrer la V1 commerciale et d'acquérir les premiers clients.</p>
+<table>
+  <tr><th>Poste</th><th class="n">Montant</th><th>Sources envisagées</th></tr>
+  <tr><td>Développement plateforme</td><td class="n">15 000 €</td><td rowspan="5" style="vertical-align:middle;">Apport personnel · love money · prêt d'honneur (Réseau Entreprendre, Initiative France) · BPI France · concours startups</td></tr>
+  <tr><td>Marketing de lancement</td><td class="n">10 000 €</td></tr>
+  <tr><td>Infrastructure technique</td><td class="n">3 000 €</td></tr>
+  <tr><td>Juridique / comptabilité</td><td class="n">2 000 €</td></tr>
+  <tr><td>Trésorerie / imprévus</td><td class="n">5 000 €</td></tr>
+  <tr><td><b>Total</b></td><td class="n"><b>35 000 €</b></td></tr>
+</table>
+
+<h2 id="s5-4">5.4 KPIs et risques</h2>
+<div class="grid2">
+  <div class="box"><h4>Indicateurs clés (objectif N+1)</h4><ul><li>Visiteurs uniques : ~1 500 / mois</li><li>Taux de conversion : ~0,5 %</li><li>CA mensuel moyen : ~7 000 € (en montée)</li><li>NPS : &gt; 40 · Recommandation : 30 %</li></ul></div>
+  <div class="box"><h4>Risques & mitigations</h4><ul><li>Faible notoriété → marketing digital, partenariats</li><li>Marge faible → services (montage, garantie, Pro)</li><li>Pénurie composants → multi-sourcing</li><li>Dépendance fournisseurs → diversification</li></ul></div>
+</div>
+
+<!-- ============================ 6. ORGANISATION & ÉQUIPE ============================ -->
+<h1 class="sec" id="s6"><span class="num">6.</span> Organisation, roadmap et équipe</h1>
+<p class="lead">Une feuille de route en quatre temps, un processus sans stock, une équipe à staffer.</p>
+
+<h2 id="s6-1">6.1 Roadmap produit</h2>
+<figure>
+  <div class="fig">
+    <div class="tl">
+      <div class="ph"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, prix, benchmarks, questionnaire, configs prêtes. En production.</p></div>
+      <div class="ph"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Panier, tunnel de commande, paiement Stripe, suivi des commandes.</p></div>
+      <div class="ph"><div class="when">Sept. 2026 +</div><h4>V2</h4><p>IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.</p></div>
+      <div class="ph"><div class="when">2027 +</div><h4>Expansion</h4><p>Application mobile, abonnement Pro, communauté, internationalisation.</p></div>
+    </div>
+  </div>
+  <figcaption><b>Figure 10</b> — Roadmap produit : du MVP en production à l'expansion.</figcaption>
+</figure>
+
+<h2 id="s6-2">6.2 Processus opérationnel</h2>
+<p>Le cycle d'une commande, sans stock, suit cinq étapes : <strong>(1)</strong> le client configure et valide ; <strong>(2)</strong> PC Aeris source les composants au meilleur prix ; <strong>(3)</strong> les composants sont reçus et assemblés selon l'offre de montage choisie ; <strong>(4)</strong> la machine est testée (POST, démarrage, benchmarks selon l'offre) ; <strong>(5)</strong> elle est expédiée avec son rapport. Ce flux asset-light évite l'immobilisation de capital et concentre la valeur sur le service.</p>
+
+<h2 id="s6-3">6.3 Environnement technique</h2>
+<figure>
+  <div class="fig grid2">
+    <div class="box"><h4>Front-end</h4><p>React · TypeScript · Vite · SCSS · Zustand (état) · React Router. Identité <b>Aeris Dark</b>, accessibilité conforme RGAA AA.</p></div>
+    <div class="box"><h4>Back-end & données</h4><p>Supabase (PostgreSQL, Auth, RLS) · &gt; 25 000 composants · prix de marché (LDLC) · scores PassMark · déploiement continu sur Vercel.</p></div>
+    <div class="box"><h4>Qualité</h4><p>69 tests automatisés (Vitest, unitaires + intégration) · règles de compatibilité couvertes par tests.</p></div>
+    <div class="box"><h4>Outillage data</h4><p>Scripts Node : import catalogue, agrégation des prix, récupération des benchmarks, génération des configs pré-faites.</p></div>
+  </div>
+  <figcaption><b>Figure 13</b> — Architecture et environnement technique de PC Aeris.</figcaption>
+</figure>
+
+<h2 id="s6-4">6.4 L'équipe</h2>
+<p>Aujourd'hui, l'équipe se résume à son <strong>fondateur, Quentin Geoffroy</strong>, qui a conçu et mis en production le MVP en solo — produit, moteur de compatibilité, intégration des prix et des benchmarks. C'est la meilleure preuve d'une capacité d'exécution avec peu de moyens. Avec l'amorçage, les premiers renforts sont identifiés : un <strong>développeur full-stack</strong> (V1 et IA), un <strong>responsable marketing</strong> (acquisition, SEO, partenariats), et un <strong>support technique doublé d'un expert hardware</strong> (curation des données, conseil, SAV).</p>
+
+<!-- ============================ 7. AGILE ============================ -->
+<h1 class="sec" id="s7"><span class="num">7.</span> Démarche agile et pilotage produit</h1>
+<p class="lead">Story mapping, périmètre du MVP, et exécution en sprints.</p>
+
+<h2 id="s7-1">7.1 Story mapping</h2>
+<p>Le besoin a été structuré en une <em>story map</em> organisée autour des grandes activités de l'utilisateur, de la découverte à la gestion de son compte. Chaque activité regroupe des tâches déclinées en user stories priorisées.</p>
+<figure>
+  <div class="fig">
+    <div class="grid3" style="font-size:8.8px;">
+      <div class="box"><h4>1 · Découvrir</h4><p>Accueil, présentation, navigation, parcours par profil.</p></div>
+      <div class="box"><h4>2 · S'authentifier</h4><p>Inscription, connexion (email/pseudo), reset mot de passe.</p></div>
+      <div class="box"><h4>3 · Configurer</h4><p>Catalogue, recherche, compatibilité, tri perf/prix, récapitulatif, prix.</p></div>
+      <div class="box"><h4>4 · Commander</h4><p>Panier, adresses, paiement Stripe, confirmation, suivi. <span class="tag todo">à venir</span></p></div>
+      <div class="box"><h4>5 · Gérer son compte</h4><p>Profil, configurations sauvegardées, historique.</p></div>
+      <div class="box"><h4>6 · Administrer</h4><p>Dashboard, CRUD produits & prix, gestion utilisateurs.</p></div>
+    </div>
+  </div>
+  <figcaption><b>Figure 11</b> — Carte des parcours (story map) : six activités utilisateur.</figcaption>
+</figure>
+
+<h2 id="s7-2">7.2 Périmètre du MVP</h2>
+<div class="grid2">
+  <div class="box"><h4>✓ Dans le MVP</h4><ul><li>Authentification complète (email + pseudo, reset)</li><li>Configurateur 8 catégories à compatibilité garantie</li><li>Ordre de sélection verrouillé (zéro impasse)</li><li>Tri par performance et par prix</li><li>Questionnaire guidé & configurations pré-faites</li><li>Sauvegarde de configurations</li><li>Back-office admin (produits + prix)</li><li>Prix de marché & benchmarks intégrés</li></ul></div>
+  <div class="box"><h4>✗ Hors MVP (V1+)</h4><ul><li>Panier et tunnel de commande</li><li>Paiement Stripe & suivi de commande</li><li>IA de recommandation avancée</li><li>Responsive mobile complet</li><li>Affichage prix dans tout le catalogue (en cours)</li><li>Occasion (source à brancher)</li></ul></div>
+</div>
+
+<h2 id="s7-3">7.3 Exécution en sprints</h2>
+<p>Le développement s'est déroulé en sprints courts et ciblés. Le détail des revues figure en <a href="#annexeC">Annexe C</a>.</p>
+<table>
+  <tr><th>Sprint</th><th>Période</th><th class="n">Points</th><th>Objectif</th><th>Statut</th></tr>
+  <tr><td>Sprint 1</td><td>Janv.–mars 2026</td><td class="n">~57</td><td>Fondations : auth, configurateur, admin</td><td><span class="tag ok">livré</span></td></tr>
+  <tr><td>Sprint 2</td><td>17 avr. 2026</td><td class="n">~12</td><td>Fix login, toasts, tuyauterie prix</td><td><span class="tag ok">livré</span></td></tr>
+  <tr><td>Sprint 3</td><td>17-20 avr. 2026</td><td class="n">~19</td><td>Compatibilité complète + tests Vitest</td><td><span class="tag ok">livré</span></td></tr>
+  <tr><td>Sprint 4</td><td>20 avr. 2026</td><td class="n">~21</td><td>Admin création/prix + tests intégration</td><td><span class="tag ok">livré</span></td></tr>
+  <tr><td>Mai 2026</td><td>22-29 mai 2026</td><td class="n">~16</td><td>Aeris Dark, ordre verrouillé, configs sauvegardées</td><td><span class="tag ok">livré</span></td></tr>
+  <tr><td>Sprint 5</td><td>Juin 2026</td><td class="n">~26</td><td>Prix UI, benchmarks, questionnaire, configs prêtes</td><td><span class="tag">en cours</span></td></tr>
+  <tr><td>Sprints 6-9+</td><td>Juil. 2026 +</td><td class="n">~145</td><td>Panier, commande, Stripe, suivi, V2</td><td><span class="tag todo">à faire</span></td></tr>
+</table>
+
+<!-- ============================ 8. RÉALISATIONS ============================ -->
+<h1 class="sec" id="s8"><span class="num">8.</span> Réalisations et état d'avancement</h1>
+<p class="lead">Un produit en production, pas une maquette.</p>
+
+<h2 id="s8-1">8.1 Le configurateur et la compatibilité</h2>
+<p>Le cœur du produit est un configurateur couvrant <strong>8 catégories</strong> de composants (processeur, carte mère, boîtier, RAM, carte graphique, stockage, ventirad, alimentation). À chaque sélection, un moteur de compatibilité filtre en temps réel les composants restants : socket du processeur et de la carte mère, type de RAM, format de boîtier, dimensions, connectique de stockage (M.2 / SATA) et dimensionnement de l'alimentation selon les TDP. L'ordre de sélection est verrouillé pour rendre toute impasse impossible. L'utilisateur peut trier par <strong>performance</strong> ou par <strong>prix</strong>.</p>
+
+<h2 id="s8-2">8.2 Les données : prix et benchmarks</h2>
+<p>Deux chantiers de données structurent la valeur du produit :</p>
+<ul>
+  <li><strong>Prix de marché</strong> — un agrégateur relève en continu des prix réels chez les marchands français et en calcule une fourchette (bas / moyen / haut). Le moteur est opérationnel ; la couverture du catalogue s'élargit par lots.</li>
+  <li><strong>Scores de performance</strong> — les benchmarks de référence PassMark ont été intégrés sur <strong>733 processeurs et 982 cartes graphiques</strong>, permettant le calcul du coût par point de performance et la recommandation de valeur.</li>
+</ul>
+<div class="grid4">
+  <div class="box hl"><div class="stat">25 k+</div><div class="statl">composants en base</div></div>
+  <div class="box hl"><div class="stat">1 715</div><div class="statl">scores PassMark intégrés</div></div>
+  <div class="box hl"><div class="stat">12</div><div class="statl">configs pré-faites compatibles</div></div>
+  <div class="box hl"><div class="stat">8</div><div class="statl">catégories à compatibilité garantie</div></div>
+</div>
+
+<h2 id="s8-3">8.3 Qualité et fiabilité</h2>
+<p>La fiabilité repose sur <strong>69 tests automatisés</strong> (Vitest), couvrant les règles de compatibilité (logique pure), les services (authentification, données) et les flux d'intégration critiques. L'identité visuelle <em>Aeris Dark</em> a été conçue dans le respect de l'accessibilité (RGAA AA). Le déploiement est continu sur Vercel.</p>
+
+<h2 id="s8-4">8.4 Bilan d'avancement</h2>
+<p>À ce jour, le périmètre fonctionnel du MVP est atteint. Sur les 87 user stories du backlog, 45 sont livrées (≈ 137 points) ; il reste principalement le tunnel de commande et le paiement, planifiés pour la V1 d'août 2026.</p>
+<figure>
+  <div class="fig">
+    <div class="bar" style="margin-bottom:6px;">
+      <i class="done" style="width:52%;"></i><i class="ready" style="width:3%;"></i><i class="todo" style="width:45%;"></i>
+    </div>
+    <div style="display:flex;gap:16px;font-size:8.6px;color:var(--ink-2);">
+      <span>■ <b style="color:var(--ok);">Livré</b> — 45 US (~137 pts)</span>
+      <span>■ <b style="color:var(--brand-l);">Prêt</b> — 3 US</span>
+      <span>■ <b style="color:#9aa0b4;">À faire</b> — 39 US (~188 pts)</span>
+    </div>
+  </div>
+  <figcaption><b>Figure 12</b> — Avancement du backlog (87 user stories, au lancement du MVP).</figcaption>
+</figure>
+
+<!-- ============================ CONCLUSION ============================ -->
+<h1 class="sec" id="concl">Conclusion</h1>
+<p>PC Aeris répond à un besoin réel sur un marché porteur, avec une proposition de valeur clairement différenciante. Trois éléments en font la solidité. D'abord, c'est un <strong>produit réel</strong>, déjà en production, avec des fondations techniques éprouvées — pas une simple idée. Ensuite, c'est une <strong>niche claire</strong> : le sur-mesure simplifié, là où les revendeurs parlent technique et où Amazon parle prix, mais où personne ne parle de simplicité. Enfin, c'est un <strong>modèle honnête et asset-light</strong> : pas de marge cachée sur les composants, un revenu transparent fondé sur le service de montage, et un risque financier structurellement faible.</p>
+<p>Les différenciateurs ne sont pas que des promesses : la compatibilité garantie, le moteur performance/prix nourri par les benchmarks, et la transparence des prix de marché sont <strong>opérationnels</strong>. La prochaine étape est la V1 commerciale — panier, commande et paiement — visée pour août 2026, puis l'acquisition des premiers clients, soutenue par l'amorçage recherché.</p>
+<p>Au-delà des fonctionnalités, ce projet aura démontré une capacité à transformer une vision produit en un logiciel fonctionnel, testé et déployé, en maîtrisant toute la chaîne, du moteur de compatibilité jusqu'à l'intégration des données de marché. C'est sur cette base d'exécution que PC Aeris entend construire la suite.</p>
+<blockquote><p>Permettre à chacun d'obtenir le PC parfait pour ses besoins — <strong>sans stress, sans erreur, au juste prix.</strong></p></blockquote>
+
+<!-- ============================ ANNEXES ============================ -->
+<h1 class="sec" id="annexes">Annexes</h1>
+<p class="lead">Détail opérationnel : backlog, user stories, revues de sprint et ressources.</p>
+
+<h2 id="annexeA">Annexe A — Backlog priorisé complet</h2>
+<p>Le backlog compte <strong>87 user stories</strong> réparties en six épopées (Découverte, Authentification, Configurateur, Commande, Compte, Administration), priorisées selon la valeur et l'effort. Récapitulatif au lancement du MVP :</p>
+<table>
+  <tr><th>Statut</th><th class="n">User stories</th><th class="n">Points</th></tr>
+  <tr><td>Livré (Done)</td><td class="n">45</td><td class="n">~137</td></tr>
+  <tr><td>Prêt techniquement (données prix en cours)</td><td class="n">3</td><td class="n">~8</td></tr>
+  <tr><td>À faire</td><td class="n">39</td><td class="n">~188</td></tr>
+  <tr><td><b>Total</b></td><td class="n"><b>87</b></td><td class="n"><b>~333</b></td></tr>
+</table>
+<table>
+  <tr><th>Épopée</th><th>Contenu principal</th><th>Priorité dominante</th></tr>
+  <tr><td>E1 — Découverte</td><td>Accueil, navigation, parcours par profil, configs prêtes</td><td>Critique / Haute</td></tr>
+  <tr><td>E2 — Authentification</td><td>Inscription, connexion email/pseudo, reset, profil</td><td>Critique</td></tr>
+  <tr><td>E3 — Configurateur</td><td>Catalogue, recherche, compatibilité, tri, prix, sauvegarde</td><td>Critique / Haute</td></tr>
+  <tr><td>E4 — Commande</td><td>Panier, adresses, paiement Stripe, confirmation, suivi</td><td>Haute (V1)</td></tr>
+  <tr><td>E5 — Compte</td><td>Configurations sauvegardées, historique, préférences</td><td>Moyenne</td></tr>
+  <tr><td>E6 — Administration</td><td>Dashboard, CRUD produits & prix, gestion utilisateurs</td><td>Haute</td></tr>
+</table>
+
+<h2 id="annexeB">Annexe B — User Stories formatées (extrait représentatif)</h2>
+<p>Chaque user story suit le format <em>« En tant que … je veux … afin de … »</em> assorti de critères d'acceptation (CA) vérifiables en recette. Extrait des stories critiques et hautes.</p>
+
+<h4>US-031 — Filtrage automatique par compatibilité</h4>
+<p><b>En tant que</b> configurateur, <b>je veux</b> que seuls les composants compatibles avec mes choix précédents soient proposés, <b>afin de</b> ne jamais assembler une configuration invalide.</p>
+<ul><li>CA1 — la sélection d'un processeur restreint les cartes mères au bon socket ;</li><li>CA2 — un composant incompatible n'apparaît pas dans la liste ;</li><li>CA3 — un message explique le filtre actif.</li></ul>
+
+<h4>US-033 — Compatibilité carte graphique / alimentation</h4>
+<p><b>En tant que</b> configurateur, <b>je veux</b> que l'alimentation proposée soit suffisante pour la configuration, <b>afin de</b> garantir un fonctionnement stable.</p>
+<ul><li>CA1 — la puissance requise est calculée à partir des TDP processeur et carte graphique + une marge ;</li><li>CA2 — les alimentations sous-dimensionnées sont exclues.</li></ul>
+
+<h4>US-041 — Sauvegarde de configuration</h4>
+<p><b>En tant qu'</b>utilisateur connecté, <b>je veux</b> sauvegarder ma configuration sous un nom, <b>afin de</b> la retrouver et la modifier plus tard.</p>
+<ul><li>CA1 — une fenêtre permet de nommer la configuration ;</li><li>CA2 — la configuration est listée dans mon espace ;</li><li>CA3 — elle peut être rechargée dans le configurateur.</li></ul>
+
+<h4>US-079 — Gestion des prix produits (admin)</h4>
+<p><b>En tant qu'</b>administrateur, <b>je veux</b> éditer les prix des produits, <b>afin de</b> maintenir des données de marché à jour.</p>
+<ul><li>CA1 — édition des prix bas / moyen / haut depuis la table admin ;</li><li>CA2 — la modification est immédiatement reflétée côté configurateur.</li></ul>
+
+<p style="font-size:9px;color:var(--muted);margin-top:8px;">L'intégralité des user stories formatées est maintenue dans le dépôt du projet (<code>docs/agile/user-stories.md</code>).</p>
+
+<h2 id="annexeC">Annexe C — Revues de sprint (Sprints 1 à 4)</h2>
+<p><b>Sprint 1 (janv.–mars 2026, ~57 pts)</b> — Fondations : authentification complète, configurateur de base, back-office admin, base de composants. Rétrospective : socle robuste, mais documentation agile à formaliser.</p>
+<p><b>Sprint 2 (17 avr. 2026, ~12 pts)</b> — Correction du bug de connexion par pseudo, système de notifications toast, refonte de l'accueil, mise en place de la tuyauterie multi-sources des prix.</p>
+<p><b>Sprint 3 (17-20 avr. 2026, ~19 pts)</b> — Complétion des règles de compatibilité (carte graphique/alimentation, boîtier/format, stockage/connectique) et initialisation de la couverture de tests (Vitest).</p>
+<p><b>Sprint 4 (20 avr. 2026, ~21 pts)</b> — Complétion du CRUD admin (création de produits, édition des prix) et tests d'intégration sur les flux critiques (authentification, administration, configurateur).</p>
+<p style="font-size:9px;color:var(--muted);">Zéro régression constatée de Sprint 1 à Sprint 4. Les revues complètes sont conservées dans le dépôt (<code>docs/agile/</code>).</p>
+
+<h2 id="annexeD">Annexe D — Liens et ressources du projet</h2>
+<table>
+  <tr><th>Ressource</th><th>Lien</th></tr>
+  <tr><td>Démonstration en production</td><td>https://pc-aeris.vercel.app/</td></tr>
+  <tr><td>Code source &amp; historique</td><td>https://github.com/QuentinGP23/PC_Aeris</td></tr>
+  <tr><td>Documentation produit & agile</td><td>dépôt <code>/docs</code> (pitch, business model, étude de marché, backlog, user stories, revues de sprint)</td></tr>
+</table>
+
+</body>
+</html>
