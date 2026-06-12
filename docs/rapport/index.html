@@ -61,6 +61,10 @@
   .box{border:1px solid var(--line);border-radius:7px;padding:11px 13px;background:var(--soft);}
   .box h4{margin:0 0 5px;color:var(--brand-d);} .box.hl{background:var(--brand-soft);border-color:#c9cdfb;}
   .box ul{margin:2px 0;padding-left:15px;}
+  .persona__hd{display:flex;align-items:center;gap:9px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--line);}
+  .persona__av{font-size:22px;line-height:1;}
+  .persona__hd b{display:block;font-size:11px;color:var(--ink);} .persona__hd span{font-size:8.4px;color:var(--muted);}
+  .persona p{font-size:9px;margin:0 0 4px;color:var(--ink-2);line-height:1.5;} .persona p b{color:var(--brand-d);}
   .stat{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1;}
   .stat .u{font-size:12px;color:var(--muted);font-weight:600;}
   .statl{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px;}
@@ -170,7 +174,7 @@
     <li class="l0"><a href="#s6"><span class="t">6. Organisation, roadmap et équipe</span><span class="dots"></span></a></li>
     <li class="l1"><a href="#s6-1"><span class="t">6.1 Roadmap · 6.2 Processus · 6.3 Environnement technique · 6.4 Équipe</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#s7"><span class="t">7. Démarche agile et pilotage produit</span><span class="dots"></span></a></li>
-    <li class="l1"><a href="#s7-1"><span class="t">7.1 Story mapping · 7.2 Périmètre du MVP · 7.3 Sprints</span><span class="dots"></span></a></li>
+    <li class="l1"><a href="#s7-1"><span class="t">7.1 Personas · 7.2 Story mapping · 7.3 MVP · 7.4 Sprints</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#s8"><span class="t">8. Réalisations et état d'avancement</span><span class="dots"></span></a></li>
     <li class="l1"><a href="#s8-1"><span class="t">8.1 Configurateur · 8.2 Données · 8.3 Qualité · 8.4 Bilan</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#concl"><span class="t">Conclusion</span><span class="dots"></span></a></li>
@@ -450,9 +454,32 @@
 
 <!-- ============================ 7. AGILE ============================ -->
 <h1 class="sec" id="s7"><span class="num">7.</span> Démarche agile et pilotage produit</h1>
-<p class="lead">Story mapping, périmètre du MVP, et exécution en sprints.</p>
+<p class="lead">Personas, story mapping, périmètre du MVP, et exécution en sprints.</p>
 
-<h2 id="s7-1">7.1 Story mapping</h2>
+<h2 id="s7-1">7.1 Personas</h2>
+<p>Trois personas, dérivés des segments cibles, guident les décisions produit et la priorisation. Chacun correspond à l'un des trois parcours de la plateforme, et c'est de leurs objectifs que découlent les user stories du backlog.</p>
+<div class="grid3">
+  <div class="box persona">
+    <div class="persona__hd"><span class="persona__av">🎮</span><div><b>Lucas, 19 ans</b><span>Étudiant · premier PC gaming</span></div></div>
+    <p><b>Objectif :</b> un PC pour jouer aux jeux récents en 1080p, avec un budget serré (~900 €).</p>
+    <p><b>Frustration :</b> il n'y connaît rien au matériel et a peur de se tromper ou de payer trop cher.</p>
+    <p><b>Parcours :</b> le <em>questionnaire guidé</em>.</p>
+  </div>
+  <div class="box persona">
+    <div class="persona__hd"><span class="persona__av">🎬</span><div><b>Camille, 32 ans</b><span>Monteuse vidéo freelance</span></div></div>
+    <p><b>Objectif :</b> une station fiable et puissante pour le montage 4K et un peu de 3D.</p>
+    <p><b>Frustration :</b> composer une configuration professionnelle compatible et au juste prix lui prend un temps fou.</p>
+    <p><b>Parcours :</b> les <em>configs prêtes « création »</em> puis ajustement.</p>
+  </div>
+  <div class="box persona">
+    <div class="persona__hd"><span class="persona__av">🧠</span><div><b>Hugo, 27 ans</b><span>Passionné · monte ses PC</span></div></div>
+    <p><b>Objectif :</b> optimiser chaque composant au meilleur rapport performance / prix.</p>
+    <p><b>Frustration :</b> vérifier la compatibilité et comparer les prix sur cinq sites différents.</p>
+    <p><b>Parcours :</b> le <em>configurateur libre</em> avec tri par performance.</p>
+  </div>
+</div>
+
+<h2 id="s7-2">7.2 Story mapping</h2>
 <p>Le besoin a été structuré en une <em>story map</em> organisée autour des grandes activités de l'utilisateur, de la découverte à la gestion de son compte. Chaque activité regroupe des tâches déclinées en user stories priorisées.</p>
 <figure id="fig11">
   <div class="fig">
@@ -468,13 +495,13 @@
   <figcaption><b>Figure 11</b> — Carte des parcours (story map) : six activités utilisateur.</figcaption>
 </figure>
 
-<h2 id="s7-2">7.2 Périmètre du MVP</h2>
+<h2 id="s7-3">7.3 Périmètre du MVP</h2>
 <div class="grid2">
   <div class="box"><h4>✓ Dans le MVP</h4><ul><li>Authentification complète (email + pseudo, reset)</li><li>Configurateur 8 catégories à compatibilité garantie</li><li>Ordre de sélection verrouillé (zéro impasse)</li><li>Tri par performance et par prix</li><li>Questionnaire guidé & configurations pré-faites</li><li>Sauvegarde de configurations</li><li>Back-office admin (produits + prix)</li><li>Prix de marché & benchmarks intégrés</li></ul></div>
   <div class="box"><h4>✗ Hors MVP (V1+)</h4><ul><li>Panier et tunnel de commande</li><li>Paiement Stripe & suivi de commande</li><li>IA de recommandation avancée</li><li>Responsive mobile complet</li><li>Affichage prix dans tout le catalogue (en cours)</li><li>Occasion (source à brancher)</li></ul></div>
 </div>
 
-<h2 id="s7-3">7.3 Exécution en sprints</h2>
+<h2 id="s7-4">7.4 Exécution en sprints</h2>
 <p>Le développement s'est déroulé en sprints courts et ciblés. Le détail des revues figure en <a href="#annexeC">Annexe C</a>.</p>
 <table>
   <tr><th>Sprint</th><th>Période</th><th class="n">Points</th><th>Objectif</th><th>Statut</th></tr>
@@ -557,7 +584,7 @@
 </table>
 
 <h2 id="annexeB">Annexe B — User Stories formatées (extrait représentatif)</h2>
-<p>Chaque user story suit le format <em>« En tant que … je veux … afin de … »</em> assorti de critères d'acceptation (CA) vérifiables en recette. Extrait des stories critiques et hautes.</p>
+<p>Les user stories découlent des personas (§ 7.1) et de la story map (§ 7.2). Chacune suit le format <em>« En tant que … je veux … afin de … »</em> assorti de critères d'acceptation (CA) vérifiables en recette. Extrait des stories critiques et hautes.</p>
 <h4>US-031 — Filtrage automatique par compatibilité</h4>
 <p><b>En tant que</b> configurateur, <b>je veux</b> que seuls les composants compatibles avec mes choix précédents soient proposés, <b>afin de</b> ne jamais assembler une configuration invalide.</p>
 <ul><li>CA1 — la sélection d'un processeur restreint les cartes mères au bon socket ;</li><li>CA2 — un composant incompatible n'apparaît pas dans la liste ;</li><li>CA3 — un message explique le filtre actif.</li></ul>
