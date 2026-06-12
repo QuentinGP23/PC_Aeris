@@ -38,6 +38,12 @@ export const ordersService = {
     return { id: data.id as string, error: null }
   },
 
+  /** Envoie le devis PDF par email au client et aux admins (Edge Function). Best-effort. */
+  async emailDevis(payload: { orderId: string; clientName: string; total: number; pdfBase64: string }): Promise<{ error: string | null }> {
+    const { error } = await supabase.functions.invoke('send-devis', { body: payload })
+    return { error: error ? error.message : null }
+  },
+
   async list(): Promise<{ data: OrderSummary[]; error: string | null }> {
     const { data, error } = await supabase
       .from('orders')

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore, cartTotal, cartCount, useToast } from '../../store'
 import { useAuth } from '../../context/useAuth'
 import { ordersService, type ShippingAddress } from '../../services'
+import { downloadDevis, devisBase64 } from '../../utils/devis'
 import './Checkout.scss'
 
 const eur = (n: number) => `${Math.round(n).toLocaleString('fr-FR')} €`
@@ -33,11 +34,16 @@ function Checkout() {
     }
     setSubmitting(true)
     const { id, error } = await ordersService.create(items, total, ship)
-    setSubmitting(false)
     if (error || !id) {
+      setSubmitting(false)
       toast.error(error ?? 'Erreur lors de la commande')
       return
     }
+    // Devis : téléchargement immédiat pour le client + envoi par email (client + admins).
+    const info = { number: id.slice(0, 8).toUpperCase(), date: new Date().toLocaleDateString('fr-FR'), client: ship.fullName }
+    try { downloadDevis(items, info) } catch { /* ignore */ }
+    void ordersService.emailDevis({ orderId: id, clientName: ship.fullName, total, pdfBase64: devisBase64(items, info) })
+    setSubmitting(false)
     clear()
     setOrderId(id)
   }

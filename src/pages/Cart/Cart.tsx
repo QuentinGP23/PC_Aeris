@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCartStore, itemTotal, cartTotal, useToast } from '../../store'
 import { CATEGORIES, type CategoryKey } from '../../types'
 import { ASSEMBLY_OFFERS, ASSEMBLY_PRICE } from '../../constants'
+import { downloadDevis, devisNumber } from '../../utils/devis'
 import './Cart.scss'
 
 const catLabel = (c: CategoryKey) => CATEGORIES.find((x) => x.value === c)?.label ?? c
@@ -54,11 +55,21 @@ function Cart() {
                 </div>
 
                 <ul className="ci__lines">
+                  <li className="ci__lines-hd">
+                    <span>Poste</span><span>Composant</span><span>Acheté chez</span><span>Prix</span>
+                  </li>
                   {item.lines.map((l) => (
                     <li key={l.category}>
                       <span className="ci__cat">{catLabel(l.category)}</span>
                       <span className="ci__pname">{l.name}</span>
-                      <span className="ci__price">{l.price != null ? eur(l.price) : '—'}</span>
+                      <span className="ci__merchant">
+                        {l.url ? (
+                          <a href={l.url} target="_blank" rel="noreferrer">{l.merchant ?? 'voir'}</a>
+                        ) : (
+                          l.merchant ?? '—'
+                        )}
+                      </span>
+                      <span className="ci__price">{l.price != null ? eur(l.price) : 'sur devis'}</span>
                     </li>
                   ))}
                 </ul>
@@ -101,6 +112,15 @@ function Cart() {
           <div className="cart__row cart__row--total"><span>Total</span><span>{eur(total)}</span></div>
           <p className="cart__note">Les composants sont facturés au meilleur prix du marché. Les prix manquants seront confirmés au sourcing.</p>
           <button className="btn btn--ind btn--full" onClick={() => navigate('/commande')}>Passer commande →</button>
+          <button
+            className="btn btn--ghost2 btn--full"
+            onClick={() => {
+              downloadDevis(items, { number: devisNumber(), date: new Date().toLocaleDateString('fr-FR') })
+              toast.success('Devis téléchargé')
+            }}
+          >
+            📄 Télécharger le devis
+          </button>
           <button className="btn btn--ghost2 btn--full" onClick={() => { toast.info('Panier conservé'); navigate('/configurateur') }}>Continuer mes achats</button>
         </aside>
       </div>

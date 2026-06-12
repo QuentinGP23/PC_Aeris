@@ -54,13 +54,21 @@
 
   &__lines {
     list-style: none; margin: 0 0 14px; padding: 0;
-    li { display: grid; grid-template-columns: 90px 1fr auto; gap: 10px; align-items: baseline;
+    li { display: grid; grid-template-columns: 76px 1fr 92px 66px; gap: 10px; align-items: baseline;
       padding: 4px 0; border-bottom: 1px dashed var(--border); font-size: 12.5px; }
     li:last-child { border-bottom: none; }
   }
+  &__lines-hd {
+    span { font-family: var(--fm); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
+    span:last-child { text-align: right; }
+  }
   &__cat { font-family: var(--fm); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
   &__pname { color: var(--text); }
-  &__price { font-family: var(--fm); color: var(--text-2); font-variant-numeric: tabular-nums; }
+  &__merchant {
+    font-family: var(--fm); font-size: 11px;
+    a { color: var(--ind-l); text-decoration: none; &:hover { text-decoration: underline; } }
+  }
+  &__price { font-family: var(--fm); color: var(--text-2); font-variant-numeric: tabular-nums; text-align: right; }
 
   &__assembly { margin-bottom: 14px; }
   &__assembly-l { font-family: var(--fm); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
