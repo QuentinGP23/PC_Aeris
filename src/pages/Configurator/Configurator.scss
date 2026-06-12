@@ -130,6 +130,23 @@
     }
   }
 
+  &__cart {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: none;
+    background: var(--ind);
+    color: #fff;
+    font-family: var(--fb);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.14s;
+
+    &:hover { background: #7577f5; }
+  }
+
   &__login-hint {
     font-family: var(--fb);
     font-size: 11px;

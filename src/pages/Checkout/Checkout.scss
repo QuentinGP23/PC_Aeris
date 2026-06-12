@@ -1,0 +1,80 @@
+@use "../../styles/variables" as *;
+
+.ck {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 44px 24px 80px;
+
+  &--center { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  &__title { font-family: var(--fh); font-size: 28px; font-weight: 800; color: var(--text); margin: 0 0 24px; }
+
+  &__grid { display: grid; grid-template-columns: 1fr 320px; gap: 22px; align-items: start; }
+  &__main { display: flex; flex-direction: column; gap: 16px; }
+
+  &__card {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border); border-radius: var(--r); padding: 20px;
+    h2 { font-family: var(--fh); font-size: 16px; color: var(--text); margin: 0 0 14px; }
+  }
+
+  &__fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  &__field {
+    display: flex; flex-direction: column; gap: 5px;
+    &--full { grid-column: 1 / -1; }
+    span { font-family: var(--fm); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
+    input {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--rs);
+      color: var(--text); padding: 10px 12px; font-family: var(--fb); font-size: 13.5px; outline: none;
+      transition: border-color 0.15s;
+      &:focus { border-color: var(--ind); }
+      &::placeholder { color: var(--text-3); }
+    }
+  }
+
+  &__pay {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--rs); padding: 14px;
+    &-ico { font-size: 22px; }
+    b { font-family: var(--fb); font-size: 13px; color: var(--text); }
+    p { font-family: var(--fb); font-size: 12px; color: var(--text-2); line-height: 1.5; margin: 4px 0 0; }
+  }
+
+  &__sum {
+    position: sticky; top: 90px;
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border); border-radius: var(--r); padding: 20px;
+    h3 { font-family: var(--fh); font-size: 16px; color: var(--text); margin: 0 0 12px; }
+  }
+  &__items { display: flex; flex-direction: column; gap: 7px; margin-bottom: 10px; }
+  &__line { display: flex; justify-content: space-between; gap: 10px; font-family: var(--fb); font-size: 12.5px; color: var(--text-2); }
+  &__row { display: flex; justify-content: space-between; padding: 7px 0;
+    &--total { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 12px;
+      font-family: var(--fh); font-size: 19px; font-weight: 800; color: var(--text); } }
+
+  &__empty { text-align: center; color: var(--text-2); p { font-family: var(--fb); font-size: 16px; margin: 0 0 18px; } }
+  &__done {
+    text-align: center; max-width: 480px;
+    &-ico { width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%; background: rgba(16,185,129,.12);
+      color: var(--ok); display: grid; place-items: center; font-size: 28px; font-weight: 800; }
+    h1 { font-family: var(--fh); font-size: 26px; font-weight: 800; color: var(--text); margin: 0 0 12px; }
+    p { font-family: var(--fb); font-size: 14px; color: var(--text-2); line-height: 1.55; margin: 0 0 8px; b { color: var(--text); } }
+    &-sub { font-size: 12.5px !important; color: var(--text-3) !important; }
+    &-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+  }
+}
+
+.ck-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 18px; border-radius: var(--rs); font-family: var(--fb); font-size: 13.5px; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.14s; text-decoration: none;
+  &--full { width: 100%; margin-top: 8px; }
+  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #7577f5; } &:disabled { opacity: 0.5; cursor: not-allowed; } }
+  &--ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border);
+    &:hover { border-color: var(--border-s); color: var(--text); } }
+}
+
+@media (max-width: 820px) {
+  .ck__grid { grid-template-columns: 1fr; }
+  .ck__sum { position: static; }
+  .ck__fields { grid-template-columns: 1fr; }
+}

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { List, X } from '@phosphor-icons/react'
+import { List, X, ShoppingCart } from '@phosphor-icons/react'
 import { useAuth } from '../../../context'
-import { useConfigStore } from '../../../store'
+import { useConfigStore, useCartStore, cartCount } from '../../../store'
 import './Header.scss'
 
 const NAV_LINKS = [
@@ -19,6 +19,8 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const config = useConfigStore(s => s.config)
   const selectedCount = Object.keys(config).length
+  const cartItems = useCartStore(s => s.items)
+  const cartQty = cartCount(cartItems)
 
   const isActive = (to: string) => (to === '/' ? pathname === '/' : pathname.startsWith(to))
 
@@ -56,6 +58,16 @@ function Header() {
               {selectedCount} composant{selectedCount > 1 ? 's' : ''} sélectionné{selectedCount > 1 ? 's' : ''}
             </button>
           )}
+
+          <button
+            type="button"
+            className="nav-cart"
+            onClick={() => navigate('/panier')}
+            aria-label="Voir le panier"
+          >
+            <ShoppingCart size={20} weight="regular" />
+            {cartQty > 0 && <span className="nav-cart__badge">{cartQty}</span>}
+          </button>
 
           {isAuthenticated && user ? (
             <>

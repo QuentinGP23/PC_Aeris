@@ -5,6 +5,8 @@ import { cascadeInvalidations } from '../utils/selection-order'
 
 export { useToast, useToastStore } from './toastStore'
 export type { ToastVariant, Toast } from './toastStore'
+export { useCartStore, itemUnitPrice, itemTotal, cartCount, cartTotal } from './cartStore'
+export type { CartItem, CartLine } from './cartStore'
 
 interface ConfigStore {
   config: Partial<Record<CategoryKey, Product>>

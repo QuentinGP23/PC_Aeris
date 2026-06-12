@@ -1,5 +1,43 @@
 import type { CategoryKey } from '../types'
 
+// ── Offres de montage (le revenu : composants à prix coûtant + montage fixe) ──
+
+export type AssemblyTier = 'essentiel' | 'confort' | 'premium'
+
+export interface AssemblyOffer {
+  id: AssemblyTier
+  name: string
+  price: number
+  desc: string
+  includes: string[]
+}
+
+export const ASSEMBLY_OFFERS: AssemblyOffer[] = [
+  {
+    id: 'essentiel',
+    name: 'Essentiel',
+    price: 79,
+    desc: 'Montage standard, vérification fonctionnelle, test de boot.',
+    includes: ['Montage des composants', 'Câble management de base', 'Test POST + démarrage Windows'],
+  },
+  {
+    id: 'confort',
+    name: 'Confort',
+    price: 129,
+    desc: 'Montage soigné, optimisation thermique, installation OS et drivers.',
+    includes: ['Tout l\'Essentiel', 'Câble management premium', 'Installation Windows + drivers', 'Profil de courbes ventilateurs'],
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    price: 199,
+    desc: 'Tuning complet, benchmarks, profil overclock léger si compatible.',
+    includes: ['Tout le Confort', 'Benchmarks 3DMark + Cinebench', 'Profil XMP / EXPO optimisé', 'Rapport de tests livré'],
+  },
+]
+
+export const ASSEMBLY_PRICE: Record<AssemblyTier, number> = { essentiel: 79, confort: 129, premium: 199 }
+
 // ── Specs affichées sur les cartes du configurateur (par catégorie) ──────────
 
 export const KEY_SPECS: Record<CategoryKey, string[]> = {

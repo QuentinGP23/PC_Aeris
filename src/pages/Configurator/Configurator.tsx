@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../config'
-import { useConfigStore, useToast } from '../../store'
+import { useConfigStore, useToast, useCartStore } from '../../store'
 import { useAuth } from '../../context/useAuth'
 import { CATEGORIES } from '../../types'
 import { KEY_SPECS, SPEC_LABELS, SPEC_UNITS } from '../../constants'
@@ -40,6 +40,7 @@ function Configurator() {
   } = useConfigStore()
   const toast = useToast()
   const { isAuthenticated } = useAuth()
+  const addToCart = useCartStore((s) => s.addConfig)
 
   const [savedModalOpen, setSavedModalOpen] = useState(false)
   const [saveModalOpen, setSaveModalOpen] = useState(false)
@@ -251,6 +252,12 @@ function Configurator() {
     toast.success(`"${name}" sauvegardée`)
   }
 
+  const handleAddToCart = () => {
+    const name = loadedConfigName ?? `Config du ${new Date().toLocaleDateString('fr-FR')}`
+    addToCart(name, config)
+    toast.success('Configuration ajoutée au panier')
+  }
+
   const activeCatDef = CATEGORIES.find((c) => c.value === activeCategory)!
 
   const orderedCategories = SELECTION_ORDER.map((key) => CATEGORIES.find((c) => c.value === key)!).filter(Boolean)
@@ -329,6 +336,11 @@ function Configurator() {
           <div className="config-side__total-v">
             {totalAvg > 0 ? `${Math.round(totalAvg).toLocaleString('fr-FR')} €` : '—'}
           </div>
+          {selectedCount > 0 && (
+            <button type="button" className="config-side__cart" onClick={handleAddToCart}>
+              🛒 Ajouter au panier
+            </button>
+          )}
           {isAuthenticated && (
             <div className="config-side__cta">
               <button
