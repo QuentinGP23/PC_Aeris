@@ -5,7 +5,9 @@ import { ASSEMBLY_OFFERS, ASSEMBLY_PRICE } from '../constants'
 import { itemUnitPrice, itemTotal, cartTotal, type CartItem } from '../store'
 
 const catLabel = (c: CategoryKey) => CATEGORIES.find((x) => x.value === c)?.label ?? c
-const eur = (n: number) => `${Math.round(n).toLocaleString('fr-FR')} €`
+// Espace standard comme séparateur de milliers (les polices jsPDF rendent mal
+// l'espace fine insécable de toLocaleString).
+const eur = (n: number) => `${Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`
 const assemblyName = (id: CartItem['assembly']) => ASSEMBLY_OFFERS.find((o) => o.id === id)?.name ?? id
 
 export interface DevisInfo {
@@ -16,37 +18,66 @@ export interface DevisInfo {
 
 const INDIGO: [number, number, number] = [79, 70, 229]
 const INK: [number, number, number] = [26, 29, 41]
-const MUTED: [number, number, number] = [120, 126, 145]
+const MUTED: [number, number, number] = [122, 128, 146]
+const SOFT: [number, number, number] = [246, 247, 251]
+const LINE: [number, number, number] = [233, 236, 244]
 
-/** Construit le PDF du devis (détail composants, marchand, prix + montage + total). */
+/** PDF du devis — détail composants / marchand / prix + montage + total. */
 export function buildDevis(items: CartItem[], info: DevisInfo): jsPDF {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   const W = doc.internal.pageSize.getWidth()
-  const M = 40
+  const H = doc.internal.pageSize.getHeight()
+  const M = 50
 
-  // ── En-tête ──
+  const finalY = () => (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY
+
+  // ── Bandeau + en-tête ──
   doc.setFillColor(...INDIGO)
-  doc.rect(0, 0, W, 6, 'F')
-  doc.setFont('helvetica', 'bold').setFontSize(20).setTextColor(...INK)
-  doc.text('PC Aeris', M, 48)
-  doc.setFont('helvetica', 'normal').setFontSize(9).setTextColor(...MUTED)
-  doc.text('Le PC sur-mesure, enfin accessible à tous.', M, 62)
+  doc.rect(0, 0, W, 8, 'F')
 
-  doc.setFont('helvetica', 'bold').setFontSize(22).setTextColor(...INDIGO)
-  doc.text('DEVIS', W - M, 48, { align: 'right' })
-  doc.setFont('helvetica', 'normal').setFontSize(9).setTextColor(...MUTED)
-  doc.text(`N° ${info.number}`, W - M, 62, { align: 'right' })
-  doc.text(`Date : ${info.date}`, W - M, 74, { align: 'right' })
-  if (info.client) doc.text(`Client : ${info.client}`, W - M, 86, { align: 'right' })
+  doc.setFont('helvetica', 'bold').setFontSize(22).setTextColor(...INK)
+  doc.text('PC Aeris', M, 66)
+  doc.setFont('helvetica', 'normal').setFontSize(9.5).setTextColor(...MUTED)
+  doc.text('Le PC sur-mesure, enfin accessible à tous.', M, 82)
 
-  let y = 110
+  doc.setFont('helvetica', 'bold').setFontSize(26).setTextColor(...INDIGO)
+  doc.text('DEVIS', W - M, 64, { align: 'right' })
 
+  // Bloc info (n°, date, client) dans un encadré léger.
+  const boxW = 200
+  const boxX = W - M - boxW
+  const boxY = 84
+  const rows: [string, string][] = [['Devis n°', info.number], ['Date', info.date]]
+  if (info.client) rows.push(['Client', info.client])
+  const boxH = 16 + rows.length * 16
+  doc.setFillColor(...SOFT)
+  doc.setDrawColor(...LINE)
+  doc.roundedRect(boxX, boxY, boxW, boxH, 6, 6, 'FD')
+  let ry = boxY + 20
+  rows.forEach(([k, v]) => {
+    doc.setFont('helvetica', 'normal').setFontSize(8.5).setTextColor(...MUTED)
+    doc.text(k, boxX + 14, ry)
+    doc.setFont('helvetica', 'bold').setFontSize(8.5).setTextColor(...INK)
+    doc.text(v, boxX + boxW - 14, ry, { align: 'right' })
+    ry += 16
+  })
+
+  let y = Math.max(120, boxY + boxH + 24)
+
+  // ── Configurations ──
   items.forEach((item, idx) => {
-    if (y > 720) { doc.addPage(); y = 60 }
+    if (y > H - 150) { doc.addPage(); y = 70 }
 
-    doc.setFont('helvetica', 'bold').setFontSize(12).setTextColor(...INK)
-    doc.text(`Configuration ${idx + 1} — ${item.name}${item.quantity > 1 ? `  (× ${item.quantity})` : ''}`, M, y)
-    y += 8
+    // Titre de section avec accent.
+    doc.setFillColor(...INDIGO)
+    doc.roundedRect(M, y - 9, 3, 13, 1.5, 1.5, 'F')
+    doc.setFont('helvetica', 'bold').setFontSize(12.5).setTextColor(...INK)
+    doc.text(`Configuration ${idx + 1} — ${item.name}`, M + 12, y)
+    if (item.quantity > 1) {
+      doc.setFont('helvetica', 'normal').setFontSize(9).setTextColor(...MUTED)
+      doc.text(`quantité : ${item.quantity}`, W - M, y, { align: 'right' })
+    }
+    y += 12
 
     const body = item.lines.map((l) => [
       catLabel(l.category),
@@ -54,53 +85,64 @@ export function buildDevis(items: CartItem[], info: DevisInfo): jsPDF {
       l.merchant ?? '—',
       l.price != null ? eur(l.price) : 'sur devis',
     ])
-    // Ligne montage
-    body.push([
-      'Montage',
-      `Offre ${assemblyName(item.assembly)}`,
-      'PC Aeris',
-      eur(ASSEMBLY_PRICE[item.assembly]),
-    ])
+    body.push(['Montage', `Offre ${assemblyName(item.assembly)}`, 'PC Aeris', eur(ASSEMBLY_PRICE[item.assembly])])
 
     autoTable(doc, {
-      startY: y + 6,
-      head: [['Poste', 'Composant / prestation', 'Acheté chez', 'Prix']],
+      startY: y,
+      head: [['POSTE', 'COMPOSANT / PRESTATION', 'ACHETÉ CHEZ', 'PRIX']],
       body,
-      theme: 'grid',
-      styles: { fontSize: 8.5, cellPadding: 5, textColor: INK, lineColor: [227, 230, 239] },
-      headStyles: { fillColor: INDIGO, textColor: [255, 255, 255], fontSize: 8, fontStyle: 'bold' },
+      theme: 'striped',
+      styles: { fontSize: 9, cellPadding: { top: 7, bottom: 7, left: 9, right: 9 }, textColor: INK, lineColor: LINE, lineWidth: 0 },
+      headStyles: { fillColor: INDIGO, textColor: [255, 255, 255], fontSize: 7.5, fontStyle: 'bold', cellPadding: { top: 8, bottom: 8, left: 9, right: 9 } },
+      alternateRowStyles: { fillColor: SOFT },
       columnStyles: {
-        0: { cellWidth: 90, textColor: MUTED },
-        2: { cellWidth: 90 },
-        3: { cellWidth: 70, halign: 'right', fontStyle: 'bold' },
+        0: { cellWidth: 92, textColor: MUTED, fontStyle: 'bold', fontSize: 8 },
+        2: { cellWidth: 96 },
+        3: { cellWidth: 76, halign: 'right', fontStyle: 'bold' },
       },
       margin: { left: M, right: M },
     })
 
-    y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
+    y = finalY() + 14
     const unit = itemUnitPrice(item)
-    doc.setFont('helvetica', 'bold').setFontSize(9.5).setTextColor(...INK)
-    const sub = item.quantity > 1 ? `Sous-total : ${eur(unit)} × ${item.quantity} = ${eur(itemTotal(item))}` : `Sous-total : ${eur(itemTotal(item))}`
-    doc.text(sub, W - M, y, { align: 'right' })
-    y += 24
+    doc.setFont('helvetica', 'normal').setFontSize(9.5).setTextColor(...MUTED)
+    const label = item.quantity > 1 ? `Sous-total  (${eur(unit)} × ${item.quantity})` : 'Sous-total'
+    doc.text(label, W - M - 90, y, { align: 'right' })
+    doc.setFont('helvetica', 'bold').setFontSize(11).setTextColor(...INK)
+    doc.text(eur(itemTotal(item)), W - M, y, { align: 'right' })
+    y += 30
   })
 
   // ── Total ──
-  if (y > 740) { doc.addPage(); y = 60 }
-  doc.setDrawColor(...INDIGO).setLineWidth(1)
-  doc.line(M, y, W - M, y)
-  y += 22
-  doc.setFont('helvetica', 'bold').setFontSize(15).setTextColor(...INK)
-  doc.text('TOTAL', M, y)
-  doc.text(eur(cartTotal(items)), W - M, y, { align: 'right' })
+  if (y > H - 130) { doc.addPage(); y = 70 }
+  const tH = 44
+  doc.setFillColor(238, 240, 254)
+  doc.roundedRect(M, y, W - 2 * M, tH, 8, 8, 'F')
+  doc.setFont('helvetica', 'bold').setFontSize(11).setTextColor(...INK)
+  doc.text('TOTAL À PAYER', M + 18, y + tH / 2 + 4)
+  doc.setFont('helvetica', 'bold').setFontSize(18).setTextColor(...INDIGO)
+  doc.text(eur(cartTotal(items)), W - M - 18, y + tH / 2 + 6, { align: 'right' })
+  y += tH + 26
 
-  y += 26
-  doc.setFont('helvetica', 'normal').setFontSize(7.5).setTextColor(...MUTED)
+  // ── Note ──
+  doc.setDrawColor(...LINE).setLineWidth(0.5)
+  doc.line(M, y, W - M, y)
+  y += 16
+  doc.setFont('helvetica', 'normal').setFontSize(8).setTextColor(...MUTED)
   const note =
-    'Les composants sont sourcés au meilleur prix du marché identifié, sans marge de notre part. ' +
-    'La rémunération de PC Aeris correspond à l\'offre de montage. Les prix « sur devis » seront confirmés au sourcing. ' +
-    'Devis valable 7 jours — pc-aeris.vercel.app'
-  doc.text(doc.splitTextToSize(note, W - 2 * M), M, y)
+    'Les composants sont sourcés au meilleur prix du marché identifié, sans marge de notre part : la rémunération de ' +
+    'PC Aeris correspond à l\'offre de montage choisie. Les prix « sur devis » seront confirmés au moment du sourcing. ' +
+    'Devis valable 7 jours à compter de sa date d\'émission.'
+  doc.text(doc.splitTextToSize(note, W - 2 * M), M, y, { lineHeightFactor: 1.5 })
+
+  // Pied de page sur chaque page.
+  const pages = doc.getNumberOfPages()
+  for (let p = 1; p <= pages; p++) {
+    doc.setPage(p)
+    doc.setFont('helvetica', 'normal').setFontSize(7.5).setTextColor(...MUTED)
+    doc.text('PC Aeris · pc-aeris.vercel.app', M, H - 28)
+    doc.text(`${p} / ${pages}`, W - M, H - 28, { align: 'right' })
+  }
 
   return doc
 }
@@ -109,7 +151,7 @@ export function downloadDevis(items: CartItem[], info: DevisInfo): void {
   buildDevis(items, info).save(`devis-${info.number}.pdf`)
 }
 
-/** Renvoie le PDF en base64 (sans préfixe data-uri) pour l'envoi par email. */
+/** PDF en base64 (sans préfixe data-uri) pour l'envoi par email. */
 export function devisBase64(items: CartItem[], info: DevisInfo): string {
   const uri = buildDevis(items, info).output('datauristring')
   return uri.split(',')[1] ?? ''
