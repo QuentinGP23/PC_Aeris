@@ -1,60 +1,95 @@
-// Envoie le devis PDF par email au client (appelant) et à tous les comptes admin.
-// Secrets requis : RESEND_API_KEY (clé Resend). Optionnel : DEVIS_SENDER.
+// Envoie le devis par email au client + à tous les admins (Resend).
+// Lit la commande côté serveur (orderId) → robuste, testable, et utilisable par un webhook.
+// Secrets : RESEND_API_KEY. Optionnel : DEVIS_SENDER.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const ADMIN_EMAIL = 'admin@pcaeris.fr'
+const ASSEMBLY_PRICE: Record<string, number> = { essentiel: 79, confort: 129, premium: 199 }
+const ASSEMBLY_NAME: Record<string, string> = { essentiel: 'Essentiel', confort: 'Confort', premium: 'Premium' }
+const CAT: Record<string, string> = {
+  cpu: 'Processeur', gpu: 'Carte graphique', ram: 'RAM', motherboard: 'Carte mère',
+  storage: 'Stockage', psu: 'Alimentation', pc_case: 'Boîtier', cpu_cooler: 'Ventirad',
+}
 const cors = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } })
+const json = (b: unknown, s = 200) =>
+  new Response(JSON.stringify(b), { status: s, headers: { ...cors, 'Content-Type': 'application/json' } })
+const eur = (n: number) => `${Math.round(Number(n) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`
 
-const eur = (n: number) => `${Math.round(n).toLocaleString('fr-FR')} €`
+interface Line { category: string; name: string; price: number | null; merchant: string | null }
+interface Item { name: string; lines: Line[]; componentsPrice: number; assembly: string; quantity: number }
+
+function buildHtml(items: Item[], total: number, ref: string, client?: string): string {
+  const cell = 'padding:6px 9px;border-bottom:1px solid #eceef4'
+  const blocks = items.map((it) => {
+    const rows = it.lines.map((l) =>
+      `<tr><td style="${cell};color:#6b7185;font-size:11px">${CAT[l.category] ?? l.category}</td>` +
+      `<td style="${cell}">${l.name}</td><td style="${cell}">${l.merchant ?? '—'}</td>` +
+      `<td style="${cell};text-align:right;font-weight:600">${l.price != null ? eur(l.price) : 'sur devis'}</td></tr>`).join('')
+    const montage =
+      `<tr><td style="${cell};color:#6b7185">Montage</td><td style="${cell}">Offre ${ASSEMBLY_NAME[it.assembly] ?? it.assembly}</td>` +
+      `<td style="${cell}">PC Aeris</td><td style="${cell};text-align:right;font-weight:600">${eur(ASSEMBLY_PRICE[it.assembly] ?? 0)}</td></tr>`
+    const sub = (it.componentsPrice + (ASSEMBLY_PRICE[it.assembly] ?? 0)) * it.quantity
+    return `<h3 style="margin:18px 0 6px;font-size:14px">${it.name}${it.quantity > 1 ? ` (× ${it.quantity})` : ''}</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:#4f46e5;color:#fff;font-size:9.5px">
+          <th style="padding:7px 9px;text-align:left">POSTE</th><th style="padding:7px 9px;text-align:left">COMPOSANT</th>
+          <th style="padding:7px 9px;text-align:left">ACHETÉ CHEZ</th><th style="padding:7px 9px;text-align:right">PRIX</th>
+        </tr></thead><tbody>${rows}${montage}</tbody></table>
+      <p style="text-align:right;margin:6px 0 0;font-weight:700;font-size:12px">Sous-total : ${eur(sub)}</p>`
+  }).join('')
+  return `<div style="font-family:Segoe UI,Arial,sans-serif;color:#1a1d29;max-width:660px">
+    <div style="height:6px;background:#4f46e5"></div>
+    <h2 style="margin:16px 0 2px">PC Aeris — Devis #${ref}</h2>
+    <p style="color:#6b7185;font-size:12px;margin:0">Le PC sur-mesure, enfin accessible à tous.</p>
+    ${client ? `<p style="font-size:12px;margin:10px 0 0">Client : <b>${client}</b></p>` : ''}
+    ${blocks}
+    <table style="width:100%;border-collapse:collapse;margin-top:16px;background:#eef0fe;border-radius:8px">
+      <tr><td style="padding:13px 16px;font-weight:700">TOTAL À PAYER</td>
+      <td style="padding:13px 16px;text-align:right;color:#4f46e5;font-weight:800;font-size:18px">${eur(total)}</td></tr>
+    </table>
+    <p style="color:#6b7185;font-size:11px;line-height:1.55;margin-top:14px">Les composants sont sourcés au meilleur prix du marché, sans marge de notre part : notre rémunération correspond à l'offre de montage choisie. Devis valable 7 jours.</p>
+    <p style="color:#6b7185;font-size:11px">— L'équipe PC Aeris · pc-aeris.vercel.app</p>
+  </div>`
+}
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
-
   try {
     const url = Deno.env.get('SUPABASE_URL')!
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
     const RESEND = Deno.env.get('RESEND_API_KEY')
     const SENDER = Deno.env.get('DEVIS_SENDER') ?? 'PC Aeris <onboarding@resend.dev>'
-    const authHeader = req.headers.get('Authorization') ?? ''
 
-    const { orderId, clientName, total, pdfBase64 } = await req.json()
-    const ref = String(orderId ?? '').slice(0, 8).toUpperCase()
+    const payload = await req.json()
+    // Supporte l'appel direct {orderId} et le webhook DB {record:{id}}.
+    const orderId: string = payload.orderId ?? payload.record?.id
+    const pdfBase64: string | undefined = payload.pdfBase64
+    if (!orderId) return json({ error: 'orderId manquant' }, 400)
 
-    // Email du client (l'appelant authentifié).
-    const asUser = createClient(url, anonKey, { global: { headers: { Authorization: authHeader } } })
-    const { data: u } = await asUser.auth.getUser()
-    const clientEmail = u?.user?.email
-    if (!clientEmail) return json({ error: 'Appelant non authentifié.' }, 401)
-
-    // Emails des admins (rôle dans user_metadata / app_metadata).
     const admin = createClient(url, serviceKey)
+    const { data: order, error: oErr } = await admin
+      .from('orders').select('id, user_id, items, total_eur, shipping').eq('id', orderId).single()
+    if (oErr || !order) return json({ error: 'Commande introuvable' }, 404)
+
+    const { data: cu } = await admin.auth.admin.getUserById(order.user_id)
+    const clientEmail = cu?.user?.email
+    if (!clientEmail) return json({ error: 'Email client introuvable' }, 404)
+
     const { data: list } = await admin.auth.admin.listUsers({ perPage: 1000 })
     const adminEmails = (list?.users ?? [])
       .filter((x: { user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown> }) =>
         x.user_metadata?.role === 'admin' || x.app_metadata?.role === 'admin')
-      .map((x: { email?: string }) => x.email)
-      .filter(Boolean) as string[]
+      .map((x: { email?: string }) => x.email).filter(Boolean) as string[]
     const bcc = Array.from(new Set([ADMIN_EMAIL, ...adminEmails])).filter((e) => e && e !== clientEmail)
 
-    if (!RESEND) return json({ sent: false, reason: 'RESEND_API_KEY non configuré', recipients: { to: clientEmail, bcc } })
+    const ref = String(orderId).slice(0, 8).toUpperCase()
+    const client = (order.shipping as { fullName?: string } | null)?.fullName
+    const html = buildHtml((order.items ?? []) as Item[], Number(order.total_eur), ref, client)
 
-    const html = `
-      <div style="font-family:Segoe UI,Arial,sans-serif;color:#1a1d29;max-width:560px">
-        <div style="height:5px;background:#4f46e5"></div>
-        <h2 style="margin:18px 0 4px">PC Aeris — Votre devis #${ref}</h2>
-        <p style="color:#41465a;line-height:1.55">Bonjour ${clientName ?? ''},<br/>
-        Merci pour votre commande. Vous trouverez en pièce jointe votre <b>devis détaillé</b> :
-        chaque composant, le marchand où il est sourcé au meilleur prix, et l'offre de montage.</p>
-        <p style="font-size:20px;font-weight:800;margin:18px 0">Total : ${eur(Number(total) || 0)}</p>
-        <p style="color:#6b7185;font-size:12px;line-height:1.5">Les composants sont sourcés au meilleur prix du marché, sans marge de notre part : notre rémunération correspond à l'offre de montage choisie. Devis valable 7 jours.</p>
-        <p style="color:#6b7185;font-size:12px">— L'équipe PC Aeris · pc-aeris.vercel.app</p>
-      </div>`
+    if (!RESEND) return json({ sent: false, reason: 'RESEND_API_KEY non configuré', recipients: { to: clientEmail, bcc } })
 
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -69,8 +104,8 @@ Deno.serve(async (req) => {
       }),
     })
     const body = await r.json()
-    if (!r.ok) return json({ sent: false, error: body }, 502)
-    return json({ sent: true, recipients: { to: clientEmail, bcc } })
+    if (!r.ok) return json({ sent: false, status: r.status, error: body }, 502)
+    return json({ sent: true, id: body?.id, recipients: { to: clientEmail, bcc } })
   } catch (e) {
     return json({ error: String(e) }, 500)
   }
