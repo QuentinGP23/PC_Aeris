@@ -216,6 +216,7 @@
     <li class="l0"><a href="#annexeC"><span class="t">Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#annexeD"><span class="t">Annexe D — Liens et ressources du projet</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#annexeE"><span class="t">Annexe E — Sources et bibliographie</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#annexeF"><span class="t">Annexe F — Simulation de passage à l'échelle (RNCP Bloc 3)</span><span class="dots"></span></a></li>
   </ul>
 </section>
 
@@ -643,6 +644,7 @@
   <figcaption><b>Figure 14</b> — Points de rupture et leviers d'un changement d'échelle d'un facteur 100.</figcaption>
 </figure>
 <blockquote><p>Le choix d'une architecture <em>asset-light</em> et d'une pile managée (Supabase, Vercel) est précisément ce qui rend ce changement d'échelle réaliste : ni stock à multiplier, ni infrastructure lourde à réécrire. L'essentiel du passage à l'échelle est alors <strong>organisationnel et opérationnel</strong> bien plus que technique.</p></blockquote>
+<p>Le détail opérationnel de cette simulation — équipe cible, arbitrages <i>build vs buy</i>, budget sur 12 mois, méthodologie, simulation de deux sprints, fiches de poste et politique d'inclusion — est développé en <a href="#annexeF">Annexe F</a>, conformément au bloc 3 du référentiel RNCP.</p>
 
 <!-- ============================ CONCLUSION ============================ -->
 <h1 class="sec" id="concl">Conclusion</h1>
@@ -730,6 +732,117 @@
   <li>GEO — <i>Generative Engine Optimization</i> : optimisation de la visibilité dans les réponses des moteurs génératifs (ChatGPT, Perplexity, Google AI Overviews).</li>
 </ul>
 <p style="font-size:9px;color:var(--muted);margin-top:8px;">Sauf mention contraire, toutes les figures sont des productions originales de l'auteur ; les données chiffrées qu'elles contiennent renvoient aux sources ci-dessus.</p>
+
+<h2 id="annexeF">Annexe F — Simulation de passage à l'échelle (RNCP Bloc 3)</h2>
+<p>Cette annexe est un <strong>exercice de simulation</strong> demandé au titre du bloc 3 du RNCP 34758 (organisation, pilotage, management). Elle ne modifie pas le concept : elle projette ce que deviendrait PC Aeris s'il passait à l'échelle, avec une véritable équipe, un budget réel et une organisation structurée. La section 9 en donne la vue stratégique ; on en détaille ici la mise en œuvre.</p>
+
+<h3>F.1 Organisation & méthode</h3>
+<h4>F.1.1 Équipe cible (mois 0 à 12)</h4>
+<table>
+  <tr><th>Rôle</th><th>Mission principale</th><th>Arrivée</th><th>Statut</th><th>Séniorité</th></tr>
+  <tr><td>CTO / Lead Dev</td><td>Architecture, scalabilité, V1 et IA, qualité</td><td>M0</td><td>Interne (associé)</td><td>Senior</td></tr>
+  <tr><td>Expert hardware (PO data)</td><td>Curation composants, règles de compatibilité, benchmarks</td><td>M0</td><td>Freelance (40 %)</td><td>Senior</td></tr>
+  <tr><td>Développeur full-stack</td><td>Tunnel de paiement, features, API</td><td>M2</td><td>Interne</td><td>Confirmé</td></tr>
+  <tr><td>Growth / Marketing</td><td>SEO/GEO, contenu, partenariats créateurs</td><td>M3</td><td>Interne</td><td>Confirmé</td></tr>
+  <tr><td>Support / Ops</td><td>SAV, suivi commandes, coordination assembleurs</td><td>M6</td><td>Interne</td><td>Junior</td></tr>
+  <tr><td>UI/UX designer</td><td>Refontes, nouvelles features</td><td>Ponctuel</td><td>Freelance / agence</td><td>Confirmé</td></tr>
+</table>
+<h4>F.1.2 Build vs Buy</h4>
+<table>
+  <tr><th>Brique</th><th>Décision</th><th>Prestataire</th><th>Justification</th></tr>
+  <tr><td>Auth & base de données</td><td>Buy (SaaS)</td><td>Supabase</td><td>Managé, sécurisé (RLS), scalable</td></tr>
+  <tr><td>Hébergement & CI/CD</td><td>Buy (SaaS)</td><td>Vercel + GitHub Actions</td><td>Déploiement continu, edge réseau</td></tr>
+  <tr><td>Paiement</td><td>Buy (SaaS)</td><td>Stripe</td><td>Standard, PCI-DSS, fiable</td></tr>
+  <tr><td>Emails transactionnels</td><td>Buy (SaaS)</td><td>Resend</td><td>Simple, déjà intégré</td></tr>
+  <tr><td>Moteur de compatibilité & perf/prix</td><td>Build (interne)</td><td>—</td><td>Cœur de la valeur, propriétaire</td></tr>
+  <tr><td>Agrégation des prix de marché</td><td>Build (interne)</td><td>—</td><td>Différenciateur, barrière à l'entrée</td></tr>
+  <tr><td>Assemblage</td><td>Buy (partenaires)</td><td>Réseau d'assembleurs régionaux</td><td>Non scalable en interne</td></tr>
+  <tr><td>Monitoring</td><td>Buy (SaaS)</td><td>Sentry</td><td>Erreurs en temps réel</td></tr>
+</table>
+<h4>F.1.3 Méthodologie projet</h4>
+<ul>
+  <li><b>Méthode :</b> Scrum hybride — Scrum pour les features, Kanban pour le flux de support/bugs.</li>
+  <li><b>Cycles :</b> sprints de 2 semaines.</li>
+  <li><b>Cérémonies :</b> daily (15 min), sprint planning, review/démo, rétrospective, refinement hebdomadaire du backlog.</li>
+  <li><b>Outils :</b> Linear (backlog & sprints), Notion (documentation), Figma (design), GitHub (code, PR, CI).</li>
+  <li><b>Justification :</b> petite équipe pluridisciplinaire ayant besoin de cadence et de visibilité ; le volet Kanban absorbe l'imprévisible (SAV, incidents).</li>
+</ul>
+
+<h3>F.2 Pilotage & livraison</h3>
+<h4>F.2.1 Plan de communication des parties prenantes</h4>
+<table>
+  <tr><th>Partie prenante</th><th>Enjeu / attente</th><th>Fréquence & canal</th><th>Livrable</th></tr>
+  <tr><td>Clients & beta-testeurs</td><td>Produit fiable, conseil, juste prix</td><td>Continu — in-app, email, Discord</td><td>Notes de version, enquêtes NPS</td></tr>
+  <tr><td>Grossistes / fournisseurs</td><td>Volumes, disponibilité, paiement</td><td>Mensuel — email, points</td><td>Prévisions de commandes</td></tr>
+  <tr><td>Assembleurs partenaires</td><td>Flux de commandes, qualité</td><td>Hebdo — portail, appels</td><td>Bons de montage, check-list QC</td></tr>
+  <tr><td>Investisseurs / BPI</td><td>Avancement, KPIs, trésorerie</td><td>Mensuel — reporting</td><td>Tableau de bord, board deck</td></tr>
+</table>
+<h4>F.2.2 Budget prévisionnel 12 mois (scénario à l'échelle)</h4>
+<table>
+  <tr><th>Poste</th><th class="n">Montant</th><th>Hypothèse</th></tr>
+  <tr><td>Design & prototypage</td><td class="n">8 000 €</td><td>Freelance UI/UX ponctuel</td></tr>
+  <tr><td>Développement (V1 + features)</td><td class="n">30 000 €</td><td>Renforts freelance + outils</td></tr>
+  <tr><td>Infrastructure & outils (12 mois)</td><td class="n">12 000 €</td><td>Supabase Pro, Vercel, Stripe, SaaS</td></tr>
+  <tr><td>Salaires & freelances (12 mois)</td><td class="n">220 000 €</td><td>~4 ETP + expert hardware 40 %</td></tr>
+  <tr><td>Marketing & acquisition</td><td class="n">40 000 €</td><td>SEO/GEO, contenu, créateurs, ads</td></tr>
+  <tr><td>Autres (juridique, comptable)</td><td class="n">10 000 €</td><td>Statuts, CGV, RGPD, comptabilité</td></tr>
+  <tr><td><b>TOTAL</b></td><td class="n"><b>~320 000 €</b></td><td>12 premiers mois à l'échelle</td></tr>
+</table>
+<p><b>Plan de financement :</b> amorçage initial (35 K€ : fonds propres, love money) puis <b>levée d'amorçage (seed) ~300 K€</b> appuyée par un prêt d'honneur et la garantie BPI France, complétée par le chiffre d'affaires early. Le bootstrap de 35 K€ du chapitre 5 reste le scénario solo ; ce budget-ci correspond au passage à l'échelle avec équipe.</p>
+<h4>F.2.3 Definition of Done & critères qualité</h4>
+<ol>
+  <li>Code revu et mergé (PR relue, intégration continue verte).</li>
+  <li>Tests unitaires et d'intégration écrits et au vert.</li>
+  <li>Responsive vérifié (mobile 375 px, tablette, desktop).</li>
+  <li>Accessibilité RGAA AA (contrastes, navigation clavier).</li>
+  <li>Aucune erreur console sur le parcours concerné.</li>
+  <li>Déployé en production (Vercel) et vérifié.</li>
+</ol>
+<h4>F.2.4 Plan de lancement (go-to-market)</h4>
+<ul>
+  <li><b>Canal d'acquisition principal :</b> SEO/GEO (guides, comparatifs) + partenariats créateurs YouTube/Twitch.</li>
+  <li><b>3 KPI suivis dès J+1 :</b> taux de conversion visiteur → configuration, nombre de devis demandés, satisfaction (retours / NPS).</li>
+  <li><b>Monitoring & rollback :</b> Sentry + tableau de bord Vercel ; en cas d'échec de mise en production, rollback instantané vers le déploiement précédent (Vercel) et <i>feature flags</i> pour neutraliser une fonctionnalité fautive.</li>
+</ul>
+
+<h3>F.3 Management d'équipe</h3>
+<h4>F.3.1 Simulation de deux sprints</h4>
+<p><b>Sprint 1 — objectif : mettre en production le paiement en ligne.</b></p>
+<table>
+  <tr><th>#</th><th>User story</th><th>Priorité</th><th>Effort</th></tr>
+  <tr><td>1</td><td>En tant que client, je veux payer ma commande par carte (Stripe) afin de finaliser sans devis manuel.</td><td>Must</td><td>L</td></tr>
+  <tr><td>2</td><td>En tant que système, je veux confirmer le paiement par webhook et créer la commande payée.</td><td>Must</td><td>M</td></tr>
+  <tr><td>3</td><td>En tant que client, je veux recevoir un email de confirmation de paiement.</td><td>Should</td><td>S</td></tr>
+</table>
+<p style="margin-top:8px;"><b>Sprint 2 — objectif : fluidifier le suivi de commande.</b></p>
+<table>
+  <tr><th>#</th><th>User story</th><th>Priorité</th><th>Effort</th></tr>
+  <tr><td>1</td><td>En tant que client, je veux être notifié par email à chaque changement de statut de ma commande.</td><td>Must</td><td>S</td></tr>
+  <tr><td>2</td><td>En tant qu'administrateur, je veux un tableau de bord des commandes filtrable par statut.</td><td>Should</td><td>M</td></tr>
+  <tr><td>3</td><td>En tant que client, je veux noter mon expérience après livraison afin d'alimenter le NPS.</td><td>Could</td><td>S</td></tr>
+</table>
+<h4>F.3.2 Charte d'équipe & posture managériale</h4>
+<ul>
+  <li><b>3 valeurs cardinales :</b> Passion (on aime le hardware), Pragmatisme (livrer &gt; perfection), Transparence (communication ouverte).</li>
+  <li><b>Rituels :</b> hebdo — planning, review, rétro ; mensuel — revue produit & KPIs ; trimestriel — OKR.</li>
+  <li><b>Prise de décision :</b> déléguée au plus proche du sujet (chacun <i>owner</i> de son périmètre), consultative, arbitrage du fondateur en cas de désaccord persistant.</li>
+  <li><b>Gestion des conflits :</b> désaccord technique tranché par un <i>spike</i>/POC et la donnée ; tension interpersonnelle traitée en 1:1, avec médiation du fondateur si nécessaire.</li>
+</ul>
+<h4>F.3.3 Deux fiches de poste prioritaires</h4>
+<div class="grid2">
+  <div class="box"><h4>CTO / Lead Developer</h4>
+    <p><b>Missions :</b> architecture & scalabilité ; piloter la V1 et l'IA ; garantir la qualité (tests, CI, sécurité).</p>
+    <p><b>Compétences :</b> React/TS, Node, PostgreSQL, archi cloud ; <i>soft</i> : leadership, mentorat, pragmatisme.</p>
+    <p><b>Onboarding 30 j :</b> S1 immersion produit + codebase ; S2 première feature livrée ; S3-4 prise en main de l'archi et de la roadmap technique.</p>
+  </div>
+  <div class="box"><h4>Growth / Marketing</h4>
+    <p><b>Missions :</b> acquisition SEO/GEO ; production de contenu (guides, comparatifs) ; partenariats créateurs.</p>
+    <p><b>Compétences :</b> SEO technique, GEO, content, analytics ; <i>soft</i> : créativité, autonomie, culture gaming.</p>
+    <p><b>Onboarding 30 j :</b> S1 immersion cible/produit ; S2 audit SEO/GEO + plan de contenu ; S3-4 premiers contenus et un partenariat amorcé.</p>
+  </div>
+</div>
+<h4>F.3.4 Inclusion & aménagement de poste</h4>
+<p>L'équipe recrute sur les compétences, sans discrimination, et privilégie des outils accessibles et un fonctionnement <i>remote-friendly</i>. Exemple concret d'aménagement pour un collaborateur malentendant : sous-titrage automatique des visioconférences (daily, review), communication asynchrone privilégiée (Linear, Notion), matériel adapté (double écran, dispositif de transcription), horaires flexibles et télétravail. Cohérence de fond : le produit lui-même vise la conformité RGAA AA, ce qui ancre une culture d'accessibilité dans l'équipe.</p>
 
 <script src="paged.polyfill.js"></script>
 </body>
