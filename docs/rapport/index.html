@@ -39,7 +39,7 @@
 
   table{border-collapse:collapse;width:100%;margin:8px 0 4px;font-size:9.5px;break-inside:avoid;}
   th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;}
-  th{background:var(--brand);color:#fff;font-weight:600;font-size:8.8px;letter-spacing:.02em;}
+  th{background:var(--brand-soft);color:var(--brand-d);font-weight:700;font-size:8.8px;letter-spacing:.02em;border-bottom:1.5px solid var(--brand);}
   tr:nth-child(even) td{background:var(--soft);}
   td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 
@@ -86,6 +86,11 @@
   .bar i{display:block;height:100%;}
   .bar .done{background:var(--ok);} .bar .ready{background:var(--brand-l);} .bar .todo{background:#d7dae6;}
   hr{border:none;border-top:1px solid var(--line);margin:14px 0;}
+
+  /* ===== Recueil des illustrations (fin de document) ===== */
+  .illus{break-inside:avoid;margin:0 0 14mm;text-align:center;}
+  .illus img{max-width:100%;max-height:215mm;border:1px solid var(--line);border-radius:7px;}
+  .illus figcaption{margin-top:8px;text-align:center;}
 
   /* ===== Couverture (fond blanc, encre sombre, accents indigo) ===== */
   .cover{page:cover;break-after:page;display:flex;flex-direction:column;min-height:262mm;padding:0 20mm;position:relative;}
@@ -180,45 +185,12 @@
     <li class="l0"><a href="#s9"><span class="t">9. Simulation de changement d'échelle</span><span class="dots"></span></a></li>
     <li class="l1"><a href="#s9-1"><span class="t">9.1 Quatre dimensions · 9.2 Points de rupture et leviers</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#concl"><span class="t">Conclusion</span><span class="dots"></span></a></li>
+    <li class="l0"><a href="#illus"><span class="t">Recueil des illustrations</span><span class="dots"></span></a></li>
     <li class="l0"><a href="#annexes"><span class="t">Annexes</span><span class="dots"></span></a></li>
   </ul>
 </section>
 
-<!-- ============================ TABLE DES ILLUSTRATIONS ============================ -->
-<section class="fm">
-  <h1>Table des illustrations</h1>
-  <ul class="toc">
-    <li class="fg"><a href="#fig1"><span class="t">Figure 1 — Les trois questions sans réponse simple</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig2"><span class="t">Figure 2 — Les trois parcours utilisateur</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig3"><span class="t">Figure 3 — Le moteur de valeur : performance / prix</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig4"><span class="t">Figure 4 — Analyse PESTEL</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig5"><span class="t">Figure 5 — Les cinq forces de Porter</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig6"><span class="t">Figure 6 — Analyse SWOT (synthèse)</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig7"><span class="t">Figure 7 — Les trois offres de montage</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig8"><span class="t">Figure 8 — Business Model Canvas</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig9"><span class="t">Figure 9 — Projections financières 2027-2029</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig10"><span class="t">Figure 10 — Roadmap produit</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig11"><span class="t">Figure 11 — Carte des parcours (story map)</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig12"><span class="t">Figure 12 — Avancement du backlog</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig13"><span class="t">Figure 13 — Architecture technique</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig14"><span class="t">Figure 14 — Changement d'échelle : points de rupture et leviers</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig15"><span class="t">Figure 15 — Le produit en production (captures)</span><span class="dots"></span></a></li>
-    <li class="fg"><a href="#fig16"><span class="t">Figure 16 — Diagramme de Gantt du projet</span><span class="dots"></span></a></li>
-  </ul>
-</section>
-
-<!-- ============================ TABLE DES ANNEXES ============================ -->
-<section class="fm">
-  <h1>Table des annexes</h1>
-  <ul class="toc">
-    <li class="l0"><a href="#annexeA"><span class="t">Annexe A — Backlog priorisé complet</span><span class="dots"></span></a></li>
-    <li class="l0"><a href="#annexeB"><span class="t">Annexe B — User Stories formatées (critères d'acceptation)</span><span class="dots"></span></a></li>
-    <li class="l0"><a href="#annexeC"><span class="t">Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span></a></li>
-    <li class="l0"><a href="#annexeD"><span class="t">Annexe D — Liens et ressources du projet</span><span class="dots"></span></a></li>
-    <li class="l0"><a href="#annexeE"><span class="t">Annexe E — Sources et bibliographie</span><span class="dots"></span></a></li>
-    <li class="l0"><a href="#annexeF"><span class="t">Annexe F — Simulation de passage à l'échelle (RNCP Bloc 3)</span><span class="dots"></span></a></li>
-  </ul>
-</section>
+<!-- Tables des illustrations et des annexes déplacées en fin de document -->
 
 <!-- ============================ INTRODUCTION ============================ -->
 <h1 class="sec" id="intro">Introduction</h1>
@@ -654,6 +626,63 @@
 <p>Les différenciateurs ne sont pas que des promesses : la compatibilité garantie, le moteur performance/prix nourri par les benchmarks et la transparence des prix de marché sont <strong>opérationnels</strong>, tout comme le tunnel de commande par devis. La prochaine étape est l'ouverture commerciale complète — le <strong>paiement en ligne</strong> — visée pour août 2026, puis l'acquisition des premiers clients, soutenue par l'amorçage recherché.</p>
 <p>Au-delà des fonctionnalités, ce projet aura démontré une capacité à transformer une vision produit en un logiciel fonctionnel, testé et déployé, en maîtrisant toute la chaîne, du moteur de compatibilité jusqu'à l'intégration des données de marché. C'est sur cette base d'exécution que PC Aeris entend construire la suite.</p>
 <blockquote><p>Permettre à chacun d'obtenir le PC parfait pour ses besoins — <strong>sans stress, sans erreur, au juste prix.</strong></p></blockquote>
+
+<!-- ============================ TABLE DES ILLUSTRATIONS ============================ -->
+<h1 class="sec" id="tdi">Table des illustrations</h1>
+<ul class="toc">
+  <li class="fg"><a href="#r-fig1"><span class="t">Figure 1 — Les trois questions sans réponse simple</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig2"><span class="t">Figure 2 — Les trois parcours utilisateur</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig3"><span class="t">Figure 3 — Le moteur de valeur : performance / prix</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig4"><span class="t">Figure 4 — Analyse PESTEL</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig5"><span class="t">Figure 5 — Les cinq forces de Porter</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig6"><span class="t">Figure 6 — Analyse SWOT (synthèse)</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig7"><span class="t">Figure 7 — Les trois offres de montage</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig8"><span class="t">Figure 8 — Business Model Canvas</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig9"><span class="t">Figure 9 — Projections financières 2027-2029</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig10"><span class="t">Figure 10 — Roadmap produit</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig11"><span class="t">Figure 11 — Carte des parcours (story map)</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig12"><span class="t">Figure 12 — Avancement du backlog</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig13"><span class="t">Figure 13 — Architecture technique</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig14"><span class="t">Figure 14 — Changement d'échelle : points de rupture et leviers</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig15"><span class="t">Figure 15 — Le produit en production (captures)</span><span class="dots"></span></a></li>
+  <li class="fg"><a href="#r-fig16"><span class="t">Figure 16 — Diagramme de Gantt du projet</span><span class="dots"></span></a></li>
+</ul>
+
+<!-- ============================ RECUEIL DES ILLUSTRATIONS ============================ -->
+<h1 class="sec" id="illus">Recueil des illustrations</h1>
+<p class="lead">L'ensemble des figures du rapport, reproduites en grand format.</p>
+<figure class="illus" id="r-fig1"><img src="img/fig1.png" alt="Figure 1" /></figure>
+<figure class="illus" id="r-fig2"><img src="img/fig2.png" alt="Figure 2" /></figure>
+<figure class="illus" id="r-fig3"><img src="img/fig3.png" alt="Figure 3" /></figure>
+<figure class="illus" id="r-fig4"><img src="img/fig4.png" alt="Figure 4" /></figure>
+<figure class="illus" id="r-fig5"><img src="img/fig5.png" alt="Figure 5" /></figure>
+<figure class="illus" id="r-fig6"><img src="img/fig6.png" alt="Figure 6" /></figure>
+<figure class="illus" id="r-fig7"><img src="img/fig7.png" alt="Figure 7" /></figure>
+<figure class="illus" id="r-fig8"><img src="img/fig8.png" alt="Figure 8" /></figure>
+<figure class="illus" id="r-fig9"><img src="img/fig9.png" alt="Figure 9" /></figure>
+<figure class="illus" id="r-fig10"><img src="img/fig10.png" alt="Figure 10" /></figure>
+<figure class="illus" id="r-fig11"><img src="img/fig11.png" alt="Figure 11" /></figure>
+<figure class="illus" id="r-fig12"><img src="img/fig12.png" alt="Figure 12" /></figure>
+<figure class="illus" id="r-fig13"><img src="img/fig13.png" alt="Figure 13" /></figure>
+<figure class="illus" id="r-fig14"><img src="img/fig14.png" alt="Figure 14" /></figure>
+<figure class="illus" id="r-fig15"><img src="img/configurateur.png" alt="Figure 15a — Configurateur" /><figcaption><b>Figure 15a</b> — Le configurateur : compatibilité en temps réel, tri performance / prix.</figcaption></figure>
+<figure class="illus"><img src="img/configs-pretes.png" alt="Figure 15b — Configurations prêtes" /><figcaption><b>Figure 15b</b> — Les configurations prêtes à l'emploi, par usage et par gamme.</figcaption></figure>
+<figure class="illus"><img src="img/questionnaire.png" alt="Figure 15c — Questionnaire" /><figcaption><b>Figure 15c</b> — Le questionnaire guidé pour les débutants.</figcaption></figure>
+<figure class="illus"><img src="img/admin-dashboard.png" alt="Figure 15d — Tableau de bord admin" /><figcaption><b>Figure 15d</b> — Le back-office : tableau de bord administrateur.</figcaption></figure>
+<figure class="illus"><img src="img/admin-products.png" alt="Figure 15e — Catalogue admin" /><figcaption><b>Figure 15e</b> — Le back-office : gestion du catalogue (plus de 25 000 composants).</figcaption></figure>
+<figure class="illus"><img src="img/github.png" alt="Figure 15f — Dépôt GitHub" /><figcaption><b>Figure 15f</b> — Le dépôt GitHub du projet (commits, CI, migrations).</figcaption></figure>
+<figure class="illus" id="r-fig16"><img src="img/fig16.png" alt="Figure 16" /></figure>
+
+<!-- ============================ TABLE DES ANNEXES ============================ -->
+<h1 class="sec" id="tda">Table des annexes</h1>
+<ul class="toc">
+  <li class="l0"><a href="#annexeA"><span class="t">Annexe A — Backlog priorisé complet</span><span class="dots"></span></a></li>
+  <li class="l0"><a href="#annexeB"><span class="t">Annexe B — User Stories formatées (critères d'acceptation)</span><span class="dots"></span></a></li>
+  <li class="l0"><a href="#annexeC"><span class="t">Annexe C — Revues de sprint (Sprints 1 à 4)</span><span class="dots"></span></a></li>
+  <li class="l0"><a href="#annexeD"><span class="t">Annexe D — Liens et ressources du projet</span><span class="dots"></span></a></li>
+  <li class="l0"><a href="#annexeE"><span class="t">Annexe E — Sources et bibliographie</span><span class="dots"></span></a></li>
+  <li class="l0"><a href="#annexeF"><span class="t">Annexe F — Simulation de passage à l'échelle (RNCP Bloc 3)</span><span class="dots"></span></a></li>
+</ul>
 
 <!-- ============================ ANNEXES ============================ -->
 <h1 class="sec" id="annexes">Annexes</h1>
