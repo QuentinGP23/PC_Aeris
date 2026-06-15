@@ -6,7 +6,7 @@
 <style>
   :root{
     --ink:#1a1d29; --ink-2:#41465a; --muted:#6b7185; --line:#e3e6ef; --soft:#f6f7fb;
-    --brand:#4f46e5; --brand-d:#3730a3; --brand-l:#6366f1; --brand-soft:#eef0fe;
+    --brand:#6366f1; --brand-d:#4338ca; --brand-l:#818cf8; --brand-soft:#eef0fe;
     --ok:#0f9d6e; --warn:#c97a12; --err:#d14343;
   }
 
@@ -87,23 +87,24 @@
   .bar .done{background:var(--ok);} .bar .ready{background:var(--brand-l);} .bar .todo{background:#d7dae6;}
   hr{border:none;border-top:1px solid var(--line);margin:14px 0;}
 
-  /* ===== Couverture ===== */
-  .cover{page:cover;break-after:page;display:flex;flex-direction:column;min-height:262mm;padding:0 17mm;position:relative;}
-  .cover__top{padding-top:30mm;}
-  .cover__logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px;}
-  .cover__mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand-d));
-    color:#fff;display:grid;place-items:center;font-size:16px;}
-  .cover__rule{width:84px;height:5px;background:linear-gradient(90deg,var(--brand-d),var(--brand-l));border-radius:3px;margin:34px 0 22px;}
-  .cover__ey{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);}
-  .cover h1{font-size:60px;line-height:1;letter-spacing:-.03em;margin:12px 0 8px;color:var(--ink);border:none;}
-  .cover .base{font-size:20px;color:var(--ink-2);font-weight:500;}
+  /* ===== Couverture (Aeris Dark) ===== */
+  .cover{page:cover;break-after:page;display:flex;flex-direction:column;min-height:262mm;padding:0 20mm;position:relative;
+    background:linear-gradient(158deg,#0b0b18 0%,#05050d 58%,#0a0a1a 100%);color:#f0f0fa;}
+  .cover__top{padding-top:34mm;}
+  .cover__logo{display:flex;align-items:center;gap:11px;font-size:16px;font-weight:800;color:#f0f0fa;margin-bottom:8px;}
+  .cover__mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#4338ca);
+    color:#fff;display:grid;place-items:center;font-size:17px;box-shadow:0 6px 22px rgba(99,102,241,.4);}
+  .cover__rule{width:84px;height:5px;background:linear-gradient(90deg,#4338ca,#818cf8);border-radius:3px;margin:34px 0 22px;}
+  .cover__ey{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#818cf8;}
+  .cover h1{font-size:62px;line-height:1;letter-spacing:-.03em;margin:12px 0 10px;color:#f0f0fa;border:none;}
+  .cover .base{font-size:20px;color:#b5b5c8;font-weight:500;}
   .cover__mid{flex:1;}
-  .cover__meta{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--ink-2);margin-bottom:14px;}
-  .cover__meta b{color:var(--ink);font-size:14px;}
-  .cover__links{font-size:11px;color:var(--muted);}
-  .cover__links a{color:var(--brand-d);}
-  .cover__ft{border-top:1px solid var(--line);padding:8px 0 24px;display:flex;justify-content:space-between;
-    font-size:9px;color:var(--muted);}
+  .cover__meta{display:flex;flex-direction:column;gap:3px;font-size:13px;color:#b5b5c8;margin-bottom:14px;}
+  .cover__meta b{color:#f0f0fa;font-size:14px;}
+  .cover__links{font-size:11px;color:#8e8ea8;}
+  .cover__links a{color:#818cf8;}
+  .cover__ft{border-top:1px solid rgba(255,255,255,.1);padding:8px 0 24px;display:flex;justify-content:space-between;
+    font-size:9px;color:#8e8ea8;}
 
   /* ===== Sommaire / illustrations / annexes ===== */
   .fm{break-before:page;}
@@ -147,7 +148,7 @@
     <span>15 juin 2026</span>
   </div>
   <div class="cover__links">
-    Démo en production : <a>pc-aeris.vercel.app</a> &nbsp;·&nbsp; Code source : <a>github.com/QuentinGP23/PC_Aeris</a>
+    Démo en production : <a href="https://pc-aeris.vercel.app">pc-aeris.vercel.app</a> &nbsp;·&nbsp; Code source : <a href="https://github.com/QuentinGP23/PC_Aeris">github.com/QuentinGP23/PC_Aeris</a>
   </div>
   <div class="cover__ft"><span>PC Aeris — Plateforme de configuration de PC sur-mesure</span><span>Rapport de fin de Master 2</span></div>
 </section>
@@ -234,19 +235,19 @@
 <p>L'acheteur d'aujourd'hui fait face à une offre fragmentée et à un jargon opaque. Confronté à des dizaines de sites et des centaines de références, il reste seul face à trois questions qu'il ne sait pas trancher. Ces trois interrogations résument la friction du marché.</p>
 <figure id="fig1">
   <div class="fig grid3">
-    <div class="box"><h4>🔌 Compatibilité</h4><p>« Cette carte graphique est-elle compatible avec cette carte mère ? Mon ventirad entre-t-il dans ce boîtier ? »</p></div>
-    <div class="box"><h4>⚡ Puissance</h4><p>« Mon alimentation est-elle suffisante pour l'ensemble de ma configuration ? »</p></div>
-    <div class="box"><h4>💸 Juste prix</h4><p>« Est-ce que je paie le bon prix, ou est-ce que je me fais avoir ? »</p></div>
+    <div class="box"><h4>Compatibilité</h4><p>« Cette carte graphique est-elle compatible avec cette carte mère ? Mon ventirad entre-t-il dans ce boîtier ? »</p></div>
+    <div class="box"><h4>Puissance</h4><p>« Mon alimentation est-elle suffisante pour l'ensemble de ma configuration ? »</p></div>
+    <div class="box"><h4>Juste prix</h4><p>« Est-ce que je paie le bon prix, ou est-ce que je me fais avoir ? »</p></div>
   </div>
   <figcaption><b>Figure 1</b> — Les trois questions que tout acheteur se pose, sans réponse simple aujourd'hui.</figcaption>
 </figure>
 <p><strong>Le constat est largement partagé :</strong> la majorité des acheteurs abandonnent leur projet, ou passent des heures de recherche pour finalement faire un mauvais choix — un composant incompatible, une alimentation sous-dimensionnée, ou un prix payé trop cher. Cette friction est précisément le problème que PC Aeris adresse.</p>
 
 <h2 id="s1-2">1.2 Le marché</h2>
-<p>Le marché du PC en France représente environ <strong>4 milliards d'euros par an</strong>. Le segment qui nous intéresse — le gaming et les stations de travail — croît de <strong>8 à 10 % par an</strong>, porté par l'essor de l'esport, du streaming et des usages créatifs. C'est un marché à la fois vaste et en croissance <span style="color:var(--muted);font-size:9px;">(ordres de grandeur ; sources en Annexe E)</span>.</p>
+<p>Le marché français du jeu vidéo a pesé <strong>5,7 milliards d'euros en 2024</strong> (SELL). Surtout, le segment qui nous concerne directement — le <strong>PC gaming</strong> — y a progressé de <strong>+9,1 %</strong> sur l'année, à contre-courant d'un marché global en léger repli. À l'échelle mondiale, le marché du PC gaming (matériel) est estimé à environ <strong>62 milliards de dollars en 2024</strong> et devrait croître d'environ <strong>13,5 % par an jusqu'en 2030</strong> (Grand View Research). Un marché vaste, durablement porté par l'esport, le streaming et les usages créatifs <span style="color:var(--muted);font-size:9px;">(sources en Annexe E)</span>.</p>
 <div class="grid3">
-  <div class="box hl"><div class="stat">~4<span class="u"> Mds €</span></div><div class="statl">marché PC France / an</div></div>
-  <div class="box hl"><div class="stat">+8-10<span class="u"> %</span></div><div class="statl">croissance gaming / workstation</div></div>
+  <div class="box hl"><div class="stat">5,7<span class="u"> Mds €</span></div><div class="statl">marché FR du jeu vidéo · 2024</div></div>
+  <div class="box hl"><div class="stat">+9,1<span class="u"> %</span></div><div class="statl">PC gaming France · 2024 (SELL)</div></div>
   <div class="box hl"><div class="stat">0<span class="u"></span></div><div class="statl">acteur sur le « sur-mesure simplifié »</div></div>
 </div>
 <p style="margin-top:9px;">Nos cibles sont des particuliers et des professionnels individuels : gamers débutants et confirmés, créatifs et freelances (montage, 3D, développement), étudiants des filières techniques et indépendants. Tous partagent un même besoin : du sur-mesure, <em>sans la complexité</em> qui l'accompagne habituellement.</p>
@@ -271,9 +272,9 @@
 <p>Un seul parcours ne convient pas à tous. PC Aeris propose donc trois portes d'entrée, qui existent réellement dans le produit.</p>
 <figure id="fig2">
   <div class="fig grid3">
-    <div class="box"><h4>🌱 Débutants — le questionnaire</h4><p>Quelques questions (usage, niveau) débouchent sur une configuration recommandée, optimisée et garantie compatible. Aucune connaissance technique requise.</p></div>
-    <div class="box hl"><h4>🧠 Connaisseurs — le configurateur</h4><p>Sélection composant par composant : à chaque choix, seuls les éléments compatibles restent proposés. Tri par performance ou par prix. Zéro impasse.</p></div>
-    <div class="box"><h4>⚡ Pressés — les configs prêtes</h4><p>Des PC complets, par usage et par gamme, déjà composés et garantis compatibles, chargeables en un clic.</p></div>
+    <div class="box"><h4>Débutants — le questionnaire</h4><p>Quelques questions (usage, niveau) débouchent sur une configuration recommandée, optimisée et garantie compatible. Aucune connaissance technique requise.</p></div>
+    <div class="box hl"><h4>Connaisseurs — le configurateur</h4><p>Sélection composant par composant : à chaque choix, seuls les éléments compatibles restent proposés. Tri par performance ou par prix. Zéro impasse.</p></div>
+    <div class="box"><h4>Pressés — les configs prêtes</h4><p>Des PC complets, par usage et par gamme, déjà composés et garantis compatibles, chargeables en un clic.</p></div>
   </div>
   <figcaption><b>Figure 2</b> — Les trois parcours utilisateur : questionnaire, configurateur, configurations pré-faites.</figcaption>
 </figure>
@@ -306,7 +307,7 @@
     <table>
       <tr><th style="width:18%;">Facteur</th><th>Impact sur PC Aeris</th></tr>
       <tr><td><b>Politique</b></td><td>🟢 Soutien aux startups tech (BPI, French Tech), réglementation e-commerce stable.</td></tr>
-      <tr><td><b>Économique</b></td><td>🟡 Inflation et arbitrages budgétaires, mais le gaming reste prioritaire pour la cible. Marché ~4 Mds €.</td></tr>
+      <tr><td><b>Économique</b></td><td>🟡 Inflation et arbitrages budgétaires, mais le gaming reste prioritaire pour la cible. Marché FR du jeu vidéo : 5,7 Mds € (SELL 2024).</td></tr>
       <tr><td><b>Socioculturel</b></td><td>🟢 Gaming mainstream, esport en croissance, attente forte de personnalisation et de transparence.</td></tr>
       <tr><td><b>Technologique</b></td><td>🟢 IA accessible, outils modernes. Évolution rapide des composants = besoin de conseil.</td></tr>
       <tr><td><b>Écologique</b></td><td>🟡 Pression sur l'obsolescence ; opportunité d'intégrer l'occasion et la durabilité.</td></tr>
@@ -553,15 +554,17 @@
 <h2 id="s8-1">8.1 Le configurateur et la compatibilité</h2>
 <p>Le cœur du produit est un configurateur couvrant <strong>8 catégories</strong> de composants (processeur, carte mère, boîtier, RAM, carte graphique, stockage, ventirad, alimentation). À chaque sélection, un moteur de compatibilité filtre en temps réel les composants restants : socket du processeur et de la carte mère, type de RAM, format de boîtier, dimensions, connectique de stockage (M.2 / SATA) et dimensionnement de l'alimentation selon les TDP. L'ordre de sélection est verrouillé pour rendre toute impasse impossible. L'utilisateur peut trier par <strong>performance</strong> ou par <strong>prix</strong>.</p>
 <figure id="fig15">
-  <div class="grid2">
+  <div class="grid3">
     <img src="img/configurateur.png" alt="Le configurateur PC en action" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
     <img src="img/configs-pretes.png" alt="Configurations prêtes à l'emploi" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
-  </div>
-  <div class="grid2" style="margin-top:8px;">
     <img src="img/questionnaire.png" alt="Questionnaire guidé" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
+  </div>
+  <div class="grid3" style="margin-top:8px;">
+    <img src="img/admin-dashboard.png" alt="Back-office : tableau de bord administrateur" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
+    <img src="img/admin-products.png" alt="Back-office : gestion du catalogue produits" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
     <img src="img/github.png" alt="Dépôt GitHub du projet" style="width:100%;border:1px solid var(--line);border-radius:6px;" />
   </div>
-  <figcaption><b>Figure 15</b> — Le produit en production : configurateur (compatibilité, tri performance/prix), configurations prêtes, questionnaire guidé, et dépôt GitHub du projet.</figcaption>
+  <figcaption><b>Figure 15</b> — Le produit en production : les trois parcours (configurateur, configurations prêtes, questionnaire), le back-office d'administration (tableau de bord et catalogue de plus de 25 000 composants), et le dépôt GitHub du projet.</figcaption>
 </figure>
 
 <h2 id="s8-2">8.2 Les données : prix et benchmarks</h2>
@@ -603,25 +606,25 @@
 
 <h2 id="s9-1">9.1 Les quatre dimensions du passage à l'échelle</h2>
 <div class="grid2">
-  <div class="box"><h4>🧩 Technique & plateforme</h4><ul>
+  <div class="box"><h4>Technique & plateforme</h4><ul>
     <li>Supabase : passage à un plan dédié, réplicas de lecture, index et cache (CDN, Redis)</li>
     <li>Agrégation des prix et des benchmarks déportée dans une <b>file de jobs</b> asynchrone planifiée</li>
     <li>Observabilité (Sentry, logs, alertes), tests end-to-end et budget de performance</li>
     <li>Moteur de recherche dédié (Postgres FTS / Meilisearch) sur plus de 25 000 composants</li>
   </ul></div>
-  <div class="box"><h4>📦 Opérations & logistique</h4><ul>
+  <div class="box"><h4>Opérations & logistique</h4><ul>
     <li>Réseau d'<b>assembleurs partenaires</b> régionaux plutôt qu'un montage centralisé</li>
     <li>Sourcing semi-automatisé (API grossistes, réassort, alertes de prix)</li>
     <li>Outillage du SAV et des retours, suivi transporteurs intégré</li>
     <li>Standardisation de la qualité (check-list, rapport de test systématique)</li>
   </ul></div>
-  <div class="box"><h4>👥 Organisation & équipe</h4><ul>
+  <div class="box"><h4>Organisation & équipe</h4><ul>
     <li>De 1 à ~10-15 personnes : pôles Tech, Produit, Marketing, Ops/Support</li>
     <li>Recrutements prioritaires : CTO, puis développeurs, growth, support, expert hardware</li>
     <li>Rituels agile passés à l'échelle, documentation et gouvernance des décisions</li>
     <li>Externalisation maîtrisée (comptabilité, juridique, logistique)</li>
   </ul></div>
-  <div class="box"><h4>💶 Financier & marché</h4><ul>
+  <div class="box"><h4>Financier & marché</h4><ul>
     <li>Au-delà de l'amorçage : levée d'amorçage (<em>seed</em>) pour financer recrutements et trésorerie</li>
     <li>Seuil de rentabilité (~17 commandes/mois) atteint puis largement dépassé</li>
     <li>Expansion géographique : Europe francophone, puis EN/DE/ES (plateforme pensée pour l'i18n)</li>
@@ -702,8 +705,8 @@
 <h2 id="annexeD">Annexe D — Liens et ressources du projet</h2>
 <table>
   <tr><th>Ressource</th><th>Lien</th></tr>
-  <tr><td>Démonstration en production</td><td>https://pc-aeris.vercel.app/</td></tr>
-  <tr><td>Code source &amp; historique</td><td>https://github.com/QuentinGP23/PC_Aeris</td></tr>
+  <tr><td>Démonstration en production</td><td><a href="https://pc-aeris.vercel.app/">pc-aeris.vercel.app</a></td></tr>
+  <tr><td>Code source &amp; historique</td><td><a href="https://github.com/QuentinGP23/PC_Aeris">github.com/QuentinGP23/PC_Aeris</a></td></tr>
   <tr><td>Documentation produit & agile</td><td>dépôt <code>/docs</code> (pitch, business model, étude de marché, backlog, user stories, revues de sprint)</td></tr>
 </table>
 
@@ -715,13 +718,11 @@
   <tr><td>Scores de performance CPU / GPU</td><td>PassMark Software — <i>CPU &amp; GPU Benchmarks</i> (cpubenchmark.net, videocardbenchmark.net)</td><td>Moteur de valeur performance/prix (1 715 scores intégrés)</td></tr>
   <tr><td>Prix de marché des composants</td><td>Relevés chez les marchands français (ex. LDLC)</td><td>Fourchettes de prix bas / moyen / haut</td></tr>
 </table>
-<h4>Sources marché et sectorielles (à citer / confirmer)</h4>
+<h4>Sources marché (chiffres confirmés)</h4>
 <ul>
-  <li>SELL — <i>L'Essentiel du jeu vidéo</i> (marché français du jeu vidéo et de l'équipement).</li>
-  <li>GfK / Context / IDC — ventes de PC et de composants en France et en Europe.</li>
-  <li>Statista — taille et croissance des marchés PC et gaming.</li>
-  <li>Xerfi — études sectorielles sur la distribution informatique et l'e-commerce.</li>
-  <li>Médiamétrie / Arcep — usages numériques des ménages français.</li>
+  <li><b>SELL — <i>L'Essentiel du jeu vidéo</i>, bilan 2024</b> : marché français du jeu vidéo à 5,7 Mds € ; segment PC gaming à 1,5 Md €, en hausse de +9,1 % sur l'année. <span style="color:var(--muted)">sell.fr/news/bilan-marche-2024</span></li>
+  <li><b>Grand View Research — <i>Gaming PC Market Report</i>, 2024</b> : marché mondial du PC gaming estimé à ~62 Mds $ en 2024, croissance ~13,5 %/an sur 2025-2030. <span style="color:var(--muted)">grandviewresearch.com/industry-analysis/gaming-pc-market-report</span></li>
+  <li>Compléments : GfK / NIQ / IDC (ventes de PC en France), Médiamétrie / Arcep (usages numériques des ménages).</li>
 </ul>
 <h4>Références méthodologiques et concepts cités</h4>
 <ul>

@@ -15,13 +15,14 @@ Cette étude suit une logique d'**entonnoir**. On part du plus large — la tail
 
 ### 1.1 Taille et dynamique
 
-Le marché français du PC reste un marché de masse, soutenu par le jeu vidéo, la création de contenu et le télétravail. Les ordres de grandeur retenus comme hypothèses de travail sont les suivants ; ils devront être consolidés avec des sources sectorielles avant le rendu final (voir § Sources).
+Le marché français du PC reste un marché de masse, soutenu par le jeu vidéo, la création de contenu et le télétravail. Les chiffres clés, sourcés, sont les suivants (voir § Sources).
 
-| Indicateur | Valeur (hypothèse de travail) | À sourcer |
+| Indicateur | Valeur | Source |
 | --- | --- | --- |
-| Marché du PC en France | ~4 milliards € / an | GfK / Context / Statista |
-| Croissance du segment gaming & workstation | +8 à 10 % / an | SELL, *L'Essentiel du jeu vidéo* ; IDC |
-| Part du sur-mesure / assemblé | En croissance, peu d'acteurs spécialisés | Xerfi ; observation concurrentielle |
+| Marché français du jeu vidéo (2024) | 5,7 Mds € | SELL — *L'Essentiel du jeu vidéo* |
+| dont segment **PC gaming** (2024) | 1,5 Md €, **+9,1 %** sur l'année | SELL |
+| Marché mondial du PC gaming (matériel) | ~62 Mds $ (2024), **CAGR ~13,5 %** d'ici 2030 | Grand View Research |
+| Part du sur-mesure / assemblé | En croissance, peu d'acteurs spécialisés | Observation concurrentielle |
 
 Le segment qui nous intéresse — le PC fixe performant, gaming ou workstation — est le plus dynamique et le moins menacé par la substitution (un usage gaming AAA ou de création 3D reste difficilement transférable vers un portable d'entrée de gamme ou une console). C'est sur ce cœur de marché que se concentre PC Aeris.
 
@@ -146,7 +147,7 @@ La SWOT consolide les trois analyses précédentes. Les **forces et faiblesses**
 
 | Élément | Constat |
 | --- | --- |
-| **Marché** | Porteur (~4 Mds €), en croissance sur le segment gaming / workstation |
+| **Marché** | Porteur (jeu vidéo FR 5,7 Mds €), PC gaming en croissance (+9,1 % en 2024) |
 | **Environnement (PESTEL)** | Favorable, vigilance sur la conjoncture économique |
 | **Concurrence (Porter)** | Intense sur le prix, mais créneau « sur-mesure simplifié » peu exploité |
 | **Synthèse (SWOT)** | Différenciation par l'UX, la transparence et l'IA ; l'évolution techno devient un atout de récurrence |
@@ -157,13 +158,9 @@ La SWOT consolide les trois analyses précédentes. Les **forces et faiblesses**
 
 ## Sources
 
-> ⚠️ **À compléter avant le rendu final.** Les ordres de grandeur ci-dessus sont des hypothèses de travail. Sources sectorielles recommandées à citer (voir `BIBLIOGRAPHIE.md`) :
->
-> - **SELL** — *L'Essentiel du jeu vidéo* (marché FR du jeu vidéo, équipement)
-> - **GfK / Context / IDC** — ventes de PC et composants en France/Europe
-> - **Statista** — taille et croissance du marché PC / gaming
-> - **Xerfi** — études sectorielles e-commerce et distribution informatique
-> - **Médiamétrie / Arcep** — usages numériques des ménages
+- **SELL — *L'Essentiel du jeu vidéo*, bilan 2024** : marché français du jeu vidéo à 5,7 Mds € ; PC gaming à 1,5 Md €, +9,1 % sur l'année — [sell.fr/news/bilan-marche-2024](https://www.sell.fr/news/bilan-marche-2024)
+- **Grand View Research — *Gaming PC Market Report*, 2024** : marché mondial du PC gaming ~62 Mds $ en 2024, CAGR ~13,5 % d'ici 2030 — [grandviewresearch.com](https://www.grandviewresearch.com/industry-analysis/gaming-pc-market-report)
+- Compléments : GfK / NIQ / IDC (ventes de PC en France), Médiamétrie / Arcep (usages numériques des ménages).
 
 ---
 
