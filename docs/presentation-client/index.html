@@ -238,6 +238,7 @@
         <span class="chip ok">✓ Tri par performance (benchmark)</span>
         <span class="chip ok">✓ Ordre de sélection verrouillé — zéro impasse</span>
         <span class="chip ok">✓ Configurations sauvegardées</span>
+        <span class="chip ok">✓ Commande par devis · panier & suivi</span>
         <span class="chip ok">✓ Comptes & espace utilisateur</span>
         <span class="chip ok">✓ Back-office admin (produits + prix)</span>
         <span class="chip ok">✓ Moteur de prix réels (intégration LDLC)</span>
@@ -360,7 +361,7 @@
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Projections financières</div>
     <h1 class="title">Une trajectoire prudente.</h1>
-    <div class="sub">Hypothèses conservatrices pour une marque sans notoriété — l'<b>année 1 est une montée en charge</b> (sous le seuil). Croissance par bouche-à-oreille, SEO et partenariats.</div>
+    <div class="sub">Hypothèses conservatrices pour une marque sans notoriété — l'<b>année 1 est une montée en charge</b> (sous le seuil). Croissance par bouche-à-oreille, <b>SEO/GEO</b> et partenariats créateurs.</div>
     <table style="margin-top:6px">
       <tr><th>Année</th><th>Commandes / mois</th><th>Panier moyen</th><th>CA annuel</th><th>Marge brute</th></tr>
       <tr><td>2027 <span style="color:var(--text-3);font-size:12px">· lancement</span></td><td>~6</td><td>1 200 €</td><td class="num">~86 K€</td><td class="num">8-10 K€</td></tr>
@@ -375,10 +376,24 @@
     <h1 class="title">Du MVP au lancement commercial.</h1>
     <div class="roadmap" style="margin-top:28px">
       <div class="rm"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, prix réels. En production.</p></div>
-      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Panier, tunnel de commande, paiement Stripe, suivi des commandes.</p></div>
+      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Paiement en ligne (Stripe), OAuth Google, filtres avancés. Panier, commande par devis et suivi déjà livrés.</p></div>
       <div class="rm"><div class="when">Sept. 2026 +</div><h4>V2</h4><p>IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.</p></div>
       <div class="rm"><div class="when">2027 +</div><h4>Expansion</h4><p>App mobile, abonnement Pro, communauté, internationalisation.</p></div>
     </div>
+  </section>
+
+  <!-- CHANGEMENT D'ÉCHELLE -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Changement d'échelle</div>
+    <h1 class="title">Conçu pour passer<br>à l'échelle <span class="grad">×100</span>.</h1>
+    <div class="sub">De quelques commandes par mois à plusieurs milliers : ce qui change — et pourquoi le modèle le permet.</div>
+    <div class="cols c2" style="align-items:start;margin-top:4px">
+      <div class="card"><h3>🧩 Technique</h3><p>Pile managée (Supabase, Vercel) : réplicas de lecture, cache, agrégation des prix en file de jobs asynchrone. Rien à réécrire.</p></div>
+      <div class="card"><h3>📦 Opérations</h3><p>Réseau d'<b style="color:#fff">assembleurs partenaires</b> régionaux et sourcing semi-automatisé, plutôt qu'un montage centralisé.</p></div>
+      <div class="card"><h3>👥 Équipe</h3><p>De 1 à ~10-15 personnes : pôles Tech, Produit, Marketing, Ops. Recrutement d'un CTO en priorité.</p></div>
+      <div class="card hl"><h3>💶 Marché</h3><p>Expansion Europe (plateforme i18n-ready), segment Pro/B2B, abonnement. Levée d'amorçage pour financer la montée.</p></div>
+    </div>
+    <div class="sub" style="margin-top:18px;color:var(--text-3)">Modèle <b style="color:var(--text-2)">asset-light</b> : pas de stock à multiplier — le passage à l'échelle est surtout <b style="color:var(--text-2)">organisationnel</b>, pas technique.</div>
   </section>
 
   <!-- 16 — ÉQUIPE -->
@@ -396,6 +411,29 @@
           <li><b>Développeur full-stack</b> <span>— accélérer la V1 et l'IA.</span></li>
           <li><b>Responsable marketing</b> <span>— acquisition, SEO, partenariats créateurs.</span></li>
           <li><b>Support & expert hardware</b> <span>— curation des données, conseil, SAV.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BESOIN DE FINANCEMENT -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Besoin de financement</div>
+    <h1 class="title">35 000 € pour <span class="grad">enclencher</span> la V1.</h1>
+    <div class="sub">Un amorçage maîtrisé sur 6-12 mois, concentré là où se joue la traction.</div>
+    <div class="cols c2" style="align-items:start">
+      <table>
+        <tr><th>Poste</th><th>Montant</th><th>Pourquoi</th></tr>
+        <tr><td>Développement</td><td class="num">15 K€</td><td>V1 (paiement, suivi), fiabilisation</td></tr>
+        <tr><td>Marketing</td><td class="num">10 K€</td><td>Notoriété : SEO/GEO, créateurs</td></tr>
+        <tr><td>Infrastructure</td><td class="num">3 K€</td><td>Hébergement, BDD, API prix (12 mois)</td></tr>
+        <tr><td>Juridique</td><td class="num">2 K€</td><td>Statuts, CGV, RGPD</td></tr>
+        <tr><td>Trésorerie</td><td class="num">5 K€</td><td>Imprévus, décalage de trésorerie</td></tr>
+      </table>
+      <div>
+        <div class="card hl"><h3>≈ 70 % vers la traction</h3><p>Développement et marketing concentrent l'essentiel de l'enveloppe : c'est là que se débloquent la monétisation et les premiers clients.</p></div>
+        <ul class="bul" style="margin-top:18px">
+          <li><b>Sources envisagées</b> <span>— apport personnel, love money, prêt d'honneur (Réseau Entreprendre), BPI France, concours startups.</span></li>
         </ul>
       </div>
     </div>

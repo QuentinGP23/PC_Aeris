@@ -3,7 +3,37 @@
 > **Dernière mise à jour :** 29 mai 2026
 > **Projet :** PC Aeris — Configurateur PC sur mesure
 > **Légende :** [MVP] = Sprint 1-5 | [V1] = Sprint 6-8 | [V2] = Sprint 9+
-> **Note :** US-040 à US-044 (configurations sauvegardées) ont été avancées de V1 vers MVP en mai 2026.
+> **Note :** US-040 à US-044 (configurations sauvegardées) ont été avancées de V1 vers MVP en mai 2026. Les US-088 à US-091 (workflow de devis) ont été ajoutées en juin 2026.
+
+---
+
+## Schéma de la story map
+
+Une *story map* se lit en deux dimensions : horizontalement, **l'épine dorsale** (le parcours de l'utilisateur, activité après activité) ; verticalement, les **versions de livraison** (MVP, V1, V2), de la plus prioritaire en haut à la plus optionnelle en bas.
+
+### Épine dorsale — le parcours utilisateur
+
+```mermaid
+flowchart LR
+    A1["1 · Découvrir<br/>la plateforme"] --> A2["2 · S'authentifier"] --> A3["3 · Configurer<br/>son PC"] --> A4["4 · Passer<br/>commande"] --> A5["5 · Gérer<br/>son compte"]
+    A6["6 · Admin ·<br/>gérer la plateforme"]
+    A1 -. supervise .-> A6
+    A4 -. supervise .-> A6
+    classDef act fill:#1e1b4b,stroke:#6366F1,color:#E0E7FF;
+    class A1,A2,A3,A4,A5,A6 act;
+```
+
+### Board — activités × versions de livraison
+
+Chaque cellule liste les user stories planifiées pour l'activité (colonne) et la version (ligne).
+
+| Version | 1 · Découvrir | 2 · S'authentifier | 3 · Configurer | 4 · Commander | 5 · Gérer compte | 6 · Admin |
+|---|---|---|---|---|---|---|
+| **MVP** (S1-5) | 001, 002, 005, 008 | 011, 012, 014, 015, 017, 018, 019 | 020, 021, 023-027, 031, 032, 038 | — | — | 069, 071-073, 075-077 |
+| **V1** (S6-8) | 003, 004, 006, 007, 009, 010 | 013, 016 | 022, 028-030, 033-035, 039-044 | 047-055, 058, 059, **088-091** | 061-064, 066, 067 | 070, 074, 078, 079, 081-083, 080 |
+| **V2** (S9+) | — | — | 036, 037, 045, 046 | 056, 057, 060 | 065, 068 | — |
+
+> Lecture : la **ligne MVP** forme le *walking skeleton* — le plus petit parcours bout-en-bout livrable. Les lignes V1 puis V2 enrichissent chaque activité. Le détail des tâches et des stories figure ci-dessous.
 
 ---
 

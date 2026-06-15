@@ -1,9 +1,12 @@
 # Backlog Produit — PC Aeris
 
-> **Dernière mise à jour :** 29 mai 2026 — après Sprints 1 à 4 livrés + Sprint 5 partiellement livré
-> **Total :** 83 user stories
-> **Vélocité cible :** 20-25 points/sprint (projet solo)
-> **Vélocité réelle observée :** ~22 points/sprint en moyenne sur S1→S4
+> **Dernière mise à jour :** 15 juin 2026
+> **Total :** 91 user stories (87 initiales + 4 ajoutées en juin pour le workflow de devis)
+> **Tri :** par **priorité décroissante** (Critique → Haute → Moyenne → Basse), puis par identifiant.
+> **Vélocité réelle observée :** ~22 points/sprint en moyenne sur S1→S4 (projet solo).
+> **Vue temporelle (par sprint) :** voir [roadmap.md](./roadmap.md).
+
+Le backlog ci-dessous est **priorisé** : il se lit de haut en bas, du plus bloquant au plus optionnel. La priorité reflète la valeur business et le caractère bloquant pour le MVP ; le statut reflète l'état réel du code au 15 juin 2026.
 
 ---
 
@@ -11,147 +14,145 @@
 
 | Priorité | Description |
 |---|---|
-| Critique | Bloquant pour le MVP — sans ça, le produit ne fonctionne pas |
-| Haute | Valeur business forte, à livrer en V1 |
-| Moyenne | Améliore l'expérience, peut attendre V1/V2 |
-| Basse | Nice-to-have, V2 ou au-delà |
+| **Critique** | Bloquant pour le MVP — sans cela, le produit ne fonctionne pas |
+| **Haute** | Valeur business forte, à livrer en V1 |
+| **Moyenne** | Améliore l'expérience, peut attendre V1/V2 |
+| **Basse** | *Nice-to-have*, V2 ou au-delà |
 
 | Statut | Description |
 |---|---|
-| Done | Développé et fonctionnel |
-| Done (partiel) | Développé mais incomplet ou buggé |
-| A faire | Pas encore développé |
-| Bug | Développé mais cassé |
-| Tech Debt | Fonctionne mais nécessite une refactorisation |
+| **Done** | Développé et fonctionnel |
+| **En cours** | En cours de développement |
+| **Tech ready** | UI/code prêts, en attente de données (prix : credentials API non obtenus) |
+| **À faire** | Pas encore développé |
 
 ---
 
-## Backlog complet
+## Backlog priorisé
 
-| ID | User Story | Rôle | Priorité | Sprint | Statut | Points |
+### 🔴 Priorité Critique (26 stories — 100 % livrées)
+
+| ID | User Story | Activité | Rôle | Sprint | Statut | Pts |
 |---|---|---|---|---|---|---|
-| **ACTIVITE 1 — Découvrir la plateforme** |
-| US-001 | Accéder à une page d'accueil claire présentant PC Aeris | Visiteur | Critique | 1 | Done | 5 |
-| US-002 | Voir une présentation visuelle du configurateur avec call-to-action | Visiteur | Haute | 2 | Done | 3 |
-| US-003 | Voir des exemples de configurations populaires sur la page d'accueil | Visiteur | Moyenne | 6 | A faire | 5 |
-| US-004 | Voir les tarifs indicatifs d'assemblage | Visiteur | Haute | 5 | A faire | 2 |
-| US-005 | Naviguer via un menu de navigation clair avec accès rapide aux sections | Visiteur | Critique | 1 | Done | 3 |
-| US-006 | Utiliser le site depuis un smartphone (responsive complet) | Visiteur | Haute | 5 | A faire | 8 |
-| US-007 | Accéder à un footer avec informations légales, liens utiles et contact | Visiteur | Moyenne | 5 | A faire | 2 |
-| US-008 | Explorer la liste des composants disponibles par catégorie | Visiteur | Critique | 1 | Done | 3 |
-| US-009 | Filtrer les composants par marque, prix et caractéristiques techniques | Visiteur | Haute | 6 | A faire | 5 |
-| US-010 | Voir le prix de chaque composant dans le catalogue | Visiteur | Haute | 5 | Tech ready, données absentes | 3 |
-| **ACTIVITE 2 — S'authentifier** |
-| US-011 | Créer un compte avec email et mot de passe | Visiteur | Critique | 1 | Done | 3 |
-| US-012 | Choisir un pseudo lors de l'inscription | Visiteur | Critique | 1 | Done | 2 |
-| US-013 | S'inscrire via Google (OAuth) | Visiteur | Moyenne | 7 | A faire | 5 |
-| US-014 | Se connecter avec email et mot de passe | Utilisateur | Critique | 1 | Done | 2 |
-| US-015 | Se connecter avec son pseudo (correction du bug) | Utilisateur | Critique | 2 | Done | 3 |
-| US-016 | Rester connecté entre les sessions (remember me) | Utilisateur | Haute | 5 | A faire | 2 |
-| US-017 | Recevoir un email de réinitialisation de mot de passe | Utilisateur | Critique | 1 | Done | 2 |
-| US-018 | Définir un nouveau mot de passe via le lien email | Utilisateur | Critique | 1 | Done | 2 |
-| US-019 | Se déconnecter | Utilisateur | Critique | 1 | Done | 1 |
-| **ACTIVITE 3 — Configurer son PC** |
-| US-020 | Accéder au configurateur PC depuis la navigation | Utilisateur | Critique | 1 | Done | 1 |
-| US-021 | Voir toutes les catégories de composants disponibles | Utilisateur | Critique | 1 | Done | 2 |
-| US-022 | Choisir un usage cible pour obtenir des suggestions (Gaming, Bureautique, Création) | Utilisateur | Moyenne | 6 | A faire | 8 |
-| US-023 | Parcourir les composants d'une catégorie avec pagination | Utilisateur | Critique | 1 | Done | 3 |
-| US-024 | Rechercher un composant par nom | Utilisateur | Critique | 1 | Done | 2 |
-| US-025 | Voir les caractéristiques techniques clés d'un composant | Utilisateur | Critique | 1 | Done | 2 |
-| US-026 | Sélectionner un composant pour l'ajouter à sa configuration | Utilisateur | Critique | 1 | Done | 2 |
-| US-027 | Retirer un composant de sa configuration | Utilisateur | Critique | 1 | Done | 1 |
-| US-028 | Voir le prix de chaque composant dans le configurateur | Utilisateur | Haute | 5 | Tech ready, données absentes | 3 |
-| US-029 | Filtrer les composants par fourchette de prix | Utilisateur | Haute | 6 | A faire | 3 |
-| US-030 | Voir une image du composant dans la liste | Utilisateur | Haute | 5 | A faire | 2 |
-| US-031 | Voir les composants filtrés automatiquement par compatibilité CPU/Carte mère/RAM | Utilisateur | Critique | 1 | Done | 8 |
-| US-032 | Voir une explication du filtre de compatibilité actif | Utilisateur | Haute | 1 | Done | 2 |
-| US-033 | Vérification compatibilité GPU / Alimentation (calcul TDP) | Utilisateur | Haute | 3 | Done | 5 |
-| US-034 | Vérification compatibilité Boîtier / Format carte mère (ATX/mATX/ITX) | Utilisateur | Haute | 3 | Done | 3 |
-| US-035 | Vérification compatibilité Stockage / Connectique carte mère (M.2/SATA) | Utilisateur | Haute | 3 | Done | 3 |
-| US-036 | Analyse IA de la configuration avec recommandations personnalisées | Utilisateur | Basse | 9 | A faire | 13 |
-| US-037 | Suggestion automatique de PSU adapté à la consommation totale estimée | Utilisateur | Basse | 9 | A faire | 8 |
-| US-038 | Voir un récapitulatif de tous les composants sélectionnés | Utilisateur | Critique | 1 | Done | 2 |
-| US-039 | Voir le prix total de sa configuration | Utilisateur | Haute | 5 | Tech ready, données absentes | 2 |
-| US-040 | Voir un indicateur de complétude de la configuration | Utilisateur | Haute | 5 | Done | 3 |
-| US-041 | Sauvegarder une configuration (utilisateur connecté) | Utilisateur | Haute | 5 | Done | 5 |
-| US-042 | Nommer une configuration sauvegardée | Utilisateur | Haute | 5 | Done | 2 |
-| US-043 | Accéder à ses configurations sauvegardées | Utilisateur | Haute | 5 | Done | 3 |
-| US-044 | Supprimer une configuration sauvegardée | Utilisateur | Moyenne | 5 | Done | 1 |
-| US-045 | Partager une configuration via un lien unique | Utilisateur | Moyenne | 8 | A faire | 5 |
-| US-046 | Exporter une configuration en PDF | Utilisateur | Basse | 9 | A faire | 5 |
-| **ACTIVITE 4 — Passer commande** |
-| US-047 | Ajouter sa configuration au panier | Utilisateur | Haute | 6 | A faire | 5 |
-| US-048 | Voir le contenu du panier avec détail des composants et prix | Utilisateur | Haute | 6 | A faire | 3 |
-| US-049 | Modifier ou supprimer des articles du panier | Utilisateur | Haute | 6 | A faire | 3 |
-| US-050 | Panier persistant entre les sessions | Utilisateur | Haute | 6 | A faire | 3 |
-| US-051 | Saisir une adresse de livraison lors de la commande | Utilisateur | Haute | 7 | A faire | 3 |
-| US-052 | Choisir parmi ses adresses sauvegardées lors du checkout | Utilisateur | Haute | 7 | A faire | 2 |
-| US-053 | Choisir une option de livraison (standard, express) | Utilisateur | Moyenne | 7 | A faire | 3 |
-| US-054 | Payer par carte bancaire via Stripe | Utilisateur | Haute | 7 | A faire | 8 |
-| US-055 | Recevoir un email de confirmation de commande | Utilisateur | Haute | 7 | A faire | 3 |
-| US-056 | Payer en plusieurs fois | Utilisateur | Basse | 10 | A faire | 5 |
-| US-057 | Payer via PayPal | Utilisateur | Basse | 10 | A faire | 5 |
-| US-058 | Accéder à l'historique de ses commandes | Utilisateur | Haute | 8 | A faire | 3 |
-| US-059 | Voir le statut détaillé d'une commande en cours | Utilisateur | Haute | 8 | A faire | 3 |
-| US-060 | Recevoir des notifications email à chaque changement de statut de commande | Utilisateur | Moyenne | 9 | A faire | 5 |
-| **ACTIVITE 5 — Gérer son compte** |
-| US-061 | Accéder à sa page de profil | Utilisateur | Haute | 5 | Done (hors sprint, avril 2026) | 3 |
-| US-062 | Modifier son prénom, nom et numéro de téléphone | Utilisateur | Haute | 5 | Done (hors sprint, avril 2026) | 2 |
-| US-063 | Modifier son pseudo | Utilisateur | Haute | 5 | A faire | 2 |
-| US-064 | Changer son mot de passe depuis son profil | Utilisateur | Haute | 5 | A faire | 2 |
-| US-065 | Uploader une photo de profil (avatar) | Utilisateur | Basse | 9 | A faire | 5 |
-| US-066 | Ajouter des adresses de livraison à son profil | Utilisateur | Haute | 6 | A faire | 3 |
-| US-067 | Définir une adresse de livraison par défaut | Utilisateur | Haute | 6 | A faire | 2 |
-| US-068 | Supprimer son compte (RGPD) | Utilisateur | Moyenne | 9 | A faire | 5 |
-| **ACTIVITE 6 — [Admin] Gérer la plateforme** |
-| US-069 | Voir un dashboard admin avec stats clés (users, produits, commandes) | Admin | Critique | 1 | Done | 5 |
-| US-070 | Voir des graphiques d'évolution des inscriptions et commandes | Admin | Moyenne | 6 | A faire | 5 |
-| US-071 | Voir la liste de tous les utilisateurs avec rôle et date d'inscription | Admin | Critique | 1 | Done | 3 |
-| US-072 | Modifier le rôle d'un utilisateur (user/admin) | Admin | Critique | 1 | Done | 2 |
-| US-073 | Supprimer un compte utilisateur | Admin | Critique | 1 | Done | 2 |
-| US-074 | Rechercher et filtrer les utilisateurs | Admin | Haute | 5 | A faire | 3 |
-| US-075 | Voir la liste de tous les produits avec leur catégorie | Admin | Critique | 1 | Done | 3 |
-| US-076 | Modifier les informations et specs techniques d'un produit existant | Admin | Critique | 1 | Done | 5 |
-| US-077 | Supprimer un produit du catalogue | Admin | Critique | 1 | Done | 2 |
-| US-078 | Créer un nouveau produit avec toutes ses specs techniques | Admin | Haute | 4 | Done | 5 |
-| US-079 | Définir et modifier le prix de chaque produit | Admin | Haute | 4 | Done | 3 |
-| US-080 | Importer des produits en masse depuis un fichier CSV | Admin | Moyenne | 8 | A faire | 8 |
-| US-081 | Voir la liste de toutes les commandes avec leur statut | Admin | Haute | 7 | A faire | 3 |
-| US-082 | Mettre à jour le statut d'une commande | Admin | Haute | 7 | A faire | 3 |
-| US-083 | Voir le détail d'une commande (composants, prix, adresse) | Admin | Haute | 7 | A faire | 2 |
-| **TRANSVERSE — Qualite et Infrastructure** |
-| US-084 | Afficher des notifications toast globales (succès, erreur, info) | Utilisateur | Haute | 2 | Done | 3 |
-| US-085 | Avoir une page 404 personnalisée et ergonomique | Visiteur | Moyenne | 4 | Done (hors sprint, avril 2026) | 2 |
-| US-086 | Avoir une couverture de tests unitaires sur les utils et services critiques | Dev | Haute | 3 | Done (Vitest, 27 tests S3) | 8 |
-| US-087 | Avoir des tests d'intégration sur les flux critiques (auth, config, commande) | Dev | Haute | 4 | Done (15 tests d'intégration S4) | 13 |
+| US-001 | Page d'accueil claire présentant PC Aeris | Découvrir | Visiteur | 1 | Done | 5 |
+| US-005 | Menu de navigation clair | Découvrir | Visiteur | 1 | Done | 3 |
+| US-008 | Liste des composants par catégorie | Découvrir | Visiteur | 1 | Done | 3 |
+| US-011 | Créer un compte (email + mot de passe) | S'authentifier | Visiteur | 1 | Done | 3 |
+| US-012 | Choisir un pseudo à l'inscription | S'authentifier | Visiteur | 1 | Done | 2 |
+| US-014 | Se connecter (email + mot de passe) | S'authentifier | Utilisateur | 1 | Done | 2 |
+| US-015 | Se connecter avec son pseudo (fix bug) | S'authentifier | Utilisateur | 2 | Done | 3 |
+| US-017 | Recevoir un email de réinitialisation | S'authentifier | Utilisateur | 1 | Done | 2 |
+| US-018 | Définir un nouveau mot de passe | S'authentifier | Utilisateur | 1 | Done | 2 |
+| US-019 | Se déconnecter | S'authentifier | Utilisateur | 1 | Done | 1 |
+| US-020 | Accéder au configurateur | Configurer | Utilisateur | 1 | Done | 1 |
+| US-021 | Voir toutes les catégories de composants | Configurer | Utilisateur | 1 | Done | 2 |
+| US-023 | Parcourir les composants (pagination) | Configurer | Utilisateur | 1 | Done | 3 |
+| US-024 | Rechercher un composant par nom | Configurer | Utilisateur | 1 | Done | 2 |
+| US-025 | Voir les caractéristiques techniques clés | Configurer | Utilisateur | 1 | Done | 2 |
+| US-026 | Sélectionner un composant | Configurer | Utilisateur | 1 | Done | 2 |
+| US-027 | Retirer un composant | Configurer | Utilisateur | 1 | Done | 1 |
+| US-031 | Filtrage compatibilité CPU/Carte mère/RAM | Configurer | Utilisateur | 1 | Done | 8 |
+| US-038 | Récapitulatif de configuration | Configurer | Utilisateur | 1 | Done | 2 |
+| US-069 | Dashboard admin (stats clés) | Admin | Admin | 1 | Done | 5 |
+| US-071 | Liste des utilisateurs | Admin | Admin | 1 | Done | 3 |
+| US-072 | Modifier le rôle d'un utilisateur | Admin | Admin | 1 | Done | 2 |
+| US-073 | Supprimer un compte utilisateur | Admin | Admin | 1 | Done | 2 |
+| US-075 | Liste des produits | Admin | Admin | 1 | Done | 3 |
+| US-076 | Modifier un produit (infos + specs) | Admin | Admin | 1 | Done | 5 |
+| US-077 | Supprimer un produit | Admin | Admin | 1 | Done | 2 |
+
+### 🟠 Priorité Haute (47 stories)
+
+| ID | User Story | Activité | Rôle | Sprint | Statut | Pts |
+|---|---|---|---|---|---|---|
+| US-002 | Hero banner avec CTA configurateur | Découvrir | Visiteur | 2 | Done | 3 |
+| US-003 | Configurations populaires / pré-montées | Découvrir | Visiteur | 6 | Done | 5 |
+| US-004 | Tarifs indicatifs d'assemblage | Découvrir | Visiteur | 5 | Done | 2 |
+| US-006 | Site responsive mobile complet | Découvrir | Visiteur | 5 | En cours | 8 |
+| US-009 | Filtrer le catalogue (marque, prix, specs) | Découvrir | Visiteur | 6 | À faire | 5 |
+| US-010 | Prix de chaque composant au catalogue | Découvrir | Visiteur | 5 | Tech ready | 3 |
+| US-016 | Rester connecté entre sessions | S'authentifier | Utilisateur | 5 | À faire | 2 |
+| US-028 | Prix de chaque composant au configurateur | Configurer | Utilisateur | 5 | Tech ready | 3 |
+| US-030 | Image du composant dans la liste | Configurer | Utilisateur | 5 | À faire | 2 |
+| US-032 | Explication du filtre de compatibilité actif | Configurer | Utilisateur | 1 | Done | 2 |
+| US-033 | Compatibilité GPU / Alimentation (TDP) | Configurer | Utilisateur | 3 | Done | 5 |
+| US-034 | Compatibilité Boîtier / Format carte mère | Configurer | Utilisateur | 3 | Done | 3 |
+| US-035 | Compatibilité Stockage / Carte mère (M.2/SATA) | Configurer | Utilisateur | 3 | Done | 3 |
+| US-039 | Prix total de la configuration | Configurer | Utilisateur | 5 | Tech ready | 2 |
+| US-040 | Indicateur de complétude | Configurer | Utilisateur | Mai | Done | 3 |
+| US-041 | Sauvegarder une configuration | Configurer | Utilisateur | Mai | Done | 5 |
+| US-042 | Nommer une configuration sauvegardée | Configurer | Utilisateur | Mai | Done | 2 |
+| US-043 | Accéder à ses configurations sauvegardées | Configurer | Utilisateur | Mai | Done | 3 |
+| US-047 | Ajouter une configuration au panier | Commander | Utilisateur | 6 | Done | 5 |
+| US-048 | Voir le contenu du panier (détail + prix) | Commander | Utilisateur | 6 | Done | 3 |
+| US-049 | Modifier / supprimer des articles du panier | Commander | Utilisateur | 6 | Done | 3 |
+| US-050 | Panier persistant entre sessions | Commander | Utilisateur | 6 | Done | 3 |
+| US-051 | Saisir une adresse de livraison au checkout | Commander | Utilisateur | 7 | Done | 3 |
+| US-052 | Choisir une adresse sauvegardée au checkout | Commander | Utilisateur | 7 | Done | 2 |
+| US-054 | Paiement par carte via Stripe | Commander | Utilisateur | 7 | À faire | 8 |
+| US-055 | Email de confirmation de commande | Commander | Utilisateur | 7 | À faire | 3 |
+| US-058 | Historique de ses commandes | Commander | Utilisateur | 8 | Done | 3 |
+| US-059 | Statut détaillé d'une commande en cours | Commander | Utilisateur | 8 | Done | 3 |
+| US-061 | Page de profil utilisateur | Gérer compte | Utilisateur | 5 | Done | 3 |
+| US-062 | Modifier prénom, nom, téléphone | Gérer compte | Utilisateur | 5 | Done | 2 |
+| US-063 | Modifier son pseudo | Gérer compte | Utilisateur | 5 | À faire | 2 |
+| US-064 | Changer son mot de passe depuis le profil | Gérer compte | Utilisateur | 5 | Done | 2 |
+| US-066 | Ajouter des adresses de livraison au profil | Gérer compte | Utilisateur | 6 | Done | 3 |
+| US-067 | Définir une adresse par défaut | Gérer compte | Utilisateur | 6 | Done | 2 |
+| US-074 | Rechercher et filtrer les utilisateurs (admin) | Admin | Admin | 5 | À faire | 3 |
+| US-078 | Créer un nouveau produit (admin) | Admin | Admin | 4 | Done | 5 |
+| US-079 | Définir et modifier le prix d'un produit | Admin | Admin | 4 | Done | 3 |
+| US-081 | Liste de toutes les commandes (admin) | Admin | Admin | 7 | Done | 3 |
+| US-082 | Mettre à jour le statut d'une commande | Admin | Admin | 7 | Done | 3 |
+| US-083 | Voir le détail d'une commande (admin) | Admin | Admin | 7 | Done | 2 |
+| US-084 | Notifications toast globales | Transverse | Utilisateur | 2 | Done | 3 |
+| US-086 | Tests unitaires (utils + services) | Transverse | Dev | 3 | Done | 8 |
+| US-087 | Tests d'intégration (flux critiques) | Transverse | Dev | 4 | Done | 13 |
+| US-088 | Demander un devis à partir du panier | Commander | Utilisateur | Juin | Done | 3 |
+| US-089 | Compléter et envoyer le devis final (admin) | Admin | Admin | Juin | Done | 5 |
+| US-090 | Accepter ou refuser le devis reçu | Commander | Utilisateur | Juin | Done | 3 |
+| US-091 | Email automatique d'envoi du devis | Transverse | Système | Juin | Done | 3 |
+
+### 🟡 Priorité Moyenne (12 stories)
+
+| ID | User Story | Activité | Rôle | Sprint | Statut | Pts |
+|---|---|---|---|---|---|---|
+| US-007 | Footer + pages légales (CGV, mentions, RGPD) | Découvrir | Visiteur | 5 | Done | 2 |
+| US-013 | S'inscrire via Google (OAuth) | S'authentifier | Visiteur | 7 | À faire | 5 |
+| US-022 | Choisir un usage cible (questionnaire guidé) | Configurer | Utilisateur | 6 | Done | 8 |
+| US-029 | Filtrer les composants par fourchette de prix | Configurer | Utilisateur | 6 | À faire | 3 |
+| US-044 | Supprimer une configuration sauvegardée | Configurer | Utilisateur | Mai | Done | 1 |
+| US-045 | Partager une configuration via un lien | Configurer | Utilisateur | 8 | À faire | 5 |
+| US-053 | Choisir une option de livraison | Commander | Utilisateur | 7 | À faire | 3 |
+| US-060 | Notifications email à chaque changement de statut | Commander | Utilisateur | 9 | À faire | 5 |
+| US-068 | Supprimer son compte (RGPD) | Gérer compte | Utilisateur | 9 | Done | 5 |
+| US-070 | Graphiques d'évolution (admin) | Admin | Admin | 6 | À faire | 5 |
+| US-080 | Import CSV de produits (admin) | Admin | Admin | 8 | À faire | 8 |
+| US-085 | Page 404 personnalisée | Transverse | Visiteur | 4 | Done | 2 |
+
+### 🟢 Priorité Basse (6 stories — V2)
+
+| ID | User Story | Activité | Rôle | Sprint | Statut | Pts |
+|---|---|---|---|---|---|---|
+| US-036 | Analyse IA de la configuration | Configurer | Utilisateur | 9+ | À faire | 13 |
+| US-037 | Suggestion automatique de PSU | Configurer | Utilisateur | 9+ | À faire | 8 |
+| US-046 | Exporter une configuration en PDF | Configurer | Utilisateur | 9+ | À faire | 5 |
+| US-056 | Payer en plusieurs fois | Commander | Utilisateur | 10+ | À faire | 5 |
+| US-057 | Payer via PayPal | Commander | Utilisateur | 10+ | À faire | 5 |
+| US-065 | Uploader une photo de profil (avatar) | Gérer compte | Utilisateur | 9+ | À faire | 5 |
 
 ---
 
-## Synthese par sprint
+## Récapitulatif par statut (au 15 juin 2026)
 
-| Sprint | Période | Stories ciblées | Points livrés | Statut | Objectif principal |
-|---|---|---|---|---|---|
-| Sprint 1 | Jan–Mar 2026 | US-001, 005, 008, 011-012, 014, 017-021, 023-027, 031-032, 038, 069, 071-073, 075-077 | ~57 | ✅ Done | Foundation : Auth + Configurateur + Admin base |
-| Sprint 2 | 17 avril 2026 | US-002, 015, 084 + scaffolding multi-sources prix | ~12 | ✅ Done | Fix bug login + toast + tuyauterie prix |
-| Sprint 3 | 17-20 avril 2026 | US-033, 034, 035, 086 | ~19 | ✅ Done | Compatibilité complète + setup Vitest |
-| Sprint 4 | 20 avril 2026 | US-078, 079, 087 | ~21 | ✅ Done | Admin création produits + édition prix + tests intégration |
-| Hors sprint | avril 2026 | US-061, 062, 085 + fiche produit + enrichissement images | ~12 | ✅ Done | Profil utilisateur, 404, page produit |
-| Mai 2026 | 22-29 mai 2026 | Redesign visuel + fix ordre configurateur + US-040 à 044 (groupe A Sprint 5) | ~16 | 🔄 PR ouvertes | Refonte dark theme + verrouillage ordre + configs sauvegardées |
-| Sprint 5 (reste) | juin 2026 | US-004, 006, 010, 016, 028, 030, 039, 063, 064, 074 | ~26 | À faire | Prix UI + remember me + responsive + assemblage + admin search |
-| Sprint 6 | juin-juillet 2026 | US-003, 009, 022, 029, 047-050, 066-067, 070 | ~42 | À faire | Panier + Catalogue amélioré + Adresses |
-| Sprint 7 | juillet 2026 | US-013, 051-055, 081-083 | ~31 | À faire | Tunnel de commande + Stripe + Admin commandes |
-| Sprint 8 | août 2026 | US-007, 045, 058-059, 080 | ~18 | À faire | Suivi commande + Partage configs + Import CSV |
-| Sprint 9+ (V2) | sept 2026+ | US-036, 037, 046, 056, 057, 060, 065, 068 | ~54 | À faire | V2 : IA, paiement avancé, RGPD, exports |
-
----
-
-## Recap par statut (au 29 mai 2026)
-
-| Statut | Nombre | Points |
+| Statut | Nombre | Points (≈) |
 |---|---|---|
-| Done | 45 | ~137 |
-| Tech ready, données absentes (prix) | 3 | ~8 |
-| A faire | 35 | ~188 |
-| **Total** | **83** | **~333** |
+| Done | 67 | ~216 |
+| Tech ready (prix, en attente credentials API) | 3 | ~8 |
+| En cours | 1 | ~8 |
+| À faire | 20 | ~100 |
+| **Total** | **91** | **~332** |
 
-**Note "Tech ready, données absentes"** : US-010, US-028, US-039 — l'UI est prête à afficher des prix mais aucune donnée n'est en base. La tuyauterie multi-sources (Amazon/Rakuten/Cdiscount/eBay) est scaffoldée, en attente des credentials API.
+**Lecture :** **100 % des stories Critiques** et **~77 % des stories Hautes** sont livrées. Le reliquat « À faire » est concentré sur la **V2** (IA, paiements alternatifs, avatar) et sur trois chantiers V1 ciblés (Stripe, OAuth, filtres avancés). Le paiement direct Stripe (US-054) a été temporairement remplacé par un **workflow de devis** (US-088 à US-091) : le client demande un devis depuis son panier, l'administrateur le complète avec les vendeurs et prix réels, puis le client l'accepte ou le refuse en ligne.
+
+**Note « Tech ready »** : US-010, US-028, US-039 — l'UI sait afficher des prix mais aucune donnée n'est en base. La tuyauterie multi-sources (Amazon / Rakuten / Cdiscount / eBay) est scaffoldée, en attente des credentials API.

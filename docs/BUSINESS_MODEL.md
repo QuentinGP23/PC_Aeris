@@ -68,6 +68,10 @@ _Marge brute ≈ l'offre de montage, soit ~10 % du CA (les composants sont vendu
 
 > **Note** : projections prudentes pour une marque sans notoriété. Croissance conditionnée au bouche-à-oreille et aux partenariats.
 
+### Justification du panier moyen (1 200 - 1 300 €)
+
+Le panier moyen retenu n'est pas arbitraire : c'est la **moyenne pondérée des budgets des cinq segments cibles** (§2), qui s'échelonnent de 600 € (étudiants) à 3 000 € (gamers confirmés). La valeur de 1 200-1 300 € est **volontairement conservatrice** : elle se situe dans le bas de la fourchette des segments à plus forte valeur (créatifs 1 200-2 500 €, gamers confirmés 1 500-3 000 €), faisant l'hypothèse qu'au lancement la clientèle penchera davantage vers les **débutants et étudiants** (paniers plus modestes). La légère progression d'année en année (1 200 → 1 250 → 1 300 €) traduit une montée en gamme attendue à mesure que la notoriété attire des profils plus exigeants.
+
 ---
 
 ## 4. Canaux de distribution
@@ -79,6 +83,7 @@ _Marge brute ≈ l'offre de montage, soit ~10 % du CA (les composants sont vendu
 | **Réseaux sociaux**         | Acquisition, communauté, contenus éducatifs               |
 | **YouTube / Twitch**        | Partenariats créateurs gaming/tech                        |
 | **SEO / Content marketing** | Guides, comparatifs, tutoriels                            |
+| **GEO** _(Generative Engine Optimization)_ | Être cité par les IA génératives (ChatGPT, Perplexity, Google AI Overviews) quand un utilisateur demande conseil sur sa config — canal émergent, à fort potentiel pour une cible déjà adepte des assistants IA |
 
 ---
 
@@ -179,8 +184,8 @@ _Marge brute ≈ l'offre de montage, soit ~10 % du CA (les composants sont vendu
 | ------------------------------------- | ------ | --------------------------------------- |
 | Concurrence des géants (LDLC, Amazon) | Élevé  | Différenciation UX + niche sur-mesure   |
 | Ruptures de stock composants          | Moyen  | Multi-sourcing, alertes automatiques    |
-| Marges faibles sur hardware           | Élevé  | Services à valeur ajoutée, fidélisation |
-| Évolution technologique rapide        | Moyen  | Veille continue, mise à jour agile      |
+| Revenu adossé au seul montage         | Moyen  | Montée en gamme des offres (Confort/Premium), revenus complémentaires (garantie, abonnement Pro) |
+| Évolution technologique rapide        | Faible | **Plutôt une opportunité** : relance le besoin de conseil et d'upgrade (récurrence). Veille continue. |
 | Dépendance aux partenaires            | Moyen  | Diversification fournisseurs            |
 
 ---
@@ -206,14 +211,14 @@ _Marge brute ≈ l'offre de montage, soit ~10 % du CA (les composants sont vendu
 ├─────────────────┴─────────────────┼─────────────────┤
 │         STRUCTURE DE COÛTS        │     REVENUS     │
 │                                   │                 │
-│ • Infra technique (5%)            │ • Commission    │
-│ • Marketing (10-15%)              │   ventes (12%)  │
-│ • Équipe (variable)               │ • Assemblage    │
-│ • Coût composants (80-88%)        │ • Abo Pro       │
-│                                   │ • Partenariats  │
+│ • Infra technique                 │ • Montage       │
+│ • Marketing                       │   79/129/199 €  │
+│ • Équipe (variable)               │ • Garantie      │
+│ • Composants (à prix coûtant)     │ • Abo Pro       │
+│                                   │ • Affiliation   │
 └───────────────────────────────────┴─────────────────┘
 ```
 
 ---
 
-_Document de travail — PC Aeris — Janvier 2026_
+_Document de travail — PC Aeris — mis à jour le 15 juin 2026_

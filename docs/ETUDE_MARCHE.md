@@ -1,103 +1,170 @@
 # Étude de marché — PC Aeris
 
----
-
-## 1. Analyse SWOT
-
-| **FORCES** | **FAIBLESSES** |
-|------------|----------------|
-| ✅ Proposition de valeur unique (sur-mesure simplifié) | ❌ Notoriété à construire de zéro |
-| ✅ Transparence des prix (différenciation forte) | ❌ Marges faibles sur le hardware |
-| ✅ IA de compatibilité (barrière technologique) | ❌ Dépendance aux fournisseurs tiers |
-| ✅ UX adaptée à tous les niveaux | ❌ Pas d'économies d'échelle (pas de vente en gros) |
-| ✅ Pas de stock = pas de BFR élevé | ❌ Équipe réduite au lancement |
-
-| **OPPORTUNITÉS** | **MENACES** |
-|------------------|-------------|
-| 🚀 Croissance du marché gaming (+8-10%/an) | ⚠️ Concurrence des acteurs établis (LDLC, Amazon) |
-| 🚀 Démocratisation du PC pour créatifs/streamers | ⚠️ Volatilité des prix des composants |
-| 🚀 Essor du télétravail (besoin de workstations) | ⚠️ Pénuries de composants (GPU, etc.) |
-| 🚀 Méfiance croissante envers les PC pré-assemblés | ⚠️ Guerre des prix sur le hardware |
-| 🚀 Génération Z habituée au sur-mesure digital | ⚠️ Évolution technologique rapide |
+> **Dernière mise à jour :** 15 juin 2026
+> **Objet :** caractériser le marché visé, son environnement et la position concurrentielle de PC Aeris, afin d'en tirer une synthèse stratégique exploitable.
 
 ---
 
-## 2. Analyse PESTEL
+## Note de lecture
+
+Cette étude suit une logique d'**entonnoir**. On part du plus large — la taille et les dynamiques du marché — pour aller vers le plus spécifique. L'analyse de marché, l'analyse PESTEL (macro-environnement) et les cinq forces de Porter (environnement concurrentiel immédiat) constituent les **matériaux d'entrée**. La matrice **SWOT**, présentée en dernier, n'est pas une analyse de plus : c'est la **synthèse** qui agrège ces trois lectures pour en déduire des axes d'action. C'est pourquoi elle clôt le document.
+
+---
+
+## 1. Analyse de marché
+
+### 1.1 Taille et dynamique
+
+Le marché français du PC reste un marché de masse, soutenu par le jeu vidéo, la création de contenu et le télétravail. Les ordres de grandeur retenus comme hypothèses de travail sont les suivants ; ils devront être consolidés avec des sources sectorielles avant le rendu final (voir § Sources).
+
+| Indicateur | Valeur (hypothèse de travail) | À sourcer |
+| --- | --- | --- |
+| Marché du PC en France | ~4 milliards € / an | GfK / Context / Statista |
+| Croissance du segment gaming & workstation | +8 à 10 % / an | SELL, *L'Essentiel du jeu vidéo* ; IDC |
+| Part du sur-mesure / assemblé | En croissance, peu d'acteurs spécialisés | Xerfi ; observation concurrentielle |
+
+Le segment qui nous intéresse — le PC fixe performant, gaming ou workstation — est le plus dynamique et le moins menacé par la substitution (un usage gaming AAA ou de création 3D reste difficilement transférable vers un portable d'entrée de gamme ou une console). C'est sur ce cœur de marché que se concentre PC Aeris.
+
+### 1.2 Tendances structurantes
+
+Plusieurs tendances de fond rendent le moment opportun :
+
+- **Le jeu vidéo est devenu mainstream.** L'esport, le streaming et les créateurs de contenu ont normalisé l'idée d'investir dans une machine performante.
+- **Le télétravail a installé un besoin durable de stations de travail** à domicile (montage vidéo, 3D, développement, data).
+- **La défiance envers les PC pré-assemblés** « boîte noire » progresse : les acheteurs veulent comprendre et maîtriser ce qu'ils paient.
+- **L'IA générative est devenue un réflexe d'aide à la décision.** Une part croissante des acheteurs interroge ChatGPT, Perplexity ou Gemini avant d'acheter — ce qui ouvre un canal d'acquisition nouveau (le GEO, traité dans le business plan).
+- **La seconde main et la durabilité** s'imposent comme critères d'achat, en réaction à l'obsolescence et à l'inflation.
+
+### 1.3 La demande : segmentation
+
+La demande visée est exclusivement composée de **particuliers et de professionnels individuels** — pas de vente en gros, chaque configuration étant unique. Cinq segments se dégagent, homogènes par leur recherche de sur-mesure sans complexité, mais distincts par leur budget.
+
+| Segment | Profil | Panier moyen | Volume potentiel |
+| --- | --- | --- | --- |
+| 🎮 Gamers débutants | 16-30 ans, premier PC gaming | 800 – 1 500 € | Élevé |
+| 🎮 Gamers confirmés | 20-40 ans, upgrade régulier | 1 500 – 3 000 € | Moyen |
+| 🎨 Créatifs / Freelances | Monteurs, graphistes, développeurs | 1 200 – 2 500 € | Moyen |
+| 🎓 Étudiants tech | Écoles d'ingénieurs, informatique | 600 – 1 200 € | Élevé |
+| 💼 Pros individuels | Indépendants, consultants | 1 000 – 2 500 € | Moyen |
+
+### 1.4 L'offre : paysage concurrentiel
+
+Quatre familles d'acteurs se partagent aujourd'hui la demande, sans qu'aucune ne couvre réellement le besoin de « sur-mesure simplifié » :
+
+- **Les revendeurs spécialistes** (LDLC, Materiel.net, TopAchat) : catalogue large et expertise réelle, mais interface technique pensée pour des connaisseurs.
+- **Les généralistes** (Amazon, Cdiscount) : prix et logistique imbattables, mais aucun conseil ni garantie de compatibilité — une « jungle » de produits.
+- **Les assembleurs / pré-montés** (grande distribution, marques) : simplicité maximale mais aucune personnalisation, et des configurations dictées par le stock.
+- **Les outils de compatibilité** (type PCPartPicker) : utiles aux experts pour vérifier un montage, mais ni vendeurs, ni accompagnants, ni francophones grand public.
+
+PC Aeris se positionne dans l'espace laissé vacant : **l'expertise d'un spécialiste, la simplicité d'un pré-monté, la transparence d'un comparateur.**
+
+---
+
+## 2. Analyse PESTEL (macro-environnement)
+
+Le macro-environnement est **globalement porteur**, avec des points de vigilance économiques.
 
 | Facteur | Impact sur PC Aeris |
-|---------|---------------------|
-| **Politique** | 🟢 Soutien aux startups tech en France (BPI, French Tech). Réglementations e-commerce stables. |
-| **Économique** | 🟡 Inflation = arbitrage budgétaire des consommateurs. Mais le gaming reste une priorité pour la cible. Marché FR du PC : ~4 Mds €/an. |
-| **Socioculturel** | 🟢 Gaming mainstream, esports en croissance, streamers influents. Attente forte de personnalisation et de transparence. |
-| **Technologique** | 🟢 IA accessible (OpenAI, etc.), outils no-code/low-code. Évolution rapide des composants = besoin de conseil. |
-| **Écologique** | 🟡 Pression sur l'obsolescence programmée. Opportunité : intégrer l'occasion, promouvoir la durabilité. |
-| **Légal** | 🟢 Garantie légale de conformité (2 ans). RGPD à respecter pour les données utilisateurs. |
+| --- | --- |
+| **Politique** | 🟢 Soutien public à l'entrepreneuriat tech (BPI, French Tech). Cadre e-commerce stable. |
+| **Économique** | 🟡 L'inflation pousse les ménages à l'arbitrage, mais le gaming reste une dépense priorisée par la cible. La transparence prix devient un argument d'autant plus fort. |
+| **Socioculturel** | 🟢 Gaming mainstream, esport en croissance, influence des streamers. Attente forte de personnalisation et de transparence. |
+| **Technologique** | 🟢 IA accessible et abordable, outils cloud matures. Surtout : l'évolution rapide des composants crée un **besoin de conseil et de renouvellement récurrent** — un moteur d'activité plus qu'une contrainte (voir SWOT). |
+| **Écologique** | 🟡 Pression sociétale sur l'obsolescence. Opportunité : intégrer l'occasion et promouvoir la durabilité (réparabilité, upgrade plutôt que remplacement). |
+| **Légal** | 🟢 Garantie légale de conformité (2 ans) et RGPD : contraintes maîtrisables, et facteurs de confiance s'ils sont bien exécutés. |
 
-**Synthèse PESTEL** : environnement globalement favorable, avec des opportunités sur la transparence et l'éco-responsabilité.
+**Synthèse PESTEL :** environnement favorable. Les principaux leviers à exploiter sont la **transparence** (réponse à l'arbitrage économique) et l'**éco-responsabilité** (réponse à la pression écologique). Le seul facteur réellement surveillé est la conjoncture économique, qui pèse sur le pouvoir d'achat de la cible.
 
 ---
 
-## 3. Les 5 forces de Porter
+## 3. Les cinq forces de Porter (environnement concurrentiel)
 
-### Vue d'ensemble
+L'intensité concurrentielle est **élevée**, mais elle se concentre sur le terrain du prix et du catalogue — pas sur celui du conseil personnalisé, où PC Aeris se place.
 
 ```
                     MENACE DES NOUVEAUX
                         ENTRANTS
-                           │
-                           ▼
-                        MOYENNE
-                           │
-    ┌──────────────────────┼──────────────────────┐
-    │                      │                      │
-    ▼                      ▼                      ▼
- POUVOIR               INTENSITÉ              POUVOIR
-FOURNISSEURS          CONCURRENCE             CLIENTS
-   ÉLEVÉ      ◄────►     ÉLEVÉE      ◄────►    ÉLEVÉ
-    │                      │                      │
-    └──────────────────────┼──────────────────────┘
-                           │
-                           ▼
-                    MENACE PRODUITS
-                      SUBSTITUTS
-                           │
-                           ▼
-                        MOYENNE
+                          (Moyenne)
+                              │
+                              ▼
+   POUVOIR FOURNISSEURS ─► INTENSITÉ ◄─ POUVOIR CLIENTS
+        (Élevé)           CONCURRENCE        (Élevé)
+                           (Élevée)
+                              ▲
+                              │
+                       MENACE SUBSTITUTS
+                          (Moyenne)
 ```
 
-### Détail des forces
-
 | Force | Intensité | Analyse |
-|-------|-----------|---------|
-| **Pouvoir des fournisseurs** | 🔴 Élevé | Marché concentré (Intel, AMD, Nvidia). Pénuries récurrentes. Peu de marge de négociation pour les petits acteurs. |
-| **Pouvoir des clients** | 🔴 Élevé | Clients informés, comparent facilement les prix. Faible coût de changement. Sensibilité prix importante. |
-| **Menace des nouveaux entrants** | 🟡 Moyenne | Barrières techniques (IA, base de données composants) mais peu de barrières capitalistiques. Marché accessible aux startups. |
-| **Menace des substituts** | 🟡 Moyenne | PC portables gaming, consoles (PS5, Xbox), cloud gaming (GeForce Now, Xbox Cloud). Le PC fixe reste supérieur en performance/prix. |
-| **Intensité concurrentielle** | 🔴 Élevée | LDLC, Materiel.net, TopAchat, Amazon, AliExpress. Guerre des prix. Mais peu d'acteurs sur le créneau "sur-mesure simplifié". |
+| --- | --- | --- |
+| **Pouvoir des fournisseurs** | 🔴 Élevé | Marché amont concentré (Intel, AMD, Nvidia), pénuries récurrentes, peu de marge de négociation pour un petit acteur. |
+| **Pouvoir des clients** | 🔴 Élevé | Clients informés qui comparent facilement, faible coût de changement, forte sensibilité au prix. |
+| **Menace des nouveaux entrants** | 🟡 Moyenne | Barrières techniques réelles (IA de compatibilité, base de données, agrégation prix) mais faibles barrières capitalistiques. |
+| **Menace des substituts** | 🟡 Moyenne | Portables gaming, consoles (PS5/Xbox), cloud gaming (GeForce Now). Le PC fixe garde l'avantage performance/prix et évolutivité sur le cœur de cible. |
+| **Intensité concurrentielle** | 🔴 Élevée | LDLC, Materiel.net, TopAchat, Amazon… Guerre des prix, mais créneau « sur-mesure simplifié » peu disputé. |
 
-### Positionnement stratégique
+**Stratégie de réponse :** ne pas livrer la guerre des prix (terrain des fournisseurs et des géants), mais **déplacer la concurrence sur la valeur ajoutée** — conseil, compatibilité garantie, transparence, expérience. Multi-sourcing et affiliation pour atténuer le pouvoir des fournisseurs ; communauté et configurations partagées pour créer un coût de changement côté clients.
 
-| Force | Stratégie PC Aeris |
-|-------|-------------------|
-| Fournisseurs | Multi-sourcing, partenariats affiliation, intégration occasion |
-| Clients | Transparence prix, UX différenciante, communauté fidèle |
-| Nouveaux entrants | Avance technologique (IA), effet réseau (configs partagées) |
-| Substituts | Cibler les usages où le PC fixe excelle (gaming AAA, création) |
-| Concurrence | Éviter la guerre des prix, se positionner sur la valeur ajoutée |
+---
+
+## 4. Synthèse stratégique : matrice SWOT
+
+La SWOT consolide les trois analyses précédentes. Les **forces et faiblesses** sont internes (issues du diagnostic produit et organisationnel) ; les **opportunités et menaces** sont externes (issues du PESTEL et de Porter).
+
+> **Arbitrage notable :** l'**évolution technologique rapide** des composants, souvent listée comme une menace, est ici classée en **opportunité**. Pour un revendeur de stock, c'est un risque d'invendus ; pour une plateforme de conseil *asset-light* sans stock, c'est au contraire un **moteur de récurrence** — chaque nouvelle génération de composants relance le besoin de conseil, de comparaison et d'upgrade, c'est-à-dire la demande pour notre service.
+
+| **FORCES** (interne) | **FAIBLESSES** (interne) |
+| --- | --- |
+| ✅ Proposition de valeur unique : le sur-mesure simplifié | ❌ Notoriété à construire de zéro |
+| ✅ Transparence des prix (différenciation forte) | ❌ Marges structurellement faibles sur le hardware nu |
+| ✅ Moteur de compatibilité (barrière technologique) | ❌ Dépendance aux fournisseurs et plateformes tierces |
+| ✅ UX adaptée à tous les niveaux | ❌ Pas d'économies d'échelle (configurations uniques) |
+| ✅ Modèle *asset-light* : pas de stock, faible BFR | ❌ Équipe réduite au lancement (solo) |
+
+| **OPPORTUNITÉS** (externe) | **MENACES** (externe) |
+| --- | --- |
+| 🚀 Croissance du marché gaming (+8-10 %/an) | ⚠️ Concurrence des acteurs établis (LDLC, Amazon) |
+| 🚀 Démocratisation du PC pour créatifs et streamers | ⚠️ Volatilité et pénuries des prix composants |
+| 🚀 Essor du télétravail (besoin de workstations) | ⚠️ Guerre des prix tirant les marges vers le bas |
+| 🚀 Défiance envers les pré-assemblés « boîte noire » | ⚠️ Durcissement des conditions d'affiliation des marketplaces |
+| 🚀 **Évolution technologique rapide = besoin de conseil et d'upgrade récurrent** | ⚠️ Conjoncture économique pesant sur le pouvoir d'achat |
+| 🚀 Recours croissant aux IA génératives pour s'informer (canal GEO) | |
+
+### Stratégies croisées (ce que la SWOT permet de décider)
+
+| Croisement | Décision stratégique |
+| --- | --- |
+| **Forces × Opportunités** (offensif) | Capitaliser sur la transparence et la compatibilité pour capter la croissance gaming et la défiance envers les pré-assemblés. Faire de l'évolution techno un moteur de réachat (alertes, upgrades). |
+| **Forces × Menaces** (défensif) | Opposer la valeur ajoutée (conseil, UX) à la guerre des prix des géants, plutôt que de s'y aligner. |
+| **Faiblesses × Opportunités** (ajustement) | Compenser la notoriété zéro par le SEO/GEO et les partenariats créateurs, peu coûteux et adaptés à la cible. |
+| **Faiblesses × Menaces** (vigilance) | Diversifier les sources d'approvisionnement et d'affiliation pour réduire la dépendance ; recruter un CTO pour lever le risque « solo ». |
 
 ---
 
 ## Conclusion
 
 | Élément | Constat |
-|---------|---------|
-| **Marché** | Porteur (~4 Mds €), en croissance sur le segment gaming/workstation |
-| **Environnement** | Favorable (tech, social, politique), vigilance sur l'économique |
-| **Concurrence** | Intense mais créneau "sur-mesure simplifié" peu exploité |
-| **Clé de succès** | Différenciation par l'UX, la transparence et l'IA |
+| --- | --- |
+| **Marché** | Porteur (~4 Mds €), en croissance sur le segment gaming / workstation |
+| **Environnement (PESTEL)** | Favorable, vigilance sur la conjoncture économique |
+| **Concurrence (Porter)** | Intense sur le prix, mais créneau « sur-mesure simplifié » peu exploité |
+| **Synthèse (SWOT)** | Différenciation par l'UX, la transparence et l'IA ; l'évolution techno devient un atout de récurrence |
 
-> **PC Aeris se positionne sur une niche stratégique** : le sur-mesure accessible, là où les géants sont absents.
+> **PC Aeris se positionne sur une niche stratégique : le sur-mesure accessible, là où les généralistes ne conseillent pas et où les spécialistes restent trop techniques.**
 
 ---
 
-*Document de travail — PC Aeris — Janvier 2026*
+## Sources
+
+> ⚠️ **À compléter avant le rendu final.** Les ordres de grandeur ci-dessus sont des hypothèses de travail. Sources sectorielles recommandées à citer (voir `BIBLIOGRAPHIE.md`) :
+>
+> - **SELL** — *L'Essentiel du jeu vidéo* (marché FR du jeu vidéo, équipement)
+> - **GfK / Context / IDC** — ventes de PC et composants en France/Europe
+> - **Statista** — taille et croissance du marché PC / gaming
+> - **Xerfi** — études sectorielles e-commerce et distribution informatique
+> - **Médiamétrie / Arcep** — usages numériques des ménages
+
+---
+
+_Document de travail — PC Aeris — mis à jour le 15 juin 2026_

@@ -1,217 +1,177 @@
 # User Stories détaillées — PC Aeris
 
-> **Scope :** User stories de priorité Critique et Haute
-> **Dernière mise à jour :** 29 mai 2026
-> **Convention :** Les critères d'acceptation (CA) sont les conditions vérifiables en recette
-> **Source de vérité statuts :** [backlog.md](./backlog.md) — ce document liste les CA détaillés, le backlog liste les statuts à jour.
+> **Scope :** user stories de priorité Critique et Haute.
+> **Dernière mise à jour :** 15 juin 2026
+> **Convention :** les critères d'acceptation (CA) sont les conditions vérifiables en recette.
+> **Source de vérité des statuts :** [backlog.md](./backlog.md) — ce document détaille les CA, le backlog liste les statuts et priorités à jour.
+
+---
+
+## Definition of Done générique (commune à toutes les user stories)
+
+Pour éviter la répétition, les critères suivants s'appliquent **à toutes les stories** et ne sont donc **pas répétés** dans chaque fiche. Une story n'est considérée *Done* que si, en plus de ses critères d'acceptation :
+
+- [ ] **Code revu et mergé** sur `develop` (PR relue, CI verte)
+- [ ] **Rendu correct** sur les navigateurs cibles (Chrome, Firefox, Safari)
+- [ ] **Responsive vérifié** (mobile 375 px, tablette 768 px, desktop)
+- [ ] **Aucune erreur** en console sur le parcours concerné
+- [ ] **Respect du design system** Aeris Dark (contrastes RGAA AA)
+
+Chaque fiche ci-dessous ne mentionne donc, sous **« DoD spécifique »**, que les conditions **propres** à la story (migration, test ciblé, dépendance, etc.). Les **stories techniques / enabler** (US-086, US-087…), dont la valeur est surtout technique, conservent une DoD spécifique détaillée.
 
 ---
 
 ## Activité 1 — Découvrir la plateforme
 
----
-
 ### US-001 : Page d'accueil avec présentation de PC Aeris
-**En tant que** visiteur
-**Je veux** accéder à une page d'accueil claire qui présente PC Aeris
-**Afin de** comprendre ce que propose le service avant de m'inscrire ou de configurer un PC
+**En tant que** visiteur **je veux** une page d'accueil claire **afin de** comprendre ce que propose le service avant de m'inscrire ou de configurer.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La page d'accueil charge en moins de 3 secondes
-- [ ] CA2 : La valeur proposition principale est visible sans scrolling (above the fold)
-- [ ] CA3 : Un call-to-action "Configurer mon PC" est visible et fonctionnel
-- [ ] CA4 : La page présente au minimum : titre, sous-titre, et lien vers le configurateur
-- [ ] CA5 : La navigation est fonctionnelle (header avec liens vers les sections principales)
+- [ ] CA1 : La page charge en moins de 3 secondes
+- [ ] CA2 : La proposition de valeur est visible sans scroller (*above the fold*)
+- [ ] CA3 : Un CTA « Configurer mon PC » est visible et fonctionnel
+- [ ] CA4 : La page présente au minimum titre, sous-titre et lien vers le configurateur
+- [ ] CA5 : La navigation est fonctionnelle (header avec liens principaux)
 
-**Definition of Done :**
-- [ ] Code reviewé et mergé sur develop
-- [ ] Rendu correct sur Chrome, Firefox, Safari
-- [ ] Responsive vérifié sur mobile (375px) et tablette (768px)
-- [ ] Aucune erreur console
+**DoD spécifique :** aucune (DoD générique suffisante).
 
-**Points :** 5 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done (partiel — contenu placeholder)
+**Points :** 5 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-002 : Hero banner avec call-to-action vers le configurateur
-**En tant que** visiteur
-**Je veux** voir une bannière hero visuelle mettant en avant le configurateur
-**Afin d'** être incité à démarrer une configuration dès ma première visite
+**En tant que** visiteur **je veux** une bannière hero mettant en avant le configurateur **afin d'**être incité à démarrer dès ma première visite.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un composant HeroBanner est affiché en haut de la page d'accueil
-- [ ] CA2 : La bannière contient un titre accrocheur, un sous-titre descriptif et un bouton CTA
+- [ ] CA1 : Un composant HeroBanner est affiché en haut de la home
+- [ ] CA2 : La bannière contient titre accrocheur, sous-titre et bouton CTA
 - [ ] CA3 : Le CTA redirige vers /configurateur
-- [ ] CA4 : La bannière est visuellement distincte du reste de la page (fond, typographie)
-- [ ] CA5 : L'image/visuel de fond est optimisé (format WebP ou SVG, < 200ko)
+- [ ] CA4 : La bannière est visuellement distincte (fond, typographie)
+- [ ] CA5 : Le visuel de fond est optimisé (WebP ou SVG, < 200 ko)
 
-**Definition of Done :**
-- [ ] Code reviewé et mergé sur develop
-- [ ] Design validé (cohérent avec le design system)
-- [ ] Responsive vérifié sur mobile, tablette et desktop
-- [ ] Performance Lighthouse > 80
+**DoD spécifique :** performance Lighthouse > 80 sur la home.
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 2
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 2 | **Statut :** Done
 
 ---
 
 ### US-005 : Menu de navigation principal
-**En tant que** visiteur
-**Je veux** un menu de navigation clair et accessible
-**Afin d'** accéder rapidement aux différentes sections du site
+**En tant que** visiteur **je veux** un menu de navigation clair **afin d'**accéder rapidement aux sections du site.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le header contient un logo PC Aeris cliquable (redirige vers /)
-- [ ] CA2 : Les liens de navigation principaux sont : Accueil, Configurateur, [Mon compte / Connexion]
-- [ ] CA3 : Si l'utilisateur est connecté, le menu affiche son pseudo et un accès au profil
-- [ ] CA4 : Si l'utilisateur est admin, un lien "Admin" est visible dans la navigation
-- [ ] CA5 : Le menu est sticky (reste visible lors du scroll)
-- [ ] CA6 : Sur mobile, la navigation passe en menu hamburger
+- [ ] CA1 : Logo PC Aeris cliquable (redirige vers /)
+- [ ] CA2 : Liens principaux : Accueil, Configurateur, [Mon compte / Connexion]
+- [ ] CA3 : Si connecté, le menu affiche le pseudo et l'accès au profil
+- [ ] CA4 : Si admin, un lien « Admin » est visible
+- [ ] CA5 : Le menu est sticky au scroll
+- [ ] CA6 : Sur mobile, passage en menu hamburger
 
-**Definition of Done :**
-- [ ] Code reviewé et mergé sur develop
-- [ ] Responsive mobile vérifié (menu hamburger fonctionnel)
-- [ ] Accessibilité : navigation au clavier fonctionnelle
+**DoD spécifique :** navigation au clavier fonctionnelle (accessibilité).
 
-**Points :** 3 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done (partiel — pas de menu hamburger mobile)
+**Points :** 3 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-006 : Responsive mobile complet
-**En tant que** visiteur
-**Je veux** utiliser le site depuis un smartphone
-**Afin de** configurer mon PC ou consulter mes commandes en mobilité
+**En tant que** visiteur **je veux** utiliser le site depuis un smartphone **afin de** configurer ou consulter mes commandes en mobilité.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Toutes les pages sont utilisables sur un écran de 375px de large minimum
-- [ ] CA2 : Le configurateur est utilisable sur mobile (sélection de composants, navigation par catégorie)
-- [ ] CA3 : Les formulaires d'authentification sont utilisables sur mobile (inputs suffisamment grands, pas de zoom forcé)
-- [ ] CA4 : Les tableaux admin s'adaptent ou passent en vue carte sur mobile
-- [ ] CA5 : Aucun contenu n'est tronqué ou inaccessible sur mobile
-- [ ] CA6 : Les boutons ont une zone de touch d'au moins 44x44px
+- [ ] CA1 : Toutes les pages utilisables dès 375 px de large
+- [ ] CA2 : Le configurateur est utilisable sur mobile
+- [ ] CA3 : Les formulaires d'auth sont utilisables (inputs assez grands, pas de zoom forcé)
+- [ ] CA4 : Les tableaux admin s'adaptent (vue carte sur mobile)
+- [ ] CA5 : Aucun contenu tronqué ou inaccessible
+- [ ] CA6 : Zones de touch ≥ 44 × 44 px
 
-**Definition of Done :**
-- [ ] Testé sur iOS Safari et Android Chrome
-- [ ] Testé aux breakpoints 375px, 414px, 768px
-- [ ] Lighthouse Mobile Performance > 70
-- [ ] Aucun scroll horizontal parasite
+**DoD spécifique :** testé sur iOS Safari et Android Chrome ; breakpoints 375/414/768 px ; Lighthouse Mobile > 70 ; aucun scroll horizontal parasite.
 
-**Points :** 8 | **Priorité :** Haute | **Sprint :** 5
+**Points :** 8 | **Priorité :** Haute | **Sprint :** 5 | **Statut :** En cours
 
 ---
 
 ## Activité 2 — S'authentifier
 
----
-
 ### US-011 : Inscription avec email et mot de passe
-**En tant que** visiteur
-**Je veux** créer un compte avec mon adresse email et un mot de passe
-**Afin d'** accéder aux fonctionnalités personnalisées (sauvegarde de configurations, commandes)
+**En tant que** visiteur **je veux** créer un compte avec email et mot de passe **afin d'**accéder aux fonctionnalités personnalisées.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le formulaire d'inscription contient : email, pseudo, prénom, nom, mot de passe, confirmation mot de passe
-- [ ] CA2 : L'email est validé côté client (format) et côté serveur (unicité)
-- [ ] CA3 : Le pseudo est validé (min 3 caractères, uniquement alphanumériques et tirets)
-- [ ] CA4 : Le mot de passe doit contenir au moins 8 caractères
-- [ ] CA5 : Un message de succès est affiché après inscription réussie
-- [ ] CA6 : En cas d'erreur (email déjà utilisé, etc.), un message explicite est affiché
-- [ ] CA7 : L'utilisateur est automatiquement connecté après inscription
+- [ ] CA1 : Le formulaire contient email, pseudo, prénom, nom, mot de passe, confirmation
+- [ ] CA2 : L'email est validé côté client (format) et serveur (unicité)
+- [ ] CA3 : Le pseudo est validé (≥ 3 caractères, alphanumériques et tirets)
+- [ ] CA4 : Le mot de passe contient ≥ 8 caractères
+- [ ] CA5 : Message de succès après inscription
+- [ ] CA6 : Message explicite en cas d'erreur (email déjà utilisé…)
+- [ ] CA7 : Connexion automatique après inscription
 
-**Definition of Done :**
-- [ ] Code reviewé et mergé
-- [ ] Tests sur cas nominaux et cas d'erreur validés manuellement
-- [ ] Responsive vérifié
-- [ ] Données persistées correctement dans Supabase (table profiles)
+**DoD spécifique :** données persistées dans Supabase (table `profiles`) ; cas nominaux et d'erreur validés.
 
 **Points :** 3 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-014 : Connexion avec email et mot de passe
-**En tant qu'** utilisateur inscrit
-**Je veux** me connecter avec mon email et mon mot de passe
-**Afin d'** accéder à mon espace personnel
+**En tant qu'**utilisateur inscrit **je veux** me connecter avec mon email et mon mot de passe **afin d'**accéder à mon espace personnel.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le formulaire contient un champ email/identifiant et un champ mot de passe
-- [ ] CA2 : La connexion par email fonctionne correctement
-- [ ] CA3 : Un message d'erreur générique est affiché si les identifiants sont incorrects (ne pas indiquer si c'est l'email ou le mot de passe qui est faux)
-- [ ] CA4 : Après connexion réussie, l'utilisateur est redirigé vers la page d'accueil (ou la page admin si rôle admin)
-- [ ] CA5 : Un lien "Mot de passe oublié ?" est présent et fonctionnel
-- [ ] CA6 : Un lien vers la page d'inscription est présent
+- [ ] CA1 : Champ email/identifiant + champ mot de passe
+- [ ] CA2 : La connexion par email fonctionne
+- [ ] CA3 : Message d'erreur générique si identifiants incorrects (sans préciser lequel)
+- [ ] CA4 : Redirection vers la home (ou admin si rôle admin) après succès
+- [ ] CA5 : Lien « Mot de passe oublié ? » présent et fonctionnel
+- [ ] CA6 : Lien vers l'inscription présent
 
-**Definition of Done :**
-- [ ] Code reviewé et mergé
-- [ ] Tests manuels sur nominaux et erreurs
-- [ ] Responsive vérifié
-- [ ] Session correctement stockée dans Supabase Auth
+**DoD spécifique :** session correctement stockée dans Supabase Auth.
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
-### US-015 : Connexion par pseudo (correction bug)
-**En tant qu'** utilisateur inscrit
-**Je veux** me connecter avec mon pseudo au lieu de mon email
-**Afin d'** avoir une alternative pratique à la connexion par email
+### US-015 : Connexion par pseudo (correction de bug)
+**En tant qu'**utilisateur inscrit **je veux** me connecter avec mon pseudo **afin d'**avoir une alternative à l'email.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le champ identifiant accepte aussi bien un email qu'un pseudo
-- [ ] CA2 : Si un pseudo est saisi, le service résout l'email correspondant via la table profiles avant d'appeler Supabase Auth
-- [ ] CA3 : Un pseudo inexistant retourne un message d'erreur clair ("Identifiant ou mot de passe incorrect")
-- [ ] CA4 : La connexion par pseudo fonctionne exactement comme la connexion par email (même session, même redirection)
-- [ ] CA5 : Le comportement n'est plus hardcodé — la logique est dynamique
+- [ ] CA1 : Le champ identifiant accepte email **ou** pseudo
+- [ ] CA2 : Si pseudo saisi, le service résout l'email via `profiles` avant Supabase Auth
+- [ ] CA3 : Pseudo inexistant → message clair (« Identifiant ou mot de passe incorrect »)
+- [ ] CA4 : La connexion par pseudo se comporte comme par email (session, redirection)
+- [ ] CA5 : Logique dynamique (plus de comportement hardcodé)
 
-**Definition of Done :**
-- [ ] Bug résolu et vérifié manuellement
-- [ ] Code reviewé
-- [ ] Aucune régression sur la connexion par email
+**DoD spécifique :** bug reproduit puis résolu ; aucune régression sur la connexion par email.
 
-**Notes techniques :** La logique actuelle dans authService.signIn retourne une erreur hardcodée pour la connexion par pseudo. Il faut implémenter la résolution pseudo → email via une requête Supabase sur la table profiles.
+**Notes techniques :** la logique initiale renvoyait une erreur hardcodée pour la connexion par pseudo ; implémenter la résolution pseudo → email via `profiles`.
 
-**Points :** 3 | **Priorité :** Critique | **Sprint :** 2 | **Statut :** Bug
+**Points :** 3 | **Priorité :** Critique | **Sprint :** 2 | **Statut :** Done
 
 ---
 
 ### US-017 : Réinitialisation de mot de passe par email
-**En tant qu'** utilisateur ayant oublié son mot de passe
-**Je veux** recevoir un email de réinitialisation
-**Afin de** récupérer l'accès à mon compte
+**En tant qu'**utilisateur ayant oublié son mot de passe **je veux** recevoir un email de réinitialisation **afin de** récupérer l'accès à mon compte.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La page "Mot de passe oublié" contient un champ email et un bouton d'envoi
-- [ ] CA2 : Un email de réinitialisation est envoyé si l'adresse existe dans le système
-- [ ] CA3 : Si l'email n'existe pas, un message neutre est affiché (ne pas révéler si l'email est enregistré)
-- [ ] CA4 : Un message de confirmation est affiché après soumission
-- [ ] CA5 : Le lien dans l'email redirige vers la page /reset-password avec un token valide
+- [ ] CA1 : Page « Mot de passe oublié » avec champ email + bouton d'envoi
+- [ ] CA2 : Email envoyé si l'adresse existe
+- [ ] CA3 : Si l'email n'existe pas, message neutre (ne pas révéler l'existence)
+- [ ] CA4 : Message de confirmation après soumission
+- [ ] CA5 : Le lien redirige vers /reset-password avec un token valide
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Email de reset testé manuellement (envoi et réception)
-- [ ] Responsive vérifié
+**DoD spécifique :** email de reset testé manuellement (envoi et réception).
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-018 : Définition d'un nouveau mot de passe
-**En tant qu'** utilisateur ayant cliqué sur le lien de reset
-**Je veux** définir un nouveau mot de passe
-**Afin de** restaurer l'accès à mon compte
+**En tant qu'**utilisateur ayant cliqué sur le lien de reset **je veux** définir un nouveau mot de passe **afin de** restaurer l'accès à mon compte.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La page de reset affiche deux champs : nouveau mot de passe et confirmation
-- [ ] CA2 : Le nouveau mot de passe doit respecter les règles de validation (min 8 caractères)
-- [ ] CA3 : Les deux champs doivent être identiques (validation côté client)
-- [ ] CA4 : Un message de succès est affiché après le changement réussi
-- [ ] CA5 : L'utilisateur est redirigé vers la page de connexion après succès
-- [ ] CA6 : Un token invalide ou expiré affiche un message d'erreur explicite
+- [ ] CA1 : Deux champs : nouveau mot de passe + confirmation
+- [ ] CA2 : Règles de validation respectées (≥ 8 caractères)
+- [ ] CA3 : Les deux champs doivent être identiques
+- [ ] CA4 : Message de succès après changement
+- [ ] CA5 : Redirection vers la connexion après succès
+- [ ] CA6 : Token invalide/expiré → message d'erreur explicite
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Flux complet testé (email → lien → reset → connexion)
-- [ ] Responsive vérifié
+**DoD spécifique :** flux complet testé (email → lien → reset → connexion).
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
@@ -219,526 +179,504 @@
 
 ## Activité 3 — Configurer son PC
 
----
-
 ### US-023 : Pagination dans le configurateur
-**En tant qu'** utilisateur
-**Je veux** parcourir les composants d'une catégorie avec pagination
-**Afin de** voir toutes les options disponibles sans saturer la page
+**En tant qu'**utilisateur **je veux** parcourir les composants avec pagination **afin de** voir toutes les options sans saturer la page.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Les composants sont affichés par pages de 24 éléments
-- [ ] CA2 : Des boutons "Précédent" et "Suivant" permettent de naviguer entre les pages
-- [ ] CA3 : Le nombre total de résultats est affiché ("X composants trouvés")
-- [ ] CA4 : La pagination se remet à 0 quand l'utilisateur change de catégorie ou de filtre de recherche
-- [ ] CA5 : Le chargement des pages est indiqué par un état de chargement (spinner)
+- [ ] CA1 : Affichage par pages de 24 éléments
+- [ ] CA2 : Boutons « Précédent » / « Suivant »
+- [ ] CA3 : Nombre total de résultats affiché
+- [ ] CA4 : Pagination réinitialisée au changement de catégorie ou de recherche
+- [ ] CA5 : État de chargement (spinner)
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec des données réelles en base
-- [ ] Responsive vérifié
+**DoD spécifique :** testé avec des données réelles en base.
 
 **Points :** 3 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-024 : Recherche de composant par nom
-**En tant qu'** utilisateur
-**Je veux** rechercher un composant par son nom dans le configurateur
-**Afin de** trouver rapidement un produit spécifique que je connais déjà
+**En tant qu'**utilisateur **je veux** rechercher un composant par nom **afin de** trouver rapidement un produit connu.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un champ de recherche est présent en haut de la liste des composants
-- [ ] CA2 : La recherche est insensible à la casse et aux accents
-- [ ] CA3 : La recherche se déclenche en temps réel (debounce de 300ms)
-- [ ] CA4 : Si aucun résultat, un message "Aucun composant trouvé" est affiché
-- [ ] CA5 : La pagination est réinitialisée lors d'une nouvelle recherche
-- [ ] CA6 : La recherche est compatible avec les filtres de compatibilité actifs
+- [ ] CA1 : Champ de recherche en haut de la liste
+- [ ] CA2 : Recherche insensible à la casse et aux accents
+- [ ] CA3 : Déclenchement en temps réel (debounce 300 ms)
+- [ ] CA4 : Message « Aucun composant trouvé » si vide
+- [ ] CA5 : Pagination réinitialisée à chaque recherche
+- [ ] CA6 : Compatible avec les filtres de compatibilité actifs
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec des requêtes vides, courtes et longues
-- [ ] Responsive vérifié
+**DoD spécifique :** testé avec requêtes vides, courtes et longues.
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-025 : Affichage des caractéristiques techniques clés
-**En tant qu'** utilisateur
-**Je veux** voir les caractéristiques techniques clés d'un composant dans la liste
-**Afin de** comparer rapidement les options sans ouvrir une page détail
+**En tant qu'**utilisateur **je veux** voir les specs clés d'un composant dans la liste **afin de** comparer rapidement sans ouvrir le détail.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Chaque carte composant affiche les specs clés définies par catégorie (ex : CPU → socket, cores, fréquence boost)
-- [ ] CA2 : Les specs sont formatées lisiblement (ex : "16 cores", "5.2 GHz", "DDR5")
-- [ ] CA3 : Les valeurs manquantes affichent "—" plutôt qu'une erreur
-- [ ] CA4 : La carte indique le fabricant et le nom du produit
-- [ ] CA5 : La carte indique clairement si le composant est déjà sélectionné dans la configuration
+- [ ] CA1 : Chaque carte affiche les specs clés par catégorie (ex. CPU → socket, cores, fréquence)
+- [ ] CA2 : Specs formatées lisiblement (« 16 cores », « 5.2 GHz », « DDR5 »)
+- [ ] CA3 : Valeurs manquantes → « — » plutôt qu'une erreur
+- [ ] CA4 : Fabricant et nom du produit affichés
+- [ ] CA5 : Indication claire si le composant est déjà sélectionné
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé sur toutes les catégories de composants
-- [ ] Responsive vérifié
+**DoD spécifique :** testé sur toutes les catégories de composants.
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-031 : Filtrage automatique par compatibilité CPU/Carte mère/RAM
-**En tant qu'** utilisateur
-**Je veux** que les composants incompatibles soient automatiquement filtrés
-**Afin de** ne pas pouvoir sélectionner des pièces qui ne fonctionneront pas ensemble
+**En tant qu'**utilisateur **je veux** que les composants incompatibles soient filtrés automatiquement **afin de** ne pas sélectionner de pièces qui ne fonctionneront pas ensemble.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Si un CPU est sélectionné, seules les cartes mères avec le même socket sont proposées
-- [ ] CA2 : Si une carte mère est sélectionnée, seuls les CPU avec le socket correspondant sont proposés
-- [ ] CA3 : Si une carte mère est sélectionnée, seules les RAM avec le type compatible (DDR4/DDR5) sont proposées
-- [ ] CA4 : Si un CPU est sélectionné, seuls les ventirad compatibles avec son socket sont proposés
-- [ ] CA5 : Le filtre de compatibilité est désactivé si aucun composant de référence n'est sélectionné
-- [ ] CA6 : Si aucun composant compatible n'existe, un message explicatif est affiché
+- [ ] CA1 : CPU sélectionné → seules les cartes mères au même socket
+- [ ] CA2 : Carte mère sélectionnée → seuls les CPU au socket correspondant
+- [ ] CA3 : Carte mère sélectionnée → seules les RAM au type compatible (DDR4/DDR5)
+- [ ] CA4 : CPU sélectionné → seuls les ventirad compatibles avec le socket
+- [ ] CA5 : Filtre désactivé si aucun composant de référence
+- [ ] CA6 : Message explicatif si aucun composant compatible
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec des configurations réelles (Intel LGA1700, AMD AM5)
-- [ ] Testé avec des cas limites (pas de composant de référence)
+**DoD spécifique :** testé sur Intel LGA1700 et AMD AM5 ; testé avec cas limites (aucun composant de référence).
 
 **Points :** 8 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-032 : Explication du filtre de compatibilité actif
-**En tant qu'** utilisateur
-**Je veux** voir pourquoi un filtre de compatibilité est actif
-**Afin de** comprendre les contraintes de ma configuration actuelle
+**En tant qu'**utilisateur **je veux** voir pourquoi un filtre est actif **afin de** comprendre les contraintes de ma configuration.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Quand un filtre de compatibilité est actif, un bandeau ou badge l'indique clairement
-- [ ] CA2 : Le message indique la raison du filtre (ex : "Filtré par socket LGA1700")
-- [ ] CA3 : Le message est affiché dans la section de la catégorie concernée
-- [ ] CA4 : Si la liste filtrée est vide, le message indique qu'aucun composant compatible n'est disponible
+- [ ] CA1 : Un bandeau/badge indique clairement le filtre actif
+- [ ] CA2 : Le message indique la raison (ex. « Filtré par socket LGA1700 »)
+- [ ] CA3 : Le message s'affiche dans la catégorie concernée
+- [ ] CA4 : Si liste filtrée vide, message indiquant l'absence de composant compatible
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] UX testée avec un utilisateur (message compréhensible)
-- [ ] Responsive vérifié
+**DoD spécifique :** message validé comme compréhensible auprès d'un utilisateur.
 
 **Points :** 2 | **Priorité :** Haute | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-033 : Compatibilité GPU / Alimentation
-**En tant qu'** utilisateur
-**Je veux** que le configurateur vérifie la compatibilité entre le GPU et l'alimentation
-**Afin d'** éviter de choisir un PSU insuffisant pour mon GPU
+**En tant qu'**utilisateur **je veux** que la compatibilité GPU/alimentation soit vérifiée **afin d'**éviter un PSU insuffisant.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Si un GPU est sélectionné, les PSU affichés sont ceux dont la puissance est supérieure ou égale à (TDP GPU + TDP CPU + marge de 20%)
-- [ ] CA2 : La raison du filtre est affichée (ex : "Filtré : puissance minimale recommandée 650W")
-- [ ] CA3 : Si aucun PSU de la base ne répond aux critères, un message explicite est affiché
-- [ ] CA4 : Le filtre fonctionne dans les deux sens (GPU filtré si PSU sélectionné en premier)
+- [ ] CA1 : GPU sélectionné → PSU affichés ≥ (TDP GPU + TDP CPU + marge 20 %)
+- [ ] CA2 : Raison du filtre affichée (ex. « puissance minimale recommandée 650 W »)
+- [ ] CA3 : Message explicite si aucun PSU ne convient
+- [ ] CA4 : Filtre bidirectionnel (GPU filtré si PSU choisi d'abord)
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Logique de calcul validée avec plusieurs cas (GPU entry level, mid-range, high-end)
-- [ ] Tests unitaires sur la fonction de calcul de consommation
+**DoD spécifique :** calcul validé sur plusieurs cas (entry / mid / high-end) ; **tests unitaires** sur la fonction de calcul de consommation.
 
-**Notes techniques :** Nécessite d'ajouter le champ `tdp_watts` dans les specs GPU et PSU. La logique est à implémenter dans `/src/utils/compatibility.ts`.
+**Notes techniques :** nécessite le champ `tdp_watts` dans les specs GPU et PSU ; logique dans `/src/utils/compatibility.ts`.
 
-**Points :** 5 | **Priorité :** Haute | **Sprint :** 3
+**Points :** 5 | **Priorité :** Haute | **Sprint :** 3 | **Statut :** Done
 
 ---
 
 ### US-034 : Compatibilité Boîtier / Format carte mère
-**En tant qu'** utilisateur
-**Je veux** que la compatibilité entre le boîtier et le format de la carte mère soit vérifiée
-**Afin d'** éviter de choisir une carte mère qui ne rentre pas dans le boîtier
+**En tant qu'**utilisateur **je veux** que la compatibilité boîtier/format carte mère soit vérifiée **afin d'**éviter une carte mère qui ne rentre pas.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Si une carte mère ATX est sélectionnée, seuls les boîtiers supportant ATX sont proposés
-- [ ] CA2 : Si un boîtier mATX est sélectionné, seules les cartes mères mATX et Mini-ITX sont proposées
-- [ ] CA3 : La raison du filtre est affichée (ex : "Filtré : format ATX requis")
-- [ ] CA4 : Le filtre fonctionne dans les deux sens
+- [ ] CA1 : Carte mère ATX → seuls les boîtiers supportant ATX
+- [ ] CA2 : Boîtier mATX → seules les cartes mères mATX et Mini-ITX
+- [ ] CA3 : Raison du filtre affichée (ex. « format ATX requis »)
+- [ ] CA4 : Filtre bidirectionnel
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec les formats ATX, mATX, Mini-ITX
-- [ ] Tests unitaires sur la logique de compatibilité form factor
+**DoD spécifique :** testé ATX / mATX / Mini-ITX ; **tests unitaires** sur la logique de form factor.
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 3
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 3 | **Statut :** Done
 
 ---
 
 ### US-035 : Compatibilité Stockage / Connectique carte mère
-**En tant qu'** utilisateur
-**Je veux** que la compatibilité entre le stockage et la carte mère soit vérifiée
-**Afin de** m'assurer que mes disques sont supportés par la carte mère choisie
+**En tant qu'**utilisateur **je veux** que la compatibilité stockage/carte mère soit vérifiée **afin de** m'assurer que mes disques sont supportés.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Si un SSD M.2 NVMe est sélectionné, seules les cartes mères avec un slot M.2 disponible sont proposées
-- [ ] CA2 : Si un disque SATA est sélectionné, seules les cartes mères avec des ports SATA sont proposées
-- [ ] CA3 : La raison du filtre est affichée
-- [ ] CA4 : Le filtre fonctionne dans les deux sens
+- [ ] CA1 : SSD M.2 NVMe → seules les cartes mères avec slot M.2 dispo
+- [ ] CA2 : Disque SATA → seules les cartes mères avec ports SATA
+- [ ] CA3 : Raison du filtre affichée
+- [ ] CA4 : Filtre bidirectionnel
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec SSD NVMe et HDD SATA
-- [ ] Tests unitaires sur la logique
+**DoD spécifique :** testé avec SSD NVMe et HDD SATA ; **tests unitaires** sur la logique.
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 3
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 3 | **Statut :** Done
 
 ---
 
 ### US-038 : Récapitulatif de configuration
-**En tant qu'** utilisateur
-**Je veux** voir un récapitulatif de tous mes composants sélectionnés
-**Afin d'** avoir une vue d'ensemble de ma configuration en cours
+**En tant qu'**utilisateur **je veux** un récapitulatif de tous mes composants **afin d'**avoir une vue d'ensemble.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un panneau récapitulatif affiche toutes les catégories avec leur composant sélectionné (ou "Non sélectionné")
-- [ ] CA2 : Chaque ligne du récapitulatif permet de supprimer le composant sélectionné
-- [ ] CA3 : Un bouton "Réinitialiser" permet de vider toute la configuration
-- [ ] CA4 : Le récapitulatif est visible en permanence (sidebar ou section dédiée) sans quitter le configurateur
-- [ ] CA5 : Le récapitulatif se met à jour en temps réel lors de la sélection ou suppression d'un composant
+- [ ] CA1 : Panneau listant chaque catégorie + composant (ou « Non sélectionné »)
+- [ ] CA2 : Suppression possible par ligne
+- [ ] CA3 : Bouton « Réinitialiser » pour vider la configuration
+- [ ] CA4 : Récapitulatif visible en permanence (sidebar/section dédiée)
+- [ ] CA5 : Mise à jour en temps réel
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec une configuration complète et partielle
-- [ ] Responsive vérifié
+**DoD spécifique :** testé avec configuration complète et partielle.
 
 **Points :** 2 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-039 : Prix total de la configuration
-**En tant qu'** utilisateur
-**Je veux** voir le prix total de ma configuration
-**Afin de** savoir combien coûteront les composants sélectionnés
+**En tant qu'**utilisateur **je veux** voir le prix total de ma configuration **afin de** connaître le coût des composants.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le prix total est affiché dans le récapitulatif de configuration
-- [ ] CA2 : Le prix total est la somme des prix unitaires de chaque composant sélectionné
-- [ ] CA3 : Si un composant n'a pas de prix défini, il n'est pas comptabilisé et une mention "prix non disponible" est affichée
-- [ ] CA4 : Le format de prix est en euros (ex : "1 249,99 €")
-- [ ] CA5 : Le prix se met à jour en temps réel lors de l'ajout ou suppression d'un composant
+- [ ] CA1 : Prix total affiché dans le récapitulatif
+- [ ] CA2 : Somme des prix unitaires des composants sélectionnés
+- [ ] CA3 : Composant sans prix non comptabilisé + mention « prix non disponible »
+- [ ] CA4 : Format en euros (« 1 249,99 € »)
+- [ ] CA5 : Mise à jour en temps réel
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Nécessite US-079 (prix en BDD) comme prérequis
-- [ ] Testé avec des configurations complètes et partielles
+**DoD spécifique :** **dépend de US-079** (prix en BDD) ; testé avec configs complètes et partielles. *Statut Tech ready : UI prête, données prix absentes (credentials API).*
 
-**Points :** 2 | **Priorité :** Haute | **Sprint :** 5
+**Points :** 2 | **Priorité :** Haute | **Sprint :** 5 | **Statut :** Tech ready
 
 ---
 
 ### US-041 : Sauvegarde de configuration
-**En tant qu'** utilisateur connecté
-**Je veux** sauvegarder ma configuration PC
-**Afin de** la retrouver lors de ma prochaine visite sans avoir à tout recommencer
+**En tant qu'**utilisateur connecté **je veux** sauvegarder ma configuration **afin de** la retrouver à ma prochaine visite.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un bouton "Sauvegarder ma configuration" est visible dans le configurateur
-- [ ] CA2 : Cliquer sur ce bouton ouvre un modal demandant un nom pour la configuration
-- [ ] CA3 : La configuration est sauvegardée en base de données liée au compte utilisateur
-- [ ] CA4 : Un toast de confirmation est affiché après la sauvegarde réussie
-- [ ] CA5 : Si l'utilisateur n'est pas connecté, il est invité à se connecter
-- [ ] CA6 : Un utilisateur peut sauvegarder jusqu'à 10 configurations
+- [ ] CA1 : Bouton « Sauvegarder ma configuration » dans le configurateur
+- [ ] CA2 : Ouvre un modal demandant un nom
+- [ ] CA3 : Configuration sauvegardée en base, liée au compte
+- [ ] CA4 : Toast de confirmation après sauvegarde
+- [ ] CA5 : Si non connecté, invitation à se connecter
+- [ ] CA6 : Jusqu'à 10 configurations par utilisateur
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Migration Supabase créée (table `saved_configurations`)
-- [ ] Testé avec compte connecté et non connecté
-- [ ] Toast de confirmation fonctionnel (US-084 prérequis recommandé)
+**DoD spécifique :** **migration Supabase** `saved_configurations` créée ; testé connecté et non connecté ; dépend de US-084 (toast).
 
-**Points :** 5 | **Priorité :** Haute | **Sprint :** 5
+**Points :** 5 | **Priorité :** Haute | **Sprint :** 5 (livré mai 2026) | **Statut :** Done
 
 ---
 
 ## Activité 4 — Passer commande
 
----
-
 ### US-047 : Ajout de la configuration au panier
-**En tant qu'** utilisateur
-**Je veux** ajouter ma configuration au panier
-**Afin de** procéder à la commande une fois satisfait de mes choix
+**En tant qu'**utilisateur **je veux** ajouter ma configuration au panier **afin de** procéder à la commande.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un bouton "Ajouter au panier" est visible dans le récapitulatif de configuration
-- [ ] CA2 : Le bouton n'est actif que si au moins un composant est sélectionné
-- [ ] CA3 : Après ajout, l'utilisateur est redirigé ou notifié (toast) que les articles ont été ajoutés au panier
-- [ ] CA4 : Un badge sur l'icône panier dans le header se met à jour avec le nombre d'articles
-- [ ] CA5 : Si l'utilisateur n'est pas connecté, il est invité à se connecter avant de pouvoir ajouter au panier
+- [ ] CA1 : Bouton « Ajouter au panier » dans le récapitulatif
+- [ ] CA2 : Actif seulement si ≥ 1 composant sélectionné
+- [ ] CA3 : Après ajout, notification (toast) de confirmation
+- [ ] CA4 : Badge panier dans le header mis à jour
+- [ ] CA5 : Si non connecté, invitation à se connecter
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Zustand store panier créé avec persistance localStorage
-- [ ] Responsive vérifié
-- [ ] Badge panier dans le header fonctionnel
+**DoD spécifique :** **store Zustand panier** avec persistance localStorage ; badge header fonctionnel.
 
-**Points :** 5 | **Priorité :** Haute | **Sprint :** 6
+**Points :** 5 | **Priorité :** Haute | **Sprint :** 6 | **Statut :** Done
 
 ---
 
 ### US-048 : Page panier
-**En tant qu'** utilisateur
-**Je veux** voir le contenu de mon panier avec le détail des composants et des prix
-**Afin de** vérifier ma commande avant de passer au paiement
+**En tant qu'**utilisateur **je veux** voir le contenu de mon panier **afin de** vérifier ma commande avant de continuer.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La page panier liste tous les composants avec nom, catégorie, prix unitaire
-- [ ] CA2 : Le sous-total, les frais de livraison estimés et le total sont affichés
-- [ ] CA3 : Chaque composant peut être supprimé individuellement
-- [ ] CA4 : Un bouton "Continuer mes achats" redirige vers le configurateur
-- [ ] CA5 : Un bouton "Passer commande" redirige vers le tunnel de commande (si connecté)
-- [ ] CA6 : Si le panier est vide, un message et un lien vers le configurateur sont affichés
+- [ ] CA1 : Liste des configurations avec composants, catégorie, prix
+- [ ] CA2 : Sous-total, frais estimés et total affichés
+- [ ] CA3 : Suppression possible par article
+- [ ] CA4 : Bouton « Continuer mes achats » → configurateur
+- [ ] CA5 : Bouton « Passer commande » → tunnel (si connecté)
+- [ ] CA6 : Si panier vide, message + lien vers le configurateur
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé avec un panier vide et un panier rempli
-- [ ] Responsive vérifié
+**DoD spécifique :** testé avec panier vide et rempli.
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 6
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 6 | **Statut :** Done
 
 ---
 
 ### US-054 : Paiement par carte bancaire via Stripe
-**En tant qu'** utilisateur
-**Je veux** payer ma commande par carte bancaire de façon sécurisée
-**Afin de** finaliser mon achat
+**En tant qu'**utilisateur **je veux** payer par carte de façon sécurisée **afin de** finaliser mon achat.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le formulaire de paiement Stripe est intégré (Stripe Elements ou Payment Element)
-- [ ] CA2 : Le paiement est sécurisé (PCI-DSS compliant via Stripe)
-- [ ] CA3 : Les principales cartes bancaires sont acceptées (Visa, Mastercard, American Express)
-- [ ] CA4 : En cas de paiement refusé, un message d'erreur clair est affiché
-- [ ] CA5 : En cas de succès, la commande est créée en base et l'utilisateur est redirigé vers une page de confirmation
-- [ ] CA6 : Un email de confirmation est envoyé automatiquement après le paiement (US-055)
-- [ ] CA7 : Le mode test Stripe fonctionne avec les cartes de test officielles
+- [ ] CA1 : Formulaire Stripe intégré (Payment Element)
+- [ ] CA2 : Paiement sécurisé (PCI-DSS via Stripe)
+- [ ] CA3 : Cartes principales acceptées (Visa, Mastercard, Amex)
+- [ ] CA4 : Message clair si paiement refusé
+- [ ] CA5 : En cas de succès, commande créée + page de confirmation
+- [ ] CA6 : Email de confirmation automatique (US-055)
+- [ ] CA7 : Mode test Stripe fonctionnel
 
-**Definition of Done :**
-- [ ] Intégration Stripe testée en mode sandbox
-- [ ] Webhook Stripe configuré pour confirmer le paiement
-- [ ] Migration Supabase créée (table `orders`)
-- [ ] Code reviewé
-- [ ] Aucune donnée de carte stockée côté serveur
+**DoD spécifique :** intégration testée en sandbox ; **webhook Stripe** configuré ; **migration `orders`** ; **aucune donnée de carte stockée** côté serveur. *Remplacé provisoirement par le workflow de devis (US-088 à US-091).*
 
-**Notes techniques :** Nécessite la création d'une Supabase Edge Function pour créer le Payment Intent Stripe (les clés secrètes Stripe ne doivent jamais être exposées côté client).
+**Notes techniques :** Edge Function Supabase pour créer le Payment Intent (clés secrètes jamais exposées côté client).
 
-**Points :** 8 | **Priorité :** Haute | **Sprint :** 7
+**Points :** 8 | **Priorité :** Haute | **Sprint :** 7 | **Statut :** À faire
 
 ---
 
 ### US-055 : Email de confirmation de commande
-**En tant qu'** utilisateur ayant passé commande
-**Je veux** recevoir un email de confirmation
-**Afin d'** avoir la preuve de mon achat et le récapitulatif de ma commande
+**En tant qu'**utilisateur ayant commandé **je veux** recevoir un email de confirmation **afin d'**avoir la preuve de mon achat.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un email est envoyé automatiquement après la confirmation du paiement Stripe
-- [ ] CA2 : L'email contient : numéro de commande, liste des composants, prix total, adresse de livraison
-- [ ] CA3 : L'email est envoyé à l'adresse du compte utilisateur
-- [ ] CA4 : L'email est correctement formaté en HTML (pas de texte brut uniquement)
-- [ ] CA5 : L'email est envoyé depuis une adresse no-reply@pcaeris.fr (ou équivalent)
+- [ ] CA1 : Email envoyé automatiquement après confirmation du paiement
+- [ ] CA2 : Contient n° de commande, composants, prix total, adresse
+- [ ] CA3 : Envoyé à l'adresse du compte
+- [ ] CA4 : Formaté en HTML
+- [ ] CA5 : Expédié depuis une adresse no-reply
 
-**Definition of Done :**
-- [ ] Template email créé et validé
-- [ ] Envoi automatique déclenché par le webhook Stripe
-- [ ] Testé en sandbox (email réellement reçu)
+**DoD spécifique :** template email validé ; envoi déclenché par le webhook Stripe ; testé en sandbox (email réellement reçu). *Voir US-091 (email de devis) déjà livré.*
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 7
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 7 | **Statut :** À faire
+
+---
+
+### US-088 : Demande de devis à partir du panier *(workflow ajouté en juin 2026)*
+**En tant qu'**utilisateur **je veux** demander un devis à partir de mon panier **afin de** lancer ma commande sans paiement immédiat.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Depuis le panier, un bouton crée une commande au statut `pending` (en attente de devis)
+- [ ] CA2 : L'utilisateur choisit/saisit une adresse de livraison (US-051/052)
+- [ ] CA3 : Un devis estimatif est généré et téléchargeable
+- [ ] CA4 : Une confirmation « Demande enregistrée » est affichée
+
+**DoD spécifique :** **migration `orders`** avec statut et items ; commande visible côté client et admin.
+
+**Points :** 3 | **Priorité :** Haute | **Sprint :** Juin 2026 | **Statut :** Done
+
+---
+
+### US-089 : Finalisation du devis par l'administrateur *(enabler métier)*
+**En tant qu'**administrateur **je veux** compléter le devis avec le vendeur et le prix réel de chaque composant **afin d'**envoyer un devis ferme au client.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Depuis le détail d'une commande `pending`, une popin permet de saisir vendeur + prix réel par composant
+- [ ] CA2 : Le total se recalcule en direct (composants + assemblage)
+- [ ] CA3 : L'envoi passe la commande au statut `quote_sent` et notifie le client
+- [ ] CA4 : Un devis déjà envoyé peut être modifié / renvoyé
+
+**DoD spécifique :** RPC Postgres `admin_finalize_order` en **SECURITY DEFINER** (vérifie le rôle admin) ; colonnes `final_items` / `final_total` ; statut visible dans la liste admin.
+
+**Points :** 5 | **Priorité :** Haute | **Sprint :** Juin 2026 | **Statut :** Done
+
+---
+
+### US-090 : Acceptation ou refus du devis par le client *(workflow ajouté en juin 2026)*
+**En tant qu'**utilisateur **je veux** accepter ou refuser le devis final reçu **afin de** valider ou annuler ma commande.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Une commande `quote_sent` affiche le devis final + total et deux actions (Accepter / Refuser)
+- [ ] CA2 : Accepter passe la commande au statut `accepted` ; refuser au statut `refused`
+- [ ] CA3 : L'état est reflété immédiatement côté client et admin
+- [ ] CA4 : Une commande acceptée entre dans le suivi (assemblage → expédiée → livrée)
+
+**DoD spécifique :** RPC `respond_quote` (RLS `auth.uid() = user_id`) ; barre de progression de suivi côté client.
+
+**Points :** 3 | **Priorité :** Haute | **Sprint :** Juin 2026 | **Statut :** Done
+
+---
+
+### US-091 : Email automatique d'envoi du devis *(technical story)*
+**En tant que** système **je veux** envoyer automatiquement le devis au client **afin de** le notifier sans action manuelle.
+
+**Critères d'acceptation :**
+- [ ] CA1 : À la finalisation (US-089), un email est envoyé au client
+- [ ] CA2 : L'email distingue devis **estimatif** et devis **final** (objet et contenu)
+- [ ] CA3 : Le devis est joint ou résumé dans l'email
+
+**DoD spécifique :** **Edge Function Supabase** `send-devis` (Deno) déployée ; envoi via Resend ; *en mode test Resend, la livraison réelle est limitée à une adresse vérifiée — un domaine vérifié est requis pour la production.*
+
+**Points :** 3 | **Priorité :** Haute | **Sprint :** Juin 2026 | **Statut :** Done
 
 ---
 
 ## Activité 5 — Gérer son compte
 
----
-
 ### US-061 : Page de profil utilisateur
-**En tant qu'** utilisateur connecté
-**Je veux** accéder à ma page de profil
-**Afin de** voir et modifier mes informations personnelles
+**En tant qu'**utilisateur connecté **je veux** accéder à ma page de profil **afin de** voir et modifier mes informations.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La page /profile affiche les informations de l'utilisateur (prénom, nom, pseudo, email, téléphone)
-- [ ] CA2 : La page est protégée et redirige vers /signin si l'utilisateur n'est pas connecté
-- [ ] CA3 : Un formulaire d'édition permet de modifier les informations (US-062)
-- [ ] CA4 : La date d'inscription est affichée en lecture seule
-- [ ] CA5 : Des liens vers les sections Mes configurations et Mes commandes sont présents
+- [ ] CA1 : /profile affiche prénom, nom, pseudo, email, téléphone
+- [ ] CA2 : Page protégée (redirige vers /signin si non connecté)
+- [ ] CA3 : Formulaire d'édition (US-062)
+- [ ] CA4 : Date d'inscription en lecture seule
+- [ ] CA5 : Liens vers Mes configurations et Mes commandes
 
-**Definition of Done :**
-- [ ] Le TODO dans App.tsx est remplacé par le vrai composant
-- [ ] Code reviewé
-- [ ] Responsive vérifié
+**DoD spécifique :** remplace l'ancien placeholder de route ; page `Profile.tsx` créée.
 
-**Notes techniques :** La route /profile retourne actuellement `<div>Page Profil (TODO)</div>`. Il faut créer la page `/src/pages/Profile/Profile.tsx`.
-
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 5
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 5 | **Statut :** Done
 
 ---
 
 ### US-062 : Modification des informations personnelles
-**En tant qu'** utilisateur connecté
-**Je veux** modifier mon prénom, nom et numéro de téléphone
-**Afin de** maintenir mes informations personnelles à jour
+**En tant qu'**utilisateur connecté **je veux** modifier mon prénom, nom et téléphone **afin de** garder mes informations à jour.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Les champs prénom, nom et téléphone sont éditables
-- [ ] CA2 : Le numéro de téléphone est validé (format international ou français)
-- [ ] CA3 : Un bouton "Enregistrer" soumet les modifications
-- [ ] CA4 : Un toast de succès est affiché après enregistrement
-- [ ] CA5 : En cas d'erreur serveur, un message est affiché
-- [ ] CA6 : L'email n'est pas modifiable directement (nécessite une procédure séparée)
+- [ ] CA1 : Champs prénom, nom, téléphone éditables
+- [ ] CA2 : Téléphone validé (format FR/international)
+- [ ] CA3 : Bouton « Enregistrer »
+- [ ] CA4 : Toast de succès
+- [ ] CA5 : Message en cas d'erreur serveur
+- [ ] CA6 : Email non modifiable directement
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] updateProfile dans authService.ts fonctionnel
-- [ ] Données mises à jour dans la table profiles Supabase
-- [ ] Responsive vérifié
+**DoD spécifique :** `updateProfile` fonctionnel ; données mises à jour dans `profiles`.
 
-**Points :** 2 | **Priorité :** Haute | **Sprint :** 5
+**Points :** 2 | **Priorité :** Haute | **Sprint :** 5 | **Statut :** Done
+
+---
+
+### US-066 : Carnet d'adresses de livraison
+**En tant qu'**utilisateur connecté **je veux** enregistrer plusieurs adresses de livraison sur mon profil **afin de** les réutiliser lors de mes commandes.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Le profil liste les adresses enregistrées (libellé, destinataire, adresse, CP, ville, téléphone)
+- [ ] CA2 : Ajout / modification / suppression d'une adresse (popin)
+- [ ] CA3 : La première adresse créée devient l'adresse par défaut (US-067)
+- [ ] CA4 : Au checkout, si des adresses existent, l'utilisateur en choisit une (style Amazon) ; sinon, il en crée une
+
+**DoD spécifique :** **migration `addresses`** + RLS par utilisateur ; contrainte d'unicité partielle sur l'adresse par défaut.
+
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 6 | **Statut :** Done
 
 ---
 
 ## Activité 6 — [Admin] Gérer la plateforme
 
----
-
 ### US-069 : Dashboard admin
-**En tant qu'** administrateur
-**Je veux** voir un tableau de bord avec les statistiques clés de la plateforme
-**Afin de** suivre l'activité en un coup d'oeil
+**En tant qu'**administrateur **je veux** un tableau de bord avec les stats clés **afin de** suivre l'activité d'un coup d'œil.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Le dashboard affiche le nombre total d'utilisateurs inscrits
-- [ ] CA2 : Le dashboard affiche le nombre total de produits dans le catalogue
-- [ ] CA3 : Le dashboard affiche le nombre de commandes (quand disponible)
-- [ ] CA4 : Les stats sont chargées depuis Supabase (pas de données hardcodées)
-- [ ] CA5 : Un état de chargement est affiché pendant la récupération des données
-- [ ] CA6 : L'accès au dashboard est restreint aux utilisateurs avec le rôle "admin"
+- [ ] CA1 : Nombre total d'utilisateurs
+- [ ] CA2 : Nombre total de produits
+- [ ] CA3 : Nombre de commandes (quand disponible)
+- [ ] CA4 : Stats chargées depuis Supabase (pas de données hardcodées)
+- [ ] CA5 : État de chargement pendant la récupération
+- [ ] CA6 : Accès restreint au rôle « admin »
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] ProtectedRoute avec requiredRole="admin" en place
-- [ ] Testé avec un compte admin et un compte user
+**DoD spécifique :** `ProtectedRoute requiredRole="admin"` en place ; testé avec compte admin et compte user.
 
 **Points :** 5 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-076 : Modification d'un produit existant
-**En tant qu'** administrateur
-**Je veux** modifier les informations et les specs techniques d'un produit
-**Afin de** maintenir le catalogue à jour avec les bonnes informations
+**En tant qu'**administrateur **je veux** modifier les infos et specs d'un produit **afin de** maintenir le catalogue à jour.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un bouton "Modifier" sur chaque ligne du tableau produits ouvre un formulaire d'édition
-- [ ] CA2 : Le formulaire permet de modifier les informations générales (nom, fabricant, série, année)
-- [ ] CA3 : Le formulaire permet de modifier toutes les specs techniques selon la catégorie du produit
-- [ ] CA4 : Les specs sont typées correctement (texte, nombre, booléen, tableau, JSONB)
-- [ ] CA5 : Les modifications sont sauvegardées dans la table produits et la table specs correspondante
-- [ ] CA6 : Un toast de confirmation est affiché après sauvegarde
+- [ ] CA1 : Bouton « Modifier » par ligne → formulaire d'édition
+- [ ] CA2 : Édition des infos générales (nom, fabricant, série, année)
+- [ ] CA3 : Édition de toutes les specs selon la catégorie
+- [ ] CA4 : Specs typées correctement (texte, nombre, booléen, tableau, JSONB)
+- [ ] CA5 : Sauvegarde dans la table produits + table specs
+- [ ] CA6 : Toast de confirmation
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé sur toutes les catégories de produits
-- [ ] Données réellement mises à jour en base vérifiées
+**DoD spécifique :** testé sur toutes les catégories ; mise à jour réelle en base vérifiée.
 
 **Points :** 5 | **Priorité :** Critique | **Sprint :** 1 | **Statut :** Done
 
 ---
 
 ### US-078 : Création d'un nouveau produit depuis l'admin
-**En tant qu'** administrateur
-**Je veux** créer un nouveau produit directement depuis l'interface admin
-**Afin d'** enrichir le catalogue sans dépendre des scripts d'import
+**En tant qu'**administrateur **je veux** créer un produit depuis l'admin **afin d'**enrichir le catalogue sans script.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un bouton "Nouveau produit" est présent sur la page admin Produits
-- [ ] CA2 : Cliquer ouvre un formulaire de création avec les champs : catégorie, nom, fabricant, série, année, image URL
-- [ ] CA3 : Après sélection de la catégorie, les champs de specs correspondants s'affichent dynamiquement
-- [ ] CA4 : Le produit est créé dans la table `products` et les specs dans la table dédiée (`cpu_specs`, etc.)
-- [ ] CA5 : Un toast de confirmation est affiché après création
-- [ ] CA6 : La liste des produits se rafraîchit automatiquement après la création
+- [ ] CA1 : Bouton « Nouveau produit » sur la page admin Produits
+- [ ] CA2 : Formulaire avec catégorie, nom, fabricant, série, année, image URL
+- [ ] CA3 : Champs de specs affichés dynamiquement selon la catégorie
+- [ ] CA4 : Produit créé dans `products` + specs dans la table dédiée
+- [ ] CA5 : Toast de confirmation
+- [ ] CA6 : Liste rafraîchie automatiquement
 
-**Definition of Done :**
-- [ ] Code reviewé
-- [ ] Testé sur au moins 3 catégories différentes
-- [ ] Données créées en base vérifiées
-- [ ] Aucune régression sur l'édition de produits existants
+**DoD spécifique :** testé sur ≥ 3 catégories ; données créées vérifiées ; aucune régression sur l'édition.
 
-**Notes techniques :** L'interface admin actuelle permet seulement l'édition et la suppression. La création est manquante. Le formulaire peut réutiliser les composants de formulaire existants et le SPECS_SCHEMA déjà défini dans Products.tsx.
-
-**Points :** 5 | **Priorité :** Haute | **Sprint :** 4
+**Points :** 5 | **Priorité :** Haute | **Sprint :** 4 | **Statut :** Done
 
 ---
 
 ### US-079 : Gestion des prix des produits
-**En tant qu'** administrateur
-**Je veux** définir et modifier le prix de chaque produit
-**Afin que** les utilisateurs voient les tarifs réels dans le configurateur
+**En tant qu'**administrateur **je veux** définir et modifier le prix d'un produit **afin que** les utilisateurs voient les tarifs réels.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un champ "Prix (€)" est ajouté au formulaire d'édition de produit
-- [ ] CA2 : Le champ prix est également présent lors de la création d'un produit (US-078)
-- [ ] CA3 : Le prix est stocké en centimes d'euro (entier) dans la base de données pour éviter les problèmes de virgule flottante
-- [ ] CA4 : Le prix peut être nul (produit sans prix affiché)
-- [ ] CA5 : Les prix sont affichés en format "1 249,99 €" dans le configurateur et le backoffice
+- [ ] CA1 : Champ « Prix (€) » au formulaire d'édition
+- [ ] CA2 : Champ prix aussi présent à la création (US-078)
+- [ ] CA3 : Prix stocké en centimes (entier) pour éviter les flottants
+- [ ] CA4 : Prix nullable (produit sans prix affiché)
+- [ ] CA5 : Format « 1 249,99 € » au configurateur et au back-office
 
-**Definition of Done :**
-- [ ] Migration Supabase ajoutant la colonne `price_cents INTEGER` dans la table `products`
-- [ ] Code reviewé
-- [ ] Prix affiché correctement dans le configurateur (US-028, US-039)
-- [ ] Testé avec des prix avec et sans centimes
+**DoD spécifique :** **migration** ajoutant la colonne prix ; testé avec et sans centimes.
 
-**Notes techniques :** La table `products` n'a pas de colonne prix. Une migration Supabase est nécessaire.
-
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 4
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 4 | **Statut :** Done
 
 ---
 
-### US-084 : Notifications toast globales
-**En tant qu'** utilisateur
-**Je veux** voir des notifications toast pour les actions importantes (succès, erreur, info)
-**Afin d'** être informé du résultat de mes actions sans bloquer mon flux de travail
+### US-081 : Liste et détail des commandes (admin)
+**En tant qu'**administrateur **je veux** voir toutes les commandes avec leur statut et leur détail **afin de** suivre l'activité et préparer l'assemblage.
 
 **Critères d'acceptation :**
-- [ ] CA1 : Un composant Toast est disponible globalement dans l'application
-- [ ] CA2 : Les types de toast supportés sont : success (vert), error (rouge), info (bleu), warning (orange)
-- [ ] CA3 : Les toasts s'affichent en haut à droite de l'écran et disparaissent après 4 secondes
-- [ ] CA4 : L'utilisateur peut fermer un toast manuellement
-- [ ] CA5 : Plusieurs toasts peuvent être empilés
-- [ ] CA6 : Les toasts sont utilisés après toutes les actions importantes : connexion, déconnexion, sauvegarde, erreur...
+- [ ] CA1 : Liste de toutes les commandes (date, client, total, statut)
+- [ ] CA2 : Dépli du détail (composants, prix, adresse)
+- [ ] CA3 : Mise à jour du statut (US-082)
+- [ ] CA4 : Statut toujours visible (badge) ; suivi `accepted → assemblage → expédiée → livrée`
 
-**Definition of Done :**
-- [ ] Composant Toast créé dans le design system
-- [ ] Store Zustand ou Context pour la gestion des toasts
-- [ ] Intégré dans les actions critiques existantes (auth, config save, admin actions)
-- [ ] Responsive vérifié
-- [ ] Accessible (role="alert")
+**DoD spécifique :** RPC `admin_list_orders` / `admin_update_order_status` en SECURITY DEFINER (rôle admin vérifié).
 
-**Notes techniques :** Peut utiliser une librairie légère (react-hot-toast, sonner) ou une implémentation custom cohérente avec le design system existant.
+**Points :** 3 (+ US-082, US-083) | **Priorité :** Haute | **Sprint :** 7 | **Statut :** Done
 
-**Points :** 3 | **Priorité :** Haute | **Sprint :** 2
+---
+
+## Transverse — Qualité et infrastructure (technical / enabler stories)
+
+> Ces stories ont une valeur surtout **technique**. Conformément à la convention, elles conservent une **DoD spécifique détaillée**.
+
+### US-084 : Notifications toast globales
+**En tant qu'**utilisateur **je veux** des toasts pour les actions importantes **afin d'**être informé sans bloquer mon flux.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Composant Toast disponible globalement
+- [ ] CA2 : Types success / error / info / warning
+- [ ] CA3 : Affichage en haut à droite, disparition après 4 s
+- [ ] CA4 : Fermeture manuelle possible
+- [ ] CA5 : Empilement de plusieurs toasts
+- [ ] CA6 : Utilisés après les actions clés (connexion, sauvegarde, erreur…)
+
+**DoD spécifique :**
+- [ ] Composant Toast intégré au design system
+- [ ] Store global (Zustand/Context) de gestion des toasts
+- [ ] Intégré aux actions critiques existantes (auth, save, admin)
+- [ ] Accessible (`role="alert"`)
+
+**Points :** 3 | **Priorité :** Haute | **Sprint :** 2 | **Statut :** Done
 
 ---
 
 ### US-086 : Tests unitaires sur les utils et services critiques
-**En tant que** développeur
-**Je veux** avoir une couverture de tests unitaires sur les fonctions critiques
-**Afin d'** éviter les régressions lors des évolutions du code
+**En tant que** développeur **je veux** une couverture de tests unitaires sur les fonctions critiques **afin d'**éviter les régressions.
 
 **Critères d'acceptation :**
-- [ ] CA1 : La configuration Vitest est mise en place
-- [ ] CA2 : Les fonctions de compatibilité dans `/src/utils/compatibility.ts` sont couvertes par des tests
-- [ ] CA3 : Les fonctions du authService sont testées (mock Supabase)
-- [ ] CA4 : La couverture de code atteint au moins 60% sur les fichiers utils et services
-- [ ] CA5 : Les tests passent dans le pipeline CI/CD (GitHub Actions)
+- [ ] CA1 : Configuration Vitest en place
+- [ ] CA2 : Fonctions de `compatibility.ts` couvertes
+- [ ] CA3 : Fonctions de `authService` testées (mock Supabase)
+- [ ] CA4 : Couverture ≥ 60 % sur utils et services
+- [ ] CA5 : Tests verts dans la CI (GitHub Actions)
 
-**Definition of Done :**
+**DoD spécifique :**
 - [ ] Vitest + Testing Library configurés
-- [ ] Au moins 15 tests unitaires écrits
-- [ ] CI passe sur toutes les PRs
+- [ ] ≥ 15 tests unitaires écrits (27 livrés)
+- [ ] CI verte sur toutes les PR
 - [ ] README mis à jour avec les instructions de test
 
-**Points :** 8 | **Priorité :** Haute | **Sprint :** 3
+**Points :** 8 | **Priorité :** Haute | **Sprint :** 3 | **Statut :** Done
+
+---
+
+### US-087 : Tests d'intégration sur les flux critiques
+**En tant que** développeur **je veux** des tests d'intégration sur les parcours critiques (auth, config, commande) **afin de** sécuriser les évolutions.
+
+**Critères d'acceptation :**
+- [ ] CA1 : Parcours d'authentification couvert
+- [ ] CA2 : Parcours de configuration couvert
+- [ ] CA3 : Parcours admin couvert
+- [ ] CA4 : Tests verts dans la CI
+
+**DoD spécifique :**
+- [ ] ≥ 15 tests d'intégration écrits (livrés)
+- [ ] Exécutés dans la CI à chaque PR
+- [ ] Mocks Supabase isolant les tests du réseau
+
+**Points :** 13 | **Priorité :** Haute | **Sprint :** 4 | **Statut :** Done
