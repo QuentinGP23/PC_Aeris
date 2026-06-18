@@ -101,7 +101,7 @@
   padding: 11px 16px; border-radius: var(--rs); font-family: var(--fb); font-size: 13px; font-weight: 600;
   cursor: pointer; border: none; transition: all 0.14s;
   &--full { width: 100%; margin-top: 8px; }
-  &--ind { background: var(--ind); color: #fff; &:hover { background: #7577f5; } }
+  &--ind { background: var(--ind); color: #fff; &:hover { background: #4F46E5; } }
   &--ghost2 { background: transparent; color: var(--text-2); border: 1px solid var(--border);
     &:hover { border-color: var(--border-s); color: var(--text); } }
 }

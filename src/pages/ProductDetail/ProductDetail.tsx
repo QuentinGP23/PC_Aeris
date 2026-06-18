@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { Cube, ArrowLeft, Check } from '@phosphor-icons/react'
 import { supabase } from '../../config'
+import { CategoryIcon } from '../../components/common'
 import { useConfigStore } from '../../store'
 import { CATEGORIES } from '../../types'
 import { SPEC_LABELS, SPEC_UNITS } from '../../constants'
@@ -79,7 +81,7 @@ function ProductDetail() {
     return (
       <div className="c" style={{ padding: '80px 40px', textAlign: 'center' }}>
         <p style={{ color: 'var(--text-2)', marginBottom: 24 }}>Produit introuvable.</p>
-        <button type="button" className="btn btn--ghost2" onClick={() => navigate(-1)}>← Retour</button>
+        <button type="button" className="btn btn--ghost2" onClick={() => navigate(-1)}><ArrowLeft weight="bold" /> Retour</button>
       </div>
     )
   }
@@ -110,8 +112,10 @@ function ProductDetail() {
             <div className="pd-img">
               {product.image_url ? (
                 <img src={product.image_url} alt={product.name} />
+              ) : categoryDef ? (
+                <CategoryIcon cat={categoryDef.value} size={64} weight="thin" />
               ) : (
-                <span>{categoryDef?.icon ?? '📦'}</span>
+                <Cube size={64} weight="thin" />
               )}
             </div>
 
@@ -143,7 +147,7 @@ function ProductDetail() {
                   className="btn btn--ok btn--full"
                   onClick={() => removeComponent(categoryKey)}
                 >
-                  ✓ Dans ma configuration — Retirer
+                  <Check weight="bold" /> Dans ma configuration — Retirer
                 </button>
               ) : (
                 <button

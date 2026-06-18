@@ -1,13 +1,14 @@
 import { Link, useLocation } from 'react-router-dom'
 import { type ReactNode, useEffect, useState } from 'react'
+import { SquaresFour, Users, Package, Receipt, X, ArrowLeft, type Icon } from '@phosphor-icons/react'
 import { useAuth } from '../../../context'
 import './AdminLayout.scss'
 
-const NAV_ITEMS = [
-  { to: '/admin', label: 'Dashboard', icon: '◧' },
-  { to: '/admin/users', label: 'Utilisateurs', icon: '◉' },
-  { to: '/admin/products', label: 'Produits', icon: '◫' },
-  { to: '/admin/orders', label: 'Commandes', icon: '▤' },
+const NAV_ITEMS: { to: string; label: string; icon: Icon }[] = [
+  { to: '/admin', label: 'Dashboard', icon: SquaresFour },
+  { to: '/admin/users', label: 'Utilisateurs', icon: Users },
+  { to: '/admin/products', label: 'Produits', icon: Package },
+  { to: '/admin/orders', label: 'Commandes', icon: Receipt },
 ]
 
 interface AdminLayoutProps {
@@ -49,6 +50,7 @@ function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actio
         <div className="admin-nav__section">Pilotage</div>
         {NAV_ITEMS.map((it) => {
           const active = pathname === it.to
+          const Ico = it.icon
           return (
             <Link
               key={it.to}
@@ -56,7 +58,7 @@ function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actio
               className={`admin-nav__item ${active ? 'admin-nav__item--act' : ''}`}
               onClick={() => setDrawerOpen(false)}
             >
-              <span className="admin-nav__item-ico">{it.icon}</span>
+              <span className="admin-nav__item-ico"><Ico size={20} weight={active ? 'fill' : 'regular'} /></span>
               <span>{it.label}</span>
             </Link>
           )
@@ -70,7 +72,7 @@ function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actio
             <div className="admin-nav__who-role">Administrateur</div>
           </div>
         )}
-        <Link to="/" className="admin-nav__back">← Retour au site</Link>
+        <Link to="/" className="admin-nav__back"><ArrowLeft weight="bold" /> Retour au site</Link>
         <button type="button" className="admin-nav__back" onClick={() => signOut()}>Déconnexion</button>
       </div>
     </>
@@ -94,7 +96,7 @@ function AdminLayout({ children, title, eyebrow = 'Administration', ghost, actio
               onClick={() => setDrawerOpen(false)}
               aria-label="Fermer le menu"
             >
-              ×
+              <X weight="bold" />
             </button>
             {sidebar}
           </aside>

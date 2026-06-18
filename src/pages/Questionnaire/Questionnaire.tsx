@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { GameController, FilmSlate, Broadcast, Briefcase, CaretLeft, ArrowRight, type Icon } from '@phosphor-icons/react'
 import { prebuiltsService, type PrebuiltConfig, type PrebuiltUsage, type PrebuiltTier } from '../../services'
 import { useConfigStore, useToast } from '../../store'
 import './Questionnaire.scss'
 
 type Level = 'eco' | 'equilibre' | 'perf'
 
-const USAGES: { value: PrebuiltUsage; icon: string; label: string; desc: string }[] = [
-  { value: 'gaming', icon: '🎮', label: 'Jouer', desc: 'Jeux récents, fluidité, hautes performances' },
-  { value: 'creation', icon: '🎬', label: 'Créer', desc: 'Montage vidéo, 3D, rendu, photo' },
-  { value: 'streaming', icon: '📡', label: 'Streamer / Polyvalent', desc: 'Jouer et streamer, machine à tout faire' },
-  { value: 'bureautique', icon: '💼', label: 'Bureautique / Études', desc: 'Navigation, bureautique, travail léger' },
+const USAGES: { value: PrebuiltUsage; icon: Icon; label: string; desc: string }[] = [
+  { value: 'gaming', icon: GameController, label: 'Jouer', desc: 'Jeux récents, fluidité, hautes performances' },
+  { value: 'creation', icon: FilmSlate, label: 'Créer', desc: 'Montage vidéo, 3D, rendu, photo' },
+  { value: 'streaming', icon: Broadcast, label: 'Streamer / Polyvalent', desc: 'Jouer et streamer, machine à tout faire' },
+  { value: 'bureautique', icon: Briefcase, label: 'Bureautique / Études', desc: 'Navigation, bureautique, travail léger' },
 ]
 const LEVELS: { value: Level; label: string; desc: string }[] = [
   { value: 'eco', label: 'Budget maîtrisé', desc: 'Le meilleur rapport qualité-prix' },
@@ -73,17 +74,20 @@ function Questionnaire() {
         <section className="quiz__panel">
           <h1 className="quiz__q">Pour quoi vas-tu utiliser ton PC ?</h1>
           <div className="quiz__opts">
-            {USAGES.map((u) => (
+            {USAGES.map((u) => {
+              const Ico = u.icon
+              return (
               <button
                 key={u.value}
                 className={`quiz__opt ${usage === u.value ? 'is-sel' : ''}`}
                 onClick={() => { setUsage(u.value); setStep(1) }}
               >
-                <span className="quiz__opt-ic">{u.icon}</span>
+                <span className="quiz__opt-ic"><Ico size={32} weight="duotone" /></span>
                 <span className="quiz__opt-l">{u.label}</span>
                 <span className="quiz__opt-d">{u.desc}</span>
               </button>
-            ))}
+              )
+            })}
           </div>
         </section>
       )}
@@ -103,7 +107,7 @@ function Questionnaire() {
               </button>
             ))}
           </div>
-          <button className="quiz__back" onClick={() => setStep(0)}>← Retour</button>
+          <button className="quiz__back" onClick={() => setStep(0)}><CaretLeft weight="bold" /> Retour</button>
         </section>
       )}
 
@@ -119,7 +123,7 @@ function Questionnaire() {
               )}
               <div className="quiz__result-actions">
                 <button className="quiz__cta" disabled={loading} onClick={() => void handleLoad()}>
-                  {loading ? 'Chargement…' : 'Charger & personnaliser →'}
+                  {loading ? 'Chargement…' : <>Charger & personnaliser <ArrowRight weight="bold" /></>}
                 </button>
                 <button className="quiz__ghost" onClick={() => navigate('/configs-pretes')}>Voir toutes les configs</button>
               </div>
@@ -127,7 +131,7 @@ function Questionnaire() {
           ) : (
             <p className="quiz__none">Aucune config ne correspond pour l'instant. <button className="quiz__back" onClick={() => navigate('/configs-pretes')}>Voir le catalogue</button></p>
           )}
-          <button className="quiz__back" onClick={() => setStep(1)}>← Changer de niveau</button>
+          <button className="quiz__back" onClick={() => setStep(1)}><CaretLeft weight="bold" /> Changer de niveau</button>
         </section>
       )}
     </div>

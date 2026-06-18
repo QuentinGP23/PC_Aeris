@@ -31,20 +31,20 @@ export interface Category {
   value: CategoryKey
   label: string
   specsTable: string
-  icon: string
 }
 
 // Ordre fixe d'assemblage : CPU → MOBO → boîtier → RAM → GPU → stockage → ventirad → PSU.
 // Cf. src/utils/selection-order.ts pour les pré-requis et la cascade d'invalidation.
+// Les icônes sont gérées via <CategoryIcon> (src/components/common/CategoryIcon).
 export const CATEGORIES: Category[] = [
-  { value: 'cpu',         label: 'Processeur',      specsTable: 'cpu_specs',         icon: '🖥️' },
-  { value: 'motherboard', label: 'Carte mère',      specsTable: 'motherboard_specs', icon: '🔌' },
-  { value: 'pc_case',     label: 'Boîtier',         specsTable: 'pc_case_specs',     icon: '📦' },
-  { value: 'ram',         label: 'RAM',             specsTable: 'ram_specs',         icon: '💾' },
-  { value: 'gpu',         label: 'Carte graphique', specsTable: 'gpu_specs',         icon: '🎮' },
-  { value: 'storage',     label: 'Stockage',        specsTable: 'storage_specs',     icon: '💿' },
-  { value: 'cpu_cooler',  label: 'Ventirad',        specsTable: 'cpu_cooler_specs',  icon: '❄️' },
-  { value: 'psu',         label: 'Alimentation',    specsTable: 'psu_specs',         icon: '⚡' },
+  { value: 'cpu',         label: 'Processeur',      specsTable: 'cpu_specs'         },
+  { value: 'motherboard', label: 'Carte mère',      specsTable: 'motherboard_specs' },
+  { value: 'pc_case',     label: 'Boîtier',         specsTable: 'pc_case_specs'     },
+  { value: 'ram',         label: 'RAM',             specsTable: 'ram_specs'         },
+  { value: 'gpu',         label: 'Carte graphique', specsTable: 'gpu_specs'         },
+  { value: 'storage',     label: 'Stockage',        specsTable: 'storage_specs'     },
+  { value: 'cpu_cooler',  label: 'Ventirad',        specsTable: 'cpu_cooler_specs'  },
+  { value: 'psu',         label: 'Alimentation',    specsTable: 'psu_specs'         },
 ]
 
 // Key specs displayed on product cards — aligned with actual DB column names

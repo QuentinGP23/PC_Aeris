@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CaretLeft } from '@phosphor-icons/react'
 import { useAuth } from '../../context'
 import { AuthVisual } from './AuthVisual'
 import './auth.scss'
@@ -73,7 +74,7 @@ function ForgotPassword() {
           </button>
 
           <div className="auth-switch">
-            <Link to="/signin">← Retour à la connexion</Link>
+            <Link to="/signin"><CaretLeft weight="bold" /> Retour à la connexion</Link>
           </div>
         </form>
       </div>

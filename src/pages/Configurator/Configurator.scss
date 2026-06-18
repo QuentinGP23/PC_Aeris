@@ -144,7 +144,7 @@
     cursor: pointer;
     transition: background 0.14s;
 
-    &:hover { background: #7577f5; }
+    &:hover { background: #4F46E5; }
   }
 
   &__login-hint {
@@ -683,7 +683,7 @@
 
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #7577F5; } }
+  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #4F46E5; } }
   &--ok {
     background: rgba(16, 185, 129, 0.1);
     color: var(--ok);
