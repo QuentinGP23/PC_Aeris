@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.6.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.5.0...v2.6.0) (2026-06-18)
+
+
+### Features
+
+* **addresses:** carnet d adresses dans le profil + choix au panier ([65b67db](https://github.com/QuentinGP23/PC_Aeris/commit/65b67db725254d2e4744dcc622cff4c12353e506))
+* **cart:** gestion du panier + tunnel de commande ([784f407](https://github.com/QuentinGP23/PC_Aeris/commit/784f407d79d6ff50a0d5822bf7be624efd847e72))
+* **catalog:** pages de listing par catégorie + retrait du bloc chiffres ([4d95075](https://github.com/QuentinGP23/PC_Aeris/commit/4d95075e280294d71c926d4c6d2edf5c08bc4be3))
+* **devis:** devis détaillé (marchand + prix par composant), PDF et envoi email ([95317f9](https://github.com/QuentinGP23/PC_Aeris/commit/95317f9858b33080311e18bac02f3c31fbfb6ffb))
+* **orders:** gestion admin des commandes + historique client ([2f0898e](https://github.com/QuentinGP23/PC_Aeris/commit/2f0898e47cc691b9d425c54ef97b6fe7960e7ea0))
+* **orders:** workflow de validation du devis (admin -&gt; client) ([d1fe2a9](https://github.com/QuentinGP23/PC_Aeris/commit/d1fe2a9b225309810ed2f5fe49d8d5fcb271bbc5))
+* panier, commande par devis et carnet d'adresses (tunnel + admin) ([6e4c511](https://github.com/QuentinGP23/PC_Aeris/commit/6e4c5119fe3b684141fd0c5cbb732d7f12febf99))
+* **prices:** prix neuf (scrapé) + occasion estimée, choix au devis ([cf52b00](https://github.com/QuentinGP23/PC_Aeris/commit/cf52b00371486abba3a968af9746600f2d4b0707))
+* **prices:** seed couverture large (estimé par benchmark) + label « estimé » ([b9e10cb](https://github.com/QuentinGP23/PC_Aeris/commit/b9e10cba8bd956bfa7f6dfc790dfb74856515ac8))
+* **scraper:** ajoute Alternate.fr comme 2e source (parallèle à LDLC) ([7cda292](https://github.com/QuentinGP23/PC_Aeris/commit/7cda292796640ce64e691e2dad7b8bb5181fd710))
+* **scraper:** option --no-ldlc/--no-alternate + script reset-prices ([ef4dc86](https://github.com/QuentinGP23/PC_Aeris/commit/ef4dc862128c4ebc335a03cde07dc664b52b2658))
+* **send-devis:** lecture serveur de la commande (orderId) + email HTML détaillé ([46793ef](https://github.com/QuentinGP23/PC_Aeris/commit/46793ef3b0fc540508359f8c46ed6d0717603852))
+* **send-devis:** mode démo via DEVIS_TEST_TO (envoi réel sans domaine Resend) ([94ca0b3](https://github.com/QuentinGP23/PC_Aeris/commit/94ca0b3a433283493f18dd34af748b3e8707141b))
+
+
+### Bug Fixes
+
+* **product:** retire l'ajout à la config depuis la fiche produit ([22a57ed](https://github.com/QuentinGP23/PC_Aeris/commit/22a57ed96212bb74d975c0131d7100939e827bff))
+* **scraper:** exige l'égalité de capacité totale (anti 32Go↔64Go, 2To↔1To) ([b31231e](https://github.com/QuentinGP23/PC_Aeris/commit/b31231e17dfa7b9d3943f7f9d9e0ed9c1ab15d0c))
+* **scraper:** matching plus strict sur les variantes (Ti/Super/XT…) ([c8cb3f1](https://github.com/QuentinGP23/PC_Aeris/commit/c8cb3f1ac4d59d23a7c5cfdceb8e692c73586be0))
+* **scraper:** plancher de délai + coupe-circuit anti-blocage LDLC ([1cd762f](https://github.com/QuentinGP23/PC_Aeris/commit/1cd762f6b6013d72cce3478feaedb357554c8c05))
+* **ui:** popin en theme sombre + devis admin en popin, statut visible ([fe3887a](https://github.com/QuentinGP23/PC_Aeris/commit/fe3887a67c16e74e0b1160b1c417ce997363af8b))
+
 ## [2.5.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.4.2...v2.5.0) (2026-06-05)
 
 
