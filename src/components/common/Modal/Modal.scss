@@ -7,7 +7,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,9 +17,11 @@
 }
 
 .modal {
-  background-color: $white;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-s);
+  color: var(--text);
   border-radius: $radius-xl;
-  box-shadow: $shadow-xl;
+  box-shadow: var(--shadow-2xl);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
@@ -60,20 +63,22 @@
     align-items: center;
     justify-content: space-between;
     padding: $spacing-5 $spacing-6;
-    border-bottom: 1px solid $neutral-100;
+    border-bottom: 1px solid var(--border);
     flex-shrink: 0;
   }
 
   &__title {
+    font-family: var(--fh);
     font-size: $font-size-xl;
     font-weight: $font-weight-semibold;
+    color: var(--text);
     margin: 0;
   }
 
   &__close {
     background: none;
     border: none;
-    color: $neutral-400;
+    color: var(--text-3);
     cursor: pointer;
     padding: $spacing-1;
     border-radius: $radius-md;
@@ -84,7 +89,7 @@
     flex-shrink: 0;
 
     &:hover {
-      color: $neutral-700;
+      color: var(--text);
     }
   }
 
@@ -104,7 +109,7 @@
 
   &__footer {
     padding: $spacing-4 $spacing-6;
-    border-top: 1px solid $neutral-100;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
     gap: $spacing-3;

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context'
 import { Button, Input, Alert, Avatar, Divider, Modal } from '../../components/common'
 import { Container } from '../../components/layout'
+import AddressBook from './AddressBook'
 import './Profile.scss'
 
 function Profile() {
@@ -171,6 +172,11 @@ function Profile() {
             </div>
           </div>
         </section>
+
+        <Divider />
+
+        {/* ── Adresses de livraison ────────────────────────────────────────── */}
+        <AddressBook />
 
         <Divider />
 
