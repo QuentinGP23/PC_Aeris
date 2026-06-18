@@ -16,7 +16,7 @@
   display: inline-flex; align-items: center; gap: 6px; background: var(--ind); color: #fff;
   border: none; border-radius: var(--rs); padding: 11px 18px; font-family: var(--fb); font-size: 13.5px;
   font-weight: 600; cursor: pointer; text-decoration: none;
-  &:hover { background: #7577f5; }
+  &:hover { background: #4F46E5; }
 }
 
 .ostatus {
@@ -27,7 +27,7 @@
 .oc-btn {
   border: none; border-radius: var(--rs); padding: 9px 18px; font-family: var(--fb);
   font-size: 13px; font-weight: 600; cursor: pointer;
-  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #7577f5; } }
+  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #4F46E5; } }
   &--ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border); &:hover:not(:disabled) { color: var(--text); border-color: var(--text-3); } }
   &:disabled { opacity: 0.55; cursor: default; }
 }

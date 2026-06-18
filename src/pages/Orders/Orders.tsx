@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Hourglass, EnvelopeSimpleOpen, XCircle, FileArrowDown } from '@phosphor-icons/react'
 import { ordersService, type OrderSummary } from '../../services'
 import { useAuth } from '../../context/useAuth'
 import { useToast } from '../../store'
@@ -93,7 +94,7 @@ function Orders() {
                 {/* ── Écrans selon le parcours ── */}
                 {o.status === 'pending' && (
                   <div className="oc__banner">
-                    <span className="oc__banner-ico">⏳</span>
+                    <span className="oc__banner-ico"><Hourglass weight="duotone" /></span>
                     <div>Votre devis estimatif est bien reçu. Notre équipe vérifie le prix réel de chaque composant et le meilleur vendeur, puis vous enverra un <b>devis final à valider</b> ici même.</div>
                   </div>
                 )}
@@ -101,7 +102,7 @@ function Orders() {
                 {o.status === 'quote_sent' && (
                   <div className="oc__quote">
                     <div className="oc__quote-hd">
-                      <span className="oc__quote-ico">📩</span>
+                      <span className="oc__quote-ico"><EnvelopeSimpleOpen weight="duotone" /></span>
                       <div>
                         <b>Votre devis final est prêt</b>
                         <p>Prix réels confirmés par composant. Acceptez pour lancer l'assemblage, ou refusez si vous préférez ne pas donner suite.</p>
@@ -116,7 +117,7 @@ function Orders() {
                 )}
 
                 {o.status === 'refused' && (
-                  <div className="oc__banner oc__banner--err"><span className="oc__banner-ico">✕</span><div>Vous avez refusé ce devis. Contactez-nous si vous changez d'avis ou configurez un nouveau PC.</div></div>
+                  <div className="oc__banner oc__banner--err"><span className="oc__banner-ico"><XCircle weight="fill" /></span><div>Vous avez refusé ce devis. Contactez-nous si vous changez d'avis ou configurez un nouveau PC.</div></div>
                 )}
 
                 {showTrack && (
@@ -139,7 +140,7 @@ function Orders() {
                       toast.success('Devis téléchargé')
                     }}
                   >
-                    📄 Devis {isFinal ? 'final' : 'estimatif'}
+                    <FileArrowDown weight="bold" /> Devis {isFinal ? 'final' : 'estimatif'}
                   </button>
                 </div>
 

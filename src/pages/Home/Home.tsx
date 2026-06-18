@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowRight } from '@phosphor-icons/react'
 import { supabase } from '../../config'
-import { CATEGORIES } from '../../types'
+import { CategoryIcon } from '../../components/common'
+import { CATEGORIES, type CategoryKey } from '../../types'
 import './Home.scss'
 
 // ──────────────────────────────────────────────────────────────────────────
 // Stats publiques (depuis Supabase)
 // ──────────────────────────────────────────────────────────────────────────
 
-const NA = 'N/A'
+// Page d'accueil : on n'affiche jamais "N/A" (ça fait base de données vide),
+// on retombe sur 0 par défaut pour les compteurs sans donnée.
+const ZERO = '0'
 
 interface PublicStats {
   totalProducts: number | null
@@ -48,7 +52,7 @@ function usePublicStats(): PublicStats {
 }
 
 const fmt = (n: number) => n.toLocaleString('fr-FR')
-const fmtOrNA = (n: number | null | undefined): string => (n == null ? NA : fmt(n))
+const fmtOrZero = (n: number | null | undefined): string => (n == null ? ZERO : fmt(n))
 
 // ──────────────────────────────────────────────────────────────────────────
 // Terminal animé
@@ -66,8 +70,8 @@ const TERM_ROWS: TermRow[] = [
   { k: 'STORAGE', v: '2 TB PCIe 4.0 NVMe' },
   { k: 'PSU', v: '1 000W 80+ Gold' },
   {},
-  { k: 'COMPAT', v: '✓ ALL SYSTEMS GO', style: 'ok' },
-  { k: 'PRIX', v: NA, style: 'ind' },
+  { k: 'COMPAT', v: 'ALL SYSTEMS GO', style: 'ok' },
+  { k: 'PRIX', v: '≈ 2 890 €', style: 'ind' },
 ]
 
 function Terminal() {
@@ -192,7 +196,7 @@ function Hero({ stats }: { stats: PublicStats }) {
 
             <div className={`hero__stats-row rv rv-d6 ${ready ? 'in' : ''}`}>
               <div className="hero__stat">
-                <span className="hero__stat-n">{fmtOrNA(stats.totalProducts)}</span>
+                <span className="hero__stat-n">{fmtOrZero(stats.totalProducts)}</span>
                 <span className="hero__stat-l">Composants</span>
               </div>
               <div className="hero__stat">
@@ -219,12 +223,12 @@ function Hero({ stats }: { stats: PublicStats }) {
 
 function Ticker({ stats }: { stats: PublicStats }) {
   const ticks: [string, string][] = [
-    [fmtOrNA(stats.totalProducts), 'composants référencés'],
+    [fmtOrZero(stats.totalProducts), 'composants référencés'],
     [`${CATEGORIES.length}`, 'catégories'],
     ['100%', 'gratuit'],
-    [NA, 'configs créées'],
-    [NA, 'marques partenaires'],
-    [NA, 'mises à jour / semaine'],
+    [ZERO, 'configs créées'],
+    [ZERO, 'marques partenaires'],
+    [ZERO, 'mises à jour / semaine'],
     ['AM5', 'socket supporté'],
     ['DDR5', 'mémoire supportée'],
     ['PCIe 5.0', 'standard'],
@@ -251,10 +255,10 @@ function Ticker({ stats }: { stats: PublicStats }) {
 
 function Stats({ stats }: { stats: PublicStats }) {
   const cells = [
-    { n: fmtOrNA(stats.totalProducts), l: 'Composants',         bg: 'CMP' },
-    { n: NA,                            l: 'Configs créées',     bg: 'CFG' },
-    { n: NA,                            l: 'Marques partenaires', bg: 'BND' },
-    { n: NA,                            l: 'Vérification compat', bg: 'CMP' },
+    { n: fmtOrZero(stats.totalProducts), l: 'Composants',          bg: 'CMP' },
+    { n: ZERO,                           l: 'Configs créées',       bg: 'CFG' },
+    { n: ZERO,                           l: 'Marques partenaires',  bg: 'BND' },
+    { n: ZERO,                           l: 'Vérification compat',  bg: 'CMP' },
   ]
   return (
     <section className="s s--sm">
@@ -282,9 +286,8 @@ function Stats({ stats }: { stats: PublicStats }) {
 // ──────────────────────────────────────────────────────────────────────────
 
 type BentoCat = {
-  value: string
+  value: CategoryKey
   label: string
-  icon: string
   color: string
   bg: string
   cls: string
@@ -292,14 +295,14 @@ type BentoCat = {
 }
 
 const BENTO: BentoCat[] = [
-  { value: 'cpu',         label: 'Processeur',      icon: '⚡', color: '#3B82F6', bg: 'rgba(59,130,246,0.12)',  cls: 'bento__cell--a1', n: '01' },
-  { value: 'gpu',         label: 'Carte graphique', icon: '🎮', color: '#EF4444', bg: 'rgba(239,68,68,0.12)',   cls: 'bento__cell--a2', n: '02' },
-  { value: 'pc_case',     label: 'Boîtier',         icon: '🖥️', color: '#14B8A6', bg: 'rgba(20,184,166,0.12)',  cls: 'bento__cell--a3', n: '03' },
-  { value: 'motherboard', label: 'Carte mère',      icon: '🔌', color: '#6366F1', bg: 'rgba(99,102,241,0.12)',  cls: 'bento__cell--b1', n: '04' },
-  { value: 'ram',         label: 'Mémoire RAM',     icon: '💾', color: '#22C55E', bg: 'rgba(34,197,94,0.12)',   cls: 'bento__cell--b2', n: '05' },
-  { value: 'storage',     label: 'Stockage',        icon: '💿', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)',  cls: 'bento__cell--b3', n: '06' },
-  { value: 'psu',         label: 'Alimentation',    icon: '🔋', color: '#EC4899', bg: 'rgba(236,72,153,0.12)',  cls: 'bento__cell--c1', n: '07' },
-  { value: 'cpu_cooler',  label: 'Ventirad',        icon: '❄️', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)',  cls: 'bento__cell--c2', n: '08' },
+  { value: 'cpu',         label: 'Processeur',      color: '#60A5FA', bg: 'rgba(59,130,246,0.12)',  cls: 'bento__cell--a1', n: '01' },
+  { value: 'gpu',         label: 'Carte graphique', color: '#F87171', bg: 'rgba(239,68,68,0.12)',   cls: 'bento__cell--a2', n: '02' },
+  { value: 'pc_case',     label: 'Boîtier',         color: '#2DD4BF', bg: 'rgba(20,184,166,0.12)',  cls: 'bento__cell--a3', n: '03' },
+  { value: 'motherboard', label: 'Carte mère',      color: '#818CF8', bg: 'rgba(99,102,241,0.12)',  cls: 'bento__cell--b1', n: '04' },
+  { value: 'ram',         label: 'Mémoire RAM',     color: '#4ADE80', bg: 'rgba(34,197,94,0.12)',   cls: 'bento__cell--b2', n: '05' },
+  { value: 'storage',     label: 'Stockage',        color: '#FBBF24', bg: 'rgba(245,158,11,0.12)',  cls: 'bento__cell--b3', n: '06' },
+  { value: 'psu',         label: 'Alimentation',    color: '#F472B6', bg: 'rgba(236,72,153,0.12)',  cls: 'bento__cell--c1', n: '07' },
+  { value: 'cpu_cooler',  label: 'Ventirad',        color: '#A78BFA', bg: 'rgba(139,92,246,0.12)',  cls: 'bento__cell--c2', n: '08' },
 ]
 
 function Bento({ stats }: { stats: PublicStats }) {
@@ -325,7 +328,7 @@ function Bento({ stats }: { stats: PublicStats }) {
         <div className="bento">
           {BENTO.map((cat, idx) => {
             const count = stats.byCategory[cat.value]
-            const countLabel = count == null ? `${NA} références` : `${fmt(count)} référence${count > 1 ? 's' : ''}`
+            const countLabel = count == null ? `${ZERO} référence` : `${fmt(count)} référence${count > 1 ? 's' : ''}`
             return (
               <Link
                 key={cat.value}
@@ -337,12 +340,12 @@ function Bento({ stats }: { stats: PublicStats }) {
                 <div className="bento__glow" />
                 <span className="bento__num">{cat.n}</span>
                 <span className="bento__big-num">{cat.n}</span>
-                <div className="bento__icon">{cat.icon}</div>
+                <div className="bento__icon"><CategoryIcon cat={cat.value} size={30} weight="duotone" color={cat.color} /></div>
                 <div>
                   <div className="bento__label">{cat.label}</div>
                   <div className="bento__count">{countLabel}</div>
                 </div>
-                <div className="bento__arrow">Explorer →</div>
+                <div className="bento__arrow">Explorer <ArrowRight weight="bold" /></div>
               </Link>
             )
           })}

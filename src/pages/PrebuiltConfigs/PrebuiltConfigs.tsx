@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { GameController, FilmSlate, Briefcase, Broadcast, type Icon, type IconProps } from '@phosphor-icons/react'
 import { prebuiltsService, type PrebuiltConfig, type PrebuiltUsage } from '../../services'
 import { useConfigStore, useToast } from '../../store'
 import './PrebuiltConfigs.scss'
@@ -10,11 +11,15 @@ const USAGE_LABEL: Record<PrebuiltUsage, string> = {
   bureautique: 'Bureautique',
   streaming: 'Streaming',
 }
-const USAGE_ICON: Record<PrebuiltUsage, string> = {
-  gaming: '🎮',
-  creation: '🎬',
-  bureautique: '💼',
-  streaming: '📡',
+const USAGE_ICON: Record<PrebuiltUsage, Icon> = {
+  gaming: GameController,
+  creation: FilmSlate,
+  bureautique: Briefcase,
+  streaming: Broadcast,
+}
+function UsageIcon({ usage, ...props }: { usage: PrebuiltUsage } & IconProps) {
+  const Ico = USAGE_ICON[usage]
+  return <Ico aria-hidden {...props} />
 }
 const TIER_LABEL = { entree: "Entrée de gamme", milieu: 'Milieu de gamme', haut: 'Haut de gamme' }
 
@@ -65,7 +70,7 @@ function PrebuiltConfigs() {
         <button className={`prebuilts__chip ${filter === 'all' ? 'is-on' : ''}`} onClick={() => setFilter('all')}>Tous</button>
         {(Object.keys(USAGE_LABEL) as PrebuiltUsage[]).map((u) => (
           <button key={u} className={`prebuilts__chip ${filter === u ? 'is-on' : ''}`} onClick={() => setFilter(u)}>
-            {USAGE_ICON[u]} {USAGE_LABEL[u]}
+            <UsageIcon usage={u} weight="bold" /> {USAGE_LABEL[u]}
           </button>
         ))}
       </div>
@@ -79,7 +84,7 @@ function PrebuiltConfigs() {
           {shown.map((pc) => (
             <article key={pc.id} className="pb-card">
               <div className="pb-card__top">
-                <span className="pb-card__usage">{USAGE_ICON[pc.usage]} {USAGE_LABEL[pc.usage]}</span>
+                <span className="pb-card__usage"><UsageIcon usage={pc.usage} weight="bold" /> {USAGE_LABEL[pc.usage]}</span>
                 <span className="pb-card__tier">{TIER_LABEL[pc.tier]}</span>
               </div>
               <h2 className="pb-card__name">{pc.name}</h2>

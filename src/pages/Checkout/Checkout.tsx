@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { CheckCircle, Receipt } from '@phosphor-icons/react'
 import { useCartStore, cartTotal, cartCount, useToast } from '../../store'
 import { useAuth } from '../../context/useAuth'
 import { ordersService, addressesService, type ShippingAddress, type Address, type AddressInput } from '../../services'
@@ -80,7 +81,7 @@ function Checkout() {
     return (
       <div className="ck ck--center">
         <div className="ck__done">
-          <div className="ck__done-ico">✓</div>
+          <div className="ck__done-ico"><CheckCircle weight="fill" /></div>
           <h1>Demande enregistrée&nbsp;!</h1>
           <p>Merci&nbsp;! Votre demande <b>#{orderId.slice(0, 8).toUpperCase()}</b> a bien été reçue. Vous allez recevoir un premier devis estimatif par email.</p>
           <p className="ck__done-sub">Notre équipe vérifie ensuite le prix réel de chaque composant et le meilleur vendeur, puis vous renvoie un <b>devis final</b> à <b>accepter ou refuser</b> depuis « Mes commandes ».</p>
@@ -181,7 +182,7 @@ function Checkout() {
           <section className="ck__card">
             <h2>Comment ça marche</h2>
             <div className="ck__pay">
-              <span className="ck__pay-ico">📝</span>
+              <span className="ck__pay-ico"><Receipt weight="duotone" /></span>
               <div>
                 <b>Devis, pas de paiement maintenant</b>
                 <p>Les prix affichés sont <b>estimatifs</b>. Après validation, notre équipe confirme le prix réel de chaque composant et le meilleur vendeur, puis vous renvoie un <b>devis final</b>. Vous l'acceptez (ou non) avant tout paiement.</p>

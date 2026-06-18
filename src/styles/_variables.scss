@@ -24,8 +24,10 @@
   --text-2: #B5B5C8; // ~10:1 — secondaire (AAA)
   --text-3: #8E8EA8; // ~6.5:1 — tertiaire / labels / hints (AA)
 
-  // Accent indigo
-  --ind:    #6366F1;
+  // Accent indigo — base ajustée à #5558E6 pour que le texte blanc des
+  // boutons atteigne le contraste WCAG AA (≥ 4.5:1). Visuellement
+  // identique pour les accents décoratifs.
+  --ind:    #5558E6;
   --ind-l:  #818CF8;
   --ind-d:  #4338CA;
   --ind-g:  rgba(99, 102, 241, 0.15);
@@ -69,7 +71,7 @@
   --color-text-link:      var(--ind-l);
 
   --color-primary:       var(--ind);
-  --color-primary-hover: #7577F5;
+  --color-primary-hover: #4F46E5;
   --color-primary-50:    #EEF2FF;
   --color-primary-100:   #E0E7FF;
   --color-primary-200:   #C7D2FE;
