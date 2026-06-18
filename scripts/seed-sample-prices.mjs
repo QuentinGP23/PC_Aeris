@@ -1,17 +1,17 @@
 /**
  * seed-sample-prices.mjs
  * ────────────────────────────────────────────────────────────────────────────
- * Remplit des prix NEUF *d'exemple* (min/max/moyen) pour la démo, sur les
- * produits qui n'en ont pas encore. Estimation déterministe par catégorie /
- * année (PAS de vrai prix marché) — sert à montrer l'UI prix + l'occasion
- * dérivée en attendant le scraping réel (scripts/scrape-prices.mjs).
+ * Remplit des prix NEUF *estimés* (min/max/moyen) sur tous les produits qui
+ * n'en ont pas, pour rendre le configurateur utilisable tout de suite. Ce ne
+ * sont PAS de vrais prix marché : estimation par benchmark (CPU/GPU) et par
+ * fourchette de catégorie. Le scraper réel (scripts/scrape-prices.mjs) reprend
+ * ensuite ces produits (price_updated_at laissé NULL) pour les vrais prix.
  *
- * - N'écrase jamais un prix existant (ne remplit que price_avg_eur IS NULL).
- * - Laisse price_updated_at à NULL pour que le scraper réel reprenne ensuite
- *   ces produits et remplace l'estimation par de vrais prix.
+ * - Ne touche jamais un prix existant (price_avg_eur IS NULL uniquement).
+ * - Écritures par lots (rapide sur plusieurs milliers de lignes).
  *
  * Usage :
- *   node scripts/seed-sample-prices.mjs [--limit=80] [--dry-run]
+ *   node scripts/seed-sample-prices.mjs [--limit=100000] [--dry-run]
  *
  * .env requis : VITE_SUPABASE_URL, VITE_SUPABASE_SERVICE_ROLE_KEY
  * ────────────────────────────────────────────────────────────────────────────
@@ -44,52 +44,103 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const [k, v] = a.replace(/^--/, '').split('=')
   return [k, v ?? true]
 }))
-const LIMIT = Number(args.limit ?? 80)
+const LIMIT = Number(args.limit ?? 100000)
 const DRY = !!args['dry-run']
 
-const CATEGORIES = ['cpu', 'gpu', 'ram', 'storage', 'motherboard', 'psu', 'pc_case', 'cpu_cooler']
+// Fourchette de prix neuf [bas, haut] (€) par catégorie. Pour CPU/GPU on
+// interpole selon le benchmark ; sinon selon un facteur déterministe stable.
+const RANGE = {
+  cpu:         [70, 650],
+  gpu:         [120, 1700],
+  ram:         [40, 280],
+  storage:     [30, 320],
+  motherboard: [70, 520],
+  psu:         [45, 260],
+  pc_case:     [45, 260],
+  cpu_cooler:  [20, 160],
+}
+const CATEGORIES = Object.keys(RANGE)
 
-// Prix moyen neuf de référence par catégorie (€), à moduler.
-const BASE = { cpu: 300, gpu: 650, ram: 95, storage: 120, motherboard: 190, psu: 115, pc_case: 110, cpu_cooler: 75 }
-
-// Facteur déterministe [0.55..1.70] dérivé de l'id (stable d'un run à l'autre).
-function hashFactor(id) {
+function hashUnit(id) {
   let h = 0
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0
-  return 0.55 + ((h % 1000) / 1000) * 1.15
+  return (h % 1000) / 1000 // 0..1 déterministe
 }
 
-function estimate(category, id, year) {
-  const base = BASE[category] ?? 130
-  const yearBump = year >= 2024 ? 1.15 : year <= 2019 ? 0.8 : 1
-  const avg = Math.round(base * hashFactor(id) * yearBump)
+function priceRow(category, id, bench, benchMin, benchMax) {
+  const [lo, hi] = RANGE[category] ?? [50, 300]
+  let t // position 0..1 dans la fourchette
+  if ((category === 'cpu' || category === 'gpu') && bench != null && benchMax > benchMin) {
+    t = Math.max(0, Math.min(1, (bench - benchMin) / (benchMax - benchMin)))
+    // léger bruit déterministe pour ne pas avoir des prix trop "lisses"
+    t = Math.max(0, Math.min(1, t * 0.9 + hashUnit(id) * 0.1))
+  } else {
+    t = hashUnit(id)
+  }
+  const avg = Math.round(lo + t * (hi - lo))
   return {
-    price_min_eur: Math.round(avg * 0.9),
-    price_max_eur: Math.round(avg * 1.15),
+    id,
+    price_min_eur: Math.round(avg * 0.92),
+    price_max_eur: Math.round(avg * 1.12),
     price_avg_eur: avg,
   }
 }
 
 const supabase = createClient(URL, KEY, { auth: { persistSession: false } })
 
-let total = 0
-for (const category of CATEGORIES) {
-  const { data, error } = await supabase
-    .from('products')
-    .select('id, name, category, release_year')
-    .eq('category', category)
-    .is('price_avg_eur', null)
-    .limit(LIMIT)
-  if (error) { console.error(`✗ ${category}:`, error.message); continue }
-  if (!data || data.length === 0) { console.log(`–  ${category}: rien à remplir`); continue }
-
-  for (const p of data) {
-    const row = estimate(category, p.id, p.release_year ?? 2022)
-    if (DRY) { console.log(`[dry] ${category} ${p.name?.slice(0, 40)} → ${row.price_avg_eur}€ [${row.price_min_eur}-${row.price_max_eur}]`); continue }
-    const { error: upErr } = await supabase.from('products').update(row).eq('id', p.id)
-    if (upErr) console.error(`  ✗ ${p.id}:`, upErr.message)
-    else total++
+async function chunkedUpdate(rows) {
+  const SIZE = 50
+  let done = 0
+  for (let i = 0; i < rows.length; i += SIZE) {
+    const slice = rows.slice(i, i + SIZE)
+    await Promise.all(slice.map(({ id, ...vals }) =>
+      supabase.from('products').update(vals).eq('id', id),
+    ))
+    done += slice.length
+    process.stdout.write(`\r   …${done}/${rows.length}`)
   }
-  console.log(`✓  ${category}: ${data.length} produits`)
+  process.stdout.write('\n')
 }
-console.log(DRY ? 'Dry-run terminé.' : `Terminé — ${total} produits tarifés (exemple).`)
+
+let grand = 0
+for (const category of CATEGORIES) {
+  // Bornes de benchmark de la catégorie (pour interpoler les prix CPU/GPU).
+  let benchMin = 0, benchMax = 0
+  if (category === 'cpu' || category === 'gpu') {
+    const { data: bmax } = await supabase.from('products').select('benchmark_score')
+      .eq('category', category).not('benchmark_score', 'is', null)
+      .order('benchmark_score', { ascending: false }).limit(1)
+    const { data: bmin } = await supabase.from('products').select('benchmark_score')
+      .eq('category', category).not('benchmark_score', 'is', null)
+      .order('benchmark_score', { ascending: true }).limit(1)
+    benchMax = bmax?.[0]?.benchmark_score ?? 0
+    benchMin = bmin?.[0]?.benchmark_score ?? 0
+  }
+
+  // Pagination : on récupère tous les produits sans prix de la catégorie.
+  const rows = []
+  const PAGE = 1000
+  for (let from = 0; from < LIMIT; from += PAGE) {
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, benchmark_score')
+      .eq('category', category)
+      .is('price_avg_eur', null)
+      .range(from, Math.min(from + PAGE, LIMIT) - 1)
+    if (error) { console.error(`✗ ${category}:`, error.message); break }
+    if (!data || data.length === 0) break
+    for (const p of data) rows.push(priceRow(category, p.id, p.benchmark_score, benchMin, benchMax))
+    if (data.length < PAGE) break
+  }
+
+  if (rows.length === 0) { console.log(`–  ${category}: rien à tarifer`); continue }
+  if (DRY) {
+    const sample = rows.slice(0, 3).map((r) => `${r.price_avg_eur}€`).join(', ')
+    console.log(`[dry] ${category}: ${rows.length} produits (ex: ${sample})`)
+    continue
+  }
+  console.log(`✓  ${category}: ${rows.length} produits`)
+  await chunkedUpdate(rows)
+  grand += rows.length
+}
+console.log(DRY ? 'Dry-run terminé.' : `Terminé — ${grand} produits tarifés (estimation).`)

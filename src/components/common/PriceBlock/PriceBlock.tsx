@@ -15,6 +15,8 @@ interface PriceBlockProps {
 export function PriceBlock({ product, compact = false }: PriceBlockProps) {
   const neuf = getNewPrice(product)
   const occasion = getUsedPrice(product)
+  // Pas de date de mise à jour = prix non scrapé → estimation (seed/démo).
+  const neufEstimated = !product.price_updated_at
 
   if (!neuf) {
     return <div className="price-block price-block--empty">Prix non disponible</div>
@@ -24,7 +26,9 @@ export function PriceBlock({ product, compact = false }: PriceBlockProps) {
     <div className={`price-block ${compact ? 'price-block--compact' : ''}`}>
       <div className="price-tier price-tier--new">
         <div className="price-tier__top">
-          <span className="price-tier__label">Neuf</span>
+          <span className="price-tier__label">
+            Neuf{neufEstimated && <span className="price-tier__est" title="Estimation, prix réel non encore récupéré"> estimé</span>}
+          </span>
           <span className="price-tier__avg">{formatEur(neuf.avg)}</span>
         </div>
         {!compact && neuf.min !== neuf.max && (
