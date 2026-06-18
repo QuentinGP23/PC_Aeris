@@ -82,14 +82,14 @@ export function buildDevis(items: CartItem[], info: DevisInfo): jsPDF {
     const body = item.lines.map((l) => [
       catLabel(l.category),
       l.name,
-      l.merchant ?? '—',
+      l.condition === 'occasion' ? 'Occasion (est.)' : l.merchant ? `Neuf · ${l.merchant}` : 'Neuf',
       l.price != null ? eur(l.price) : 'sur devis',
     ])
     body.push(['Montage', `Offre ${assemblyName(item.assembly)}`, 'PC Aeris', eur(ASSEMBLY_PRICE[item.assembly])])
 
     autoTable(doc, {
       startY: y,
-      head: [['POSTE', 'COMPOSANT / PRESTATION', 'ACHETÉ CHEZ', 'PRIX']],
+      head: [['POSTE', 'COMPOSANT / PRESTATION', 'CONDITION', 'PRIX']],
       body,
       theme: 'striped',
       styles: { fontSize: 9, cellPadding: { top: 7, bottom: 7, left: 9, right: 9 }, textColor: INK, lineColor: LINE, lineWidth: 0 },

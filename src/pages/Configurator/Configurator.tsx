@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Lock, X, ShoppingCart, FloppyDisk, Check, Warning, MagnifyingGlass, CaretDown, CaretUp, CaretLeft, CaretRight, ArrowRight } from '@phosphor-icons/react'
 import { supabase } from '../../config'
+import { PriceBlock } from '../../components/common/PriceBlock'
 import { CategoryIcon } from '../../components/common'
 import { useConfigStore, useToast, useCartStore } from '../../store'
 import { useAuth } from '../../context/useAuth'
@@ -111,7 +112,10 @@ function Configurator() {
         supabase
           .from('products')
           .select(`${baseSelect}, ${specsRel}`, { count: 'exact' })
-          .eq('category', activeCategory),
+          .eq('category', activeCategory)
+          // On masque les produits sans prix neuf (l'occasion en découle) :
+          // pas de prix = pas d'info fiable à afficher/devis.
+          .not('price_avg_eur', 'is', null),
       ).range(from, to)
 
       if (search.trim()) {
@@ -153,7 +157,8 @@ function Configurator() {
           supabase
             .from('products')
             .select(`${baseSelect}, ${fallbackRel}`, { count: 'exact' })
-            .eq('category', activeCategory),
+            .eq('category', activeCategory)
+            .not('price_avg_eur', 'is', null),
         ).range(from, to)
         if (search.trim()) {
           fallbackQuery = fallbackQuery.ilike('name', `%${search.trim()}%`)
@@ -527,18 +532,7 @@ function Configurator() {
 
                       <div className="prod-card__ft">
                         <div className="prod-card__price">
-                          {product.price_avg_eur !== null ? (
-                            <>
-                              <div className="prod-card__pr">~ {Math.round(product.price_avg_eur)} €</div>
-                              {product.price_min_eur !== null && product.price_max_eur !== null && (
-                                <div className="prod-card__pa">
-                                  {Math.round(product.price_min_eur)}€ – {Math.round(product.price_max_eur)}€
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <div className="prod-card__pa">Prix non disponible</div>
-                          )}
+                          <PriceBlock product={product} compact />
                         </div>
 
                         {isSelected ? (

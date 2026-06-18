@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { CategoryKey, Product } from '../types'
 import { ASSEMBLY_PRICE, type AssemblyTier } from '../constants'
+import { getNewPrice, getUsedPrice, type PriceCondition } from '../utils/pricing'
 
 /** Marchand déduit du domaine de l'URL marchande. */
 export function merchantFromUrl(url: string | null): string | null {
@@ -23,15 +24,28 @@ export function merchantFromUrl(url: string | null): string | null {
   }
 }
 
-/** Une ligne = un composant figé au moment de l'ajout (snapshot prix/marchand). */
+/** Une ligne = un composant figé au moment de l'ajout (snapshot prix neuf + occasion). */
 export interface CartLine {
   category: CategoryKey
   productId: string
   name: string
+  /** Condition choisie pour cette ligne (neuf par défaut). */
+  condition: PriceCondition
+  /** Prix moyen neuf (réel) — null si inconnu. */
+  priceNew: number | null
+  /** Prix moyen occasion (estimé par décote) — null si inconnu. */
+  priceUsed: number | null
+  /** Prix effectif retenu selon la condition (sert au panier ET à la commande). */
   price: number | null
   merchant: string | null
   url: string | null
 }
+
+/** Prix effectif d'une ligne selon sa condition. */
+export const lineEffectivePrice = (l: Pick<CartLine, 'condition' | 'priceNew' | 'priceUsed'>): number | null =>
+  l.condition === 'occasion' ? l.priceUsed : l.priceNew
+
+const sumComponents = (lines: CartLine[]): number => lines.reduce((acc, l) => acc + (l.price ?? 0), 0)
 
 /** Un article du panier = un PC configuré + une offre de montage + quantité. */
 export interface CartItem {
@@ -49,6 +63,7 @@ interface CartStore {
   removeItem: (id: string) => void
   setQuantity: (id: string, quantity: number) => void
   setAssembly: (id: string, assembly: AssemblyTier) => void
+  setLineCondition: (itemId: string, productId: string, condition: PriceCondition) => void
   clear: () => void
 }
 
@@ -65,18 +80,23 @@ export const useCartStore = create<CartStore>()(
         set((state) => {
           const lines: CartLine[] = (Object.entries(config) as [CategoryKey, Product][])
             .filter(([, p]) => p)
-            .map(([category, p]) => ({
-              category,
-              productId: p.id,
-              name: p.name,
-              // « meilleur prix » de sourcing : on prend le prix bas, sinon la moyenne.
-              price: p.price_min_eur ?? p.price_avg_eur ?? null,
-              merchant: merchantFromUrl(p.retailer_url),
-              url: p.retailer_url,
-            }))
+            .map(([category, p]) => {
+              const priceNew = getNewPrice(p)?.avg ?? null
+              const priceUsed = getUsedPrice(p)?.avg ?? null
+              return {
+                category,
+                productId: p.id,
+                name: p.name,
+                condition: 'neuf' as PriceCondition,
+                priceNew,
+                priceUsed,
+                price: priceNew,
+                merchant: merchantFromUrl(p.retailer_url),
+                url: p.retailer_url,
+              }
+            })
           if (lines.length === 0) return state
-          const componentsPrice = lines.reduce((acc, l) => acc + (l.price ?? 0), 0)
-          const item: CartItem = { id: genId(), name, lines, componentsPrice, assembly: 'confort', quantity: 1 }
+          const item: CartItem = { id: genId(), name, lines, componentsPrice: sumComponents(lines), assembly: 'confort', quantity: 1 }
           return { items: [...state.items, item] }
         }),
 
@@ -90,9 +110,20 @@ export const useCartStore = create<CartStore>()(
       setAssembly: (id, assembly) =>
         set((state) => ({ items: state.items.map((i) => (i.id === id ? { ...i, assembly } : i)) })),
 
+      setLineCondition: (itemId, productId, condition) =>
+        set((state) => ({
+          items: state.items.map((i) => {
+            if (i.id !== itemId) return i
+            const lines = i.lines.map((l) =>
+              l.productId === productId ? { ...l, condition, price: lineEffectivePrice({ ...l, condition }) } : l,
+            )
+            return { ...i, lines, componentsPrice: sumComponents(lines) }
+          }),
+        })),
+
       clear: () => set({ items: [] }),
     }),
-    { name: 'pc-aeris-cart' },
+    { name: 'pc-aeris-cart-v2' },
   ),
 )
 

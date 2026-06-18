@@ -12,7 +12,7 @@ const eur = (n: number) => `${Math.round(n).toLocaleString('fr-FR')} €`
 function Cart() {
   const navigate = useNavigate()
   const toast = useToast()
-  const { items, removeItem, setQuantity, setAssembly, clear } = useCartStore()
+  const { items, removeItem, setQuantity, setAssembly, setLineCondition, clear } = useCartStore()
 
   if (items.length === 0) {
     return (
@@ -57,18 +57,27 @@ function Cart() {
 
                 <ul className="ci__lines">
                   <li className="ci__lines-hd">
-                    <span>Poste</span><span>Composant</span><span>Acheté chez</span><span>Prix</span>
+                    <span>Poste</span><span>Composant</span><span>Condition</span><span>Prix</span>
                   </li>
                   {item.lines.map((l) => (
                     <li key={l.category}>
                       <span className="ci__cat">{catLabel(l.category)}</span>
                       <span className="ci__pname">{l.name}</span>
-                      <span className="ci__merchant">
-                        {l.url ? (
-                          <a href={l.url} target="_blank" rel="noreferrer">{l.merchant ?? 'voir'}</a>
-                        ) : (
-                          l.merchant ?? '—'
-                        )}
+                      <span className="ci__cond">
+                        <button
+                          type="button"
+                          className={`ci__cond-b ${l.condition === 'neuf' ? 'is-on' : ''}`}
+                          onClick={() => setLineCondition(item.id, l.productId, 'neuf')}
+                          disabled={l.priceNew == null}
+                          title="Neuf"
+                        >Neuf</button>
+                        <button
+                          type="button"
+                          className={`ci__cond-b ${l.condition === 'occasion' ? 'is-on' : ''}`}
+                          onClick={() => setLineCondition(item.id, l.productId, 'occasion')}
+                          disabled={l.priceUsed == null}
+                          title="Occasion (estimée)"
+                        >Occas.</button>
                       </span>
                       <span className="ci__price">{l.price != null ? eur(l.price) : 'sur devis'}</span>
                     </li>
