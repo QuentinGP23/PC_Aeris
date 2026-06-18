@@ -1,11 +1,12 @@
+import { CheckCircle, XCircle, Warning, Info, X, type Icon } from '@phosphor-icons/react'
 import { useToastStore } from '../../../store/toastStore'
 import './Toast.scss'
 
-const ICONS: Record<string, string> = {
-  success: '✓',
-  error:   '✕',
-  warning: '⚠',
-  info:    'ℹ',
+const ICONS: Record<string, Icon> = {
+  success: CheckCircle,
+  error:   XCircle,
+  warning: Warning,
+  info:    Info,
 }
 
 export function ToastContainer() {
@@ -15,13 +16,16 @@ export function ToastContainer() {
 
   return (
     <div className="toast-container">
-      {toasts.map((toast) => (
-        <div key={toast.id} className={`toast toast--${toast.variant}`}>
-          <span className="toast__icon">{ICONS[toast.variant]}</span>
-          <span className="toast__message">{toast.message}</span>
-          <button className="toast__close" onClick={() => removeToast(toast.id)}>✕</button>
-        </div>
-      ))}
+      {toasts.map((toast) => {
+        const Ico = ICONS[toast.variant] ?? Info
+        return (
+          <div key={toast.id} className={`toast toast--${toast.variant}`}>
+            <span className="toast__icon"><Ico size={20} weight="fill" /></span>
+            <span className="toast__message">{toast.message}</span>
+            <button className="toast__close" onClick={() => removeToast(toast.id)} aria-label="Fermer"><X weight="bold" /></button>
+          </div>
+        )
+      })}
     </div>
   )
 }

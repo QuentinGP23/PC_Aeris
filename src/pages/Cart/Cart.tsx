@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ShoppingCart, X, ArrowRight, FileArrowDown } from '@phosphor-icons/react'
 import { useCartStore, itemTotal, cartTotal, useToast } from '../../store'
 import { CATEGORIES, type CategoryKey } from '../../types'
 import { ASSEMBLY_OFFERS, ASSEMBLY_PRICE } from '../../constants'
@@ -18,7 +19,7 @@ function Cart() {
       <div className="cart">
         <h1 className="cart__title">Mon panier</h1>
         <div className="cart__empty">
-          <div className="cart__empty-ico">🛒</div>
+          <div className="cart__empty-ico"><ShoppingCart size={48} weight="thin" /></div>
           <p>Votre panier est vide.</p>
           <div className="cart__empty-actions">
             <button className="btn btn--ind" onClick={() => navigate('/configurateur')}>Configurer un PC</button>
@@ -51,7 +52,7 @@ function Cart() {
                     <h2 className="ci__name">{item.name}</h2>
                     <span className="ci__count">{filled}/{CATEGORIES.length} composants</span>
                   </div>
-                  <button className="ci__rm" onClick={() => removeItem(item.id)} aria-label="Retirer">✕</button>
+                  <button className="ci__rm" onClick={() => removeItem(item.id)} aria-label="Retirer"><X weight="bold" /></button>
                 </div>
 
                 <ul className="ci__lines">
@@ -111,7 +112,7 @@ function Cart() {
           <div className="cart__row"><span>Montage</span><span>{eur(assemblyTotal)}</span></div>
           <div className="cart__row cart__row--total"><span>Total</span><span>{eur(total)}</span></div>
           <p className="cart__note">Les composants sont facturés au meilleur prix du marché. Les prix manquants seront confirmés au sourcing.</p>
-          <button className="btn btn--ind btn--full" onClick={() => navigate('/commande')}>Passer commande →</button>
+          <button className="btn btn--ind btn--full" onClick={() => navigate('/commande')}>Passer commande <ArrowRight weight="bold" /></button>
           <button
             className="btn btn--ghost2 btn--full"
             onClick={() => {
@@ -119,7 +120,7 @@ function Cart() {
               toast.success('Devis téléchargé')
             }}
           >
-            📄 Télécharger le devis
+            <FileArrowDown weight="bold" /> Télécharger le devis
           </button>
           <button className="btn btn--ghost2 btn--full" onClick={() => { toast.info('Panier conservé'); navigate('/configurateur') }}>Continuer mes achats</button>
         </aside>

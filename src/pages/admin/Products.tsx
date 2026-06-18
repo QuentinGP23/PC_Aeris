@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ArrowsDownUp, ArrowUp, ArrowDown, X, CaretLeft, CaretRight } from '@phosphor-icons/react'
 import { adminService, type AdminProduct } from '../../services'
 import { CATEGORIES } from '../../types'
 import type { CategoryKey } from '../../types'
@@ -221,8 +222,8 @@ function specsFormToUpdates(form: SpecsFormValues, schema: Record<string, SpecsF
 }
 
 function SortIcon({ col, sortBy, sortDir }: { col: string; sortBy: string; sortDir: 'asc' | 'desc' }) {
-  if (sortBy !== col) return <span className="adm-sort adm-sort--idle">↕</span>
-  return <span className="adm-sort">{sortDir === 'asc' ? '↑' : '↓'}</span>
+  if (sortBy !== col) return <span className="adm-sort adm-sort--idle"><ArrowsDownUp size={13} weight="bold" /></span>
+  return <span className="adm-sort">{sortDir === 'asc' ? <ArrowUp size={13} weight="bold" /> : <ArrowDown size={13} weight="bold" />}</span>
 }
 
 type EditFormValues = {
@@ -442,7 +443,7 @@ function AdminProducts() {
       {error && (
         <div className="adm-alert-err">
           <span>{error}</span>
-          <button onClick={() => setError(null)} aria-label="Fermer">×</button>
+          <button onClick={() => setError(null)} aria-label="Fermer"><X weight="bold" /></button>
         </div>
       )}
 
@@ -551,9 +552,9 @@ function AdminProducts() {
 
       {totalPages > 1 && (
         <div className="adm-pagination">
-          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Précédent</button>
+          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page === 0} onClick={() => setPage(page - 1)}><CaretLeft weight="bold" /> Précédent</button>
           <span className="adm-page-info">Page {page + 1} / {totalPages}</span>
-          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant →</button>
+          <button className="adm-btn adm-btn--ghost adm-btn--sm" disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}>Suivant <CaretRight weight="bold" /></button>
         </div>
       )}
 
@@ -563,7 +564,7 @@ function AdminProducts() {
           <div className="adm-modal adm-modal--xl" onClick={(e) => e.stopPropagation()}>
             <div className="adm-modal__hd">
               <div className="adm-modal__title">{isCreateMode ? 'Créer un produit' : 'Modifier le produit'}</div>
-              <button className="adm-modal__close" onClick={() => setModalMode(null)} aria-label="Fermer">×</button>
+              <button className="adm-modal__close" onClick={() => setModalMode(null)} aria-label="Fermer"><X weight="bold" /></button>
             </div>
             <div className="adm-modal__body">
               {editError && <div className="adm-alert-err">{editError}</div>}
@@ -772,7 +773,7 @@ function AdminProducts() {
           <div className="adm-modal adm-modal--sm" onClick={(e) => e.stopPropagation()}>
             <div className="adm-modal__hd">
               <div className="adm-modal__title">Supprimer le produit</div>
-              <button className="adm-modal__close" onClick={() => setDeletingProduct(null)} aria-label="Fermer">×</button>
+              <button className="adm-modal__close" onClick={() => setDeletingProduct(null)} aria-label="Fermer"><X weight="bold" /></button>
             </div>
             <div className="adm-modal__body">
               <p className="adm-warn-text">

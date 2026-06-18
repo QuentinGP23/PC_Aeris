@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
+import { CaretLeft } from '@phosphor-icons/react'
 import './legal.scss'
 
 export default function LegalNotice() {
   return (
     <div className="legal-page">
       <div className="legal-page__inner">
-        <Link to="/" className="legal-page__back">← Retour à l'accueil</Link>
+        <Link to="/" className="legal-page__back"><CaretLeft weight="bold" /> Retour à l'accueil</Link>
 
         <div className="legal-page__header">
           <span className="legal-page__label">Légal</span>

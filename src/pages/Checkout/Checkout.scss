@@ -96,7 +96,7 @@
   padding: 11px 18px; border-radius: var(--rs); font-family: var(--fb); font-size: 13.5px; font-weight: 600;
   cursor: pointer; border: none; transition: all 0.14s; text-decoration: none;
   &--full { width: 100%; margin-top: 8px; }
-  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #7577f5; } &:disabled { opacity: 0.5; cursor: not-allowed; } }
+  &--ind { background: var(--ind); color: #fff; &:hover:not(:disabled) { background: #4F46E5; } &:disabled { opacity: 0.5; cursor: not-allowed; } }
   &--ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border);
     &:hover { border-color: var(--border-s); color: var(--text); } }
 }

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft } from '@phosphor-icons/react'
 import { Button } from '../../components/common'
 import { Container } from '../../components/layout'
 import './NotFound.scss'
@@ -25,8 +26,8 @@ function NotFound() {
           </p>
 
           <div className="not-found__actions">
-            <Button size="lg" onClick={() => navigate(-1)} variant="outline">
-              ← Retour
+            <Button size="lg" onClick={() => navigate(-1)} variant="outline" leftIcon={<ArrowLeft weight="bold" />}>
+              Retour
             </Button>
             <Link to="/">
               <Button size="lg">Accueil</Button>

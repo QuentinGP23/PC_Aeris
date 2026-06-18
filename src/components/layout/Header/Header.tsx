@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { List, X, ShoppingCart } from '@phosphor-icons/react'
+import { List, X, ShoppingCart, Lightning } from '@phosphor-icons/react'
 import { useAuth } from '../../../context'
 import { useConfigStore, useCartStore, cartCount } from '../../../store'
 import './Header.scss'
@@ -28,7 +28,7 @@ function Header() {
     <nav className="nav">
       <div className="nav__inner">
         <Link to="/" className="nav__logo">
-          <span className="nav__logo-mark">⚡</span>
+          <span className="nav__logo-mark"><Lightning size={18} weight="fill" /></span>
           <span>PC Aeris</span>
         </Link>
 
