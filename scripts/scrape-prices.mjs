@@ -2,7 +2,7 @@
  * scrape-prices.mjs
  * ────────────────────────────────────────────────────────────────────────────
  * Récupère des prix EUR pour les produits PC Aeris en interrogeant des marchands
- * FR (TopAchat en source principale, LDLC en option) et en faisant correspondre
+ * FR (LDLC + Alternate.fr, prix en €), interrogés en parallèle, et en faisant correspondre
  * le bon produit par matching de tokens-modèle (évite les résultats sponsorisés
  * ou voisins).
  *
@@ -206,17 +206,68 @@ async function scrapeLDLC(query, ctx) {
   return out
 }
 
+// ── source : Alternate.fr ──────────────────────────────────────────────────────
+// Page de résultats rendue côté serveur : liens fiche
+// (…/{Marque}/{Nom-produit}/html/product/{id}) + prix "€ 599,00". Devise € (FR).
+async function scrapeAlternate(query, ctx) {
+  const url = `https://www.alternate.fr/listing.xhtml?q=${encodeURIComponent(query)}`
+  const html = await getHtml(url)
+  if (!html) return []
+
+  // Liens produit (le titre est reconstruit depuis le slug marque + nom).
+  const linkRe = /href="(https:\/\/www\.alternate\.fr\/([^"/]+)\/([^"/]+)\/html\/product\/\d+)"/g
+  const items = []
+  const seen = new Set()
+  let m
+  while ((m = linkRe.exec(html))) {
+    if (seen.has(m[1])) continue
+    seen.add(m[1])
+    const brand = decodeURIComponent(m[2]).replace(/-/g, ' ')
+    const name = decodeURIComponent(m[3]).replace(/-/g, ' ')
+    items.push({ pos: m.index, url: m[1], title: `${brand} ${name}`.replace(/\s+/g, ' ').trim() })
+  }
+
+  // Prix "€ 599,00" (séparateur de milliers : espace / nbsp éventuel).
+  const priceRe = /€\s{0,3}(\d[\d.  ]{0,9}),(\d{2})/g
+  const prices = []
+  while ((m = priceRe.exec(html))) {
+    const intPart = m[1].replace(/\D/g, '')
+    if (!intPart || intPart.length > 6) continue
+    prices.push({ pos: m.index, price: parseFloat(`${intPart}.${m[2]}`) })
+  }
+
+  // Apparie chaque produit au 1er prix qui le suit (avant le produit suivant).
+  const out = []
+  for (let k = 0; k < items.length; k++) {
+    const it = items[k]
+    const nextPos = k + 1 < items.length ? items[k + 1].pos : Infinity
+    const pr = prices.find((p) => p.pos > it.pos && p.pos < nextPos)
+    if (pr) out.push({ title: it.title, price: pr.price, url: it.url })
+  }
+  if (VERBOSE) ctx.log(`    Alternate: ${items.length} résultats, ${out.length} avec prix`)
+  return out
+}
+
 // ── traitement d'un produit ─────────────────────────────────────────────────────
 async function priceOne(product, ctx) {
   const query = cleanName(`${product.manufacturer ?? ''} ${product.name}`)
   const targetToks = [...new Set(tokens(query))]
   const targetModels = modelTokens(targetToks)
 
+  // Sources interrogées EN PARALLÈLE (sites différents → on reste poli par site).
+  // Plus de chances de match + vraie fourchette de prix multi-marchands.
+  const [ldlc, alt] = await Promise.all([
+    scrapeLDLC(query, ctx),
+    scrapeAlternate(query, ctx),
+  ])
+
   const candidates = []
-  for (const c of await scrapeLDLC(query, ctx)) {
-    if (isUsed(c.title)) continue // on ne tarife que du neuf
-    const sc = matchScore(targetToks, targetModels, c.title)
-    if (sc >= 0.5) candidates.push({ ...c, source: 'LDLC', score: sc })
+  for (const [src, list] of [['LDLC', ldlc], ['Alternate', alt]]) {
+    for (const c of list) {
+      if (isUsed(c.title)) continue // on ne tarife que du neuf
+      const sc = matchScore(targetToks, targetModels, c.title)
+      if (sc >= 0.5) candidates.push({ ...c, source: src, score: sc })
+    }
   }
 
   if (!candidates.length) return null
@@ -267,7 +318,7 @@ async function main() {
   }
   console.log(
     `🔎  ${products.length} produit(s) à traiter` +
-      `${CATEGORY ? ` [${CATEGORY}]` : ''} · source LDLC · ` +
+      `${CATEGORY ? ` [${CATEGORY}]` : ''} · sources LDLC + Alternate · ` +
       `${DRY_RUN ? 'DRY-RUN' : 'écriture'} · délai ${DELAY_MS}ms\n`,
   )
 
