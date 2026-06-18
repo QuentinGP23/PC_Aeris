@@ -25,13 +25,13 @@
   &__name {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: $neutral-900;
+    color: var(--text);
     line-height: 1.2;
   }
 
   &__email {
     font-size: $font-size-sm;
-    color: $neutral-500;
+    color: var(--text-2);
   }
 
   &__meta {
@@ -58,7 +58,7 @@
 
   &__since {
     font-size: $font-size-xs;
-    color: $neutral-400;
+    color: var(--text-3);
   }
 
   &__header-actions {
@@ -79,13 +79,13 @@
   &__section-title {
     font-size: $font-size-xl;
     font-weight: $font-weight-semibold;
-    color: $neutral-900;
+    color: var(--text);
     margin-bottom: $spacing-1;
   }
 
   &__section-desc {
     font-size: $font-size-sm;
-    color: $neutral-500;
+    color: var(--text-2);
   }
 
   // ── Danger zone ─────────────────────────────────────────────────────────────
@@ -125,14 +125,14 @@
   &__danger-item-title {
     font-size: $font-size-base;
     font-weight: $font-weight-medium;
-    color: $neutral-900;
+    color: var(--text);
 
     .profile__danger-item--destructive & { color: $error; }
   }
 
   &__danger-item-desc {
     font-size: $font-size-sm;
-    color: $neutral-500;
+    color: var(--text-2);
     line-height: 1.5;
   }
 
@@ -146,13 +146,13 @@
 
   &__delete-modal-text {
     font-size: $font-size-sm;
-    color: $neutral-700;
+    color: var(--text-2);
     line-height: 1.6;
   }
 
   &__delete-modal-instruction {
     font-size: $font-size-sm;
-    color: $neutral-600;
+    color: var(--text-2);
     padding: $spacing-3 $spacing-4;
     background: rgba($error, 0.05);
     border-left: 3px solid $error;

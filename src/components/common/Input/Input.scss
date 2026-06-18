@@ -24,7 +24,7 @@
   &__label {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $neutral-700;
+    color: var(--text-2);
   }
 
   // -------------------------------------------------------------------------
@@ -45,19 +45,19 @@
     width: 100%;
     outline: none;
     transition: all $transition-base;
-    background-color: $white;
-    color: $neutral-900;
+    background-color: var(--surface-2);
+    color: var(--text);
     font-size: $font-size-base;
     font-family: inherit;
 
     &::placeholder {
-      color: $neutral-400;
+      color: var(--text-3);
     }
 
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      background-color: $neutral-100;
+      background-color: var(--surface-3);
     }
   }
 
@@ -66,27 +66,27 @@
   // -------------------------------------------------------------------------
 
   &[data-variant="default"] .input__field {
-    border: 1px solid $neutral-200;
+    border: 1px solid var(--border-s);
     border-radius: $radius-md;
     padding: $spacing-3 $spacing-4;
   }
 
   &[data-variant="filled"] .input__field {
-    background-color: $neutral-100;
+    background-color: var(--surface-3);
     border: 1px solid transparent;
     border-radius: $radius-md;
     padding: $spacing-3 $spacing-4;
   }
 
   &[data-variant="outline"] .input__field {
-    border: 2px solid $neutral-300;
+    border: 2px solid var(--border-s);
     border-radius: $radius-md;
     padding: $spacing-3 $spacing-4;
   }
 
   &[data-variant="underline"] .input__field {
     border: none;
-    border-bottom: 2px solid $neutral-200;
+    border-bottom: 2px solid var(--border-s);
     border-radius: 0;
     padding: $spacing-3 0;
     padding-left: 0;
@@ -127,12 +127,12 @@
   &[data-focused="true"][data-variant="default"] .input__field,
   &[data-focused="true"][data-variant="filled"] .input__field,
   &[data-focused="true"][data-variant="outline"] .input__field {
-    border-color: $primary;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: var(--ind);
+    box-shadow: var(--shadow-focus);
   }
 
   &[data-focused="true"][data-variant="underline"] .input__field {
-    border-bottom-color: $primary;
+    border-bottom-color: var(--ind);
     box-shadow: none;
   }
 
@@ -154,7 +154,7 @@
   &[data-error="true"][data-focused="true"][data-variant="filled"] .input__field,
   &[data-error="true"][data-focused="true"][data-variant="outline"] .input__field {
     border-color: $error;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    box-shadow: var(--shadow-focus-error);
   }
 
   // -------------------------------------------------------------------------
@@ -163,7 +163,7 @@
 
   &__icon {
     position: absolute;
-    color: $neutral-400;
+    color: var(--text-3);
     display: flex;
     align-items: center;
     pointer-events: none;
@@ -201,7 +201,7 @@
     right: $spacing-3;
     background: none;
     border: none;
-    color: $neutral-400;
+    color: var(--text-3);
     cursor: pointer;
     padding: $spacing-1;
     display: flex;
@@ -209,7 +209,7 @@
     transition: color $transition-fast;
 
     &:hover {
-      color: $neutral-700;
+      color: var(--text);
     }
   }
 
@@ -230,6 +230,6 @@
 
   &__hint {
     font-size: $font-size-xs;
-    color: $neutral-400;
+    color: var(--text-3);
   }
 }
