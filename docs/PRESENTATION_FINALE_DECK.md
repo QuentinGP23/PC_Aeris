@@ -234,26 +234,25 @@ Donc on propose trois portes d'entrée. Pour le débutant : un questionnaire qui
 
 ```
 ┌──────────────────────────────────────────┐
-│   RTX 4070 Ti SUPER                      │
+│   GeForce RTX 5070                       │
 │                                          │
-│   Prix BAS du marché :       789 €       │
-│   Prix MOYEN :               845 €       │  ← affichage central
-│   Prix HAUT :                920 €       │
+│   NEUF      569 € — 826 €  (moy. 674 €)  │  ← prix marché réels
+│   OCCASION  ~ 470 €  (estimée par décote) │
 │                                          │
-│   Neuf + occasion · MAJ : il y a 2h      │
+│   Sources : LDLC + Alternate.fr          │
 └──────────────────────────────────────────┘
 ```
 
 **Chez les concurrents** : un seul prix, celui du revendeur. Aucune référence marché.
-**Chez Aeris** : fourchette agrégée Amazon + Rakuten + Cdiscount + eBay. *Aucun concurrent francophone ne le fait.*
+**Chez Aeris** : fourchette **neuf réelle** (scrapée chez plusieurs marchands FR — *LDLC + Alternate.fr*, agrégées min/moyen/max) + **occasion estimée** par décote selon catégorie et âge. *Aucun concurrent francophone ne l'affiche.*
 
 <!--
 [1 min 30]
 C'est probablement notre différenciation la plus forte commercialement. Aujourd'hui, sur les sites concurrents, vous voyez un seul prix. Celui du revendeur. Et vous n'avez aucune idée s'il est cher, bon marché, ou dans la moyenne du marché.
 
-Nous, pour chaque composant, on agrège plusieurs sources et on affiche trois indicateurs. Le client voit instantanément si ce qu'on lui propose est compétitif. À la fin de sa configuration, il a une fourchette de prix réaliste, pas un tarif fixe artificiel.
+Nous, pour chaque composant, on affiche une fourchette neuf — bas / moyen / haut — issue de prix réels récupérés chez plusieurs marchands FR (LDLC, Alternate.fr) par scraping, plus un prix d'occasion estimé. Je suis transparent là-dessus : le neuf est réel et scrapé ; l'occasion est une estimation par décote (catégorie + âge), clairement labellisée « estimée » dans l'interface. Le client voit instantanément si ce qu'on lui propose est compétitif.
 
-Cette transparence n'existe chez aucun concurrent francophone aujourd'hui. C'est une barrière à l'entrée parce que c'est complexe à intégrer techniquement.
+J'assume aussi un choix technique : les API officielles (Amazon, eBay…) sont payantes ou demandent une validation de compte que je n'ai pas voulu engager au stade MVP ; j'ai donc bâti un scraping multi-sources, en volume faible et poli, avec garde-fous anti-blocage. C'est ce qui rend la transparence prix possible sans coût — et aucun concurrent francophone ne l'affiche.
 -->
 
 ---
@@ -268,10 +267,12 @@ Cette transparence n'existe chez aucun concurrent francophone aujourd'hui. C'est
 
 → Démo live (5 minutes) : `pc-aeris.vercel.app`
 
-- Configurateur avec ordre verrouillé CPU → MOBO → boîtier → RAM → GPU
-- Filtres de compatibilité en temps réel (socket, format, hauteur cooler...)
-- Sauvegarde de configurations (compte utilisateur)
-- Back-office admin complet (CRUD + édition prix)
+- Configurateur : ordre verrouillé CPU → MOBO → boîtier → RAM → GPU, compatibilité temps réel (socket, format, hauteur ventirad…)
+- **Prix neuf + occasion** (fourchette) affichés sur chaque composant
+- **Pages catalogue** par catégorie (consulter / trier, hors configurateur)
+- **Panier → devis détaillé PDF → suivi de commande** + carnet d'adresses
+- Questionnaire profil → **configs prêtes** recommandées · sauvegarde de configs
+- Back-office admin complet (CRUD produits, **validation des devis**, dashboard)
 
 <br>
 
@@ -283,30 +284,30 @@ Plutôt que de continuer à en parler, regardons-le.
 
 [démo] Voici la page d'accueil. On entre dans le configurateur. L'ordre des composants est verrouillé dans la logique de montage : CPU d'abord, puis carte mère filtrée automatiquement sur le bon socket, puis le boîtier en fonction du format de la carte mère, et ainsi de suite. Si je sélectionne un boîtier ITX, les cartes mères ATX disparaissent immédiatement.
 
-J'ai aussi un indicateur de complétude — quand les 8 composants sont sélectionnés, j'ai un badge ✓ Configuration complète. Et je peux sauvegarder ma configuration pour la retrouver plus tard ou la modifier.
+Chaque composant affiche un prix neuf (fourchette) et un prix d'occasion estimé. J'ai un indicateur de complétude — badge ✓ quand les 8 composants sont là — et je peux sauvegarder ma config.
 
-Côté admin, on a un back-office complet pour gérer le catalogue, les utilisateurs, les produits, leurs prix. Tout est déployé en continu sur Vercel.
+Je montre aussi les pages catalogue (consultation par catégorie, hors configurateur), puis le parcours d'achat complet : panier → génération d'un devis détaillé en PDF → suivi de commande, avec un carnet d'adresses. Côté admin, back-office complet : CRUD produits, dashboard, et validation des devis (l'admin confirme les prix réels et renvoie le devis final au client). Tout est déployé en continu sur Vercel.
 -->
 
 ---
 
 <div class="eyebrow">07 / MARCHÉ</div>
 
-<div class="big-stat">~4 Mds €</div>
-<div class="stat-label">MARCHÉ DU PC EN FRANCE / AN</div>
+<div class="big-stat">5,7 Mds €</div>
+<div class="stat-label">MARCHÉ FRANÇAIS DU JEU VIDÉO 2024 — SELL</div>
 
 <br>
 
-<div class="big-stat" style="font-size: 64px; color: #6366F1;">+8 à 10 %</div>
-<div class="stat-label">CROISSANCE SEGMENT GAMING & WORKSTATION</div>
+<div class="big-stat" style="font-size: 64px; color: #6366F1;">+9,1 %</div>
+<div class="stat-label">VENTES PC GAMING EN FRANCE — SELL 2024</div>
 
 <br>
 
-**La part du sur-mesure est en croissance — et peu d'acteurs sont spécialisés** sur le créneau du *sur-mesure simplifié*.
+**Marché mondial du PC gaming : ~62 Mds $, CAGR ~13,5 %** *(Grand View Research)*. Peu d'acteurs FR spécialisés sur le *sur-mesure simplifié*.
 
 <!--
 [1 min]
-Quelques chiffres pour cadrer. Le marché du PC en France pèse environ 4 milliards d'euros par an. Le segment gaming et workstation, qui est notre cœur de cible, croît de 8 à 10 % par an. La part du sur-mesure, elle, augmente — parce que les acheteurs deviennent plus exigeants, plus informés, et veulent un produit qui leur ressemble.
+Quelques chiffres pour cadrer, et je cite mes sources. Le marché français du jeu vidéo pèse 5,7 milliards d'euros en 2024 selon le SELL, et les ventes de PC gaming en France ont progressé de 9,1 %. À l'échelle mondiale, Grand View Research évalue le marché du PC gaming à environ 62 milliards de dollars avec une croissance annuelle de l'ordre de 13,5 %. La part du sur-mesure, elle, augmente — parce que les acheteurs deviennent plus exigeants, plus informés, et veulent un produit qui leur ressemble.
 
 Et surtout, peu d'acteurs sont spécialisés sur le sur-mesure simplifié. Les revendeurs traditionnels parlent technique. Amazon parle prix. Personne ne parle simplicité.
 -->
@@ -439,26 +440,28 @@ Pour atteindre ces chiffres, on mise sur le bouche-à-oreille, le SEO sur des re
 
 <div class="eyebrow">12 / ÉTAT D'AVANCEMENT</div>
 
-<div class="big-stat" style="color: #6366F1;">95 %</div>
-<div class="stat-label">MVP LIVRÉ AU 29 MAI 2026</div>
+<div class="big-stat" style="color: #6366F1; font-size: 72px;">MVP livré</div>
+<div class="stat-label">EN PRODUCTION · 79 TESTS AUTOMATISÉS</div>
 
 <br>
 
-**Le produit existe vraiment** — code déployé, 67 tests automatisés, documentation à jour.
+**Le produit existe vraiment** — code déployé sur Vercel, 79 tests, doc à jour.
 
-- **Sprint 1** (jan-mars) : fondations · auth · configurateur · admin · design system
-- **Sprints 2-4** (avril) : compat complète · admin CRUD · tests
-- **Mai** : refonte Aeris Dark + ordre verrouillé + configs sauvegardées
+- Configurateur + compatibilité temps réel + ordre verrouillé + configs sauvegardées
+- **Parcours d'achat complet** : panier → devis PDF → suivi de commande + carnet d'adresses
+- **Prix neuf (scrapés LDLC + Alternate) + occasion estimée** sur chaque composant
+- **Pages catalogue** par catégorie + back-office admin (CRUD, validation devis, dashboard)
+- Refonte visuelle : système d'icônes cohérent + contrastes **WCAG AA**
 
-**5 % restant** : affichage UI des prix (UI prête, bloqué sur credentials API en cours).
+**Prochaine étape (V1)** : paiement Stripe + élargissement continu de la couverture prix.
 
 <!--
 [1 min 30]
 Aujourd'hui, le produit existe vraiment. Pas une slide, pas un rendu Figma — du code déployé qui marche.
 
-Sprint 1, de janvier à mars, on a posé les fondations. Sprints 2-3-4 en avril, sur 4 jours intensifs, on a complété les règles de compatibilité et écrit les premiers tests automatisés. En mai, refonte visuelle complète en thème sombre + bloc configurations sauvegardées avec migration BDD et sécurité fine.
+Sprint 1, de janvier à mars, les fondations. Sprints 2-3-4 en avril, les règles de compatibilité et les tests. En mai-juin, j'ai livré la suite : le parcours d'achat complet — panier, devis détaillé en PDF, suivi de commande, carnet d'adresses — les prix neuf (scrapés chez LDLC et Alternate) et occasion estimée affichés sur les composants, les pages catalogue par catégorie, et une refonte visuelle (système d'icônes, accessibilité WCAG AA).
 
-Il reste 5 % : l'affichage des prix dans l'UI. Le code est prêt, on attend des credentials API auprès d'Amazon Partenaires et de Rakuten.
+Le MVP est donc en production, 79 tests automatisés. La prochaine étape, côté V1, c'est le paiement en ligne via Stripe et l'élargissement continu de la couverture prix par scraping. Le seul point que j'assume : la couverture prix est partielle aujourd'hui — le scraping est lent et poli par nature — mais le mécanisme tourne et se complète au fil des passes.
 -->
 
 ---
@@ -471,9 +474,9 @@ Il reste 5 % : l'affichage des prix dans l'UI. Le code est prêt, on attend des 
 
 | Phase | Période | Contenu |
 |---|---|---|
-| **MVP clos** | Juin 2026 | Prix UI · Responsive · Tarifs home |
-| **V1 publique** | Juil–Août 2026 | Panier · Stripe · Emails · Historique cmd · Partage configs · Tests E2E |
-| **V2** | Sept 2026+ | IA recommandation · OAuth Google · Paiement multi-fois · App mobile · Multi-langue |
+| **MVP livré** | Juin 2026 | Configurateur · catalogue · panier → devis → commande · prix neuf/occasion · admin |
+| **V1 publique** | Été 2026 | Paiement **Stripe** · emails transactionnels · partage de config · responsive · tests E2E · couverture prix élargie |
+| **V2** | 2027 | IA de recommandation · OAuth Google · paiement multi-fois · app mobile · multi-langue |
 
 <br>
 
@@ -481,9 +484,9 @@ Il reste 5 % : l'affichage des prix dans l'UI. Le code est prêt, on attend des 
 
 <!--
 [1 min 30]
-La roadmap publique. Juin 2026, on ferme le MVP. Juillet et août, on livre la V1 publique avec le panier, le tunnel de commande complet, l'intégration Stripe pour le paiement carte, les emails transactionnels, l'historique de commande, le partage de configuration par lien unique, et les tests end-to-end Playwright.
+La roadmap. Le MVP est livré : configurateur, catalogue, et surtout le parcours d'achat complet — panier, devis détaillé, suivi de commande — qui était initialement prévu en V1 et qui est déjà en place. La V1 publique, cet été, se concentre donc sur le paiement en ligne via Stripe, les emails transactionnels, le partage de configuration par lien, le responsive, les tests end-to-end Playwright, et l'élargissement de la couverture prix.
 
-À partir de septembre, V2 : l'IA de recommandation, le paiement en plusieurs fois, l'OAuth Google, et progressivement le multi-langue pour l'expansion européenne.
+À partir de 2027, V2 : l'IA de recommandation, l'OAuth Google, le paiement en plusieurs fois, l'app mobile, et progressivement le multi-langue pour l'expansion européenne.
 -->
 
 ---

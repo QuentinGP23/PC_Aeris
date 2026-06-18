@@ -4,7 +4,7 @@
 > **Durée cible :** 18-22 minutes (1 min par slide + buffer Q/R)
 > **Audience :** jury M2 dans le rôle de potentiels clients, investisseurs, partenaires
 > **Angle :** projet produit, pas démo technique. Chaque affirmation est sourcée dans les docs produit.
-> **Date de mise à jour :** 29 mai 2026
+> **Date de mise à jour :** 19 juin 2026 (MVP livré : prix neuf/occasion, panier→devis→commande, catalogue, refonte icônes)
 
 ---
 
@@ -160,24 +160,24 @@ Inspirée de StockX, appliquée au hardware.
 
 ```
 ┌─────────────────────────────────────┐
-│   RTX 4070 Ti SUPER                 │
+│   GeForce RTX 5070                  │
 │                                     │
-│   Prix BAS du marché :    789 €     │
-│   Prix MOYEN :            845 €     │  ← (en gros et en couleur)
-│   Prix HAUT :             920 €     │
+│   NEUF      569 € — 826 €           │
+│   (moyen)   674 €                   │  ← (en gros et en couleur)
+│   OCCASION  ~ 470 € (estimée)       │
 │                                     │
-│   Neuf + occasion. MAJ : il y a 2h. │
+│   Sources : LDLC + Alternate.fr     │
 └─────────────────────────────────────┘
 ```
 
 **Script (1 min 30)**
 > "C'est probablement notre différenciation la plus forte commercialement. Aujourd'hui, sur les sites concurrents, vous voyez **un seul prix**. Celui du revendeur. Et vous n'avez aucune idée s'il est cher, bon marché, ou dans la moyenne du marché.
 >
-> Nous, pour chaque composant, on agrège plusieurs sources — Amazon, Rakuten, Cdiscount, eBay pour l'occasion — et on affiche trois indicateurs : prix bas, prix moyen, prix haut. Le client voit instantanément si ce qu'on lui propose est compétitif. À la fin de sa configuration, il a une **fourchette de prix réaliste**, pas un tarif fixe artificiel.
+> Nous, pour chaque composant, on affiche une **fourchette neuf** — bas, moyen, haut — construite à partir de prix réels récupérés chez plusieurs marchands FR (LDLC, Alternate.fr) par scraping, plus un **prix d'occasion estimé** par décote. Je suis transparent : le neuf est réel et scrapé, l'occasion est une estimation clairement labellisée comme telle dans l'interface. Le client voit instantanément si ce qu'on lui propose est compétitif.
 >
-> Cette transparence n'existe chez aucun concurrent francophone aujourd'hui. C'est une barrière à l'entrée parce que c'est complexe à intégrer techniquement et qu'il faut maintenir les sources à jour en permanence."
+> J'assume un choix technique : les API officielles (Amazon, eBay…) sont payantes ou exigent une validation de compte que je n'ai pas voulu engager au stade MVP. J'ai donc bâti un scraping multi-sources, faible volume et poli, avec garde-fous anti-blocage. C'est ce qui rend cette transparence possible sans coût — et aucun concurrent francophone ne l'affiche."
 
-**Source** : PITCH.md (section différenciation), scaffolding multi-sources prix livré en Sprint 2 (Amazon Partenaires / Rakuten / Cdiscount / eBay).
+**Source** : PITCH.md (différenciation) ; implémentation réelle = `scripts/scrape-prices.mjs` (LDLC + Alternate.fr, prix € dans le HTML) + `src/utils/pricing.ts` (occasion par décote) + composant `PriceBlock`.
 
 ---
 
@@ -188,11 +188,11 @@ Inspirée de StockX, appliquée au hardware.
 Le produit, aujourd'hui.
 ```
 
-**Visuel** : 3-4 captures réelles de l'application :
-1. Page d'accueil (hero + section configurateur)
-2. Configurateur en action avec l'ordre verrouillé et le filtre de compatibilité actif
-3. Configuration complète + fonctionnalité "Sauvegarder"
-4. Espace admin (preuve que le back-office existe)
+**Visuel** : captures réelles de l'application :
+1. Page d'accueil + pages **catalogue** par catégorie (consultation/tri)
+2. Configurateur : ordre verrouillé + filtre de compatibilité + **prix neuf/occasion** par composant
+3. **Panier → devis détaillé (PDF) → suivi de commande** + carnet d'adresses
+4. Espace admin (CRUD produits, **validation des devis**, dashboard)
 
 **URL démo** : https://pc-aeris.vercel.app (si déployée)
 
@@ -201,9 +201,9 @@ Le produit, aujourd'hui.
 >
 > [démo] Voici la page d'accueil. On entre dans le configurateur. **L'ordre des composants est verrouillé** dans la logique de montage : CPU d'abord, puis carte mère filtrée automatiquement sur le bon socket, puis le boîtier en fonction du format de la carte mère, et ainsi de suite. **Si je sélectionne un boîtier ITX, les cartes mères ATX disparaissent immédiatement**.
 >
-> J'ai aussi un indicateur de complétude — quand les 8 composants sont sélectionnés, j'ai un badge ✓ Configuration complète. Et **je peux sauvegarder ma configuration** pour la retrouver plus tard ou la modifier.
+> Chaque composant affiche son **prix neuf** (fourchette) et son **prix d'occasion estimé**. Indicateur de complétude — badge ✓ quand les 8 composants sont là — et sauvegarde de la config.
 >
-> Côté admin, on a un back-office complet pour gérer le catalogue, les utilisateurs, les produits, leurs prix. Tout est déployé en continu sur Vercel.
+> Je montre aussi les **pages catalogue** (consultation par catégorie, indépendantes du configurateur), puis le **parcours d'achat complet** : panier → génération d'un devis détaillé en PDF → suivi de commande, avec carnet d'adresses. Côté admin, back-office complet : CRUD produits, dashboard, et **validation des devis** — l'admin confirme les prix réels et renvoie le devis final au client. Tout est déployé en continu sur Vercel.
 >
 > Ce que je vous montre, c'est **du vrai code en production** — pas une maquette, pas un prototype Figma."
 
@@ -215,17 +215,17 @@ Le produit, aujourd'hui.
 
 **Titre slide**
 ```
-4 milliards d'euros par an en France.
-+8 à 10 % de croissance sur notre segment.
+5,7 Mds € : le marché français du jeu vidéo (2024).
+PC gaming en France : +9,1 %.
 ```
 
-**Visuel** : un grand chiffre central "~4 Mds €/an" et trois sous-chiffres :
-- Marché PC France : ~4 Mds €/an
-- Croissance gaming/workstation : +8 à 10 %/an
-- Part du sur-mesure : en croissance, peu d'acteurs spécialisés
+**Visuel** : un grand chiffre central "5,7 Mds €" et trois sous-chiffres :
+- Marché FR du jeu vidéo 2024 : 5,7 Mds € (source SELL)
+- Ventes PC gaming France : +9,1 % (source SELL 2024)
+- Marché mondial du PC gaming : ~62 Mds $, CAGR ~13,5 % (Grand View Research)
 
 **Script (1 min)**
-> "Quelques chiffres pour cadrer. Le marché du PC en France pèse environ 4 milliards d'euros par an. Le segment gaming et workstation, qui est notre cœur de cible, croît de 8 à 10 % par an. La part du sur-mesure, elle, augmente — parce que les acheteurs deviennent plus exigeants, plus informés, et veulent un produit qui leur ressemble.
+> "Quelques chiffres pour cadrer, sources à l'appui. Le marché français du jeu vidéo pèse 5,7 milliards d'euros en 2024 (SELL), et les ventes de PC gaming en France ont progressé de 9,1 %. À l'échelle mondiale, Grand View Research évalue le marché du PC gaming à ~62 milliards de dollars, avec une croissance d'environ 13,5 % par an. La part du sur-mesure, elle, augmente — parce que les acheteurs deviennent plus exigeants, plus informés, et veulent un produit qui leur ressemble.
 >
 > Et surtout, **peu d'acteurs sont spécialisés sur le sur-mesure simplifié**. Les revendeurs traditionnels parlent technique. Amazon parle prix. Personne ne parle simplicité. C'est notre créneau."
 
@@ -359,8 +359,8 @@ Hypothèses prudentes, croissance par bouche-à-oreille.
 
 **Titre slide**
 ```
-MVP livré à 95 %.
-Le produit existe, en code, en production.
+MVP livré, en production.
+79 tests automatisés. Le produit existe vraiment.
 ```
 
 **Visuel** : timeline horizontale avec les sprints + jalons :
@@ -374,19 +374,19 @@ Jan-Mar 2026          Avril 2026              Mai 2026             Juin 2026
     (57 pts)              (52 pts)               sauvegardées (16 pts)
                                                                        ▲
                                                                        │
-                                                              Affichage UI prix
-                                                              (bloqueur résiduel :
-                                                              credentials API)
+                                                       Mai-juin : prix (scraping LDLC/Alternate),
+                                                       panier → devis → commande, catalogue,
+                                                       refonte icônes + accessibilité
 ```
 
 **Script (1 min 30)**
 > "Aujourd'hui, le produit existe vraiment. Pas une slide, pas un rendu Figma — du code déployé qui marche.
 >
-> Sprint 1, de janvier à mars, on a posé les fondations : authentification, configurateur de base, design system. Sprints 2-3-4 en avril, sur 4 jours intensifs, on a complété les règles de compatibilité (GPU/PSU, boîtier/MOBO, stockage/MOBO) et écrit les premiers tests automatisés. En mai, on a fait deux choses : la refonte visuelle complète en thème sombre, et le bloc 'configurations sauvegardées' avec la migration de base de données et la sécurité fine.
+> Sprint 1, de janvier à mars : fondations, authentification, configurateur, design system. Sprints 2-3-4 en avril : règles de compatibilité (GPU/PSU, boîtier/MOBO, stockage/MOBO) et tests automatisés. En mai-juin, j'ai livré tout le reste : le parcours d'achat complet — panier, devis détaillé en PDF, suivi de commande, carnet d'adresses — l'affichage des prix neuf (scrapés chez LDLC et Alternate) et occasion estimée sur les composants, les pages catalogue par catégorie, et une refonte visuelle avec un système d'icônes cohérent et des contrastes conformes WCAG AA.
 >
-> **Il reste 5 %** : c'est l'affichage des prix dans l'UI. Le code est prêt, mais on attend des credentials API auprès d'Amazon Partenaires et de Rakuten pour brancher les sources. Ce dossier est en cours et indépendant de la roadmap produit."
+> Le MVP est donc en production, avec 79 tests automatisés. La prochaine étape, côté V1, c'est le paiement Stripe et l'élargissement continu de la couverture prix. Le seul point que j'assume : la couverture prix est partielle aujourd'hui, parce que le scraping est volontairement lent et poli — mais le mécanisme tourne et se complète passe après passe."
 
-**Source** : docs/agile/sprint-1-review.md, sprint-2-3-4-review.md, mvp-scope.md (statut au 29 mai 2026).
+**Source** : code en production (configurateur, panier/devis/commande, prix, catalogue, admin) ; 79 tests automatisés ; docs/agile/ (sprints, backlog).
 
 ---
 
@@ -401,22 +401,20 @@ Juin → août 2026 : V1 publique.
 **Visuel** : timeline simple sur 3 phases :
 
 ```
-JUIN 2026          JUIL-AOÛT 2026          SEPT 2026 et au-delà
-─────────          ────────────────        ────────────────────
-MVP CLOS           V1 PUBLIQUE             V2
-
-• Prix UI          • Panier + checkout     • IA de recommandation
-• Responsive       • Stripe + emails       • OAuth Google
-• Tarifs home      • Historique commandes  • Paiement multi-fois
-                   • Partage configs       • Avatar / RGPD avancé
-                   • Tests E2E             • App mobile
-                                           • Multi-langue (EN/DE/ES)
+MVP LIVRÉ          V1 PUBLIQUE (été 2026)  V2 (2027)
+─────────          ──────────────────────  ─────────
+Configurateur      • Paiement Stripe       • IA de recommandation
+Catalogue          • Emails transactionnels• OAuth Google
+Panier→devis→cmd   • Partage de config     • Paiement multi-fois
+Prix neuf/occasion • Responsive            • App mobile
+Admin + adresses   • Tests E2E             • Multi-langue (EN/DE/ES)
+                   • Couverture prix ++
 ```
 
 **Script (1 min 30)**
-> "La roadmap publique. Juin 2026, on ferme le MVP — c'est imminent. Juillet et août, on livre la V1 publique avec **le panier, le tunnel de commande complet, l'intégration Stripe** pour le paiement carte, les emails transactionnels, l'historique de commande, le partage de configuration par lien unique, et les tests end-to-end Playwright.
+> "La roadmap. Le MVP est livré — et il inclut déjà le panier, le tunnel de commande et le devis, qui étaient initialement prévus en V1. La V1 publique, cet été, se concentre donc sur **le paiement en ligne via Stripe**, les emails transactionnels, le partage de configuration par lien unique, le responsive mobile, les tests end-to-end Playwright, et l'élargissement de la couverture prix par scraping.
 >
-> À partir de septembre 2026, on entame la V2 : l'IA de recommandation qui analyse votre configuration et suggère des ajustements, le paiement en plusieurs fois, l'OAuth Google, et progressivement le multi-langue pour l'expansion européenne — anglais, allemand, espagnol.
+> À partir de 2027, V2 : l'IA de recommandation qui analyse votre configuration et suggère des ajustements, l'OAuth Google, le paiement en plusieurs fois, l'app mobile, et progressivement le multi-langue pour l'expansion européenne — anglais, allemand, espagnol.
 >
 > Cette roadmap est documentée sprint par sprint dans un backlog public que nos contributeurs et nos partenaires peuvent suivre."
 
@@ -539,7 +537,7 @@ Voici les questions probables et les réponses préparées, sourcées dans les d
 → Honnêtement, c'est la notoriété zéro au lancement. Le marketing est notre plus gros poste budgétaire. Mitigation : SEO sur des requêtes très intentionnistes (faible CAC), partenariats créateurs (effet de levier sur l'audience existante), bouche-à-oreille amorcé par les beta-testeurs. (BUSINESS_PLAN.md risques)
 
 ### "Vous êtes seul, comment je sais que vous allez tenir ?"
-→ Le code est là, en production, déployé, testé (67 tests automatisés), documenté. C'est la preuve que je sais shipper. À partir de la V1 publique, le recrutement d'un CTO est ma priorité numéro 1. (EQUIPE_IDEALE.md, MVP Sprint 1-5)
+→ Le code est là, en production, déployé, testé (79 tests automatisés), documenté. C'est la preuve que je sais shipper. À partir de la V1 publique, le recrutement d'un CTO est ma priorité numéro 1. (EQUIPE_IDEALE.md, MVP Sprint 1-5)
 
 ### "Pourquoi pas vendre aux entreprises ? Le ticket moyen est plus élevé."
 → Choix volontaire. La vente B2B exigerait un commercial dédié, un service achat dédié, une logistique différente. On veut rester focalisé sur l'expérience individuelle et la viralité B2C. La V2 pourra ouvrir un canal Pro si les volumes le justifient. (BUSINESS_MODEL.md)
