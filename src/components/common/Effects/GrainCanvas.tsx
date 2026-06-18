@@ -32,7 +32,7 @@ export function GrainCanvas() {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 9997,
-        opacity: 0.038,
+        opacity: 0.02,
       }}
     />
   )

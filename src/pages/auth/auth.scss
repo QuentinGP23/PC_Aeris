@@ -263,6 +263,6 @@
   font-family: var(--fb);
   transition: all 0.15s;
 
-  &:hover:not(:disabled) { background: #7577F5; box-shadow: 0 4px 20px var(--ind-gs); }
+  &:hover:not(:disabled) { background: #4F46E5; box-shadow: 0 4px 20px var(--ind-gs); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }

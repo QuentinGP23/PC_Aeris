@@ -1,4 +1,5 @@
 import "./Button.scss";
+import { CircleNotch } from "@phosphor-icons/react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type ButtonVariant =
@@ -42,7 +43,7 @@ function Button({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading && <span className="button__loader">⏳</span>}
+      {isLoading && <span className="button__loader"><CircleNotch size={16} weight="bold" style={{ animation: "spin 0.8s linear infinite" }} /></span>}
       {!isLoading && leftIcon && (
         <span className="button__icon button__icon--left">{leftIcon}</span>
       )}

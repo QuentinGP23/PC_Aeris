@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { Lock, X, ShoppingCart, FloppyDisk, Check, Warning, MagnifyingGlass, CaretDown, CaretUp, CaretLeft, CaretRight, ArrowRight } from '@phosphor-icons/react'
 import { supabase } from '../../config'
+import { CategoryIcon } from '../../components/common'
 import { useConfigStore, useToast, useCartStore } from '../../store'
 import { useAuth } from '../../context/useAuth'
 import { CATEGORIES } from '../../types'
@@ -276,7 +278,7 @@ function Configurator() {
             <span className="config-prog__label">{selectedCount}/{CATEGORIES.length}</span>
           </div>
           {isComplete && (
-            <div className="config-prog__complete">✓ Configuration complète</div>
+            <div className="config-prog__complete"><Check weight="bold" /> Configuration complète</div>
           )}
         </div>
 
@@ -295,7 +297,7 @@ function Configurator() {
                 title={catLocked ? `Sélectionne d'abord ${categoryLabel(missingPrereqs(cat.value, config)[0])}` : undefined}
               >
                 <span className="config-item__n">{String(idx + 1).padStart(2, '0')}</span>
-                <span className="config-item__ico">{catLocked ? '🔒' : cat.icon}</span>
+                <span className="config-item__ico">{catLocked ? <Lock /> : <CategoryIcon cat={cat.value} />}</span>
                 <div className="config-item__info">
                   <div className="config-item__lbl">{cat.label}</div>
                   {selected ? (
@@ -323,7 +325,7 @@ function Configurator() {
                       }
                     }}
                   >
-                    ✕
+                    <X weight="bold" />
                   </span>
                 )}
               </button>
@@ -338,7 +340,7 @@ function Configurator() {
           </div>
           {selectedCount > 0 && (
             <button type="button" className="config-side__cart" onClick={handleAddToCart}>
-              🛒 Ajouter au panier
+              <ShoppingCart weight="bold" /> Ajouter au panier
             </button>
           )}
           {isAuthenticated && (
@@ -349,7 +351,7 @@ function Configurator() {
                 onClick={() => setSaveModalOpen(true)}
                 disabled={saving || selectedCount === 0}
               >
-                {saving ? 'Sauvegarde…' : '💾 Sauvegarder'}
+                {saving ? 'Sauvegarde…' : <><FloppyDisk weight="bold" /> Sauvegarder</>}
               </button>
               <button
                 type="button"
@@ -405,9 +407,9 @@ function Configurator() {
                 aria-disabled={catLocked}
                 title={catLocked ? `Sélectionne d'abord ${categoryLabel(missingPrereqs(cat.value, config)[0])}` : undefined}
               >
-                <span>{catLocked ? '🔒' : cat.icon}</span>
+                <span>{catLocked ? <Lock /> : <CategoryIcon cat={cat.value} />}</span>
                 <span>{cat.label}</span>
-                {done && <span className="config-tab__ck">✓</span>}
+                {done && <span className="config-tab__ck"><Check weight="bold" /></span>}
               </button>
             )
           })}
@@ -415,20 +417,20 @@ function Configurator() {
 
         {locked ? (
           <div className="compat-info compat-info--locked">
-            🔒 Sélectionne d'abord {missingForActive.map(categoryLabel).join(', ')} pour débloquer {activeCatDef.label.toLowerCase()}
+            <Lock weight="bold" /> Sélectionne d'abord {missingForActive.map(categoryLabel).join(', ')} pour débloquer {activeCatDef.label.toLowerCase()}
           </div>
         ) : (
           <>
             {compatInfo.active && (
               <div className={`compat-info ${compatInfo.fallback ? 'compat-info--empty' : ''}`}>
                 {compatInfo.fallback
-                  ? <>⚠️ Aucun produit ne passe le filtre {compatInfo.reason} — affichage du catalogue complet. Vérifie manuellement la compatibilité.</>
-                  : <>✓ Filtré pour compatibilité · {compatInfo.reason}</>}
+                  ? <><Warning weight="bold" /> Aucun produit ne passe le filtre {compatInfo.reason} — affichage du catalogue complet. Vérifie manuellement la compatibilité.</>
+                  : <><Check weight="bold" /> Filtré pour compatibilité · {compatInfo.reason}</>}
               </div>
             )}
 
             <div className="config-search">
-                <span className="config-search__ico">⌕</span>
+                <span className="config-search__ico"><MagnifyingGlass /></span>
                 <input
                   type="text"
                   className="config-search__in"
@@ -456,7 +458,7 @@ function Configurator() {
                   className={`config-sort__b ${sort === 'bench' ? 'is-on' : ''}`}
                   onClick={() => { setSort('bench'); setPage(0) }}
                 >
-                  Performance ↓
+                  Performance <CaretDown weight="bold" />
                 </button>
               )}
               <button
@@ -464,7 +466,7 @@ function Configurator() {
                 className={`config-sort__b ${sort === 'price' ? 'is-on' : ''}`}
                 onClick={() => { setSort('price'); setPage(0) }}
               >
-                Prix ↑
+                Prix <CaretUp weight="bold" />
               </button>
             </div>
 
@@ -489,7 +491,7 @@ function Configurator() {
                         {product.image_url ? (
                           <img src={product.image_url} alt={product.name} />
                         ) : (
-                          <span>{activeCatDef.icon}</span>
+                          <CategoryIcon cat={activeCategory} size={44} weight="thin" />
                         )}
                       </div>
 
@@ -545,7 +547,7 @@ function Configurator() {
                             className="btn btn--ok btn--full"
                             onClick={() => removeComponent(activeCategory)}
                           >
-                            ✓ Sélectionné
+                            <Check weight="bold" /> Sélectionné
                           </button>
                         ) : (
                           <button
@@ -558,7 +560,7 @@ function Configurator() {
                         )}
 
                         <Link to={`/produit/${product.id}`} className="prod-detail-link">
-                          Voir la fiche →
+                          Voir la fiche <ArrowRight weight="bold" />
                         </Link>
                       </div>
                     </div>
@@ -575,7 +577,7 @@ function Configurator() {
                   disabled={page === 0}
                   onClick={() => setPage((p) => p - 1)}
                 >
-                  ← Précédent
+                  <CaretLeft weight="bold" /> Précédent
                 </button>
                 <span className="pagination__info">
                   Page {page + 1} / {totalPages}
@@ -586,7 +588,7 @@ function Configurator() {
                   disabled={page >= totalPages - 1}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Suivant →
+                  Suivant <CaretRight weight="bold" />
                 </button>
               </div>
             )}

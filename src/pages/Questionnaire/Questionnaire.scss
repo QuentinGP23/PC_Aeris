@@ -51,7 +51,7 @@
   &__cta {
     background: var(--ind); color: #fff; border: none; border-radius: var(--rs);
     padding: 12px 22px; font-family: var(--fb); font-size: 14px; font-weight: 600; cursor: pointer;
-    &:hover:not(:disabled) { background: #7577f5; }
+    &:hover:not(:disabled) { background: #4F46E5; }
     &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
   &__ghost {

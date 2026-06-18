@@ -1,7 +1,11 @@
-const AUTH_CARDS = [
-  { icon: '⚡', name: 'Ryzen 9 7950X', cat: 'Processeur' },
-  { icon: '🎮', name: 'RTX 4090 24 GB', cat: 'Carte graphique' },
-  { icon: '🖥️', name: 'Lian Li O11 Dynamic', cat: 'Boîtier' },
+import { Check } from '@phosphor-icons/react'
+import { CategoryIcon } from '../../components/common'
+import type { CategoryKey } from '../../types'
+
+const AUTH_CARDS: { key: CategoryKey; name: string; cat: string; color: string }[] = [
+  { key: 'cpu',     name: 'Ryzen 9 7950X',       cat: 'Processeur',      color: '#818CF8' },
+  { key: 'gpu',     name: 'RTX 4090 24 GB',      cat: 'Carte graphique', color: '#F87171' },
+  { key: 'pc_case', name: 'Lian Li O11 Dynamic', cat: 'Boîtier',         color: '#2DD4BF' },
 ]
 
 export function AuthVisual() {
@@ -16,12 +20,12 @@ export function AuthVisual() {
         <div className="auth-vis__cards">
           {AUTH_CARDS.map(c => (
             <div key={c.name} className="auth-vis__card">
-              <div className="auth-vis__card-ico">{c.icon}</div>
+              <div className="auth-vis__card-ico"><CategoryIcon cat={c.key} size={24} weight="duotone" color={c.color} /></div>
               <div>
                 <div className="auth-vis__card-name">{c.name}</div>
                 <div className="auth-vis__card-cat">{c.cat}</div>
               </div>
-              <div className="auth-vis__card-check">✓</div>
+              <div className="auth-vis__card-check"><Check weight="bold" /></div>
             </div>
           ))}
         </div>

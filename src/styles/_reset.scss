@@ -25,10 +25,16 @@ body {
 img,
 picture,
 video,
-canvas,
-svg {
+canvas {
   display: block;
   max-width: 100%;
+}
+
+// Les icônes (Phosphor) s'alignent en ligne avec le texte adjacent.
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 input,

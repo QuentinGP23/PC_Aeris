@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { CaretUp, CaretDown } from '@phosphor-icons/react'
 import { ordersService, type OrderAdmin } from '../../services'
 import { useToast, type CartItem } from '../../store'
 import { Modal, Button } from '../../components/common'
@@ -117,7 +118,7 @@ function AdminOrders() {
                       </select>
                     )}
                   </span>
-                  <span><button className="otr__exp" onClick={() => setOpenId(isOpen ? null : o.id)}>{isOpen ? '▲' : '▾'}</button></span>
+                  <span><button className="otr__exp" onClick={() => setOpenId(isOpen ? null : o.id)} aria-label={isOpen ? 'Réduire' : 'Développer'}>{isOpen ? <CaretUp weight="bold" /> : <CaretDown weight="bold" />}</button></span>
                 </div>
 
                 {isOpen && (

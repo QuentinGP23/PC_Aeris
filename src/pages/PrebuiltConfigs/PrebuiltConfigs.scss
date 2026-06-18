@@ -57,7 +57,7 @@
     background: var(--ind); color: #fff; border: none; border-radius: var(--rs);
     padding: 11px 14px; font-family: var(--fb); font-size: 13px; font-weight: 600; cursor: pointer;
     transition: background 0.14s;
-    &:hover:not(:disabled) { background: #7577f5; }
+    &:hover:not(:disabled) { background: #4F46E5; }
     &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
 }

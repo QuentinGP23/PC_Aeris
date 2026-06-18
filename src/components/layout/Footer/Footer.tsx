@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Lightning } from '@phosphor-icons/react'
 import './Footer.scss'
 
 const LEGAL_LINKS = [
@@ -13,7 +14,7 @@ function Footer() {
       <div className="c">
         <div className="footer__inner">
           <Link to="/" className="footer__logo">
-            <span className="footer__logo-mark">⚡</span>
+            <span className="footer__logo-mark"><Lightning size={18} weight="fill" /></span>
             <span>PC Aeris</span>
           </Link>
 
