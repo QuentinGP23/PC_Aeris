@@ -64,7 +64,12 @@ const LIMIT = parseInt(args.limit ?? '40', 10)
 const MAX_AGE_DAYS = parseInt(args['max-age'] ?? '7', 10)
 const DRY_RUN = !!args['dry-run']
 const VERBOSE = !!args.verbose
-const DELAY_MS = parseInt(args.delay ?? '1500', 10)
+const _reqDelay = parseInt(args.delay ?? '1500', 10)
+// Plancher anti-blocage : en dessous de ~900ms, LDLC bloque l'IP (anti-bot).
+const DELAY_MS = Math.max(900, isNaN(_reqDelay) ? 1500 : _reqDelay)
+if (DELAY_MS !== _reqDelay) {
+  console.warn(`⚠️  --delay=${_reqDelay}ms trop bas (risque de blocage anti-bot LDLC) → relevé à ${DELAY_MS}ms.\n`)
+}
 
 const UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
@@ -120,6 +125,10 @@ function matchScore(targetToks, targetModels, candidateTitle) {
   return hits / targetToks.length
 }
 
+// Échecs réseau consécutifs (timeout / connexion refusée). Au-delà d'un seuil,
+// l'IP est très probablement bloquée par l'anti-bot → on arrête le run.
+let netFails = 0
+
 // ── fetch poli avec petit backoff ──────────────────────────────────────────────
 async function getHtml(url, tries = 2) {
   for (let i = 0; i < tries; i++) {
@@ -128,7 +137,7 @@ async function getHtml(url, tries = 2) {
         headers: { 'User-Agent': UA, 'Accept-Language': 'fr-FR,fr;q=0.9', Accept: 'text/html' },
         redirect: 'follow',
       })
-      if (res.status === 200) return await res.text()
+      if (res.status === 200) { netFails = 0; return await res.text() }
       if (res.status === 429 || res.status >= 500) {
         await sleep(2000 * (i + 1))
         continue
@@ -138,6 +147,7 @@ async function getHtml(url, tries = 2) {
       await sleep(1000 * (i + 1))
     }
   }
+  netFails++ // toutes les tentatives ont échoué au niveau réseau
   return null
 }
 
@@ -284,6 +294,13 @@ async function main() {
       }
     } catch (e) {
       console.log(`${prefix} ⚠️  ${e.message}`)
+    }
+    // Coupe-circuit : trop d'échecs réseau consécutifs = IP très probablement
+    // bloquée (anti-bot). Inutile de continuer à marteler.
+    if (netFails >= 10) {
+      console.error(`\n⛔  ${netFails} échecs réseau consécutifs vers LDLC → IP très probablement bloquée (anti-bot).`)
+      console.error('    Arrête-toi, attends 1 à 2 h, puis relance avec --delay 1500 (ou plus) et par catégorie (--category=ram).')
+      break
     }
     if (i < products.length - 1) await sleep(DELAY_MS)
   }
