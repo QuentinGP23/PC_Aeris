@@ -253,34 +253,6 @@ function Ticker({ stats }: { stats: PublicStats }) {
 // Stats grid
 // ──────────────────────────────────────────────────────────────────────────
 
-function Stats({ stats }: { stats: PublicStats }) {
-  const cells = [
-    { n: fmtOrZero(stats.totalProducts), l: 'Composants',          bg: 'CMP' },
-    { n: ZERO,                           l: 'Configs créées',       bg: 'CFG' },
-    { n: ZERO,                           l: 'Marques partenaires',  bg: 'BND' },
-    { n: ZERO,                           l: 'Vérification compat',  bg: 'CMP' },
-  ]
-  return (
-    <section className="s s--sm">
-      <div className="c">
-        <div className="chmark rv">
-          <span className="chmark__n">01 / CHIFFRES</span>
-          <span className="chmark__line" />
-        </div>
-        <div className="stats-grid">
-          {cells.map((s, i) => (
-            <div key={s.l} className={`stats-cell rv rv-d${i + 1}`}>
-              <div className="stats-cell__bg">{s.bg}</div>
-              <div className="stats-cell__n">{s.n}</div>
-              <div className="stats-cell__l">{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ──────────────────────────────────────────────────────────────────────────
 // Bento — catalogue par catégorie
 // ──────────────────────────────────────────────────────────────────────────
@@ -310,7 +282,7 @@ function Bento({ stats }: { stats: PublicStats }) {
     <section className="s">
       <div className="c">
         <div className="chmark rv">
-          <span className="chmark__n">02 / CATALOGUE</span>
+          <span className="chmark__n">01 / CATALOGUE</span>
           <span className="chmark__line" />
         </div>
         <div className="s__head">
@@ -332,7 +304,7 @@ function Bento({ stats }: { stats: PublicStats }) {
             return (
               <Link
                 key={cat.value}
-                to="/configurateur"
+                to={`/composants/${cat.value}`}
                 className={`bento__cell ${cat.cls} rv rv-d${Math.min(idx + 1, 6)}`}
                 style={{ ['--cat-color' as string]: cat.color, ['--cat-bg' as string]: cat.bg }}
                 data-hover
@@ -370,7 +342,7 @@ function How() {
     <section className="s how">
       <div className="c">
         <div className="chmark rv">
-          <span className="chmark__n">03 / PROCESSUS</span>
+          <span className="chmark__n">02 / PROCESSUS</span>
           <span className="chmark__line" />
         </div>
         <div className="s__head">
@@ -436,7 +408,7 @@ function AssemblyPricing() {
     <section className="s assembly" id="tarifs-assemblage">
       <div className="c">
         <div className="chmark rv">
-          <span className="chmark__n">04 / TARIFS</span>
+          <span className="chmark__n">03 / TARIFS</span>
           <span className="chmark__line" />
         </div>
         <div className="s__head">
@@ -484,7 +456,6 @@ function Home() {
     <>
       <Hero stats={stats} />
       <Ticker stats={stats} />
-      <Stats stats={stats} />
       <Bento stats={stats} />
       <How />
       <AssemblyPricing />
