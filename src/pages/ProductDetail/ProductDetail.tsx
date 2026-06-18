@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Cube, ArrowLeft, Check } from '@phosphor-icons/react'
+import { Cube, ArrowLeft } from '@phosphor-icons/react'
 import { supabase } from '../../config'
 import { CategoryIcon } from '../../components/common'
-import { useConfigStore } from '../../store'
 import { CATEGORIES } from '../../types'
 import { SPEC_LABELS, SPEC_UNITS } from '../../constants'
-import type { Product, CategoryKey } from '../../types'
+import type { Product } from '../../types'
 import './ProductDetail.scss'
 
 function formatSpecValue(val: unknown, unit?: string): string {
@@ -24,7 +23,6 @@ function formatPrice(price: number): string {
 function ProductDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { config, selectComponent, removeComponent } = useConfigStore()
 
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -87,8 +85,6 @@ function ProductDetail() {
   }
 
   const categoryDef = CATEGORIES.find((c) => c.value === product.category)
-  const categoryKey = product.category as CategoryKey
-  const isSelected = config[categoryKey]?.id === product.id
 
   const specEntries = product.specs
     ? Object.entries(product.specs).filter(([, v]) => v !== null && v !== undefined)
@@ -141,23 +137,12 @@ function ProductDetail() {
             </div>
 
             <div className="pd-actions">
-              {isSelected ? (
-                <button
-                  type="button"
-                  className="btn btn--ok btn--full"
-                  onClick={() => removeComponent(categoryKey)}
-                >
-                  <Check weight="bold" /> Dans ma configuration — Retirer
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn--ind btn--full"
-                  onClick={() => selectComponent(categoryKey, product)}
-                >
-                  Ajouter à ma configuration
-                </button>
-              )}
+              {/* Fiche purement informative : l'ajout à la config se fait
+                  uniquement dans le configurateur, qui impose l'ordre de
+                  sélection (sinon on pourrait l'outrepasser depuis ici). */}
+              <Link to="/configurateur" className="btn btn--ind btn--full">
+                Configurer mon PC
+              </Link>
 
               {product.retailer_url && (
                 <a
