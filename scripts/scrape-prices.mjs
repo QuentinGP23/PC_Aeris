@@ -64,6 +64,9 @@ const LIMIT = parseInt(args.limit ?? '40', 10)
 const MAX_AGE_DAYS = parseInt(args['max-age'] ?? '7', 10)
 const DRY_RUN = !!args['dry-run']
 const VERBOSE = !!args.verbose
+// Sauter une source si elle est temporairement bloquée (ex. LDLC rate-limité).
+const NO_LDLC = !!args['no-ldlc']
+const NO_ALT = !!args['no-alternate']
 const _reqDelay = parseInt(args.delay ?? '1500', 10)
 // Plancher anti-blocage : en dessous de ~900ms, LDLC bloque l'IP (anti-bot).
 const DELAY_MS = Math.max(900, isNaN(_reqDelay) ? 1500 : _reqDelay)
@@ -106,20 +109,46 @@ function modelTokens(toks) {
   return toks.filter((t) => t.length >= 3 && /\d/.test(t))
 }
 
+// Capacité TOTALE en Go (To → ×1024). On prend la plus grande valeur Go/To du
+// titre : pour un kit "64 Go (2 x 32 Go)" c'est 64, pas 32 → évite qu'une cible
+// 32 Go matche un kit 64 Go, ou qu'un SSD 2 To matche un 1 To.
+function maxCapacityGo(s) {
+  let max = 0
+  for (const m of normCap(s).matchAll(/(\d+)(go|to)\b/g)) {
+    const v = parseInt(m[1], 10) * (m[2] === 'to' ? 1024 : 1)
+    if (v > max) max = v
+  }
+  return max
+}
+
 // Repère les annonces d'occasion / reconditionné (on veut un prix "neuf").
 const isUsed = (title) => /occasion|reconditionn|d.?occasion|refurb/i.test(title)
 
+// Marqueurs de variante qui changent franchement le produit (et le prix) :
+// RTX 5070 ≠ 5070 Ti ≠ 5070 Super ; RX 9070 ≠ 9070 XT/XTX/GRE.
+const VARIANT_MARKERS = ['ti', 'super', 'xt', 'xtx', 'gre']
+
 /**
  * Score une correspondance candidate. Retourne un score 0..1, ou -1 si invalide
- * (le token-modèle le plus discriminant est absent → on refuse).
+ * (token-modèle manquant, ou variante Ti/Super/XT… discordante).
  */
-function matchScore(targetToks, targetModels, candidateTitle) {
+function matchScore(targetToks, targetModels, targetCap, candidateTitle) {
   const cand = normCap(candidateTitle)
   const candToks = new Set(tokens(candidateTitle))
   // Exigence : TOUS les tokens-modèle de la cible doivent être présents
   // (ex. "990" ET "2to" → écarte le 990 Pro 1 To quand on cherche le 2 To).
   for (const mt of targetModels) {
     if (!cand.includes(mt)) return -1
+  }
+  // Capacité totale : si les deux ont une capacité et qu'elles diffèrent, refuse
+  // (32 Go ↛ kit 64 Go « 2 x 32 », SSD 2 To ↛ 1 To).
+  if (targetCap > 0) {
+    const candCap = maxCapacityGo(candidateTitle)
+    if (candCap > 0 && candCap !== targetCap) return -1
+  }
+  // Symétrie des variantes : refuse 5070 ↔ 5070 Ti, 9070 ↔ 9070 XT, etc.
+  for (const v of VARIANT_MARKERS) {
+    if (targetToks.includes(v) !== candToks.has(v)) return -1
   }
   const hits = targetToks.filter((t) => candToks.has(t)).length
   return hits / targetToks.length
@@ -253,19 +282,20 @@ async function priceOne(product, ctx) {
   const query = cleanName(`${product.manufacturer ?? ''} ${product.name}`)
   const targetToks = [...new Set(tokens(query))]
   const targetModels = modelTokens(targetToks)
+  const targetCap = maxCapacityGo(`${product.name} ${query}`)
 
   // Sources interrogées EN PARALLÈLE (sites différents → on reste poli par site).
   // Plus de chances de match + vraie fourchette de prix multi-marchands.
   const [ldlc, alt] = await Promise.all([
-    scrapeLDLC(query, ctx),
-    scrapeAlternate(query, ctx),
+    NO_LDLC ? Promise.resolve([]) : scrapeLDLC(query, ctx),
+    NO_ALT ? Promise.resolve([]) : scrapeAlternate(query, ctx),
   ])
 
   const candidates = []
   for (const [src, list] of [['LDLC', ldlc], ['Alternate', alt]]) {
     for (const c of list) {
       if (isUsed(c.title)) continue // on ne tarife que du neuf
-      const sc = matchScore(targetToks, targetModels, c.title)
+      const sc = matchScore(targetToks, targetModels, targetCap, c.title)
       if (sc >= 0.5) candidates.push({ ...c, source: src, score: sc })
     }
   }
@@ -318,7 +348,7 @@ async function main() {
   }
   console.log(
     `🔎  ${products.length} produit(s) à traiter` +
-      `${CATEGORY ? ` [${CATEGORY}]` : ''} · sources LDLC + Alternate · ` +
+      `${CATEGORY ? ` [${CATEGORY}]` : ''} · sources ${[!NO_LDLC && 'LDLC', !NO_ALT && 'Alternate'].filter(Boolean).join(' + ')} · ` +
       `${DRY_RUN ? 'DRY-RUN' : 'écriture'} · délai ${DELAY_MS}ms\n`,
   )
 
