@@ -55,7 +55,8 @@ function App() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/components" element={<Components />} />
+          <Route path="/composants" element={<Components />} />
+          <Route path="/composants/:category" element={<Components />} />
           <Route path="/configurateur" element={<Configurator />} />
           <Route path="/configs-pretes" element={<PrebuiltConfigs />} />
           <Route path="/questionnaire" element={<Questionnaire />} />
