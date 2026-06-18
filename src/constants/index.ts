@@ -1,5 +1,73 @@
 import type { CategoryKey } from '../types'
 
+// ── Offres de montage (le revenu : composants à prix coûtant + montage fixe) ──
+
+export type AssemblyTier = 'essentiel' | 'confort' | 'premium'
+
+export interface AssemblyOffer {
+  id: AssemblyTier
+  name: string
+  price: number
+  desc: string
+  includes: string[]
+}
+
+export const ASSEMBLY_OFFERS: AssemblyOffer[] = [
+  {
+    id: 'essentiel',
+    name: 'Essentiel',
+    price: 79,
+    desc: 'Montage standard, vérification fonctionnelle, test de boot.',
+    includes: ['Montage des composants', 'Câble management de base', 'Test POST + démarrage Windows'],
+  },
+  {
+    id: 'confort',
+    name: 'Confort',
+    price: 129,
+    desc: 'Montage soigné, optimisation thermique, installation OS et drivers.',
+    includes: ['Tout l\'Essentiel', 'Câble management premium', 'Installation Windows + drivers', 'Profil de courbes ventilateurs'],
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    price: 199,
+    desc: 'Tuning complet, benchmarks, profil overclock léger si compatible.',
+    includes: ['Tout le Confort', 'Benchmarks 3DMark + Cinebench', 'Profil XMP / EXPO optimisé', 'Rapport de tests livré'],
+  },
+]
+
+export const ASSEMBLY_PRICE: Record<AssemblyTier, number> = { essentiel: 79, confort: 129, premium: 199 }
+
+// ── Statuts de commande ──────────────────────────────────────────────────────
+
+export type OrderStatus =
+  | 'pending' | 'quote_sent' | 'accepted' | 'refused'
+  | 'paid' | 'assembling' | 'shipped' | 'delivered' | 'cancelled'
+
+export interface OrderStatusMeta {
+  value: OrderStatus
+  label: string
+  color: string // couleur d'accent (badge)
+}
+
+export const ORDER_STATUSES: OrderStatusMeta[] = [
+  { value: 'pending', label: 'Devis en préparation', color: '#c97a12' },
+  { value: 'quote_sent', label: 'Devis final envoyé', color: '#0ea5e9' },
+  { value: 'accepted', label: 'Devis accepté', color: '#4f46e5' },
+  { value: 'refused', label: 'Devis refusé', color: '#d14343' },
+  { value: 'paid', label: 'Payée', color: '#4f46e5' },
+  { value: 'assembling', label: 'En assemblage', color: '#8b5cf6' },
+  { value: 'shipped', label: 'Expédiée', color: '#6366f1' },
+  { value: 'delivered', label: 'Livrée', color: '#0f9d6e' },
+  { value: 'cancelled', label: 'Annulée', color: '#d14343' },
+]
+
+// Statuts proposés à l'admin après acceptation du devis (suivi de production).
+export const FULFILLMENT_STATUSES: OrderStatus[] = ['accepted', 'assembling', 'shipped', 'delivered', 'cancelled']
+
+export const orderStatusMeta = (s: string): OrderStatusMeta =>
+  ORDER_STATUSES.find((x) => x.value === s) ?? { value: 'pending', label: s, color: '#6b7185' }
+
 // ── Specs affichées sur les cartes du configurateur (par catégorie) ──────────
 
 export const KEY_SPECS: Record<CategoryKey, string[]> = {

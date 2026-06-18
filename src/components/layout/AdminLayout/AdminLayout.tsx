@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { to: '/admin', label: 'Dashboard', icon: '◧' },
   { to: '/admin/users', label: 'Utilisateurs', icon: '◉' },
   { to: '/admin/products', label: 'Produits', icon: '◫' },
+  { to: '/admin/orders', label: 'Commandes', icon: '▤' },
 ]
 
 interface AdminLayoutProps {
