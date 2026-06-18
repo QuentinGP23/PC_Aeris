@@ -64,6 +64,9 @@ const LIMIT = parseInt(args.limit ?? '40', 10)
 const MAX_AGE_DAYS = parseInt(args['max-age'] ?? '7', 10)
 const DRY_RUN = !!args['dry-run']
 const VERBOSE = !!args.verbose
+// Sauter une source si elle est temporairement bloquée (ex. LDLC rate-limité).
+const NO_LDLC = !!args['no-ldlc']
+const NO_ALT = !!args['no-alternate']
 const _reqDelay = parseInt(args.delay ?? '1500', 10)
 // Plancher anti-blocage : en dessous de ~900ms, LDLC bloque l'IP (anti-bot).
 const DELAY_MS = Math.max(900, isNaN(_reqDelay) ? 1500 : _reqDelay)
@@ -284,8 +287,8 @@ async function priceOne(product, ctx) {
   // Sources interrogées EN PARALLÈLE (sites différents → on reste poli par site).
   // Plus de chances de match + vraie fourchette de prix multi-marchands.
   const [ldlc, alt] = await Promise.all([
-    scrapeLDLC(query, ctx),
-    scrapeAlternate(query, ctx),
+    NO_LDLC ? Promise.resolve([]) : scrapeLDLC(query, ctx),
+    NO_ALT ? Promise.resolve([]) : scrapeAlternate(query, ctx),
   ])
 
   const candidates = []
@@ -345,7 +348,7 @@ async function main() {
   }
   console.log(
     `🔎  ${products.length} produit(s) à traiter` +
-      `${CATEGORY ? ` [${CATEGORY}]` : ''} · sources LDLC + Alternate · ` +
+      `${CATEGORY ? ` [${CATEGORY}]` : ''} · sources ${[!NO_LDLC && 'LDLC', !NO_ALT && 'Alternate'].filter(Boolean).join(' + ')} · ` +
       `${DRY_RUN ? 'DRY-RUN' : 'écriture'} · délai ${DELAY_MS}ms\n`,
   )
 
