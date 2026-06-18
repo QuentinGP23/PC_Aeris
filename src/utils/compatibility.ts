@@ -8,19 +8,10 @@ export interface CompatibilityResult {
 }
 
 /**
- * Helpers de normalisation. Les données BuildCores stockent parfois m2_slots
- * en JSONB et utilisent des variations de form_factor selon les sources.
+ * Normalise la présence d'un slot (ex: m2_slots) que BuildCores stocke
+ * tantôt en nombre, tantôt en JSONB selon les sources.
  */
-
-export function normalizeFormFactor(v: string): string {
-  let s = v.toLowerCase().replace(/[\s\-_.]+/g, '')
-  s = s.replace(/^(micro|u|µ)atx$/, 'matx')
-  s = s.replace(/^extendedatx$/, 'eatx')
-  s = s.replace(/^miniitx$/, 'mitx')
-  return s
-}
-
-export function detectSlotPresence(raw: unknown): 'present' | 'absent' | 'unknown' {
+function detectSlotPresence(raw: unknown): 'present' | 'absent' | 'unknown' {
   if (raw === null || raw === undefined) return 'unknown'
   if (typeof raw === 'number') return Number.isNaN(raw) ? 'unknown' : (raw > 0 ? 'present' : 'absent')
   if (typeof raw === 'string') {
