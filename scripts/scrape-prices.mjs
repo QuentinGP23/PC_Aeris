@@ -109,9 +109,13 @@ function modelTokens(toks) {
 // Repère les annonces d'occasion / reconditionné (on veut un prix "neuf").
 const isUsed = (title) => /occasion|reconditionn|d.?occasion|refurb/i.test(title)
 
+// Marqueurs de variante qui changent franchement le produit (et le prix) :
+// RTX 5070 ≠ 5070 Ti ≠ 5070 Super ; RX 9070 ≠ 9070 XT/XTX/GRE.
+const VARIANT_MARKERS = ['ti', 'super', 'xt', 'xtx', 'gre']
+
 /**
  * Score une correspondance candidate. Retourne un score 0..1, ou -1 si invalide
- * (le token-modèle le plus discriminant est absent → on refuse).
+ * (token-modèle manquant, ou variante Ti/Super/XT… discordante).
  */
 function matchScore(targetToks, targetModels, candidateTitle) {
   const cand = normCap(candidateTitle)
@@ -120,6 +124,10 @@ function matchScore(targetToks, targetModels, candidateTitle) {
   // (ex. "990" ET "2to" → écarte le 990 Pro 1 To quand on cherche le 2 To).
   for (const mt of targetModels) {
     if (!cand.includes(mt)) return -1
+  }
+  // Symétrie des variantes : refuse 5070 ↔ 5070 Ti, 9070 ↔ 9070 XT, etc.
+  for (const v of VARIANT_MARKERS) {
+    if (targetToks.includes(v) !== candToks.has(v)) return -1
   }
   const hits = targetToks.filter((t) => candToks.has(t)).length
   return hits / targetToks.length
