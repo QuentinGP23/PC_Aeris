@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-export function initReveal() {
+function initReveal() {
   const obs = new IntersectionObserver(
     entries => {
       entries.forEach(e => {
