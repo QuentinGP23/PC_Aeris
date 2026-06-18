@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../../config'
+import { PriceBlock } from '../../components/common/PriceBlock'
 import { useConfigStore } from '../../store'
 import { CATEGORIES } from '../../types'
 import { SPEC_LABELS, SPEC_UNITS } from '../../constants'
@@ -13,10 +14,6 @@ function formatSpecValue(val: unknown, unit?: string): string {
   if (Array.isArray(val)) return val.join(', ') || '—'
   const str = String(val)
   return unit ? `${str} ${unit}` : str
-}
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price)
 }
 
 function ProductDetail() {
@@ -92,8 +89,6 @@ function ProductDetail() {
     ? Object.entries(product.specs).filter(([, v]) => v !== null && v !== undefined)
     : []
 
-  const hasPrice = product.price_min_eur !== null && product.price_max_eur !== null
-
   return (
     <div className="pd-page">
       <div className="c">
@@ -116,24 +111,7 @@ function ProductDetail() {
             </div>
 
             <div className="pd-price">
-              <div className="pd-price__l">Prix occasion estimé</div>
-              {hasPrice ? (
-                <>
-                  <div className="pd-price__r">
-                    {product.price_avg_eur !== null
-                      ? `~ ${formatPrice(product.price_avg_eur)}`
-                      : formatPrice(product.price_min_eur!)}
-                  </div>
-                  <div className="pd-price__a">
-                    {formatPrice(product.price_min_eur!)} – {formatPrice(product.price_max_eur!)}
-                    {product.price_updated_at && (
-                      <> · MAJ {new Date(product.price_updated_at).toLocaleDateString('fr-FR')}</>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <div className="pd-price__a">Prix non disponible</div>
-              )}
+              <PriceBlock product={product} />
             </div>
 
             <div className="pd-actions">

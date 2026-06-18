@@ -1,0 +1,90 @@
+.price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &--empty {
+    color: var(--text-3);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  &__upd {
+    font-size: 10px;
+    color: var(--text-3);
+    font-family: var(--fm);
+    letter-spacing: 0.02em;
+  }
+}
+
+.price-tier {
+  border: 1px solid var(--border);
+  border-left-width: 2px;
+  border-radius: var(--rs);
+  padding: 12px 14px;
+  background: var(--surface-2);
+
+  &__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-2);
+    font-weight: 600;
+  }
+
+  &__est {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+    color: var(--text-3);
+    font-style: italic;
+  }
+
+  &__avg {
+    font-family: var(--fm);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  &__range {
+    margin-top: 4px;
+    font-family: var(--fm);
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  &--new {
+    border-left-color: var(--ind);
+    .price-tier__avg { color: var(--ind-l); }
+  }
+
+  &--used {
+    border-left-color: var(--warn);
+    background: var(--surface);
+  }
+}
+
+// Version compacte — cartes du configurateur
+.price-block--compact {
+  flex-direction: row;
+  gap: 6px;
+
+  .price-tier {
+    flex: 1;
+    padding: 6px 9px;
+    border-radius: 6px;
+  }
+  .price-tier__top { flex-direction: column; align-items: flex-start; gap: 1px; }
+  .price-tier__avg { font-size: 14px; }
+  .price-tier__label { font-size: 9px; letter-spacing: 0.05em; }
+  .price-tier__est { display: none; }
+}

@@ -54,8 +54,8 @@
 
   &__lines {
     list-style: none; margin: 0 0 14px; padding: 0;
-    li { display: grid; grid-template-columns: 76px 1fr 92px 66px; gap: 10px; align-items: baseline;
-      padding: 4px 0; border-bottom: 1px dashed var(--border); font-size: 12.5px; }
+    li { display: grid; grid-template-columns: 76px 1fr 118px 72px; gap: 10px; align-items: center;
+      padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: 12.5px; }
     li:last-child { border-bottom: none; }
   }
   &__lines-hd {
@@ -64,9 +64,15 @@
   }
   &__cat { font-family: var(--fm); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
   &__pname { color: var(--text); }
-  &__merchant {
-    font-family: var(--fm); font-size: 11px;
-    a { color: var(--ind-l); text-decoration: none; &:hover { text-decoration: underline; } }
+  &__cond { display: flex; gap: 4px; }
+  &__cond-b {
+    flex: 1; font-family: var(--fm); font-size: 9px; padding: 3px 2px;
+    border: 1px solid var(--border); border-radius: 5px; background: transparent;
+    color: var(--text-3); cursor: pointer; transition: all 0.12s;
+    text-transform: uppercase; letter-spacing: 0.03em;
+    &:hover:not(:disabled):not(.is-on) { border-color: var(--border-s); color: var(--text-2); }
+    &.is-on { background: var(--ind-g); border-color: var(--ind); color: var(--ind-l); }
+    &:disabled { opacity: 0.3; cursor: not-allowed; }
   }
   &__price { font-family: var(--fm); color: var(--text-2); font-variant-numeric: tabular-nums; text-align: right; }
 
