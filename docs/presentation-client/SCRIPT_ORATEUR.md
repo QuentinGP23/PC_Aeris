@@ -1,11 +1,11 @@
 # Script orateur — Présentation PC Aeris (investisseur / jury)
 
-**Durée : ~20 min** = ~15 min de parole + **démo 5 min max** (slide 8). 17 slides.
+**Durée : ~20 min** = ~15 min de parole + **démo 5 min max** (slide 8). 19 slides.
 Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(indications)* en italique ne se disent pas.
 
 **Avant de commencer :** `index.html` en plein écran (touche **F**). Navigation **→ / ←**. Onglet **pc-aeris.vercel.app** déjà ouvert à côté, **connecté à ton compte**, configurateur vide.
 
-> ⚠️ **Honnêteté à tenir** : prix **et** benchmarks sont réels et en base (PassMark : 733 CPU + 982 GPU ; prix marché live LDLC). Deux nuances : la **couverture prix** du catalogue est encore **partielle** (on tarife par lots) ; l'**occasion** n'est pas encore branchée. Présente prix + perf/prix comme opérationnels, sans prétendre que tout le catalogue est tarifé.
+> ⚠️ **Honnêteté à tenir** : prix **et** benchmarks sont réels et en base (PassMark : 733 CPU + 982 GPU ; prix neuf scrapés chez **LDLC + Alternate.fr**). Le **neuf** est réel et scrapé ; l'**occasion** est désormais affichée mais **estimée par décote** (catégorie + ancienneté), clairement labellisée « estimée » — ce n'est pas un relevé de marché. Seule nuance restante : la **couverture prix** du catalogue est encore **partielle** (on tarife par lots, le scraping est lent et poli). Présente prix + perf/prix comme opérationnels, sans prétendre que tout le catalogue est tarifé.
 
 ---
 
@@ -83,11 +83,11 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 
 > « Notre deuxième différence, c'est la **transparence des prix**, sur un modèle inspiré de StockX, la plateforme de revente de sneakers.
 >
-> Pour chaque composant, on affiche trois indicateurs de marché, en temps réel : le prix bas, le prix moyen, et le prix haut. Vous voyez immédiatement où se situe une offre par rapport au marché réel.
+> Pour chaque composant, on affiche une fourchette de marché : le prix bas, le prix moyen, et le prix haut. Vous voyez immédiatement où se situe une offre par rapport au marché réel.
 >
-> Et au moment de valider sa configuration, l'utilisateur ne reçoit pas un tarif fixe sorti de nulle part : il reçoit un **devis avec une fourchette réaliste**, fondée sur les vraies données du marché. C'est une transparence **intégrée directement dans le configurateur**, et c'est quelque chose qu'aucun configurateur concurrent ne propose aujourd'hui. »
+> Et au moment de valider sa configuration, l'utilisateur ne reçoit pas un tarif fixe sorti de nulle part : il reçoit un **devis avec une fourchette réaliste**, fondée sur de vraies données du marché. C'est une transparence **intégrée directement dans le configurateur**, et c'est quelque chose qu'aucun configurateur concurrent ne propose aujourd'hui. »
 
-*(Si on vous demande l'occasion : « Le neuf est déjà en ligne ; l'occasion est la prochaine source qu'on intègre. »)*
+*(Si on vous demande l'occasion : « Le neuf est scrapé chez LDLC et Alternate.fr ; l'occasion est affichée, mais **estimée par décote** — et clairement labellisée comme telle, je ne fais pas passer une estimation pour un relevé. »)*
 
 *(Transition : « Et ces prix, justement, d'où viennent-ils exactement ? »)*
 
@@ -97,7 +97,7 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 
 > « C'est une question légitime, alors je veux être précis : c'est un **prix de marché, pas un prix sorti du chapeau**. Il se construit en trois étapes.
 >
-> Première étape : on **relève en continu** les prix réels — chez les marchands pour le neuf, et sur les marketplaces pour l'occasion. Deuxième étape : à partir de ces relevés, on **calcule une fourchette** — un prix bas, un prix moyen, un prix haut. Et troisième étape : au moment de valider, on **agrège tout ça** en un devis pour le PC complet.
+> Première étape : on **relève par scraping** les prix réels du neuf, chez plusieurs marchands français — LDLC et Alternate.fr. L'occasion, elle, n'est pas scrapée : elle est **estimée par décote**, selon la catégorie et l'ancienneté, et toujours affichée comme une estimation. Deuxième étape : à partir de ces relevés, on **calcule une fourchette** — un prix bas, un prix moyen, un prix haut. Et troisième étape : au moment de valider, on **agrège tout ça** en un devis pour le PC complet.
 >
 > *(Montrer la donnée.)* Et ce n'est pas théorique : voici un exemple **réel, qui est déjà dans notre base**, le Ryzen 7 7700X — 275 euros en bas de fourchette, 282 en moyenne, 290 en haut. C'est un relevé de marché vivant, persisté sur la plateforme.
 >
@@ -109,7 +109,7 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 
 ## Slide 8 — Le produit & DÉMO *(~30 s d'intro + 5 min de démo)*
 
-> *(Intro, ~30 s :)* « Point essentiel : ce n'est pas une maquette, ce n'est pas un prototype. C'est un produit qui **tourne réellement, en production**. Plus de 25 000 composants en base, la compatibilité vérifiée sur 8 catégories, les prix, les benchmarks, et 69 tests automatisés derrière pour la fiabilité. Le mieux, c'est de vous le montrer en direct. »
+> *(Intro, ~30 s :)* « Point essentiel : ce n'est pas une maquette, ce n'est pas un prototype. C'est un produit qui **tourne réellement, en production**. Plus de 25 000 composants en base, la compatibilité vérifiée sur 8 catégories, les prix, les benchmarks, et 79 tests automatisés derrière pour la fiabilité. Le mieux, c'est de vous le montrer en direct. »
 
 *(Bascule sur l'onglet pc-aeris.vercel.app. Choré démo, ~5 min — garde le rythme, ne t'attarde pas.)*
 
@@ -147,7 +147,7 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 
 ## Slide 10 — Le marché *(~1 min)*
 
-> « Le marché du PC en France, c'est environ **4 milliards d'euros par an**. Et au sein de ce marché, le segment qui nous intéresse — le gaming et les stations de travail — croît de **8 à 10 % par an**. C'est un marché à la fois énorme et en croissance.
+> « Quelques chiffres, sources à l'appui. Le marché français du jeu vidéo pèse **5,7 milliards d'euros en 2024**, selon le SELL — le syndicat des éditeurs de logiciels de loisir — et les ventes de PC gaming en France y ont progressé de **9,1 %**. À l'échelle mondiale, Grand View Research évalue le marché du PC gaming à environ **62 milliards de dollars**, avec une croissance de l'ordre de **13,5 % par an**. C'est un marché à la fois énorme et en croissance.
 >
 > Nos cibles, ce sont des particuliers et des professionnels individuels : les **gamers**, débutants comme confirmés ; les **créatifs et les freelances** — monteurs vidéo, graphistes, développeurs ; et les **étudiants en filières techniques** ainsi que les **indépendants**.
 >
@@ -215,11 +215,27 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 >
 > Le message, c'est qu'on n'est plus au stade de l'idée. On est au stade de **l'exécution**. »
 
-*(Transition : « Et derrière cette exécution, il y a une équipe. »)*
+*(Transition : « Une exécution qui, surtout, est conçue pour passer à l'échelle. »)*
 
 ---
 
-## Slide 16 — L'équipe *(~55 s) — CRÉDIBILITÉ*
+## Slide 16 — Changement d'échelle *(~55 s)*
+
+> « Un mot sur le passage à l'échelle, parce que c'est une vraie question : qu'est-ce qui change quand on passe de quelques commandes par mois à plusieurs milliers ?
+>
+> Sur le plan **technique**, la pile est entièrement managée — Supabase et Vercel. Monter en charge, c'est activer des réplicas de lecture, du cache, et passer l'agrégation des prix en file de jobs asynchrone. Il n'y a rien à réécrire.
+>
+> Sur le plan des **opérations**, on ne centralise pas le montage : on s'appuie sur un réseau d'**assembleurs partenaires régionaux** et un sourcing semi-automatisé. C'est ça qui absorbe le volume, pas une usine à nous.
+>
+> Côté **équipe**, on passe de une à une dizaine de personnes, organisées en pôles — Tech, Produit, Marketing, Ops — avec le recrutement d'un CTO en priorité. Et côté **marché**, la plateforme est déjà pensée pour l'international, ce qui ouvre l'Europe, un segment Pro, et l'abonnement.
+>
+> Le point clé : comme le modèle est **asset-light**, sans stock à multiplier, le passage à l'échelle est avant tout **organisationnel**, pas technique. C'est un risque qu'on sait piloter. »
+
+*(Transition : « Et derrière tout ça, aujourd'hui, il y a une personne. »)*
+
+---
+
+## Slide 17 — L'équipe *(~55 s) — CRÉDIBILITÉ*
 
 > « Aujourd'hui, cette équipe, c'est moi — Quentin Geoffroy, le fondateur. Et je veux être transparent là-dessus, parce que c'est une force autant qu'un défi.
 >
@@ -227,11 +243,23 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 >
 > Et c'est précisément pour passer à l'échelle que je veux m'entourer. Avec l'amorçage, les premiers renforts sont identifiés : un **développeur full-stack** pour accélérer la V1 et l'IA, un **responsable marketing** pour l'acquisition, et un **support technique doublé d'un expert hardware** pour la curation des données et le conseil. »
 
+*(Transition : « Et très concrètement, pour enclencher tout ça : »)*
+
+---
+
+## Slide 18 — Besoin de financement *(~45 s)*
+
+> « Ce qu'on recherche, c'est un amorçage de **35 000 euros**, calibré pour 6 à 12 mois et concentré là où se joue la traction.
+>
+> Le détail : **15 000 euros** pour le développement — livrer la V1, le paiement, le suivi, et fiabiliser le tout. **10 000 euros** pour le marketing de lancement — le référencement, le SEO, les partenariats créateurs. Puis **3 000** d'infrastructure, **2 000** de juridique, et **5 000** de trésorerie pour les imprévus. Autrement dit, près de **70 % de l'enveloppe va directement à la traction** : développement et acquisition.
+>
+> Et les sources que j'envisage sont réalistes pour ce stade : apport personnel, love money, un prêt d'honneur via Réseau Entreprendre ou Initiative France, BPI France, et les concours de startups. »
+
 *(Transition : « Pour conclure. »)*
 
 ---
 
-## Slide 17 — Vision & ask *(~50 s)*
+## Slide 19 — Vision & ask *(~50 s)*
 
 > « Notre vision, je la résume comme au début : permettre à chacun d'obtenir **le PC parfait pour ses besoins — sans stress, sans erreur, et au juste prix**.
 >
@@ -245,9 +273,9 @@ Texte **à dire mot pour mot** (tu peux paraphraser, mais tout y est). Les *(ind
 
 ## Anticipation des questions
 
-- **« La compatibilité, c'est vraiment fiable ? »** → Oui : ce sont des règles métier explicites (puissance d'alimentation selon le TDP, format du boîtier vs carte mère, connectique M.2/SATA…), couvertes par 69 tests automatisés. Vous l'avez vu en direct dans la démo.
+- **« La compatibilité, c'est vraiment fiable ? »** → Oui : ce sont des règles métier explicites (puissance d'alimentation selon le TDP, format du boîtier vs carte mère, connectique M.2/SATA…), couvertes par 79 tests automatisés. Vous l'avez vu en direct dans la démo.
 - **« Les benchmarks sont déjà en place ? »** → Oui : les scores de référence **PassMark sont intégrés sur 733 processeurs et 982 cartes graphiques**. Croisés avec le prix, ils alimentent la recommandation performance-prix.
-- **« D'où viennent les prix, et quelle est la couverture ? »** → Ce sont des relevés de marché réels chez les marchands français, affichés en fourchette. C'est opérationnel ; la couverture du catalogue **s'élargit progressivement, par lots**, et l'occasion arrive ensuite.
+- **« D'où viennent les prix, et quelle est la couverture ? »** → Le **neuf** : des relevés réels récupérés par scraping chez deux marchands français, **LDLC et Alternate.fr**, affichés en fourchette. L'**occasion** : **estimée par décote** (catégorie + ancienneté), clairement labellisée comme estimation — pas un relevé. C'est opérationnel ; la couverture du catalogue **s'élargit progressivement, par lots** (scraping volontairement lent et poli). Choix assumé : les API officielles (Amazon, eBay) sont payantes ou exigent une validation de compte, d'où le scraping multi-sources avec garde-fous.
 - **« Comment vous gagnez de l'argent, exactement ? »** → On ne prend pas de marge sur les composants : ils sont vendus au meilleur prix du marché. Notre revenu, c'est l'**offre de montage à prix fixe** — 79, 129 ou 199 € — soit environ 120 € en moyenne par commande. Modèle asset-light, seuil de rentabilité bas (~17 commandes/mois), relayé demain par la garantie étendue et l'abonnement Pro.
 - **« Et la concurrence d'Amazon ou de LDLC ? »** → On ne les affronte ni sur le prix, ni sur la largeur de catalogue. On se différencie par l'accompagnement, la compatibilité garantie et la transparence. C'est une niche qu'ils ne couvrent pas.
 - **« Pourquoi seul, et pourquoi vous ? »** → Parce que j'ai déjà construit et mis en production le produit entier, seul. C'est la preuve de la capacité d'exécution. Les recrutements — dev, marketing, support — sont prévus dès l'amorçage.

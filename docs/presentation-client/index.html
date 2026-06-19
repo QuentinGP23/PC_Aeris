@@ -193,13 +193,13 @@
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Notre différenciation</div>
     <h1 class="title">La transparence des prix,<br>façon <span class="grad">StockX</span>.</h1>
-    <div class="sub">Pour chaque composant, trois indicateurs de marché en temps réel :</div>
+    <div class="sub">Pour chaque composant, une fourchette de marché — bas, moyen, haut :</div>
     <div class="cols c3" style="margin-top:6px">
       <div class="card"><div class="stat" style="color:var(--ok)">449<span class="u"> €</span></div><div class="statlbl">Prix bas du marché</div></div>
       <div class="card hl"><div class="stat">469<span class="u"> €</span></div><div class="statlbl">Prix moyen</div></div>
       <div class="card"><div class="stat" style="color:var(--warn)">489<span class="u"> €</span></div><div class="statlbl">Prix haut</div></div>
     </div>
-    <div class="sub" style="margin-top:24px;color:var(--text)">À la validation, l'utilisateur reçoit un <b>devis avec une fourchette réaliste</b> — pas un tarif fixe artificiel. <span style="color:var(--text-3)">Une transparence intégrée au configurateur, qu'aucun concurrent ne propose.</span></div>
+    <div class="sub" style="margin-top:24px;color:var(--text)">Neuf <b>scrapé chez plusieurs marchands FR</b> (LDLC + Alternate.fr) ; occasion <b>estimée par décote</b>, clairement labellisée. À la validation, un <b>devis en fourchette réaliste</b> — pas un tarif fixe artificiel. <span style="color:var(--text-3)">Une transparence intégrée au configurateur, qu'aucun concurrent ne propose.</span></div>
   </section>
 
   <!-- 7 — COMMENT ON CONSTRUIT LE PRIX -->
@@ -208,9 +208,9 @@
     <h1 class="title">Un prix de marché,<br>pas un prix sorti du chapeau.</h1>
     <div class="cols c2" style="align-items:start;margin-top:6px">
       <ul class="bul">
-        <li><b>1 · Agrégation multi-sources</b> <span>— on relève en continu les prix réels des marchands (neuf) et des marketplaces (occasion).</span></li>
-        <li><b>2 · Fourchette calculée</b> <span>— bas / moyen / haut, rafraîchie régulièrement.</span></li>
-        <li><b>3 · Devis réaliste</b> <span>— à la validation, la fourchette du PC complet.</span></li>
+        <li><b>1 · Neuf relevé par scraping</b> <span>— prix réels chez plusieurs marchands FR (LDLC, Alternate.fr).</span></li>
+        <li><b>2 · Occasion estimée par décote</b> <span>— selon la catégorie et l'ancienneté, clairement labellisée « estimée ».</span></li>
+        <li><b>3 · Fourchette &amp; devis</b> <span>— bas / moyen / haut, agrégés en un devis pour le PC complet.</span></li>
       </ul>
       <div class="card hl">
         <h3>Donnée réelle — Ryzen 7 7700X</h3>
@@ -218,17 +218,17 @@
           <tr><th>Bas</th><th>Moyen</th><th>Haut</th></tr>
           <tr><td class="num" style="color:var(--ok)">275 €</td><td class="num">282 €</td><td class="num" style="color:var(--warn)">290 €</td></tr>
         </table>
-        <p style="margin-top:12px">Relevé marché en temps réel — <b style="color:#fff">en base, sur la plateforme</b>.</p>
+        <p style="margin-top:12px">Relevé marché réel, scrapé — <b style="color:#fff">en base, sur la plateforme</b>.</p>
       </div>
     </div>
-    <div class="sub" style="margin-top:20px;color:var(--text)"><b>Pourquoi c'est défendable :</b> agréger des prix multi-sources fiables est complexe et long à construire — <span style="color:var(--text-3)">une barrière que les revendeurs classiques n'ont pas franchie.</span></div>
+    <div class="sub" style="margin-top:20px;color:var(--text)"><b>Pourquoi c'est défendable :</b> bâtir un scraping multi-sources fiable et l'agréger proprement est complexe et long — <span style="color:var(--text-3)">une barrière que les revendeurs classiques n'ont pas franchie.</span></div>
   </section>
 
   <!-- 8 — LE PRODUIT AUJOURD'HUI -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Le produit, aujourd'hui</div>
     <h1 class="title">Pas une maquette — un produit qui tourne.</h1>
-    <div class="sub">MVP quasi finalisé, en ligne sur <b>pc-aeris.vercel.app</b>. Démo live disponible.</div>
+    <div class="sub">MVP livré, en ligne sur <b>pc-aeris.vercel.app</b>. Démo live disponible.</div>
     <div class="cols c2">
       <div class="chips">
         <span class="chip ok">✓ Configurateur 8 catégories</span>
@@ -241,13 +241,15 @@
         <span class="chip ok">✓ Commande par devis · panier & suivi</span>
         <span class="chip ok">✓ Comptes & espace utilisateur</span>
         <span class="chip ok">✓ Back-office admin (produits + prix)</span>
-        <span class="chip ok">✓ Moteur de prix réels (intégration LDLC)</span>
+        <span class="chip ok">✓ Prix réels neuf — LDLC + Alternate.fr</span>
+        <span class="chip ok">✓ Occasion estimée par décote</span>
+        <span class="chip ok">✓ Pages catalogue par catégorie</span>
         <span class="chip ok">✓ Benchmarks de perf (CPU/GPU, PassMark)</span>
         <span class="chip ok">✓ Identité Aeris Dark · accessibilité RGAA AA</span>
       </div>
       <div class="cols" style="grid-template-columns:1fr 1fr;gap:18px;align-content:start">
         <div class="card"><div class="stat">25k<span class="u"></span></div><div class="statlbl">composants en base</div></div>
-        <div class="card"><div class="stat">69</div><div class="statlbl">tests automatisés</div></div>
+        <div class="card"><div class="stat">79</div><div class="statlbl">tests automatisés</div></div>
         <div class="card"><div class="stat">8</div><div class="statlbl">catégories compatibles</div></div>
         <div class="card hl"><div class="stat">live</div><div class="statlbl">démo en production</div></div>
       </div>
@@ -275,7 +277,7 @@
         <div class="card" style="grid-column:span 2"><h3>Gaming 1080p / 1440p</h3><p>Chaque pièce choisie au meilleur rapport <b style="color:#fff">performance / prix</b> — et garantie compatible avec les autres.</p></div>
       </div>
     </div>
-    <div class="sub" style="margin-top:12px;color:var(--text-3)">*Prix = fourchette de marché en temps réel. Exemple représentatif d'une configuration générée.</div>
+    <div class="sub" style="margin-top:12px;color:var(--text-3)">*Prix = fourchette de marché relevée par scraping. Exemple représentatif d'une configuration générée.</div>
   </section>
 
   <!-- 10 — MARCHÉ -->
@@ -375,8 +377,8 @@
     <div class="eyebrow"><span class="dot"></span> Roadmap</div>
     <h1 class="title">Du MVP au lancement commercial.</h1>
     <div class="roadmap" style="margin-top:28px">
-      <div class="rm"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, prix réels. En production.</p></div>
-      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Paiement en ligne (Stripe), OAuth Google, filtres avancés. Panier, commande par devis et suivi déjà livrés.</p></div>
+      <div class="rm"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, catalogue, prix neuf/occasion. En production.</p></div>
+      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Paiement en ligne (Stripe), emails transactionnels, filtres avancés, couverture prix élargie. Panier, devis et suivi déjà livrés.</p></div>
       <div class="rm"><div class="when">Sept. 2026 +</div><h4>V2</h4><p>IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.</p></div>
       <div class="rm"><div class="when">2027 +</div><h4>Expansion</h4><p>App mobile, abonnement Pro, communauté, internationalisation.</p></div>
     </div>
