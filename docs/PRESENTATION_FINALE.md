@@ -565,4 +565,4 @@ Voici les questions probables et les réponses préparées, sourcées dans les d
 
 ---
 
-_Document de préparation — PC Aeris — 29 mai 2026_
+_Document de préparation — PC Aeris — 19 juin 2026_
