@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PC Aeris — Présentation client</title>
+<title>PC Aeris — Présentation</title>
 <style>
   :root {
     --bg: #04040a; --surface: #0b0b14; --surface-2: #12121f;
@@ -20,7 +20,7 @@
   .slide {
     position: absolute; inset: 0; display: none;
     flex-direction: column; justify-content: center;
-    padding: 64px 88px 78px;
+    padding: 58px 88px 76px;
     background:
       radial-gradient(1200px 600px at 78% -10%, rgba(99,102,241,.16), transparent 60%),
       radial-gradient(900px 500px at -5% 110%, rgba(67,56,202,.14), transparent 55%),
@@ -31,43 +31,50 @@
 
   /* en-tête / pied */
   .eyebrow { display:flex; align-items:center; gap:10px; font-size:13px; letter-spacing:.18em;
-    text-transform:uppercase; color: var(--ind-l); font-weight:600; margin-bottom:18px; }
+    text-transform:uppercase; color: var(--ind-l); font-weight:600; margin-bottom:16px; }
   .eyebrow .dot { width:8px; height:8px; border-radius:50%; background:var(--ind); box-shadow:0 0 14px var(--ind); }
-  h1.title { font-size:46px; line-height:1.08; letter-spacing:-.02em; font-weight:800; margin-bottom:8px; }
+  h1.title { font-size:44px; line-height:1.08; letter-spacing:-.02em; font-weight:800; margin-bottom:8px; }
   h1.title .grad { background:linear-gradient(90deg,#a5b4fc,#6366f1); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .sub { font-size:20px; color:var(--text-2); margin-bottom:30px; max-width:1000px; line-height:1.45; }
-  .foot { position:absolute; left:88px; right:88px; bottom:30px; display:flex; justify-content:space-between;
-    align-items:center; font-size:12.5px; color:var(--text-3); letter-spacing:.04em; }
-  .progress { position:absolute; left:0; bottom:0; height:4px; background:linear-gradient(90deg,var(--ind),var(--ind-l)); transition:width .35s; }
+  .sub { font-size:19px; color:var(--text-2); margin-bottom:26px; max-width:1020px; line-height:1.45; }
+  /* message clé mis en avant */
+  .take { font-size:18px; color:var(--text); border-left:3px solid var(--ind); padding:8px 0 8px 18px;
+    margin-top:22px; line-height:1.45; max-width:1040px; }
+  .take b { color:#fff; }
+  /* pied de slide (marque + pagination) injecté en JS */
+  .foot { position:absolute; left:88px; right:88px; bottom:28px; display:flex; justify-content:space-between;
+    align-items:center; font-size:12.5px; color:var(--text-3); letter-spacing:.06em; }
+  .foot .pageno { font-variant-numeric:tabular-nums; }
+  .progress { position:absolute; left:0; bottom:0; height:4px; background:linear-gradient(90deg,var(--ind),var(--ind-l)); transition:width .35s; z-index:60; }
 
   /* primitives */
   .cols { display:grid; gap:22px; }
   .c2 { grid-template-columns:1fr 1fr; } .c3 { grid-template-columns:1fr 1fr 1fr; }
   .card { background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
-    border:1px solid var(--line); border-radius:16px; padding:22px 24px; }
+    border:1px solid var(--line); border-radius:16px; padding:20px 22px; }
   .card.hl { border-color:rgba(99,102,241,.4); background:linear-gradient(180deg, rgba(99,102,241,.12), rgba(99,102,241,.03)); }
-  .card h3 { font-size:19px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
-  .card p { font-size:15.5px; color:var(--text-2); line-height:1.5; }
+  .card h3 { font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .card p { font-size:15px; color:var(--text-2); line-height:1.5; }
   .ico { font-size:22px; }
-  ul.bul { list-style:none; display:flex; flex-direction:column; gap:14px; }
-  ul.bul li { font-size:19px; color:var(--text); line-height:1.4; padding-left:30px; position:relative; }
+  ul.bul { list-style:none; display:flex; flex-direction:column; gap:13px; }
+  ul.bul li { font-size:18px; color:var(--text); line-height:1.4; padding-left:28px; position:relative; }
   ul.bul li::before { content:"›"; position:absolute; left:4px; color:var(--ind-l); font-weight:800; }
-  ul.bul li b { color:#fff; } ul.bul li span { color:var(--text-2); font-size:16.5px; }
+  ul.bul li b { color:#fff; } ul.bul li span { color:var(--text-2); font-size:16px; }
 
-  .stat { font-size:54px; font-weight:800; letter-spacing:-.02em; line-height:1; }
-  .stat .u { font-size:22px; color:var(--text-2); font-weight:600; }
-  .statlbl { font-size:15px; color:var(--text-3); margin-top:8px; text-transform:uppercase; letter-spacing:.08em; }
+  .stat { font-size:50px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+  .stat .u { font-size:21px; color:var(--text-2); font-weight:600; }
+  .statlbl { font-size:14px; color:var(--text-3); margin-top:8px; text-transform:uppercase; letter-spacing:.07em; }
 
-  table { width:100%; border-collapse:collapse; font-size:15.5px; }
-  th,td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); }
-  th { color:var(--ind-l); font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-size:15px; }
+  th,td { text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); }
+  th { color:var(--ind-l); font-size:12px; text-transform:uppercase; letter-spacing:.07em; font-weight:600; }
   td.num { text-align:right; font-variant-numeric:tabular-nums; font-weight:700; }
   tr:last-child td { border-bottom:none; }
 
-  .chips { display:flex; flex-wrap:wrap; gap:10px; }
-  .chip { font-size:14.5px; padding:8px 14px; border-radius:999px; border:1px solid var(--line-s);
+  .chips { display:flex; flex-wrap:wrap; gap:9px; }
+  .chip { font-size:14px; padding:7px 13px; border-radius:999px; border:1px solid var(--line-s);
     background:rgba(255,255,255,.03); color:var(--text); }
   .chip.ok { border-color:rgba(52,211,153,.35); color:#a7f3d0; background:rgba(52,211,153,.07); }
+  .chip.tech { border-color:rgba(129,140,248,.35); color:#c7d2fe; background:rgba(99,102,241,.08); }
 
   .pill { display:inline-flex; align-items:center; gap:8px; font-size:13px; padding:6px 13px; border-radius:999px;
     border:1px solid var(--line-s); color:var(--text-2); }
@@ -77,9 +84,9 @@
   .logo { font-size:22px; font-weight:800; letter-spacing:.02em; display:flex; align-items:center; gap:12px; margin-bottom:34px; }
   .logo .mark { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--ind),var(--ind-d));
     display:grid; place-items:center; font-size:20px; box-shadow:0 8px 30px rgba(99,102,241,.45); }
-  .cover h1 { font-size:76px; line-height:1; letter-spacing:-.03em; font-weight:800; }
-  .cover .base { font-size:26px; color:var(--text-2); margin-top:18px; font-weight:500; }
-  .cover .meta { margin-top:46px; display:flex; gap:14px; flex-wrap:wrap; }
+  .cover h1 { font-size:74px; line-height:1; letter-spacing:-.03em; font-weight:800; }
+  .cover .base { font-size:25px; color:var(--text-2); margin-top:18px; font-weight:500; }
+  .cover .meta { margin-top:44px; display:flex; gap:14px; flex-wrap:wrap; }
   .rule { width:90px; height:6px; border-radius:4px; background:linear-gradient(90deg,var(--ind),var(--ind-l)); margin-bottom:28px; }
 
   .roadmap { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:10px; }
@@ -93,8 +100,6 @@
   .hint { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); font-size:11px; color:#555; z-index:50; }
 
   /* ---- mode impression / PDF : toutes les slides empilées ---- */
-  /* Fond plat (un seul dégradé linéaire) au lieu des 3 dégradés radiaux :
-     évite des objets "shading" PDF lourds qui rament dans le lecteur. */
   body.print { background:#000; }
   body.print .deck { width:auto; height:auto; overflow:visible; }
   body.print .slide {
@@ -103,7 +108,7 @@
     background:linear-gradient(160deg, #0b0b16 0%, #05050d 100%);
   }
   body.print .slide:last-child { page-break-after:avoid; break-after:avoid; }
-  body.print .hint { display:none; }
+  body.print .hint, body.print .progress { display:none; }
 </style>
 </head>
 <body>
@@ -118,7 +123,7 @@
     <div class="meta">
       <span class="pill">🖥️ Démo live · pc-aeris.vercel.app</span>
       <span class="pill">👤 Quentin Geoffroy</span>
-      <span class="pill">📅 Présentation client · Juin 2026</span>
+      <span class="pill">🎓 Soutenance PFE M2 · Juin 2026</span>
     </div>
   </section>
 
@@ -126,13 +131,13 @@
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Le problème</div>
     <h1 class="title">Acheter le bon PC, c'est<br>un parcours du combattant.</h1>
-    <div class="sub">Des dizaines de sites, des centaines de composants, un jargon opaque. L'acheteur se retrouve seul face à des questions qu'il ne sait pas trancher :</div>
+    <div class="sub">Des dizaines de sites, des centaines de composants, un jargon opaque. L'acheteur se retrouve seul face à trois questions qu'il ne sait pas trancher :</div>
     <div class="cols c3">
       <div class="card"><h3>🔌 Compatibilité</h3><p>« Cette carte graphique va-t-elle avec cette carte mère ? »</p></div>
       <div class="card"><h3>⚡ Alimentation</h3><p>« Mon alim est-elle assez puissante pour cette config ? »</p></div>
       <div class="card"><h3>💸 Juste prix</h3><p>« Est-ce que je paie le bon prix, ou je me fais avoir ? »</p></div>
     </div>
-    <div class="sub" style="margin-top:26px;color:var(--text)"><b>Résultat :</b> la majorité abandonne, ou perd des heures pour finir par un mauvais choix.</div>
+    <div class="take"><b>Résultat :</b> la majorité abandonne — ou perd des heures pour finir par un mauvais choix.</div>
   </section>
 
   <!-- 3 — SOLUTION -->
@@ -142,7 +147,7 @@
     <div class="cols c2" style="margin-top:14px;align-items:center">
       <div>
         <div class="card hl">
-          <h3 style="font-size:23px">🎯 Notre promesse</h3>
+          <h3 style="font-size:22px">🎯 Notre promesse</h3>
           <p style="font-size:19px;color:var(--text)">« Vous nous dites ce que vous voulez faire.<br>Nous nous occupons du reste. »</p>
         </div>
       </div>
@@ -163,18 +168,19 @@
       <div class="card hl"><h3><span class="ico">🧠</span> Connaisseurs</h3><p>Un configurateur intelligent : vous choisissez un composant, le système ne propose que ce qui est compatible et cohérent.</p></div>
       <div class="card"><h3><span class="ico">⚡</span> Pressés</h3><p>Des PC déjà assemblés, testés et prêts à être livrés. Zéro réflexion, performance garantie.</p></div>
     </div>
+    <div class="take">Trois portes d'entrée, une seule promesse : <b>le bon PC, pour la bonne personne</b>.</div>
   </section>
 
   <!-- 5 — MOTEUR DE VALEUR : BENCHMARKS -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Notre moteur de valeur</div>
     <h1 class="title">On ne compare pas des specs.<br>On mesure la <span class="grad">performance</span>.</h1>
-    <div class="sub">Une fiche technique ne dit pas si un composant est un bon achat. On note chaque composant sur un <b>indice de performance</b> (benchmarks de référence), qu'on croise avec son prix marché pour révéler le meilleur rapport <b>performance / euro</b>.</div>
+    <div class="sub">Une fiche technique ne dit pas si un composant est un bon achat. On note chaque composant sur un <b>indice de performance</b> (benchmarks PassMark), croisé à son prix marché : le meilleur rapport <b>performance / euro</b>.</div>
     <div class="cols c2" style="align-items:center">
       <ul class="bul">
         <li><b>Score de performance</b> <span>— normalisé, par catégorie.</span></li>
         <li><b>Croisé au prix réel</b> <span>— le coût par point de performance.</span></li>
-        <li><b>Recommandation de valeur</b> <span>— le bon choix, pas le plus cher.</span></li>
+        <li><b>Reco de valeur</b> <span>— le bon choix, pas le plus cher.</span></li>
       </ul>
       <div class="card hl">
         <h3>Donnée réelle — processeurs AM5</h3>
@@ -189,27 +195,15 @@
     </div>
   </section>
 
-  <!-- 6 — DIFFÉRENCIATION PRIX -->
+  <!-- 6 — TRANSPARENCE DES PRIX (fusion différenciation + justification) -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Notre différenciation</div>
     <h1 class="title">La transparence des prix,<br>façon <span class="grad">StockX</span>.</h1>
-    <div class="sub">Pour chaque composant, une fourchette de marché — bas, moyen, haut :</div>
-    <div class="cols c3" style="margin-top:6px">
-      <div class="card"><div class="stat" style="color:var(--ok)">449<span class="u"> €</span></div><div class="statlbl">Prix bas du marché</div></div>
-      <div class="card hl"><div class="stat">469<span class="u"> €</span></div><div class="statlbl">Prix moyen</div></div>
-      <div class="card"><div class="stat" style="color:var(--warn)">489<span class="u"> €</span></div><div class="statlbl">Prix haut</div></div>
-    </div>
-    <div class="sub" style="margin-top:24px;color:var(--text)">Neuf <b>scrapé chez plusieurs marchands FR</b> (LDLC + Alternate.fr) ; occasion <b>estimée par décote</b>, clairement labellisée. À la validation, un <b>devis en fourchette réaliste</b> — pas un tarif fixe artificiel. <span style="color:var(--text-3)">Une transparence intégrée au configurateur, qu'aucun concurrent ne propose.</span></div>
-  </section>
-
-  <!-- 7 — COMMENT ON CONSTRUIT LE PRIX -->
-  <section class="slide">
-    <div class="eyebrow"><span class="dot"></span> La justification des prix</div>
-    <h1 class="title">Un prix de marché,<br>pas un prix sorti du chapeau.</h1>
-    <div class="cols c2" style="align-items:start;margin-top:6px">
+    <div class="sub">Là où les concurrents affichent <b>un seul prix</b> — celui du revendeur — on affiche une <b>fourchette de marché</b> : bas, moyen, haut. Un prix de marché, pas un prix sorti du chapeau.</div>
+    <div class="cols c2" style="align-items:start">
       <ul class="bul">
         <li><b>1 · Neuf relevé par scraping</b> <span>— prix réels chez plusieurs marchands FR (LDLC, Alternate.fr).</span></li>
-        <li><b>2 · Occasion estimée par décote</b> <span>— selon la catégorie et l'ancienneté, clairement labellisée « estimée ».</span></li>
+        <li><b>2 · Occasion estimée par décote</b> <span>— selon catégorie et ancienneté, clairement labellisée « estimée ».</span></li>
         <li><b>3 · Fourchette &amp; devis</b> <span>— bas / moyen / haut, agrégés en un devis pour le PC complet.</span></li>
       </ul>
       <div class="card hl">
@@ -218,34 +212,31 @@
           <tr><th>Bas</th><th>Moyen</th><th>Haut</th></tr>
           <tr><td class="num" style="color:var(--ok)">275 €</td><td class="num">282 €</td><td class="num" style="color:var(--warn)">290 €</td></tr>
         </table>
-        <p style="margin-top:12px">Relevé marché réel, scrapé — <b style="color:#fff">en base, sur la plateforme</b>.</p>
+        <p style="margin-top:12px">Relevé marché réel, scrapé — <b style="color:#fff">persisté en base, sur la plateforme</b>.</p>
       </div>
     </div>
-    <div class="sub" style="margin-top:20px;color:var(--text)"><b>Pourquoi c'est défendable :</b> bâtir un scraping multi-sources fiable et l'agréger proprement est complexe et long — <span style="color:var(--text-3)">une barrière que les revendeurs classiques n'ont pas franchie.</span></div>
+    <div class="take"><b>Défendable :</b> bâtir un scraping multi-sources fiable est complexe et long — une barrière que les revendeurs n'ont pas franchie. <b>Aucun concurrent francophone ne l'affiche.</b></div>
   </section>
 
-  <!-- 8 — LE PRODUIT AUJOURD'HUI -->
+  <!-- 7 — LE PRODUIT AUJOURD'HUI + DÉMO -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Le produit, aujourd'hui</div>
     <h1 class="title">Pas une maquette — un produit qui tourne.</h1>
-    <div class="sub">MVP livré, en ligne sur <b>pc-aeris.vercel.app</b>. Démo live disponible.</div>
+    <div class="sub"><b>MVP livré, en production</b> sur <b>pc-aeris.vercel.app</b>. Démo live dans un instant.</div>
     <div class="cols c2">
       <div class="chips">
         <span class="chip ok">✓ Configurateur 8 catégories</span>
         <span class="chip ok">✓ Questionnaire guidé (besoin → config)</span>
-        <span class="chip ok">✓ Configs prêtes par usage & gamme</span>
-        <span class="chip ok">✓ Compatibilité vérifiée (CPU/alim/format/connectique)</span>
-        <span class="chip ok">✓ Tri par performance (benchmark)</span>
+        <span class="chip ok">✓ Configs prêtes par usage &amp; gamme</span>
+        <span class="chip ok">✓ Compatibilité temps réel (socket, format, alim…)</span>
         <span class="chip ok">✓ Ordre de sélection verrouillé — zéro impasse</span>
+        <span class="chip ok">✓ Tri par performance (benchmark)</span>
+        <span class="chip ok">✓ Prix neuf (LDLC + Alternate.fr) + occasion</span>
         <span class="chip ok">✓ Configurations sauvegardées</span>
-        <span class="chip ok">✓ Commande par devis · panier & suivi</span>
-        <span class="chip ok">✓ Comptes & espace utilisateur</span>
-        <span class="chip ok">✓ Back-office admin (produits + prix)</span>
-        <span class="chip ok">✓ Prix réels neuf — LDLC + Alternate.fr</span>
-        <span class="chip ok">✓ Occasion estimée par décote</span>
+        <span class="chip ok">✓ Panier → devis → suivi de commande</span>
         <span class="chip ok">✓ Pages catalogue par catégorie</span>
-        <span class="chip ok">✓ Benchmarks de perf (CPU/GPU, PassMark)</span>
-        <span class="chip ok">✓ Identité Aeris Dark · accessibilité RGAA AA</span>
+        <span class="chip ok">✓ Comptes &amp; espace utilisateur</span>
+        <span class="chip ok">✓ Back-office admin (produits, prix, devis)</span>
       </div>
       <div class="cols" style="grid-template-columns:1fr 1fr;gap:18px;align-content:start">
         <div class="card"><div class="stat">25k<span class="u"></span></div><div class="statlbl">composants en base</div></div>
@@ -256,31 +247,25 @@
     </div>
   </section>
 
-  <!-- 9 — EXEMPLE DE CONFIG -->
+  <!-- 8 — SOUS LE CAPOT : TECHNIQUE & QUALITÉ -->
   <section class="slide">
-    <div class="eyebrow"><span class="dot"></span> Concret — une config générée</div>
-    <h1 class="title">Un build gaming complet,<br>cohérent et compatible.</h1>
-    <div class="cols c2" style="align-items:start;margin-top:6px">
-      <table>
-        <tr><th>Composant</th><th>Choix</th><th>Prix*</th></tr>
-        <tr><td>Processeur</td><td>Ryzen 5 7500F</td><td class="num">155 €</td></tr>
-        <tr><td>Carte graphique</td><td>GeForce RTX 4060</td><td class="num">300 €</td></tr>
-        <tr><td>Carte mère</td><td>B650</td><td class="num">150 €</td></tr>
-        <tr><td>Mémoire</td><td>32 Go DDR5-6000</td><td class="num">95 €</td></tr>
-        <tr><td>Stockage</td><td>1 To NVMe Gen4</td><td class="num">75 €</td></tr>
-        <tr><td>Alimentation</td><td>750 W Gold</td><td class="num">120 €</td></tr>
-        <tr><td>Boîtier</td><td>NZXT H5 Flow</td><td class="num">95 €</td></tr>
-      </table>
-      <div class="cols" style="grid-template-columns:1fr 1fr;gap:16px;align-content:start">
-        <div class="card hl"><div class="stat">~990<span class="u"> €</span></div><div class="statlbl">budget total estimé</div></div>
-        <div class="card"><div class="stat" style="color:var(--ok)">✓</div><div class="statlbl">compatibilité garantie</div></div>
-        <div class="card" style="grid-column:span 2"><h3>Gaming 1080p / 1440p</h3><p>Chaque pièce choisie au meilleur rapport <b style="color:#fff">performance / prix</b> — et garantie compatible avec les autres.</p></div>
-      </div>
+    <div class="eyebrow"><span class="dot"></span> Sous le capot</div>
+    <h1 class="title">Des fondations <span class="grad">solides</span>,<br>pas un prototype jetable.</h1>
+    <div class="cols c2" style="margin-top:4px">
+      <div class="card"><h3>🏗️ Architecture &amp; code</h3><p>React 19 + TypeScript, organisation en composants/modules, état Zustand, SCSS. Code typé et structuré.</p></div>
+      <div class="card"><h3>🗄️ Back &amp; données</h3><p>Supabase — Postgres, Auth, sécurité par <b style="color:#fff">RLS</b>, Edge Functions. Validations et gestion des erreurs.</p></div>
+      <div class="card"><h3>🔁 Qualité &amp; CI/CD</h3><p>Git (branches, PR, revues), CI lint + build + <b style="color:#fff">79 tests</b> à chaque PR, déploiement continu Vercel.</p></div>
+      <div class="card hl"><h3>♿ UI/UX &amp; accessibilité</h3><p>Design system <b style="color:#fff">Aeris Dark</b>, contrastes <b style="color:#fff">WCAG / RGAA AA</b>, responsive, bundle optimisé.</p></div>
     </div>
-    <div class="sub" style="margin-top:12px;color:var(--text-3)">*Prix = fourchette de marché relevée par scraping. Exemple représentatif d'une configuration générée.</div>
+    <div class="chips" style="margin-top:18px">
+      <span class="chip tech">React 19</span><span class="chip tech">TypeScript</span><span class="chip tech">Vite</span>
+      <span class="chip tech">Zustand</span><span class="chip tech">SCSS</span><span class="chip tech">Supabase</span>
+      <span class="chip tech">Postgres + RLS</span><span class="chip tech">Vercel</span><span class="chip tech">Vitest</span>
+      <span class="chip tech">ESLint</span><span class="chip tech">GitHub Actions</span>
+    </div>
   </section>
 
-  <!-- 10 — MARCHÉ -->
+  <!-- 9 — MARCHÉ -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Le marché</div>
     <h1 class="title">Un marché porteur,<br>une niche inexploitée.</h1>
@@ -290,12 +275,12 @@
         <div class="card hl"><div class="stat">+9,1<span class="u"> %</span></div><div class="statlbl">PC gaming France 2024 (SELL)</div></div>
       </div>
       <ul class="bul">
-        <li><b>Gamers</b> <span>— débutants & confirmés, premier PC ou upgrade.</span></li>
-        <li><b>Créatifs & freelances</b> <span>— montage, 3D, développement.</span></li>
-        <li><b>Étudiants tech & pros indépendants</b> <span>— besoins précis, budget maîtrisé.</span></li>
-        <li><span style="color:var(--text-3)">Point commun : du sur-mesure, sans la complexité.</span></li>
+        <li><b>Gamers</b> <span>— débutants &amp; confirmés, premier PC ou upgrade.</span></li>
+        <li><b>Créatifs &amp; freelances</b> <span>— montage, 3D, développement.</span></li>
+        <li><b>Étudiants tech &amp; pros indépendants</b> <span>— besoins précis, budget maîtrisé.</span></li>
       </ul>
     </div>
+    <div class="take">Monde : <b>~62 Mds $</b>, <b>+13,5 %/an</b> (Grand View Research). Point commun de nos cibles : <b>du sur-mesure, sans la complexité</b>.</div>
   </section>
 
   <!-- 10 — POURQUOI ON SE DÉMARQUE -->
@@ -310,16 +295,10 @@
       <tr><td>Parcours adapté au niveau</td><td>✗</td><td>✗</td><td>✗</td><td>~</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
       <tr><td>Conseil / accompagnement</td><td>~</td><td>✗</td><td>✗</td><td>~</td><td style="color:var(--ok);font-weight:700">✓</td></tr>
     </table>
-    <div class="chips" style="margin-top:24px">
-      <span class="chip">🛡️ IA de compatibilité</span>
-      <span class="chip">🛡️ Moteur perf/prix propriétaire</span>
-      <span class="chip">🛡️ Agrégation prix multi-sources</span>
-      <span class="chip">🛡️ Effet réseau — configs partagées</span>
-    </div>
-    <div class="sub" style="margin-top:18px;color:var(--text-3)">On ne fait pas la guerre des prix à Amazon : on occupe le quadrant inexploité <b style="color:var(--text-2)">expertise + simplicité</b>.</div>
+    <div class="take">On ne fait pas la guerre des prix à Amazon : on occupe le quadrant inexploité <b>expertise + simplicité</b>.</div>
   </section>
 
-  <!-- 9 — BUSINESS MODEL -->
+  <!-- 11 — BUSINESS MODEL -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Modèle économique</div>
     <h1 class="title">On gagne sur le <span class="grad">montage</span>,<br>pas sur les composants.</h1>
@@ -329,7 +308,7 @@
       <div class="card hl"><h3>Confort</h3><div class="stat">129<span class="u"> €</span></div><p>+ câblage premium, Windows et drivers à jour, profil de courbes ventilateurs.</p></div>
       <div class="card"><h3>Premium</h3><div class="stat">199<span class="u"> €</span></div><p>+ benchmarks 3DMark / Cinebench, profil XMP/EXPO, rapport de tests livré.</p></div>
     </div>
-    <div class="sub" style="margin-top:18px;color:var(--text-2)"><b style="color:#fff">Prix total = composants au meilleur prix + offre de montage.</b> Modèle <b>asset-light</b> (pas de stock), complété demain par la garantie étendue et un abonnement Pro.</div>
+    <div class="take"><b>Prix total = composants au meilleur prix + offre de montage.</b> Modèle <b>asset-light</b> (pas de stock), complété demain par garantie étendue et abonnement Pro.</div>
   </section>
 
   <!-- 12 — ÉCONOMIE UNITAIRE / RENTABILITÉ -->
@@ -354,7 +333,7 @@
           <tr><td>Coûts fixes mensuels (infra, outils, marketing)</td><td class="num">~1 500 €</td></tr>
           <tr><td>Commandes pour l'équilibre</td><td class="num">~17 / mois</td></tr>
         </table>
-        <p style="margin-top:14px">Année 1 : montée en charge <b style="color:#fff">sous le seuil</b> ; l'équilibre (~17/mois) est atteint courant année 2. Pas de stock = pas d'invendus, BFR minimal.</p>
+        <p style="margin-top:14px">Année 1 : montée en charge <b style="color:#fff">sous le seuil</b> ; l'équilibre (~17/mois) atteint courant année 2. Pas de stock = pas d'invendus, BFR minimal.</p>
       </div>
     </div>
   </section>
@@ -363,62 +342,109 @@
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Projections financières</div>
     <h1 class="title">Une trajectoire prudente.</h1>
-    <div class="sub">Hypothèses conservatrices pour une marque sans notoriété — l'<b>année 1 est une montée en charge</b> (sous le seuil). Croissance par bouche-à-oreille, <b>SEO/GEO</b> et partenariats créateurs.</div>
+    <div class="sub">Hypothèses conservatrices pour une marque sans notoriété — l'<b>année 1 est une montée en charge</b>. Croissance par bouche-à-oreille, <b>SEO/GEO</b> et partenariats créateurs.</div>
     <table style="margin-top:6px">
       <tr><th>Année</th><th>Commandes / mois</th><th>Panier moyen</th><th>CA annuel</th><th>Marge brute</th></tr>
       <tr><td>2027 <span style="color:var(--text-3);font-size:12px">· lancement</span></td><td>~6</td><td>1 200 €</td><td class="num">~86 K€</td><td class="num">8-10 K€</td></tr>
       <tr><td>2028</td><td>~16</td><td>1 250 €</td><td class="num">~240 K€</td><td class="num">21-25 K€</td></tr>
       <tr><td>2029</td><td>~32</td><td>1 300 €</td><td class="num">~500 K€</td><td class="num">42-50 K€</td></tr>
     </table>
+    <div class="take">Équilibre courant <b>2028</b>, près de <b>500 K€</b> de CA en 2029 — sur des leviers maîtrisables.</div>
   </section>
 
-  <!-- 11 — ROADMAP -->
+  <!-- 14 — ROADMAP -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Roadmap</div>
     <h1 class="title">Du MVP au lancement commercial.</h1>
     <div class="roadmap" style="margin-top:28px">
       <div class="rm"><div class="when">Juin 2026 <span class="now">ICI</span></div><h4>MVP</h4><p>Configurateur, compatibilité, comptes, sauvegarde, catalogue, prix neuf/occasion. En production.</p></div>
-      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Paiement en ligne (Stripe), emails transactionnels, filtres avancés, couverture prix élargie. Panier, devis et suivi déjà livrés.</p></div>
+      <div class="rm"><div class="when">Août 2026</div><h4>V1 commerciale</h4><p>Paiement Stripe, emails transactionnels, filtres avancés, couverture prix élargie. Panier, devis et suivi déjà livrés.</p></div>
       <div class="rm"><div class="when">Sept. 2026 +</div><h4>V2</h4><p>IA de recommandation, OAuth Google, paiement en plusieurs fois, RGPD.</p></div>
       <div class="rm"><div class="when">2027 +</div><h4>Expansion</h4><p>App mobile, abonnement Pro, communauté, internationalisation.</p></div>
     </div>
+    <div class="take">On n'est plus au stade de l'idée. On est au stade de <b>l'exécution</b>.</div>
   </section>
 
-  <!-- CHANGEMENT D'ÉCHELLE -->
+  <!-- 15 — PASSAGE À L'ÉCHELLE · MÉTHODE -->
   <section class="slide">
-    <div class="eyebrow"><span class="dot"></span> Changement d'échelle</div>
+    <div class="eyebrow"><span class="dot"></span> Passage à l'échelle · Méthode</div>
+    <h1 class="title">Une organisation <span class="grad">agile</span>,<br>prête à scaler.</h1>
+    <div class="cols c2" style="align-items:start;margin-top:4px">
+      <div class="card">
+        <h3>🔁 Méthodologie</h3>
+        <p><b style="color:#fff">Scrum hybride</b> · sprints de 2 semaines · cérémonies : planning, daily, review, rétro. Outils : <b style="color:#fff">GitHub Projects</b>, Notion, Figma.</p>
+        <p style="margin-top:10px">Cadence courte = feedback rapide et cap réajusté à chaque sprint.</p>
+      </div>
+      <div class="card hl">
+        <h3>🧩 Build vs Buy</h3>
+        <table style="margin-top:4px">
+          <tr><th>Brique</th><th>Décision</th></tr>
+          <tr><td>Configurateur &amp; compatibilité</td><td style="color:var(--ind-l);font-weight:700">Interne</td></tr>
+          <tr><td>Relevé de prix (scraping)</td><td style="color:var(--ind-l);font-weight:700">Interne</td></tr>
+          <tr><td>Auth · BDD · hébergement</td><td>Buy — Supabase, Vercel</td></tr>
+          <tr><td>Paiement</td><td>Buy — Stripe</td></tr>
+          <tr><td>Emails transactionnels</td><td>Buy — Resend</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="take">On <b>construit ce qui nous différencie</b>, on <b>achète le reste</b> — l'effort interne va sur la valeur.</div>
+  </section>
+
+  <!-- 16 — CHANGEMENT D'ÉCHELLE -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Passage à l'échelle · Capacité</div>
     <h1 class="title">Conçu pour passer<br>à l'échelle <span class="grad">×100</span>.</h1>
     <div class="sub">De quelques commandes par mois à plusieurs milliers : ce qui change — et pourquoi le modèle le permet.</div>
     <div class="cols c2" style="align-items:start;margin-top:4px">
-      <div class="card"><h3>🧩 Technique</h3><p>Pile managée (Supabase, Vercel) : réplicas de lecture, cache, agrégation des prix en file de jobs asynchrone. Rien à réécrire.</p></div>
+      <div class="card"><h3>🧩 Technique</h3><p>Pile managée (Supabase, Vercel) : réplicas de lecture, cache, scraping des prix en file de jobs asynchrone. Rien à réécrire.</p></div>
       <div class="card"><h3>📦 Opérations</h3><p>Réseau d'<b style="color:#fff">assembleurs partenaires</b> régionaux et sourcing semi-automatisé, plutôt qu'un montage centralisé.</p></div>
       <div class="card"><h3>👥 Équipe</h3><p>De 1 à ~10-15 personnes : pôles Tech, Produit, Marketing, Ops. Recrutement d'un CTO en priorité.</p></div>
-      <div class="card hl"><h3>💶 Marché</h3><p>Expansion Europe (plateforme i18n-ready), segment Pro/B2B, abonnement. Levée d'amorçage pour financer la montée.</p></div>
+      <div class="card hl"><h3>💶 Marché</h3><p>Expansion Europe (plateforme i18n-ready), segment Pro/B2B, abonnement. Amorçage pour financer la montée.</p></div>
     </div>
-    <div class="sub" style="margin-top:18px;color:var(--text-3)">Modèle <b style="color:var(--text-2)">asset-light</b> : pas de stock à multiplier — le passage à l'échelle est surtout <b style="color:var(--text-2)">organisationnel</b>, pas technique.</div>
+    <div class="take">Modèle <b>asset-light</b> : pas de stock à multiplier — le passage à l'échelle est surtout <b>organisationnel</b>, pas technique.</div>
   </section>
 
-  <!-- 16 — ÉQUIPE -->
+  <!-- 17 — ÉQUIPE CIBLE & RECRUTEMENT -->
   <section class="slide">
-    <div class="eyebrow"><span class="dot"></span> L'équipe</div>
+    <div class="eyebrow"><span class="dot"></span> Passage à l'échelle · Équipe</div>
     <h1 class="title">Une exécution prouvée,<br>une équipe à <span class="grad">staffer</span>.</h1>
-    <div class="cols c2" style="align-items:start;margin-top:6px">
-      <div class="card hl">
-        <h3>👤 Quentin Geoffroy — Fondateur</h3>
-        <p>Produit, stratégie et développement. A conçu et mis en production le MVP <b style="color:#fff">en solo</b> : configurateur, moteur de compatibilité, intégration des prix et des benchmarks. La preuve qu'on sait exécuter.</p>
-      </div>
-      <div>
-        <div class="sub" style="margin-top:0">Avec l'amorçage, les premiers renforts :</div>
-        <ul class="bul">
-          <li><b>Développeur full-stack</b> <span>— accélérer la V1 et l'IA.</span></li>
-          <li><b>Responsable marketing</b> <span>— acquisition, SEO, partenariats créateurs.</span></li>
-          <li><b>Support & expert hardware</b> <span>— curation des données, conseil, SAV.</span></li>
-        </ul>
-      </div>
+    <div class="card hl" style="margin-bottom:16px">
+      <h3>👤 Quentin Geoffroy — Fondateur</h3>
+      <p>MVP conçu et mis en production <b style="color:#fff">en solo</b> : configurateur, moteur de compatibilité, intégration prix &amp; benchmarks. La preuve qu'on sait exécuter.</p>
     </div>
+    <table>
+      <tr><th>Rôle (priorité)</th><th>Mission</th><th>Arrivée</th><th>Statut</th><th>Séniorité</th></tr>
+      <tr><td style="color:var(--ind-l);font-weight:700">CTO / Lead Dev</td><td>Architecture, recrutement tech</td><td>M+1</td><td>Salarié (equity)</td><td>Senior</td></tr>
+      <tr><td>Expert hardware</td><td>Données composants, règles compat</td><td>M+2</td><td>Freelance</td><td>Senior</td></tr>
+      <tr><td>Dev full-stack</td><td>V1, IA de reco</td><td>M+3</td><td>Salarié</td><td>Confirmé</td></tr>
+      <tr><td>Growth / Marketing</td><td>Acquisition SEO, créateurs</td><td>M+4</td><td>Salarié</td><td>Confirmé</td></tr>
+      <tr><td>Support client</td><td>Onboarding, SAV</td><td>M+6</td><td>Salarié</td><td>Junior</td></tr>
+    </table>
+    <div class="take">♿ <b>Inclusion :</b> postes ouverts aux personnes en situation de handicap — télétravail, matériel adapté, horaires aménagés.</div>
   </section>
 
-  <!-- BESOIN DE FINANCEMENT -->
+  <!-- 18 — PILOTAGE & LIVRAISON -->
+  <section class="slide">
+    <div class="eyebrow"><span class="dot"></span> Passage à l'échelle · Pilotage</div>
+    <h1 class="title">Piloter, livrer, mesurer.</h1>
+    <div class="cols c3" style="margin-top:6px">
+      <div class="card">
+        <h3>🤝 Parties prenantes</h3>
+        <p><b style="color:#fff">Clients</b> — support &amp; suivi, continu.<br><b style="color:#fff">Assembleurs</b> — SLA qualité, hebdo.<br><b style="color:#fff">Investisseurs</b> — reporting mensuel.</p>
+      </div>
+      <div class="card hl">
+        <h3>✅ Definition of Done</h3>
+        <p>Revue de code + CI verte · tests passants · responsive &amp; accessibilité OK · déployé en prod · documenté.</p>
+      </div>
+      <div class="card">
+        <h3>🚀 Go-to-market</h3>
+        <p>Canal : <b style="color:#fff">SEO + créateurs</b>.<br>KPI J+1 : visiteurs, configs créées, taux de devis.<br>Rollback : revert Vercel en 1 clic.</p>
+      </div>
+    </div>
+    <div class="take">Chaque livraison est <b>mesurée</b> — et <b>réversible</b>.</div>
+  </section>
+
+  <!-- 19 — BESOIN DE FINANCEMENT -->
   <section class="slide">
     <div class="eyebrow"><span class="dot"></span> Besoin de financement</div>
     <h1 class="title">35 000 € pour <span class="grad">enclencher</span> la V1.</h1>
@@ -428,25 +454,25 @@
         <tr><th>Poste</th><th>Montant</th><th>Pourquoi</th></tr>
         <tr><td>Développement</td><td class="num">15 K€</td><td>V1 (paiement, suivi), fiabilisation</td></tr>
         <tr><td>Marketing</td><td class="num">10 K€</td><td>Notoriété : SEO/GEO, créateurs</td></tr>
-        <tr><td>Infrastructure</td><td class="num">3 K€</td><td>Hébergement, BDD, API prix (12 mois)</td></tr>
+        <tr><td>Infrastructure</td><td class="num">3 K€</td><td>Hébergement, BDD, scraping (12 mois)</td></tr>
         <tr><td>Juridique</td><td class="num">2 K€</td><td>Statuts, CGV, RGPD</td></tr>
         <tr><td>Trésorerie</td><td class="num">5 K€</td><td>Imprévus, décalage de trésorerie</td></tr>
       </table>
       <div>
-        <div class="card hl"><h3>≈ 70 % vers la traction</h3><p>Développement et marketing concentrent l'essentiel de l'enveloppe : c'est là que se débloquent la monétisation et les premiers clients.</p></div>
+        <div class="card hl"><h3>≈ 70 % vers la traction</h3><p>Développement et marketing concentrent l'essentiel : c'est là que se débloquent la monétisation et les premiers clients.</p></div>
         <ul class="bul" style="margin-top:18px">
-          <li><b>Sources envisagées</b> <span>— apport personnel, love money, prêt d'honneur (Réseau Entreprendre), BPI France, concours startups.</span></li>
+          <li><b>Financement</b> <span>— apport perso, love money, prêt d'honneur (Réseau Entreprendre / Initiative France), BPI France, concours startups.</span></li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- 17 — VISION / ASK -->
+  <!-- 20 — VISION / ASK -->
   <section class="slide cover">
     <div class="eyebrow"><span class="dot"></span> En résumé</div>
-    <h1 class="title" style="font-size:54px">Le PC parfait pour chacun —<br><span class="grad">sans stress, sans erreur, au juste prix.</span></h1>
+    <h1 class="title" style="font-size:52px">Le PC parfait pour chacun —<br><span class="grad">sans stress, sans erreur, au juste prix.</span></h1>
     <div class="cols c3" style="margin-top:30px">
-      <div class="card"><h3>✅ Produit réel</h3><p>MVP en production, fondations techniques solides.</p></div>
+      <div class="card"><h3>✅ Produit réel</h3><p>MVP en production, fondations techniques solides, 79 tests.</p></div>
       <div class="card"><h3>🎯 Niche claire</h3><p>Sur-mesure simplifié, là où les géants n'adressent pas.</p></div>
       <div class="card hl"><h3>🚀 Ce qu'on recherche</h3><p>Amorçage <b style="color:#fff">35 K€</b> → V1 commerciale + premiers clients.</p></div>
     </div>
@@ -463,12 +489,20 @@
 
 <script>
   const slides = [...document.querySelectorAll('.slide')];
+  const N = slides.length;
+  // pied de page : marque + pagination, injecté pour rester cohérent à l'écran et au PDF
+  slides.forEach((s, k) => {
+    const f = document.createElement('div');
+    f.className = 'foot';
+    f.innerHTML = '<span>PC Aeris — Soutenance PFE M2</span><span class="pageno">' + (k + 1) + ' / ' + N + '</span>';
+    s.appendChild(f);
+  });
   let i = 0;
   const progress = document.getElementById('progress');
   function show(n) {
-    i = Math.max(0, Math.min(slides.length - 1, n));
+    i = Math.max(0, Math.min(N - 1, n));
     slides.forEach((s, k) => s.classList.toggle('active', k === i));
-    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    progress.style.width = ((i + 1) / N * 100) + '%';
     location.hash = i + 1;
   }
   function fs() {
@@ -479,7 +513,7 @@
     if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); show(i + 1); }
     else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
     else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'End') show(N - 1);
     else if (e.key.toLowerCase() === 'f') fs();
   });
   document.addEventListener('click', (e) => { if (!e.target.closest('a')) show(i + 1); });
