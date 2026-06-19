@@ -154,9 +154,9 @@ Le message : on n'est plus au stade de l'idée, on est au stade de l'exécution.
 
 ## 15 — Passage à l'échelle · Méthode
 
-Si le projet décolle, comment je l'organise ? Côté méthode, du Scrum hybride : des sprints de deux semaines, les cérémonies classiques — planning, point quotidien, revue, rétrospective — et des outils simples : GitHub Projects pour le suivi, Notion pour la doc, Figma pour le design. Une cadence courte, pour avoir du feedback vite et réajuster le cap à chaque sprint.
+Si le projet décolle, comment est-ce que je l'organise ? Côté méthode, je travaille en agile, et plus précisément en Scrum. Concrètement, ça veut dire que j'avance par cycles courts de deux semaines : à la fin de chaque cycle, je livre quelque chose de concret et je fais le point sur ce qui a marché ou pas. C'est ce qui permet d'avancer vite et de corriger le cap en continu, au lieu de tout planifier des mois à l'avance. Pour ça, je m'appuie sur des outils simples : un tableau pour suivre les tâches, un espace pour documenter, et un outil pour dessiner les maquettes.
 
-Et une décision structurante, le build versus buy : ce qui fait notre différence — le configurateur, le moteur de compatibilité, le relevé de prix — on le construit en interne ; tout le reste, on l'achète : l'authentification, la base et l'hébergement chez Supabase et Vercel, le paiement chez Stripe, les emails chez Resend. On concentre l'effort interne là où se crée la valeur.
+Et il y a une décision que j'ai déjà tranchée, qu'on appelle le « faire ou acheter ». Ma règle est simple : ce qui fait notre différence — le configurateur, la compatibilité, le relevé des prix — je le développe moi-même, parce que c'est là qu'est notre valeur. Tout le reste — créer les comptes, héberger le site, encaisser les paiements, envoyer les e-mails — je m'appuie sur des services déjà éprouvés du marché. Ça me fait gagner un temps précieux, que je réinvestis là où ça compte vraiment.
 
 ---
 
@@ -182,11 +182,13 @@ Et un point que je tiens à porter : l'inclusion. Les postes seront ouverts aux 
 
 ## 18 — Passage à l'échelle · Pilotage
 
-Côté pilotage, trois choses. Les parties prenantes d'abord : les clients, suivis en continu via le support et le suivi de commande ; les assembleurs partenaires, avec un engagement qualité revu chaque semaine ; les investisseurs, en reporting mensuel.
+Pour piloter le projet à plusieurs, je m'appuie sur trois choses.
 
-Ensuite, une definition of done claire : une fonctionnalité n'est livrée que si la revue de code est faite, l'intégration continue verte, les tests passants, le responsive et l'accessibilité vérifiés, le tout déployé en production et documenté.
+La première, c'est la relation avec les acteurs autour du projet. Avec les clients, je garde un contact permanent grâce au support et au suivi de commande. Avec les partenaires qui assemblent les PC, on fait un point qualité chaque semaine, pour être sûrs que les machines livrées sont irréprochables. Et avec les investisseurs, je fais un point d'avancement une fois par mois.
 
-Enfin, le lancement : canal principal le SEO et les créateurs ; trois indicateurs suivis dès le premier jour — visiteurs, configurations créées, taux de passage au devis ; et un plan de repli — si une mise en production échoue, on revient à la version précédente sur Vercel en un clic. Chaque livraison est mesurée, et réversible.
+La deuxième, c'est une règle claire pour décider qu'une fonctionnalité est vraiment terminée — ce qu'on appelle en gestion de projet une « definition of done ». Chez nous, une fonctionnalité n'est considérée comme livrée que si elle a été relue par quelqu'un d'autre, testée, vérifiée sur mobile et pour l'accessibilité, puis mise en ligne et documentée. Tant que tout ça n'est pas fait, ce n'est pas terminé.
+
+Et la troisième, c'est la façon dont on lance et dont on mesure. Pour se faire connaître, on mise d'abord sur le référencement sur Google et sur les créateurs de contenu. Dès le premier jour, je suis trois chiffres simples : combien de visiteurs, combien de configurations créées, et combien aboutissent à un devis. Et si une mise en ligne se passe mal, on peut revenir à la version précédente en un seul clic. Autrement dit : tout ce qu'on livre, on le mesure — et on peut toujours faire machine arrière.
 
 ---
 
