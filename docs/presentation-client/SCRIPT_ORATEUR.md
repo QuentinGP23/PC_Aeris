@@ -196,9 +196,11 @@ Et la troisième, c'est la façon dont on lance et dont on mesure. Pour se faire
 
 ## 19 — Besoin de financement
 
-Ce qu'on recherche : un amorçage de 35 000 euros, calibré pour 6 à 12 mois, concentré là où se joue la traction.
+Ce qu'on recherche : un amorçage de 35 000 euros, calibré pour 6 à 12 mois. Et la priorité, c'est un fonds de roulement solide.
 
-Le détail : 15 000 pour le développement — livrer la V1, le paiement, le suivi, fiabiliser ; 10 000 pour le marketing de lancement — référencement, créateurs ; puis 3 000 d'infrastructure, 2 000 de juridique, 5 000 de trésorerie. Près de 70 % de l'enveloppe va directement à la traction.
+Le poste le plus important, c'est justement ces 13 000 euros de fonds de roulement. Pourquoi autant ? Parce que le hardware est un marché qui bouge très vite et très fort : le prix d'un composant peut varier de plusieurs dizaines d'euros en quelques jours. Cette réserve me permet d'avancer les composants des premières commandes, et d'absorber ces variations sans jamais me mettre en danger — c'est ma vraie marge d'erreur.
+
+Ensuite, 12 000 euros pour le développement — livrer la V1, le paiement, le suivi, fiabiliser. 5 000 pour le marketing de lancement — référencement et créateurs ; volontairement modeste, parce qu'on mise sur des canaux peu coûteux. Et enfin 3 000 d'infrastructure et 2 000 de juridique.
 
 Les sources sont réalistes pour ce stade : apport personnel, love money, prêt d'honneur via Réseau Entreprendre ou Initiative France, BPI France, concours de startups.
 
@@ -259,7 +261,7 @@ On ne les affronte ni sur le prix ni sur la largeur de catalogue. On se différe
 J'ai déjà construit et mis en production le produit entier, seul. C'est la preuve de la capacité d'exécution. Les recrutements sont prévus dès l'amorçage, le CTO en priorité.
 
 **35 000 euros, pour quoi faire exactement ?**
-Développement 15 K€, marketing 10 K€, infrastructure 3 K€, juridique 2 K€, trésorerie 5 K€. Sources : apport personnel, love money, prêt d'honneur, BPI France.
+Fonds de roulement 13 K€ (avancer les premiers composants + marge d'erreur sur un marché volatil), développement 12 K€, marketing 5 K€, infrastructure 3 K€, juridique 2 K€. Sources : apport personnel, love money, prêt d'honneur, BPI France.
 
 ---
 
