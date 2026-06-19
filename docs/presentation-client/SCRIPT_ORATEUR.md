@@ -128,7 +128,7 @@ Une commande type. Panier moyen 1 200 euros : environ 1 080 de composants, factu
 
 En face, des coûts fixes mensuels — infra, outils, marketing — autour de 1 500 euros. Soit un seuil de rentabilité autour de 17 commandes par mois.
 
-La première année, on assume une montée en charge : on démarre sous le seuil — c'est sain pour une marque qui part de zéro — et on atteint l'équilibre courant année 2. Pas de stock, pas d'invendus, pas de besoin en fonds de roulement : le risque est structurellement faible.
+La première année, on assume une montée en charge : on démarre sous le seuil — c'est sain pour une marque qui part de zéro — et on atteint l'équilibre courant année 2. Et comme on ne tient pas de stock, pas d'invendus : notre besoin en fonds de roulement reste bien plus faible que chez un revendeur classique — le risque est donc structurellement limité. On en garde quand même une réserve de sécurité, j'y reviens à la fin, parce que le marché des composants est très changeant.
 
 ---
 
