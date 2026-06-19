@@ -86,13 +86,13 @@ Point essentiel : ce n'est pas une maquette ni un prototype, c'est un produit qu
 
 ---
 
-## 8 — Sous le capot
+## 8 — Confiance & qualité
 
-Un mot sur ce qu'il y a sous le capot, parce que ça compte. Ce ne sont pas des promesses, ce sont de vraies fondations.
+Un mot sur les coulisses — mais côté garanties, pas côté technique, parce que ce qui compte, c'est ce que ça vous apporte.
 
-Architecture : React et TypeScript, un code typé et organisé en composants, l'état géré avec Zustand. Back et données : Supabase — une base Postgres, l'authentification, et la sécurité au niveau des lignes avec les Row-Level Security policies. Qualité : tout passe par Git avec des revues, et une intégration continue qui lance le lint, le build et 79 tests automatisés à chaque modification, avec déploiement continu sur Vercel.
+D'abord, la sécurité : chaque compte est cloisonné, on ne voit que ses propres données, et la conformité RGPD est pensée dès le départ. Ensuite, l'accessibilité : la plateforme respecte les normes WCAG et RGAA — contrastes, navigation — ce qui la rend utilisable par tous, y compris les personnes en situation de handicap. C'est à la fois une exigence légale et un marché élargi. Troisième garantie, la fiabilité : chaque évolution est testée automatiquement avant d'être mise en ligne, donc ce qui marche aujourd'hui marche encore demain. Et enfin, c'est une plateforme qui s'améliore en continu : on livre des nouveautés sans jamais couper le service.
 
-Et l'expérience : un design system maison, des contrastes conformes WCAG et RGAA niveau AA, une interface responsive. Bref : du code propre, testé, accessible et versionné.
+Sous le capot, ce sont des standards modernes et éprouvés — mais l'essentiel, c'est cette promesse : sécurisé, accessible, fiable.
 
 ---
 
