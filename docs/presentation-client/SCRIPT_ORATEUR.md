@@ -55,7 +55,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 4 — Trois parcours *(~1 min 05)*
+## Slide 4 — Un parcours pour chaque profil *(~1 min 05)*
 
 **À l'écran :** titre *« Trois façons d'arriver au bon PC. »* · 3 cartes : 🌱 Débutants · 🧠 Connaisseurs (mise en avant) · ⚡ Pressés · encart *« le bon PC, pour la bonne personne »*.
 
@@ -71,7 +71,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 5 — Moteur de valeur : les benchmarks *(~1 min 15) — DIFFÉRENCIATEUR*
+## Slide 5 — Notre moteur de valeur *(~1 min 15) — DIFFÉRENCIATEUR*
 
 **À l'écran :** titre *« On ne compare pas des specs. On mesure la performance. »* · 3 points (score perf · croisé au prix · reco de valeur) · tableau **données réelles AM5** : Ryzen 5 7500F / 7700X / 9800X3D avec perf, prix et €/1k pts.
 
@@ -87,7 +87,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 6 — La transparence des prix *(~1 min 15) — DIFFÉRENCIATEUR + JUSTIFICATION*
+## Slide 6 — Notre différenciation *(~1 min 15) — DIFFÉRENCIATEUR + JUSTIFICATION*
 
 **À l'écran :** titre *« La transparence des prix, façon StockX. »* · 3 étapes (1 · neuf scrapé LDLC+Alternate · 2 · occasion estimée par décote · 3 · fourchette & devis) · carte **donnée réelle Ryzen 7 7700X** : 275 / 282 / 290 € · encart *« défendable… aucun concurrent francophone »*.
 
@@ -105,7 +105,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 7 — Le produit & DÉMO *(~30 s d'intro + 5 min de démo)*
+## Slide 7 — Le produit, aujourd'hui *(~30 s d'intro + 5 min de démo)*
 
 **À l'écran :** titre *« Pas une maquette — un produit qui tourne. »* · liste de fonctionnalités livrées (chips ✓) · 4 chiffres : **25k** composants · **79** tests · **8** catégories · **live**.
 
@@ -133,7 +133,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 8 — Sous le capot : technique & qualité *(~50 s) — TECHNIQUE*
+## Slide 8 — Sous le capot *(~50 s) — TECHNIQUE*
 
 **À l'écran :** titre *« Des fondations solides, pas un prototype jetable. »* · 4 cartes : 🏗️ Architecture & code · 🗄️ Back & données (RLS) · 🔁 Qualité & CI/CD (79 tests) · ♿ UI/UX & accessibilité (WCAG/RGAA AA) · bandeau de stack (React 19, TypeScript, Supabase, Postgres+RLS, Vercel, Vitest…).
 
@@ -173,7 +173,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 11 — Business model *(~1 min)*
+## Slide 11 — Modèle économique *(~1 min)*
 
 **À l'écran :** titre *« On gagne sur le montage, pas sur les composants. »* · 3 offres : **Essentiel 79 €** · **Confort 129 €** (mise en avant) · **Premium 199 €** · encart *« prix total = composants au meilleur prix + montage »*.
 
@@ -187,7 +187,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 12 — Économie unitaire & rentabilité *(~1 min 10) — RENTABILITÉ*
+## Slide 12 — Rentabilité *(~1 min 10) — RENTABILITÉ*
 
 **À l'écran :** titre *« Rentable dès la petite échelle. »* · carte 💶 **Par commande** (panier ~1 200 €, composants ~1 080 €, revenu montage ~120 €, marge de contribution ~90 €) · carte 📈 **Seuil** (coûts fixes ~1 500 €/mois, **~17 commandes/mois**).
 
@@ -241,7 +241,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 16 — Passage à l'échelle · Capacité (×100) *(~50 s) — BLOC 3*
+## Slide 16 — Passage à l'échelle · Capacité *(~50 s) — BLOC 3*
 
 **À l'écran :** titre *« Conçu pour passer à l'échelle ×100. »* · 4 cartes : 🧩 Technique · 📦 Opérations · 👥 Équipe · 💶 Marché · encart *« asset-light : passage à l'échelle surtout organisationnel »*.
 
@@ -255,7 +255,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 17 — Passage à l'échelle · Équipe & recrutement *(~1 min) — BLOC 3 / CRÉDIBILITÉ*
+## Slide 17 — Passage à l'échelle · Équipe *(~1 min) — BLOC 3 / CRÉDIBILITÉ*
 
 **À l'écran :** titre *« Une exécution prouvée, une équipe à staffer. »* · carte fondateur (MVP en solo) · tableau de recrutement (CTO/Lead Dev, Expert hardware, Dev full-stack, Growth/Marketing, Support — avec mission, mois d'arrivée, statut, séniorité) · encart ♿ **Inclusion**.
 
@@ -269,7 +269,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 18 — Passage à l'échelle · Pilotage & livraison *(~50 s) — BLOC 3*
+## Slide 18 — Passage à l'échelle · Pilotage *(~50 s) — BLOC 3*
 
 **À l'écran :** titre *« Piloter, livrer, mesurer. »* · 3 cartes : 🤝 **Parties prenantes** (clients, assembleurs, investisseurs) · ✅ **Definition of Done** · 🚀 **Go-to-market** (canal, KPI J+1, rollback) · encart *« mesurée et réversible »*.
 
@@ -297,7 +297,7 @@ Pour chaque slide : **« À l'écran »** = ce qui est affiché (pour te repére
 
 ---
 
-## Slide 20 — Vision & ask (En résumé) *(~45 s)*
+## Slide 20 — En résumé *(~45 s)*
 
 **À l'écran :** titre *« Le PC parfait pour chacun — sans stress, sans erreur, au juste prix. »* · 3 cartes : ✅ Produit réel · 🎯 Niche claire · 🚀 Ce qu'on recherche (35 K€) · contacts (site + e-mail).
 
