@@ -164,7 +164,7 @@ Et une décision structurante, le build versus buy : ce qui fait notre différen
 
 Passer de quelques commandes par mois à plusieurs milliers, qu'est-ce que ça change ?
 
-Techniquement, presque rien à réécrire : la pile est managée, on active des réplicas de lecture, du cache, et on passe le scraping des prix en file de jobs asynchrone. Côté opérations, on ne centralise pas le montage : on s'appuie sur un réseau d'assembleurs partenaires régionaux et un sourcing semi-automatisé. Côté équipe, on passe de une à une dizaine de personnes en pôles. Côté marché, la plateforme est déjà pensée pour l'international, ce qui ouvre l'Europe et un segment Pro.
+Techniquement, presque rien à réécrire : l'infrastructure qu'on utilise grandit à la demande — on ajoute de la puissance quand le trafic monte, et les relevés de prix tournent en arrière-plan, sans jamais ralentir le site pour l'utilisateur. Côté opérations, on ne centralise pas le montage : on s'appuie sur un réseau d'assembleurs partenaires régionaux et un sourcing semi-automatisé. Côté équipe, on passe de une à une dizaine de personnes en pôles. Côté marché, la plateforme est déjà pensée pour l'international, ce qui ouvre l'Europe et un segment Pro.
 
 Le point clé : comme le modèle est asset-light, sans stock à multiplier, le passage à l'échelle est avant tout organisationnel, pas technique. Un risque qu'on sait piloter.
 
@@ -224,7 +224,7 @@ Oui : les scores PassMark sont intégrés sur 733 processeurs et 982 cartes grap
 Le neuf : des relevés réels par scraping chez LDLC et Alternate.fr, affichés en fourchette. L'occasion : estimée par décote, clairement labellisée — ce n'est pas un relevé. La couverture du catalogue est partielle et s'élargit par lots, parce que le scraping est volontairement lent et poli. Les API officielles (Amazon, eBay) sont payantes ou exigent une validation de compte, d'où le scraping multi-sources avec garde-fous.
 
 **Pourquoi React, Supabase ?**
-Une stack moderne, typée et managée : elle me permet de livrer vite et seul, et de monter en charge sans tout réécrire. La sécurité est gérée par les RLS côté base.
+Des technologies modernes, fiables et peu coûteuses à faire tourner : elles me permettent de livrer vite, seul, et de grandir sans tout reconstruire. Et la sécurité est placée au plus près des données — concrètement, chaque utilisateur est techniquement isolé des autres, personne ne peut voir les données d'un autre.
 
 **Bloc 3 — organisation & management**
 
