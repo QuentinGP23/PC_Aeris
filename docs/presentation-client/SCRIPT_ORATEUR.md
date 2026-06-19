@@ -172,11 +172,13 @@ Le point clé : comme le modèle est asset-light, sans stock à multiplier, le p
 
 ## 17 — Passage à l'échelle · Équipe
 
-Aujourd'hui, l'équipe, c'est moi. Tout ce que vous avez vu, je l'ai conçu et construit en solo — la meilleure preuve qu'on sait exécuter avec peu de moyens.
+Aujourd'hui, l'équipe, c'est moi. Tout ce que vous avez vu, je l'ai conçu et construit seul — c'est la meilleure preuve qu'on sait exécuter avec peu de moyens.
 
-Pour passer à l'échelle, j'ai déjà cadré qui je recrute, quand, et sous quel statut. Priorité numéro un : un CTO ou Lead Dev, dès le premier mois, salarié avec de l'equity, pour prendre le relais technique et recruter les devs. Puis un expert hardware en freelance, un développeur full-stack pour la V1 et l'IA, un profil growth marketing, et un support client. Cinq profils, échelonnés sur six mois.
+Pour grandir, je veux rester lean le plus longtemps possible. Donc au démarrage, je m'appuie surtout sur des prestataires et des freelances : un développeur pour accélérer, un expert hardware pour les données composants, un designer quand il en faut. L'avantage, c'est que c'est un coût variable — je paie seulement quand j'en ai besoin — et ça reste flexible, sans charge fixe prématurée.
 
-Et un point que je tiens à porter : l'inclusion. Les postes seront ouverts aux personnes en situation de handicap, avec des aménagements concrets — télétravail, matériel adapté, horaires souples.
+Embaucher des salariés, ce sera l'étape d'après : ce n'est ni forcément possible, ni même utile, au tout début. On internalise seulement quand l'activité le justifie, et sur les rôles récurrents et critiques — à commencer par un Lead Dev, ou CTO, pour prendre le relais technique, puis le marketing et le support.
+
+Et un point qui me tient à cœur : l'inclusion. Les postes, prestataires comme salariés, seront ouverts aux personnes en situation de handicap, avec des aménagements concrets — télétravail, matériel adapté, horaires souples.
 
 ---
 
