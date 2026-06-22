@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Hourglass, EnvelopeSimpleOpen, XCircle, FileArrowDown } from '@phosphor-icons/react'
+import { Hourglass, EnvelopeSimpleOpen, XCircle, FileArrowDown, CreditCard } from '@phosphor-icons/react'
 import { ordersService, type OrderSummary } from '../../services'
 import { useAuth } from '../../context/useAuth'
 import { useToast } from '../../store'
@@ -13,9 +13,9 @@ const eur = (n: number) => `${Math.round(n).toLocaleString('fr-FR')} €`
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
 const catLabel = (c: CategoryKey) => CATEGORIES.find((x) => x.value === c)?.label ?? c
 
-// Suivi de production (après acceptation du devis).
+// Suivi de production (après paiement).
 const TRACK: { value: string; label: string }[] = [
-  { value: 'accepted', label: 'Devis accepté' },
+  { value: 'paid', label: 'Payée' },
   { value: 'assembling', label: 'En assemblage' },
   { value: 'shipped', label: 'Expédiée' },
   { value: 'delivered', label: 'Livrée' },
@@ -40,13 +40,32 @@ function Orders() {
     return () => { cancelled = true }
   }, [isAuthenticated, toast])
 
+  // Retour depuis Stripe Checkout (le statut réel est posé par le webhook).
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('paid') === '1') {
+      toast.success('Paiement reçu ✅ Votre commande passe en préparation.')
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [toast])
+
   const respond = async (o: OrderSummary, accept: boolean) => {
     setBusy(o.id)
     const { error } = await ordersService.respondQuote(o.id, accept)
     setBusy(null)
     if (error) return toast.error(error)
     setOrders((prev) => (prev ?? []).map((x) => (x.id === o.id ? { ...x, status: accept ? 'accepted' : 'refused' } : x)))
-    toast.success(accept ? 'Devis accepté ! Nous lançons votre commande.' : 'Devis refusé.')
+    toast.success(accept ? 'Devis accepté ! Il ne reste plus qu\'à régler.' : 'Devis refusé.')
+  }
+
+  const pay = async (o: OrderSummary) => {
+    setBusy(o.id)
+    const base = window.location.origin + window.location.pathname
+    const { url, error } = await ordersService.createCheckoutSession(o.id, base)
+    if (error || !url) {
+      setBusy(null)
+      return toast.error(error ?? 'Le paiement est indisponible pour le moment.')
+    }
+    window.location.assign(url)
   }
 
   if (!isAuthenticated) {
@@ -118,6 +137,22 @@ function Orders() {
 
                 {o.status === 'refused' && (
                   <div className="oc__banner oc__banner--err"><span className="oc__banner-ico"><XCircle weight="fill" /></span><div>Vous avez refusé ce devis. Contactez-nous si vous changez d'avis ou configurez un nouveau PC.</div></div>
+                )}
+
+                {o.status === 'accepted' && (
+                  <div className="oc__quote">
+                    <div className="oc__quote-hd">
+                      <span className="oc__quote-ico"><CreditCard weight="duotone" /></span>
+                      <div>
+                        <b>Devis accepté — il ne reste qu'à régler</b>
+                        <p>Réglez en ligne en toute sécurité pour lancer l'assemblage de votre PC.</p>
+                      </div>
+                      <div className="oc__quote-total">{eur(displayTotal)}</div>
+                    </div>
+                    <div className="oc__quote-act">
+                      <button className="oc-btn oc-btn--ind" disabled={busy === o.id} onClick={() => void pay(o)}>{busy === o.id ? '…' : `Payer ${eur(displayTotal)}`}</button>
+                    </div>
+                  </div>
                 )}
 
                 {showTrack && (

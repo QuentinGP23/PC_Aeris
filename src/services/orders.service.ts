@@ -69,6 +69,18 @@ export const ordersService = {
     return { error: error?.message ?? null }
   },
 
+  /**
+   * Client : crée une session Stripe Checkout pour régler une commande acceptée.
+   * Renvoie l'URL hébergée par Stripe vers laquelle rediriger. Le passage au statut
+   * « payée » est ensuite assuré par le webhook Stripe, pas par la redirection.
+   */
+  async createCheckoutSession(orderId: string, returnUrl: string): Promise<{ url: string | null; error: string | null }> {
+    const { data, error } = await supabase.functions.invoke('create-checkout-session', { body: { orderId, returnUrl } })
+    if (error) return { url: null, error: error.message }
+    const url = (data as { url?: string } | null)?.url ?? null
+    return { url, error: url ? null : 'Paiement indisponible.' }
+  },
+
   /** Admin : enregistre le devis final (vendeur + prix par composant) et l'envoie. */
   async finalize(orderId: string, finalItems: CartItem[], finalTotal: number): Promise<{ error: string | null }> {
     const { error } = await supabase.rpc('admin_finalize_order', {
