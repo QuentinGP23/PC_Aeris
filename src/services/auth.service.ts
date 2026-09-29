@@ -33,6 +33,13 @@ const isEmail = (identifier: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
 }
 
+// Le rôle est lu dans app_metadata et non dans user_metadata : ce dernier est
+// modifiable par l'utilisateur lui-même via auth.updateUser({ data: … }), donc
+// inutilisable pour une autorisation. L'affichage ci-dessous reste indicatif —
+// l'autorisation réelle est appliquée en base par public.is_admin().
+const roleOf = (appMetadata: Record<string, unknown> | undefined): User['role'] =>
+  appMetadata?.role === 'admin' ? 'admin' : 'user'
+
 export const authService = {
   // Sign up with email and password
   async signUp(data: SignUpData): Promise<{ user: User | null; error: string | null }> {
@@ -115,7 +122,7 @@ export const authService = {
       firstName: metadata?.first_name,
       lastName: metadata?.last_name,
       phone: metadata?.phone_number,
-      role: metadata?.role || 'user',
+      role: roleOf(authData.user.app_metadata),
       createdAt: authData.user.created_at,
       updatedAt: authData.user.updated_at || authData.user.created_at,
     }
@@ -153,7 +160,7 @@ export const authService = {
       firstName: metadata?.first_name,
       lastName: metadata?.last_name,
       phone: metadata?.phone_number,
-      role: metadata?.role || 'user',
+      role: roleOf(supaUser.app_metadata),
       createdAt: supaUser.created_at,
       updatedAt: supaUser.updated_at || supaUser.created_at,
     }
@@ -202,7 +209,7 @@ export const authService = {
           firstName: metadata?.first_name,
           lastName: metadata?.last_name,
           phone: metadata?.phone_number,
-          role: metadata?.role || 'user',
+          role: roleOf(session.user.app_metadata),
           createdAt: session.user.created_at,
           updatedAt: session.user.updated_at || session.user.created_at,
         }
