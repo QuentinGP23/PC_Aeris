@@ -32,7 +32,7 @@ loadEnv()
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
 const args = process.argv.slice(2).reduce((acc, a) => {

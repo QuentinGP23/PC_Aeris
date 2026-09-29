@@ -9,7 +9,7 @@
  *
  * Variables d'environnement (.env) :
  *   VITE_SUPABASE_URL
- *   VITE_SUPABASE_SERVICE_ROLE_KEY
+ *   SUPABASE_SERVICE_ROLE_KEY
  *   EBAY_CLIENT_ID           (developer.ebay.com → App ID)
  *   EBAY_CLIENT_SECRET       (developer.ebay.com → Cert ID)
  * ────────────────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ function loadEnv() {
 loadEnv()
 
 const SUPABASE_URL       = process.env.VITE_SUPABASE_URL
-const SUPABASE_KEY       = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+const SUPABASE_KEY       = process.env.SUPABASE_SERVICE_ROLE_KEY
 const EBAY_CLIENT_ID     = process.env.EBAY_CLIENT_ID
 const EBAY_CLIENT_SECRET = process.env.EBAY_CLIENT_SECRET
 
