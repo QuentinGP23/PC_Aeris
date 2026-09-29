@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.6.0...v2.6.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* **profile:** corriger les contrastes (charte sombre) ([295eaac](https://github.com/QuentinGP23/PC_Aeris/commit/295eaac571037ca011f5a6c3e30063a8d878c3f5))
+* **profile:** corriger les contrastes (charte sombre) ([9fdb337](https://github.com/QuentinGP23/PC_Aeris/commit/9fdb3371c44dabcf53e5ac7b60914179e7a89f9d))
+
 ## [2.6.0](https://github.com/QuentinGP23/PC_Aeris/compare/v2.5.0...v2.6.0) (2026-06-18)
 
 
