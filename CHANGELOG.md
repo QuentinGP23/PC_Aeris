@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.6.2](https://github.com/QuentinGP23/PC_Aeris/compare/v2.6.1...v2.6.2) (2026-09-29)
+
+
+### Bug Fixes
+
+* **scripts:** sécurise le nommage de la clé service_role ([468f833](https://github.com/QuentinGP23/PC_Aeris/commit/468f833148d4a9369255b83623f955c1a9c0c0b1))
+* **security:** corrige une elevation de privileges vers le role admin ([2bfe1c5](https://github.com/QuentinGP23/PC_Aeris/commit/2bfe1c560c128e2a822efa035959254363720072))
+* **security:** élévation de privilèges — n'importe quel utilisateur pouvait devenir admin ([4bf403e](https://github.com/QuentinGP23/PC_Aeris/commit/4bf403e29aaa6861fcd5fd9ac522c1f879b2a3ac))
+* **security:** rattrape pc_case_specs, omise de la migration precedente ([72c1d90](https://github.com/QuentinGP23/PC_Aeris/commit/72c1d9093c5fb4fbabd002ca13e893f42673f1e8))
+* **security:** rattrape pc_case_specs, oubliée dans la migration précédente ([7b3a395](https://github.com/QuentinGP23/PC_Aeris/commit/7b3a39581a59595c0a843c2296cfc02c1e6cc08b))
+
 ## [2.6.1](https://github.com/QuentinGP23/PC_Aeris/compare/v2.6.0...v2.6.1) (2026-06-18)
 
 
