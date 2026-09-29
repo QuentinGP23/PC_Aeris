@@ -8,7 +8,7 @@
  *   node scripts/reset-prices.mjs <categorie> [--dry-run]
  *   ex : node scripts/reset-prices.mjs ram
  *
- * .env requis : VITE_SUPABASE_URL, VITE_SUPABASE_SERVICE_ROLE_KEY
+ * .env requis : VITE_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  * ────────────────────────────────────────────────────────────────────────────
  */
 import { createClient } from '@supabase/supabase-js'
@@ -29,7 +29,7 @@ if (!CAT || !CATEGORIES.includes(CAT)) {
   process.exit(1)
 }
 
-const sb = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
+const sb = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
 
 const { count } = await sb.from('products').select('*', { count: 'exact', head: true }).eq('category', CAT).not('price_avg_eur', 'is', null)
 console.log(`${CAT} : ${count ?? 0} produit(s) tarifé(s)`)

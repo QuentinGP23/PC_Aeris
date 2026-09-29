@@ -18,7 +18,7 @@
  *
  * Variables d'environnement (.env) :
  *   VITE_SUPABASE_URL
- *   VITE_SUPABASE_SERVICE_ROLE_KEY
+ *   SUPABASE_SERVICE_ROLE_KEY
  *
  * ⚠️ Scraping : faible volume, User-Agent honnête, rate-limit. Pas de
  *    contournement anti-bot. Données mises en cache via price_updated_at.
@@ -46,9 +46,9 @@ function loadEnv() {
 loadEnv()
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL
-const SUPABASE_KEY = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('❌  VITE_SUPABASE_URL ou VITE_SUPABASE_SERVICE_ROLE_KEY manquant dans .env')
+  console.error('❌  VITE_SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY manquant dans .env')
   process.exit(1)
 }
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)

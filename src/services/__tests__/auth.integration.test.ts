@@ -18,7 +18,8 @@ import { authService } from '../auth.service'
 const fakeAuthUser = {
   id: 'u-1',
   email: 'jean@example.com',
-  user_metadata: { pseudo: 'jean', first_name: 'Jean', last_name: 'Dupont', role: 'user' },
+  user_metadata: { pseudo: 'jean', first_name: 'Jean', last_name: 'Dupont' },
+  app_metadata: { role: 'user' },
   created_at: '2026-01-01T00:00:00Z',
   updated_at: '2026-01-02T00:00:00Z',
 }
@@ -44,7 +45,7 @@ describe('authService.signIn — integration flows', () => {
 
   it('admin pseudo: resolves to hardcoded admin email without RPC', async () => {
     signInWithPassword.mockResolvedValue({
-      data: { user: { ...fakeAuthUser, email: 'admin@pcaeris.fr', user_metadata: { role: 'admin' } } },
+      data: { user: { ...fakeAuthUser, email: 'admin@pcaeris.fr', app_metadata: { role: 'admin' } } },
       error: null,
     })
 
@@ -54,6 +55,37 @@ describe('authService.signIn — integration flows', () => {
     expect(signInWithPassword).toHaveBeenCalledWith({ email: 'admin@pcaeris.fr', password: 'pw' })
     expect(user?.role).toBe('admin')
     expect(error).toBeNull()
+  })
+
+  // Non-régression : user_metadata est modifiable par l'utilisateur lui-même
+  // (auth.updateUser({ data: … })). Un rôle qui s'y trouve ne doit jamais
+  // accorder l'admin — seul app_metadata fait autorité.
+  it('role forgé dans user_metadata: ignoré, le compte reste "user"', async () => {
+    signInWithPassword.mockResolvedValue({
+      data: {
+        user: {
+          ...fakeAuthUser,
+          user_metadata: { ...fakeAuthUser.user_metadata, role: 'admin' },
+          app_metadata: { role: 'user' },
+        },
+      },
+      error: null,
+    })
+
+    const { user } = await authService.signIn({ identifier: 'jean@example.com', password: 'pw' })
+
+    expect(user?.role).toBe('user')
+  })
+
+  it('app_metadata absent: repli sur "user"', async () => {
+    signInWithPassword.mockResolvedValue({
+      data: { user: { ...fakeAuthUser, app_metadata: undefined } },
+      error: null,
+    })
+
+    const { user } = await authService.signIn({ identifier: 'jean@example.com', password: 'pw' })
+
+    expect(user?.role).toBe('user')
   })
 
   it('regular pseudo: calls RPC to resolve email then signs in', async () => {
